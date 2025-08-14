@@ -2,7 +2,7 @@
 const C = require('constants');
 const buildRoom = require('buildRoom');
 const operateTowers = require('operateTowers')
-
+const roomReaction=require('roomReaction')
 
 class Variation {
     constructor(variationName, variationFinished, rampartsAmount, spawnPos) {
@@ -18,6 +18,9 @@ Room.prototype.roomManager = function roomManager() {
 
 
     global.heap.rooms[this.name].state = []
+    global.heap.rooms[this.name].needRawResources = []
+    global.heap.rooms[this.name].needT3EconomicBoosts = []
+    global.heap.rooms[this.name].needT3MilitaryBoosts=[]
     global.heap.rooms[this.name].hostiles = []
     global.heap.rooms[this.name].hostileHealPower = 0;
     global.heap.rooms[this.name].hostileAttackPower = 0;
@@ -203,11 +206,11 @@ Room.prototype.roomManager = function roomManager() {
 
         if (global.heap.isSomeRoomPlanning == false) {
 
-           // console.log("Room: ", this.name, " entered building/planning base")
+            // console.log("Room: ", this.name, " entered building/planning base")
             //this.visualizeBase() // debugging
             // assuring that only one room in a tick would go into room building
             if (this.memory.finishedPlanning != true) {
-                 console.log("Room: ", this.name, " is planning layout")
+                console.log("Room: ", this.name, " is planning layout")
                 global.heap.isSomeRoomPlanning = true;
 
                 if (this.memory.baseVariations == undefined) {
@@ -242,7 +245,7 @@ Room.prototype.roomManager = function roomManager() {
                     this.memory.baseVariations[C.SRC_1_2_CONTROLLER].spawnPos = undefined
 
                     //if there is spawn in room use only one variation
-                    if (this.memory.spawnId!=undefined && Game.getObjectById(this.memory.spawnId)!=null) {
+                    if (this.memory.spawnId != undefined && Game.getObjectById(this.memory.spawnId) != null) {
                         this.memory.baseVariations = {}
                         this.memory.baseVariations[C.CURRENT_SPAWNPOS] = {}
                         this.memory.baseVariations[C.CURRENT_SPAWNPOS].variationFinished = false;
@@ -261,7 +264,7 @@ Room.prototype.roomManager = function roomManager() {
                     // loop through room variations
                     var finishedCounter = 0;
 
-                   
+
 
                     for (key in this.memory.baseVariations) {
 
@@ -291,24 +294,52 @@ Room.prototype.roomManager = function roomManager() {
                     this.memory.finishedPlanning = undefined
                 }
                 if (Game.time % 5 == 0) {
-                   //console.log("room: ",this.name," is building from list")
+                    //console.log("room: ",this.name," is building from list")
                     this.buildRoom(this.memory.variationToBuild)
                     //global.heap.isSomeRoomPlanning = true
                 }
             }
-            
+
         }
+
+        //minerals sharing
+        var rawResources = ["H","O", "U", "L", "K", "Z","X" ]//140k total
+        var T3EconomicBoosts=["XUHO2","XKH2O",  "XLH2O", "XGH2O" ]
+        var T3MilitaryBoosts=["XUH2O","XKHO2","XLHO2","XZH2O","XZHO2","XGHO2"]
+        if (this.terminal != undefined && this.storage != undefined) {
+            for (res of rawResources)
+            {
+                if(this.terminal.store[res]+this.storage.store[res]<C.MIN_RAW_RESOURCE_AMOUNT)
+                {
+                    global.heap.rooms[this.name].needRawResources.push(res)
+                }
+            }
+            for(boost of T3EconomicBoosts)
+            {
+                if(this.terminal.store[boost]+this.storage.store[boost]<C.MIN_ECONOMIC_BOOST_AMOUNT)
+                {
+                    global.heap.rooms[this.name].needT3EconomicBoosts.push(res)
+                }
+            }
+            for(boost of T3MilitaryBoosts)
+            {
+                if(this.terminal.store[boost]+this.storage.store[boost]<C.MIN_MILITARY_BOOST_AMOUNT)
+                {
+                    global.heap.rooms[this.name].needT3MilitaryBoosts.push(res)
+                }
+            }
+        }
+
+        //Define what reacion should labs run
+        global.heap.rooms[this.name].reaction=this.roomReaction()
 
     }
 
     //creating Spawn construction site
-    if(this.memory.spawnId==undefined && this.memory.finalBuildingList!=undefined && this.memory.finalBuildingList.length>0)
-    {
-        for(f of this.memory.finalBuildingList)
-        {
-            if(f.structureType==STRUCTURE_SPAWN)
-            {
-                this.createConstructionSite(f.x,f.y,f.structureType,f.roomName+"_1")
+    if (this.memory.spawnId == undefined && this.memory.finalBuildingList != undefined && this.memory.finalBuildingList.length > 0) {
+        for (f of this.memory.finalBuildingList) {
+            if (f.structureType == STRUCTURE_SPAWN) {
+                this.createConstructionSite(f.x, f.y, f.structureType, f.roomName + "_1")
                 break;
             }
         }

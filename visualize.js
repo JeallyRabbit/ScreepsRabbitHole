@@ -152,6 +152,16 @@ Room.prototype.visualize = function visualizeroomManager() {
 
 
 
+    //Manager task
+    var blockPosWidth = 8
+    var blockPosHeight = 1
+    var blockPos = new RoomPosition(3+blockPosWidth, 1, this.name)
+    this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.text("Manager task: "+global.heap.rooms[this.name].managerTask, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
     //harvesting data
@@ -165,8 +175,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.text("Harvesting data", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
-
-
+    
 
     if (this.memory.harvestingSources != undefined) {
         for (src of this.memory.harvestingSources) {

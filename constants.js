@@ -49,7 +49,118 @@ const TASK_FILL_TERMINAL_ENERGY = 'fill_terminal_energy'
 const TASK_FILL_STORAGE_ENERGY = 'fill_storage_energy'
 const TASK_FILL_LINK = 'fill_link'
 const TASK_TAKE_FROM_LINK = 'take_from_link'
-const TASK_XGH2O_TRANSFER = "xgh20_transfer"
+
+const TASK_TRANSFER_TO_STORAGE={
+    RESOURCE_ENERGY: "transfer_to_storage_energy",
+    RESOURCE_POWER: "transfer_to_storage_power",
+
+    RESOURCE_HYDROGEN: "transfer_to_storage_H",
+    RESOURCE_OXYGEN: "transfer_to_storage_O",
+    RESOURCE_UTRIUM: "transfer_to_storage_U",
+    RESOURCE_LEMERGIUM: "transfer_to_storage_L",
+    RESOURCE_KEANIUM: "transfer_to_storage_K",
+    RESOURCE_ZYNTHIUM: "transfer_to_storage_Z",
+    RESOURCE_CATALYST: "transfer_to_storage_X",
+    RESOURCE_GHODIUM: "transfer_to_storage_G",
+
+    RESOURCE_SILICON: 'transfer_to_storage_silicon',
+    RESOURCE_METAL: 'transfer_to_storage_metal',
+    RESOURCE_BIOMASS: 'transfer_to_storage_biomass',
+    RESOURCE_MIST: 'transfer_to_storage_mist',
+
+    RESOURCE_HYDROXIDE: "transfer_to_storage_OH",
+    RESOURCE_ZYNTHIUM_KEANITE: "transfer_to_storage_ZK",
+    RESOURCE_UTRIUM_LEMERGITE: "transfer_to_storage_UL",
+
+    RESOURCE_UTRIUM_HYDRIDE: "transfer_to_storage_UH",
+    RESOURCE_UTRIUM_OXIDE: "transfer_to_storage_UO",
+    RESOURCE_KEANIUM_HYDRIDE: "transfer_to_storage_KH",
+    RESOURCE_KEANIUM_OXIDE: "transfer_to_storage_KO",
+    RESOURCE_LEMERGIUM_HYDRIDE: "transfer_to_storage_LH",
+    RESOURCE_LEMERGIUM_OXIDE: "transfer_to_storage_LO",
+    RESOURCE_ZYNTHIUM_HYDRIDE: "transfer_to_storage_ZH",
+    RESOURCE_ZYNTHIUM_OXIDE: "transfer_to_storage_ZO",
+    RESOURCE_GHODIUM_HYDRIDE: "transfer_to_storage_GH",
+    RESOURCE_GHODIUM_OXIDE: "transfer_to_storage_GO",
+
+    RESOURCE_UTRIUM_ACID: "transfer_to_storage_UH2O",
+    RESOURCE_UTRIUM_ALKALIDE: "transfer_to_storage_UHO2",
+    RESOURCE_KEANIUM_ACID: "transfer_to_storage_KH2O",
+    RESOURCE_KEANIUM_ALKALIDE: "transfer_to_storage_KHO2",
+    RESOURCE_LEMERGIUM_ACID: "transfer_to_storage_LH2O",
+    RESOURCE_LEMERGIUM_ALKALIDE: "transfer_to_storage_LHO2",
+    RESOURCE_ZYNTHIUM_ACID: "transfer_to_storage_ZH2O",
+    RESOURCE_ZYNTHIUM_ALKALIDE: "transfer_to_storage_ZHO2",
+    RESOURCE_GHODIUM_ACID: "transfer_to_storage_GH2O",
+    RESOURCE_GHODIUM_ALKALIDE: "transfer_to_storage_GHO2",
+
+    RESOURCE_CATALYZED_UTRIUM_ACID: "transfer_to_storage_XUH2O",
+    RESOURCE_CATALYZED_UTRIUM_ALKALIDE: "transfer_to_storage_XUHO2",
+    RESOURCE_CATALYZED_KEANIUM_ACID: "transfer_to_storage_XKH2O",
+    RESOURCE_CATALYZED_KEANIUM_ALKALIDE: "transfer_to_storage_XKHO2",
+    RESOURCE_CATALYZED_LEMERGIUM_ACID: "transfer_to_storage_XLH2O",
+    RESOURCE_CATALYZED_LEMERGIUM_ALKALIDE: "transfer_to_storage_XLHO2",
+    RESOURCE_CATALYZED_ZYNTHIUM_ACID: "transfer_to_storage_XZH2O",
+    RESOURCE_CATALYZED_ZYNTHIUM_ALKALIDE: "transfer_to_storage_XZHO2",
+    RESOURCE_CATALYZED_GHODIUM_ACID: "transfer_to_storage_XGH2O",
+    RESOURCE_CATALYZED_GHODIUM_ALKALIDE: "transfer_to_storage_XGHO2",
+}
+
+const TASK_TRANSFER_TO_TERMINAL={
+    RESOURCE_ENERGY: "transfer_to_terminal_energy",
+    RESOURCE_POWER: "transfer_to_terminal_power",
+
+    RESOURCE_HYDROGEN: "transfer_to_terminal_H",
+    RESOURCE_OXYGEN: "transfer_to_terminal_O",
+    RESOURCE_UTRIUM: "transfer_to_terminal_U",
+    RESOURCE_LEMERGIUM: "transfer_to_terminal_L",
+    RESOURCE_KEANIUM: "transfer_to_terminal_K",
+    RESOURCE_ZYNTHIUM: "transfer_to_terminal_Z",
+    RESOURCE_CATALYST: "transfer_to_terminal_X",
+    RESOURCE_GHODIUM: "transfer_to_terminal_G",
+
+    RESOURCE_SILICON: 'transfer_to_terminal_silicon',
+    RESOURCE_METAL: 'transfer_to_terminal_metal',
+    RESOURCE_BIOMASS: 'transfer_to_terminal_biomass',
+    RESOURCE_MIST: 'transfer_to_terminal_mist',
+
+    RESOURCE_HYDROXIDE: "transfer_to_terminal_OH",
+    RESOURCE_ZYNTHIUM_KEANITE: "transfer_to_terminal_ZK",
+    RESOURCE_UTRIUM_LEMERGITE: "transfer_to_terminal_UL",
+
+    RESOURCE_UTRIUM_HYDRIDE: "transfer_to_terminal_UH",
+    RESOURCE_UTRIUM_OXIDE: "transfer_to_terminal_UO",
+    RESOURCE_KEANIUM_HYDRIDE: "transfer_to_terminal_KH",
+    RESOURCE_KEANIUM_OXIDE: "transfer_to_terminal_KO",
+    RESOURCE_LEMERGIUM_HYDRIDE: "transfer_to_terminal_LH",
+    RESOURCE_LEMERGIUM_OXIDE: "transfer_to_terminal_LO",
+    RESOURCE_ZYNTHIUM_HYDRIDE: "transfer_to_terminal_ZH",
+    RESOURCE_ZYNTHIUM_OXIDE: "transfer_to_terminal_ZO",
+    RESOURCE_GHODIUM_HYDRIDE: "transfer_to_terminal_GH",
+    RESOURCE_GHODIUM_OXIDE: "transfer_to_terminal_GO",
+
+    RESOURCE_UTRIUM_ACID: "transfer_to_terminal_UH2O",
+    RESOURCE_UTRIUM_ALKALIDE: "transfer_to_terminal_UHO2",
+    RESOURCE_KEANIUM_ACID: "transfer_to_terminal_KH2O",
+    RESOURCE_KEANIUM_ALKALIDE: "transfer_to_terminal_KHO2",
+    RESOURCE_LEMERGIUM_ACID: "transfer_to_terminal_LH2O",
+    RESOURCE_LEMERGIUM_ALKALIDE: "transfer_to_terminal_LHO2",
+    RESOURCE_ZYNTHIUM_ACID: "transfer_to_terminal_ZH2O",
+    RESOURCE_ZYNTHIUM_ALKALIDE: "transfer_to_terminal_ZHO2",
+    RESOURCE_GHODIUM_ACID: "transfer_to_terminal_GH2O",
+    RESOURCE_GHODIUM_ALKALIDE: "transfer_to_terminal_GHO2",
+
+    RESOURCE_CATALYZED_UTRIUM_ACID: "transfer_to_terminal_XUH2O",
+    RESOURCE_CATALYZED_UTRIUM_ALKALIDE: "transfer_to_terminal_XUHO2",
+    RESOURCE_CATALYZED_KEANIUM_ACID: "transfer_to_terminal_XKH2O",
+    RESOURCE_CATALYZED_KEANIUM_ALKALIDE: "transfer_to_terminal_XKHO2",
+    RESOURCE_CATALYZED_LEMERGIUM_ACID: "transfer_to_terminal_XLH2O",
+    RESOURCE_CATALYZED_LEMERGIUM_ALKALIDE: "transfer_to_terminal_XLHO2",
+    RESOURCE_CATALYZED_ZYNTHIUM_ACID: "transfer_to_terminal_XZH2O",
+    RESOURCE_CATALYZED_ZYNTHIUM_ALKALIDE: "transfer_to_terminal_XZHO2",
+    RESOURCE_CATALYZED_GHODIUM_ACID: "transfer_to_terminal_XGH2O",
+    RESOURCE_CATALYZED_GHODIUM_ALKALIDE: "transfer_to_terminal_XGHO2",
+}
 
 
 //Economy const
@@ -75,10 +186,15 @@ const TERMINAL_BOTTOM_ENERGY = 30000
 const TERMINAL_TOP_ENERGY = 35000
 const TERMINAL_FREE_BUFFOR = 10000
 const TERMINAL_FASTRCL_FREE_BUFFOR = 1000
-const STORAGE_TO_TERMINAL_ENERGY = 40000
+const STORAGE_TOP_ENERGY = 60000
 const STORAGE_FASTRCL_BOTTOM_ENERGY = 5000
+const STORAGE_ENERGY_BOTTOM=50000
 const LINK_BOTTOM_ENERGY = LINK_CAPACITY * (7 / 8)
 const COLONIZE_ENERGY_LIMIT=40000
+const MIN_RAW_RESOURCE_AMOUNT=20000
+const MIN_ECONOMIC_BOOST_AMOUNT=10000
+const MIN_MILITARY_BOOST_AMOUNT=30000
+const REACTION_STEP=500
 
 // Room Visualization
 const OUTLINE_COLOR = 'black'
@@ -143,7 +259,9 @@ module.exports = {
     TASK_FILL_TERMINAL_ENERGY,
     TASK_FILL_LINK,
     TASK_TAKE_FROM_LINK,
-    TASK_XGH2O_TRANSFER,
+    TASK_TRANSFER_TO_STORAGE,
+    TASK_TRANSFER_TO_TERMINAL,
+    
 
 
     BALANCER_STEP,
@@ -169,10 +287,15 @@ module.exports = {
     TERMINAL_TOP_ENERGY,
     TERMINAL_FREE_BUFFOR,
     TERMINAL_FASTRCL_FREE_BUFFOR,
-    STORAGE_TO_TERMINAL_ENERGY,
+    STORAGE_TOP_ENERGY,
     STORAGE_FASTRCL_BOTTOM_ENERGY,
+    STORAGE_ENERGY_BOTTOM,
     LINK_BOTTOM_ENERGY,
     COLONIZE_ENERGY_LIMIT,
+    MIN_RAW_RESOURCE_AMOUNT,
+    MIN_ECONOMIC_BOOST_AMOUNT,
+    MIN_MILITARY_BOOST_AMOUNT,
+    REACTION_STEP,
 
     OUTLINE_COLOR,
     TEXT_COLOR,
