@@ -4,6 +4,22 @@ const C = require('constants');
 //TODO:
 //Add avopiding hostile areas during STATE_UNDER_ATTACK
 
+Creep.prototype.taskFillManagerLink=function taskFillManagerLink()
+{
+    if(this.room.memory.managerLinkId!=undefined  && Game.getObjectById(this.room.memory.managerLinkId)!=null)
+    {
+        if(this.store[RESOURCE_ENERGY]>0)
+        {
+            if(this.transfer(Game.getObjectById(this.room.memory.managerLinkId),RESOURCE_ENERGY)==ERR_NOT_IN_RANGE)
+            {
+                this.travelTo(Game.getObjectById(this.room.memory.managerLinkId))
+            }
+        }
+    }
+    else{
+        this.memory.task=undefined
+    }
+}
 Creep.prototype.taskFillTowers = function taskFillTowers() {
     if (this.memory.targetTower != undefined && Game.getObjectById(this.memory.targetTower) != null && Game.getObjectById(this.memory.targetTower).store[RESOURCE_ENERGY] > TOWER_CAPACITY * C.TOWER_UP_LIMIT) {
         this.memory.targetTower = undefined

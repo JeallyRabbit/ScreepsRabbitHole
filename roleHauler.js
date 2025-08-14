@@ -3,8 +3,8 @@
 
 //const { move_avoid_hostile } = require("./move_avoid_hostile");
 var sleep = require('creepSleep');
-const C=require('constants')
-const creepsTasks=require('creepsTasks')
+const C = require('constants')
+const creepsTasks = require('creepsTasks')
 
 
 
@@ -20,14 +20,14 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
     }
 
     // extensions
-    this.memory.extensionsFull=true;
+    this.memory.extensionsFull = true;
     if (this.room.memory.myExtensions != undefined) {
         for (let id of Game.rooms[this.memory.homeRoom].memory.myExtensions) {
             if (Game.getObjectById(id) == null) {
                 continue
             }
-            else if(Game.getObjectById(id).store.getFreeCapacity(RESOURCE_ENERGY)>0){
-                this.memory.extensionsFull=false;
+            else if (Game.getObjectById(id).store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
+                this.memory.extensionsFull = false;
                 break
             }
         }
@@ -37,13 +37,13 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
 
 
 
-    
+
 
     if (this.store[RESOURCE_ENERGY] == 0) {
         //this.memory.task=undefined // check if that is good idea
-        this.memory.task=C.TASK_COLLECT
+        this.memory.task = C.TASK_COLLECT
     }
-   
+
 
 
     //Assigning tasks
@@ -66,16 +66,20 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
             if (spawn.length > 0) {
                 this.memory.spawnId = spawn[0].id
             }
-            else{
-                spawn=null
+            else {
+                spawn = null
             }
         }
 
 
-        
-        if (this.room.memory.fillerContainers != undefined && this.room.memory.fillerContainers.length > 0
+        if (this.room.memory.managerLinkId != undefined && global.heap.rooms[this.room.name].resourceManagerId == undefined
+            && Game.getObjectById(this.room.memory.managerLinkId)!=null && Game.getObjectById(this.room.memory.managerLinkId).store[RESOURCE_ENERGY]<C.LINK_BOTTOM_ENERGY
+        ) {
+            this.memory.task = C.TASK_FILL_MANAGER_LINK
+        }
+        else if (this.room.memory.fillerContainers != undefined && this.room.memory.fillerContainers.length > 0
             //for testing - do not fill filler  containers on rcl 8
-            && this.room.controller.level<8
+            && this.room.controller.level < 8
         ) {
             var minEnergy = CONTAINER_CAPACITY
             for (cont of this.room.memory.fillerContainers) {
@@ -89,40 +93,44 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
                 }
             }
         }
-        if(global.heap.rooms[this.memory.homeRoom].towersNeedRefill==true)
-        {
-            this.memory.task=C.TASK_FILL_TOWERS
-        }
-        else if (this.memory.extensionsFull == false && this.memory.task==undefined) {
-            this.memory.task = C.TASK_FILL_EXTENSIONS
-        }
-        else if (this.memory.task==undefined && this.room.memory.upgradersContainer != undefined && Game.getObjectById(this.room.memory.upgradersContainer) != null
-            && Game.getObjectById(this.room.memory.upgradersContainer).store.getFreeCapacity(RESOURCE_ENERGY) >= this.store.getCapacity(RESOURCE_ENERGY) / 2) {
-            this.memory.task = C.TASK_FILL_UPGRADERS_CONTAIER
-            this.memory.containerToFill = this.room.memory.upgradersContainer
-        }
-        
-        else if (spawn!=null && spawn.store!=undefined && spawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && this.memory.task==undefined) {
-            this.memory.task = C.FILL_SPAWN
+        if (this.memory.task == undefined) {
+            if (global.heap.rooms[this.memory.homeRoom].towersNeedRefill == true) {
+                this.memory.task = C.TASK_FILL_TOWERS
+            }
+            else if (this.memory.extensionsFull == false && this.memory.task == undefined) {
+                this.memory.task = C.TASK_FILL_EXTENSIONS
+            }
+            else if (this.memory.task == undefined && this.room.memory.upgradersContainer != undefined && Game.getObjectById(this.room.memory.upgradersContainer) != null
+                && Game.getObjectById(this.room.memory.upgradersContainer).store.getFreeCapacity(RESOURCE_ENERGY) >= this.store.getCapacity(RESOURCE_ENERGY) / 2) {
+                this.memory.task = C.TASK_FILL_UPGRADERS_CONTAIER
+                this.memory.containerToFill = this.room.memory.upgradersContainer
+            }
 
+            else if (spawn != null && spawn.store != undefined && spawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && this.memory.task == undefined) {
+                this.memory.task = C.FILL_SPAWN
+
+            }
+            else {
+                spawnPos = Game.rooms[this.memory.homeRoom].memory.spawnPos
+                //this.fleeFrom({ spawnPos }, 6)
+            }
         }
-        else {
-            spawnPos=Game.rooms[this.memory.homeRoom].memory.spawnPos
-            //this.fleeFrom({ spawnPos }, 6)
-        }
+
     }
 
-    if(this.memory.task==C.TASK_FILL_TOWERS)
+    if(this.memory.task==C.TASK_FILL_MANAGER_LINK)
     {
+        this.taskFillManagerLink()
+    }
+    if (this.memory.task == C.TASK_FILL_TOWERS) {
         this.taskFillTowers();
         return
     }
-    
-    if (this.memory.task==C.TASK_COLLECT) // if is empty go to container
+
+    if (this.memory.task == C.TASK_COLLECT) // if is empty go to container
     {// go to container
-        if(this.store.getFreeCapacity(RESOURCE_ENERGY)==0)
-        {
-            this.memory.task=undefined;
+        if (this.store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
+            this.memory.task = undefined;
             return;
         }
         if (this.room.storage != undefined /* && this.memory.cIdMax==undefined */ /* && (this.memory.cIdMax!=undefined && Game.getObjectById(this.memory.cIdMax)==null)*/) {
@@ -166,7 +174,7 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
                 }
             }
             */
-            var containers=undefined;
+            var containers = undefined;
 
             if (this.room.memory.containers != undefined && this.room.memory.containers.length > 0) {
                 var containers = [];
@@ -236,7 +244,7 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
 
     }
 
-   
+
 
     if (this.memory.task == 'FILL_FILLERS_CONTAINERS') {
         if (Game.getObjectById(this.memory.containerToFill) != null && Game.getObjectById(this.memory.containerToFill).store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
@@ -260,15 +268,14 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
     }
 
     if (this.memory.task == C.TASK_FILL_EXTENSIONS) {
-        if(this.memory.extensionsFull==true)
-        {
-            this.memory.extensionsFull=undefined
-            this.memory.task=undefined
+        if (this.memory.extensionsFull == true) {
+            this.memory.extensionsFull = undefined
+            this.memory.task = undefined
             return;
         }
         var extensions = [];
         for (id of Game.rooms[this.memory.homeRoom].memory.myExtensions) {
-            if (Game.getObjectById(id)!=null && Game.getObjectById(id).store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
+            if (Game.getObjectById(id) != null && Game.getObjectById(id).store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
                 extensions.push(Game.getObjectById(id));
             }
 
@@ -328,19 +335,17 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
             }
         }
 
-        
-       
-        if(spawn!=null)
-        {
+
+
+        if (spawn != null) {
             if (this.transfer(spawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-            this.travelTo(spawn, { reusePath: 10, avoidCreeps: false })
+                this.travelTo(spawn, { reusePath: 10, avoidCreeps: false })
+            }
+            if (spawn.store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
+                this.memory.task = undefined
+            }
         }
-        if(spawn.store.getFreeCapacity(RESOURCE_ENERGY)==0)
-        {
-            this.memory.task=undefined
-        }
-        }
-        
+
     }
 
 

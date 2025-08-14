@@ -1,6 +1,6 @@
 
 const C = require('constants');
-Room.prototype.roomReactions = function roomReactions() {
+Room.prototype.roomReaction = function roomReaction() {
 
     var storage=undefined
     if(this.storage==undefined)

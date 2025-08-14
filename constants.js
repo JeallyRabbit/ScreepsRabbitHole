@@ -49,6 +49,7 @@ const TASK_FILL_TERMINAL_ENERGY = 'fill_terminal_energy'
 const TASK_FILL_STORAGE_ENERGY = 'fill_storage_energy'
 const TASK_FILL_LINK = 'fill_link'
 const TASK_TAKE_FROM_LINK = 'take_from_link'
+const TASK_FILL_MANAGER_LINK='fill_manager_link'
 
 const TASK_TRANSFER_TO_STORAGE={
     RESOURCE_ENERGY: "transfer_to_storage_energy",
@@ -163,6 +164,8 @@ const TASK_TRANSFER_TO_TERMINAL={
 }
 
 
+
+
 //Economy const
 const BALANCER_STEP = 1// value by which workers and carriers change value of balancer
 const BALANCER_WORKER_STEP = 3
@@ -261,6 +264,7 @@ module.exports = {
     TASK_TAKE_FROM_LINK,
     TASK_TRANSFER_TO_STORAGE,
     TASK_TRANSFER_TO_TERMINAL,
+    TASK_FILL_MANAGER_LINK,
     
 
 
