@@ -64,7 +64,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                     global.heap.rooms[this.room.name].managerTask = undefined
                 }
             }
-            if (global.heap.rooms[this.room.name].managerTask.startsWith("transfer_to_storage")) {
+            if (global.heap.rooms[this.room.name].managerTask!=undefined && global.heap.rooms[this.room.name].managerTask.startsWith("transfer_to_storage")) {
                 var resToTransfer = str => str.split("transfer_to_storage_")[1];
                 if (terminal.store[resToTransfer] == 0) { global.heap.rooms[this.room.name].managerTask = undefined }
                 else {
@@ -75,7 +75,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                     global.heap.rooms[this.room.name].managerTask = undefined
                 }
             }
-            else if (global.heap.rooms[this.room.name].managerTask.startsWith("transfer_to_terminal_")) {
+            else if (global.heap.rooms[this.room.name].managerTask!=undefined && global.heap.rooms[this.room.name].managerTask.startsWith("transfer_to_terminal_")) {
                 var resToTransfer = str => str.split("transfer_to_terminal")[1];
                 if (terminal.store[resToTransfer] == 0) { global.heap.rooms[this.room.name].managerTask = undefined }
                 else {
