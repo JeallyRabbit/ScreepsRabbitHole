@@ -46,7 +46,7 @@ Room.prototype.visualize = function visualizeroomManager() {
 
 
         var ttu = (Game.rooms[this.name].controller.progressTotal - Game.rooms[this.name].controller.progress) / (Math.round((Game.rooms[this.name].memory.progressSum / Game.rooms[this.name].memory.progressCounter) * 100) / 100)
-        var blockPos = new RoomPosition(this.controller.pos.x-4, this.controller.pos.y, this.name)
+        var blockPos = new RoomPosition(this.controller.pos.x - 4, this.controller.pos.y, this.name)
         var blockPosWidth = 4
         var blockPosHeight = 1
         this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
@@ -155,26 +155,26 @@ Room.prototype.visualize = function visualizeroomManager() {
     //Manager task
     var blockPosWidth = 8
     var blockPosHeight = 1
-    var blockPos = new RoomPosition(3+blockPosWidth, 1, this.name)
+    var blockPos = new RoomPosition(3 + blockPosWidth, 1, this.name)
     this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    this.visual.text("Manager task: "+global.heap.rooms[this.name].managerTask, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    this.visual.text("Manager task: " + global.heap.rooms[this.name].managerTask, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
     var blockPosWidth = 8
     var blockPosHeight = 1
-    var blockPos = new RoomPosition(3+blockPosWidth, 2, this.name)
+    var blockPos = new RoomPosition(3 + blockPosWidth, 2, this.name)
     this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    this.visual.text("Lab reaction: "+global.heap.rooms[this.name].reaction, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    this.visual.text("Lab reaction: " + global.heap.rooms[this.name].reaction, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
-    
+
     //harvesting data
     var blockPos = new RoomPosition(3, 1, this.name)
     var blockPosWidth = 8
@@ -186,7 +186,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.text("Harvesting data", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
-    
+
 
     if (this.memory.harvestingSources != undefined) {
         for (src of this.memory.harvestingSources) {
@@ -209,7 +209,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     }
     blockPos.y += blockPosHeight
 
-    
+
 
     //Used Body Parts
     var blockPosWidth = 8
@@ -220,9 +220,9 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
 
-    var maxBodyParts=(CONTROLLER_STRUCTURES[STRUCTURE_SPAWN][this.controller.level])*(CREEP_LIFE_TIME/CREEP_SPAWN_TIME)
-    this.visual.text("UsedBodyParts: "+ global.heap.rooms[this.name].creepsBodyParts+"\\"+maxBodyParts, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
-     blockPos.y += blockPosHeight
+    var maxBodyParts = (CONTROLLER_STRUCTURES[STRUCTURE_SPAWN][this.controller.level]) * (CREEP_LIFE_TIME / CREEP_SPAWN_TIME)
+    this.visual.text("UsedBodyParts: " + global.heap.rooms[this.name].creepsBodyParts + "\\" + maxBodyParts, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    blockPos.y += blockPosHeight
 
     //Creeps data
 
@@ -235,16 +235,10 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
 
-    var maxBodyParts=(CONTROLLER_STRUCTURES[STRUCTURE_SPAWN][this.controller.level])*(CREEP_LIFE_TIME/CREEP_SPAWN_TIME)
-    if(this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>C.STORAGE_BALANCER_START)
-    {
-            this.visual.text("Workers Parts: "+ global.heap.rooms[this.name].workersParts+"/"+ this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    var maxBodyParts = (CONTROLLER_STRUCTURES[STRUCTURE_SPAWN][this.controller.level]) * (CREEP_LIFE_TIME / CREEP_SPAWN_TIME)
 
-    }
-    else{
-            this.visual.text("Workers Parts: "+ global.heap.rooms[this.name].workersParts+"/1", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    this.visual.text("Workers Parts: " + global.heap.rooms[this.name].workersParts + "/" + global.heap.rooms[this.name].needWorkersParts, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
-    }
 
 
 

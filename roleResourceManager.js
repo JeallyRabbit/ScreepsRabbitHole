@@ -9,8 +9,8 @@ localHeap = {}
 Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer energy grom containers to storage
 
 
-    //Needs:
-    // global.heap.rooms[this.memory.homeRoom].managerLinkId
+    //TODO:
+    // Add clearing creep store
 
     var terminal = this.room.terminal;
     var storage = this.room.storage;
@@ -31,7 +31,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
         if (terminal != undefined && storage != undefined) {
 
             
-            console.log("T1/T2 boost in terminal: ",isT1orT2InStore(terminal.store))
+            console.log("T1/T2 boost in storage: ",this.room.name," ",isT1orT2InStore(storage.store))
             console.log(C.REVERSED_RESOURCE['UH2O'])
             if (global.heap.rooms[this.room.name].managerTask == undefined) {
                 this.say("0")

@@ -158,21 +158,20 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
     }
     else {//Workers above and on RCL4
-        if (this.storage.store[RESOURCE_ENERGY] < C.STORAGE_BALANCER_START) {
-            if (global.heap.rooms[this.name].workersParts < 1) {
-                global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
-            }
-        }
-        else if (global.heap.rooms[this.name].workersParts < this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR) {
-            global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
+        global.heap.rooms[this.name].needWorkersParts=1
+
+
+        if ((this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>C.UPGRADE_FACTOR && this.controller.level<8)
+            || (global.heap.rooms[this.name].construction.length>0 && this.controller.level==8)
+        ) {
+            global.heap.rooms[this.name].needWorkersParts=this.storage.store[RESOURCE_ENERGY]/C.UPGRADE_FACTOR
+            console.log(global.heap.rooms[this.name].construction.length," ",this.name)
         }
 
-        //RCL 8 and no building
-        if(this.controller.level==8 && global.heap.rooms[this.name].construction.length==0)
+
+        if(global.heap.rooms[this.name].workersParts <global.heap.rooms[this.name].needWorkersParts)
         {
-            if (global.heap.rooms[this.name].workersParts < 1) {
-                global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
-            }
+            global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
         }
     }
 
