@@ -142,6 +142,7 @@ Room.prototype.spawnManager = function spawnManager() {
             case C.ROLE_REPAIRER:
                 {
                     var result = spawn.spawnCreep(repairerBody(energyCap), C.ROLE_REPAIRER + '_' + this.name + Game.time, { memory: { role: C.ROLE_REPAIRER, targetRoom: request.roomName, homeRoom: this.name } })
+
                     if (result == OK) {
                         global.heap.rooms[this.name].civilianQueue.shift()
 

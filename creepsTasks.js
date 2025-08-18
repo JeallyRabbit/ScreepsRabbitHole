@@ -230,7 +230,8 @@ Creep.prototype.taskUpgrade = function taskUpgrade(localHeap) {
         return -1;
     }
     if (!this.pos.isNearTo(this.room.controller)) {
-        this.travelTo(this.room.controller, { maxStuck: 10 })
+        //this might be wrong
+       // this.travelTo(this.room.controller, { maxStuck: 10 })
     }
     var upgradeResult = this.upgradeController(this.room.controller);
     //this.travelTo(this.room.controller, { reusePath: 17,maxRooms:1 });
@@ -239,7 +240,9 @@ Creep.prototype.taskUpgrade = function taskUpgrade(localHeap) {
     }
 
     //Sharing energy
-    if (this.store[RESOURCE_ENERGY] > 0 && global.heap.rooms[this.memory.homeRoom].myWorkers != undefined && global.heap.rooms[this.memory.homeRoom].myWorkers.length > 0) {
+    if (this.store[RESOURCE_ENERGY] > 0 && global.heap.rooms[this.memory.homeRoom].myWorkers != undefined && global.heap.rooms[this.memory.homeRoom].myWorkers.length > 0
+        && Game.time%3==0
+    ) {
         for (a of global.heap.rooms[this.memory.homeRoom].myWorkers) {
             cr = Game.getObjectById(a)
             if (cr == null) { continue; }

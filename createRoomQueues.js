@@ -166,6 +166,14 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         else if (global.heap.rooms[this.name].workersParts < this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR) {
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
         }
+
+        //RCL 8 and no building
+        if(this.controller.level==8 && global.heap.rooms[this.name].construction.length==0)
+        {
+            if (global.heap.rooms[this.name].workersParts < 1) {
+                global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
+            }
+        }
     }
 
 

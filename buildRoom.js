@@ -1260,6 +1260,10 @@ Room.prototype.planSpawnPos = function planSpawnPos(type) {
             {
                 var spawn = this.find(FIND_MY_SPAWNS)
                 this.memory.spawnPos = new RoomPosition(spawn[0].pos.x, spawn[0].pos.y, this.name)
+                if(this.memory.baseVariations[type]==undefined)
+                {
+                    this.memory.baseVariations[type]={}
+                }
                 this.memory.baseVariations[type].spawnPos = new RoomPosition(spawn[0].pos.x, spawn[0].pos.y, this.name)
                 seeds.push(spawn[0].pos)
             }

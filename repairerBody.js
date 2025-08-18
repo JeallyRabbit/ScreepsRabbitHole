@@ -1,8 +1,10 @@
+const C = require("./constants");
+
 function repairerBody(cap)// return array with max possible work parts for builder
 {
     var parts=[];
 
-    while(cap>BODYPART_COST[MOVE]+BODYPART_COST[CARRY]+BODYPART_COST[WORK])
+    while(cap>BODYPART_COST[MOVE]+BODYPART_COST[CARRY]+BODYPART_COST[WORK] && parts.length<C.CREEP_MAX_BODYPARTS-3)
     {
 
         parts.push(MOVE)

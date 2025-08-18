@@ -236,7 +236,15 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
 
     var maxBodyParts=(CONTROLLER_STRUCTURES[STRUCTURE_SPAWN][this.controller.level])*(CREEP_LIFE_TIME/CREEP_SPAWN_TIME)
-    this.visual.text("Workers Parts: "+ global.heap.rooms[this.name].workersParts, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    if(this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>C.STORAGE_BALANCER_START)
+    {
+            this.visual.text("Workers Parts: "+ global.heap.rooms[this.name].workersParts+"/"+ this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+
+    }
+    else{
+            this.visual.text("Workers Parts: "+ global.heap.rooms[this.name].workersParts+"/1", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+
+    }
 
 
 
