@@ -1328,7 +1328,7 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
     }
     if (this.memory.variationToBuild != undefined) {//This might be wrong
         type = this.memory.variationToBuild
-        console.log("TEST")
+        //console.log("TEST")
     }
     var stage = 0
     if (this.memory.baseVariations == undefined || this.memory.baseVariations[type] == undefined || this.memory.baseVariations[type].spawnPos == undefined) {

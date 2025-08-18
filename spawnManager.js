@@ -26,6 +26,21 @@ Room.prototype.spawnManager = function spawnManager() {
         return -1;
     }
 
+    if(spawn.spawning!=undefined && spawn.spawning.remainingTime<spawn.spawning.needTime-2)
+    {
+        if(this.memory.spawn2Id!=undefined)
+        {
+            spawn=Game.getObjectById(this.memory.spawn2Id)
+        }
+    }
+
+    if(spawn.spawning!=undefined && spawn.spawning.remainingTime<spawn.spawning.needTime-2)
+    {
+        if(this.memory.spawn3Id!=undefined)
+        {
+            spawn=Game.getObjectById(this.memory.spawn3Id)
+        }
+    }
 
     if (global.heap.rooms[this.name].defensiveQueue.length > 0) {
         var request = global.heap.rooms[this.name].defensiveQueue[0]
@@ -78,7 +93,7 @@ Room.prototype.spawnManager = function spawnManager() {
                     else if (spawn.room.controller.level == 8) {
                         body = [MOVE, CARRY, CARRY, CARRY, CARRY]
                     }
-                    var result = spawn.spawnCreep(body, C.ROLE_FILLER + '_' + this.name + Game.time, { memory: { role: C.ROLE_FILLER, homeRoom: this.name, spanwId: this.id } })
+                    var result = spawn.spawnCreep(body, C.ROLE_FILLER + '_' + this.name + Game.time, { memory: { role: C.ROLE_FILLER, homeRoom: this.name, spawnId: this.id } })
                     if (result == OK) {
                         global.heap.rooms[this.name].harvestingQueue.shift()
 

@@ -33,7 +33,7 @@ module.exports.loop = function () {
   profiler.wrap(function () {
 
     var totalStart = Game.cpu.getUsed()
-    console.log("GIT TEST")
+    //console.log("GIT TEST")
     //Setting allies
     Memory.allies = ["JeallyRabbit", "Alphonzo", "insainmonkey", "Trepidimous"]
 

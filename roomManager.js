@@ -54,6 +54,32 @@ Room.prototype.roomManager = function roomManager() {
             }
         }
 
+        //second spawn ID
+        if ((this.memory.spawn2Id != undefined && Game.getObjectById(this.memory.spawn2Id) == null) || this.memory.spawn2Id == undefined) {
+            var sp = this.find(FIND_MY_SPAWNS,{filter:
+                function (str)
+                {
+                    return str.name.endsWith("_2")
+                }
+            })
+            if (sp.length > 0) {
+                this.memory.spawn2Id = sp[0].id
+            }
+        }
+
+        //Third spawnID
+        if ((this.memory.spawn3Id != undefined && Game.getObjectById(this.memory.spawn3Id) == null) || this.memory.spawn3Id == undefined) {
+            var sp = this.find(FIND_MY_SPAWNS,{filter:
+                function (str)
+                {
+                    return str.name.endsWith("_3")
+                }
+            })
+            if (sp.length > 0) {
+                this.memory.spawn3Id = sp[0].id
+            }
+        }
+
         //Mineral
         if (this.memory.mineralId == undefined) {
             var mineral = this.find(FIND_MINERALS)
