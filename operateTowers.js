@@ -5,7 +5,7 @@ Room.prototype.operateTowers = function operateTowers() {
         var repairTarget = undefined
         for (r of global.heap.rooms[this.name].myRamparts) {
             var rampart = Game.getObjectById(r)
-            if (rampart.hits < C.RAMPART_HITS_BOTTOM_LIMIT) {
+            if (rampart !=null && rampart.hits < C.RAMPART_HITS_BOTTOM_LIMIT) {
                 repairTarget = rampart
                 break;
             }

@@ -40,24 +40,24 @@ Room.prototype.linkManager = function linkManager() {
 
     // FIND SOURCES LINKS
 
-    if (this.memory.sourcesLinkPos != undefined && this.memory.harvestingRooms != undefined && this.memory.harvestingRooms.length > 0) {
-        if (this.memory.sourcesLinkPos.length < this.memory.harvestingRooms[0].sources_num) {
-            this.memory.sourcesLinkPos = undefined
+    if (this.memory.sourcesLinksId != undefined && this.memory.harvestingRooms != undefined && this.memory.harvestingRooms.length > 0) {
+        if (this.memory.sourcesLinksId.length < this.memory.harvestingRooms[0].sources_num) {
+            this.memory.sourcesLinksId = undefined
         }
-        else if (this.memory.sourcesLinkPos.length > 0) {
-            for (let id of this.memory.sourcesLinkPos) {
+        else if (this.memory.sourcesLinksId.length > 0) {
+            for (let id of this.memory.sourcesLinksId) {
                 if (Game.getObjectById(id) == null) {
-                    this.memory.sourcesLinkPos = undefined
+                    this.memory.sourcesLinksId = undefined
                 }
             }
         }
         else {
-            this.memory.sourcesLinkPos = undefined
+            this.memory.sourcesLinksId = undefined
         }
 
     }
-    if (this.memory.sourcesLinkPos == undefined) {
-        this.memory.sourcesLinkPos = [];
+    if (this.memory.sourcesLinksId == undefined) {
+        this.memory.sourcesLinksId = [];
         if (this.memory.sourcesLinksPos != undefined && this.memory.sourcesLinksPos.length > 0) {
             var src1Link = this.find(FIND_STRUCTURES, {
                 filter: function (str) {
@@ -65,7 +65,7 @@ Room.prototype.linkManager = function linkManager() {
                 }
             });
             if (src1Link != undefined && src1Link.length > 0) {
-                this.memory.sourcesLinkPos.push(src1Link[0].id)
+                this.memory.sourcesLinksId.push(src1Link[0].id)
             }
         }
 
@@ -76,7 +76,7 @@ Room.prototype.linkManager = function linkManager() {
                 }
             });
             if (src2Link != undefined && src2Link.length > 0) {
-                this.memory.sourcesLinkPos.push(src2Link[0].id)
+                this.memory.sourcesLinksId.push(src2Link[0].id)
             }
         }
     }
@@ -104,7 +104,7 @@ Room.prototype.linkManager = function linkManager() {
 
     var controllerLink = Game.getObjectById(this.memory.controllerLinkId)
     var sourcesLinks = []
-    for (let link_id of this.memory.sourcesLinkPos) {
+    for (let link_id of this.memory.sourcesLinksId) {
         var link = Game.getObjectById(link_id)
         if (link != null) {
             sourcesLinks.push(link)
