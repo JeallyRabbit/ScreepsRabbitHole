@@ -19,7 +19,9 @@ Room.prototype.roomManager = function roomManager() {
 
     global.heap.rooms[this.name].state = []
     global.heap.rooms[this.name].needRawResources = []
+    global.heap.rooms[this.name].excessRawResources=[]
     global.heap.rooms[this.name].needT3EconomicBoosts = []
+    global.heap.rooms[this.name].excessT3EconomicBoost=[]
     global.heap.rooms[this.name].needT3MilitaryBoosts=[]
     global.heap.rooms[this.name].hostiles = []
     global.heap.rooms[this.name].hostileHealPower = 0;
@@ -42,7 +44,20 @@ Room.prototype.roomManager = function roomManager() {
     if (Memory.mainRooms.includes(this.name)) {
         //If it is one of main rooms 
 
-
+        if(this.memory.distanceToOthers==undefined && Game.time%1234==0)
+        {
+            var distance=0;
+            var counter=0
+            for(m of Memory.mainRooms)
+            {
+                if(m!=this.name)
+                {
+                    distance+=Game.map.getRoomLinearDistance(this.name,m)
+                    counter++;
+                }
+            }
+            this.memory.distanceToOthers=distance.counter;
+        }
 
 
 
@@ -339,19 +354,31 @@ Room.prototype.roomManager = function roomManager() {
                 {
                     global.heap.rooms[this.name].needRawResources.push(res)
                 }
+                else if(this.terminal.store[res]+this.storage.store[res]>C.MAX_RAW_RESOURCE_AMOUNT)
+                {
+                    global.hepa.rooms[this.name].excessRawResources.push(res)
+                }
             }
             for(boost of T3EconomicBoosts)
             {
                 if(this.terminal.store[boost]+this.storage.store[boost]<C.MIN_ECONOMIC_BOOST_AMOUNT)
                 {
-                    global.heap.rooms[this.name].needT3EconomicBoosts.push(res)
+                    global.heap.rooms[this.name].needT3EconomicBoosts.push(boost)
+                }
+                else if(this.terminal.store[boost]+this.storage.store[boost]>C.MIN_ECONOMIC_BOOST_AMOUNT*2)
+                {
+                    global.heap.rooms[this.name].excessT3EconomicBoost.push(boost)
                 }
             }
             for(boost of T3MilitaryBoosts)
             {
                 if(this.terminal.store[boost]+this.storage.store[boost]<C.MIN_MILITARY_BOOST_AMOUNT)
                 {
-                    global.heap.rooms[this.name].needT3MilitaryBoosts.push(res)
+                    global.heap.rooms[this.name].needT3MilitaryBoosts.push(boost)
+                }
+                else if(this.terminal.store[boost]+this.storage.store[boost]>C.MIN_MILITARY_BOOST_AMOUNT*2)
+                {
+                    global.heap.rooms[this.name].excessT3MilitaryBoosts.push(boost)
                 }
             }
         }
