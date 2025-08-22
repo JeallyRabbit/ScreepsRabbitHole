@@ -1,5 +1,4 @@
 const C=require('constants');
-const { glob } = require('fs');
 
 
 
@@ -181,6 +180,15 @@ Room.prototype.terminalManager = function terminalManager() {
     for(res of global.heap.rooms[this.name].needRawResources)
     {
         if(this.terminal.buyResource(res,C.RAW_RES_BUY_AMOUNT)==OK)
+        {
+            return;
+        }
+    }
+
+    //Sharing energy to fastRclUpgrade
+    if(Memory.fastRclUpgrade!=undefined && Memory.fastRclUpgrade!=this.name)
+    {
+        if(this.terminal.send(RESOURCE_ENERGY,C.RESOURCE_SHARE_AMOUNT,Memory.fastRclUpgrade)==OK)
         {
             return;
         }

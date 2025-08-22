@@ -30,8 +30,8 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 
         if (terminal != undefined && storage != undefined) {
 
-            
-            console.log("T1/T2 boost in storage: ",this.room.name," ",isT1orT2InStore(storage.store))
+
+            console.log("T1/T2 boost in storage: ", this.room.name, " ", isT1orT2InStore(storage.store))
             console.log(C.REVERSED_RESOURCE['UH2O'])
             if (global.heap.rooms[this.room.name].managerTask == undefined) {
                 this.say("0")
@@ -63,10 +63,25 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                     this.say("6")
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isT1orT2InStore(terminal.store)]
                 }
+                else {
+                    var nuker = Game.getObjectById(global.heap.rooms[this.room.name].myNuker)
+                    if ((nuker != null && nuker.store[RESOURCE_GHODIUM] < NUKER_GHODIUM_CAPACITY && (storage.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT))
+                        )
+                    {
+                        global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_GHODIUM
+                    }
+                    else if((nuker.store[RESOURCE_ENERGY] < NUKER_ENERGY_CAPACITY) && (storage.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT))
+                    {
+                        global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_ENERGY
+                    }
+
+
+
+                }
 
             }
 
-            
+
 
             if (global.heap.rooms[this.room.name].managerTask == C.TASK_FILL_LINK) {
                 this.withdraw(storage, RESOURCE_ENERGY)
@@ -76,8 +91,8 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                     global.heap.rooms[this.room.name].managerTask = undefined
                 }
             }
-            if (global.heap.rooms[this.room.name].managerTask!=undefined && global.heap.rooms[this.room.name].managerTask.startsWith("transfer_to_storage")) {
-                var resToTransfer =global.heap.rooms[this.room.name].managerTask.replace("transfer_to_storage_", "")
+            if (global.heap.rooms[this.room.name].managerTask != undefined && global.heap.rooms[this.room.name].managerTask.startsWith("transfer_to_storage")) {
+                var resToTransfer = global.heap.rooms[this.room.name].managerTask.replace("transfer_to_storage_", "")
                 if (terminal.store[resToTransfer] == 0) { global.heap.rooms[this.room.name].managerTask = undefined }
                 else {
                     this.withdraw(terminal, resToTransfer)
@@ -87,7 +102,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                     global.heap.rooms[this.room.name].managerTask = undefined
                 }
             }
-            else if (global.heap.rooms[this.room.name].managerTask!=undefined && global.heap.rooms[this.room.name].managerTask.startsWith("transfer_to_terminal_")) {
+            else if (global.heap.rooms[this.room.name].managerTask != undefined && global.heap.rooms[this.room.name].managerTask.startsWith("transfer_to_terminal_")) {
                 var resToTransfer = global.heap.rooms[this.room.name].managerTask.replace("transfer_to_terminal_", "");
                 this.say("7")
                 if (storage.store[resToTransfer] == 0) { global.heap.rooms[this.room.name].managerTask = undefined }
@@ -99,6 +114,14 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                     global.heap.rooms[this.room.name].managerTask = undefined
                 }
             }
+            else if(global.heap.rooms[this.room.name].managerTask == C.TASK_FILL_NUKER_ENERGY)
+            {
+                this.taskFillNukerEnergy()
+            }
+            else if(global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_GHODIUM)
+            {
+                this.taskFillNukerGhodium();
+            }
 
 
         }
@@ -106,7 +129,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 }
 
 function isT3BoostInStore(store) {
-    
+
     for (res in store) {
         if (C.REVERSED_RESOURCE[res].startsWith("CATALYZED")) {
             return res
@@ -116,12 +139,12 @@ function isT3BoostInStore(store) {
 }
 
 function isT1orT2InStore(store) {
-    
+
     for (res in store) {
         //Base compounds are included here
         if ((C.REVERSED_RESOURCE[res].endsWith("OXIDE") || C.REVERSED_RESOURCE[res].endsWith("HYDRITE") || C.REVERSED_RESOURCE[res].endsWith("ACID") || C.REVERSED_RESOURCE[res].endsWith("ALKAIDE"))
             && !C.REVERSED_RESOURCE[res].replace("RESOURCE__", "").startsWith("CATALYZED")) {
-        
+
             return res
         }
     }

@@ -44,7 +44,7 @@ Room.prototype.roomManager = function roomManager() {
     if (Memory.mainRooms.includes(this.name)) {
         //If it is one of main rooms 
 
-        if(this.memory.distanceToOthers==undefined && Game.time%1234==0)
+        if(this.memory.distanceToOthers==undefined && Game.time%C.ROOM_DISTANCE_CALC_STEP==0)
         {
             var distance=0;
             var counter=0
@@ -256,6 +256,11 @@ Room.prototype.roomManager = function roomManager() {
 
                 if (this.memory.baseVariations == undefined) {
                     this.memory.baseVariations = {}
+                    this.memory.baseVariations[C.CONTROLLER] = {}
+                    this.memory.baseVariations[C.CONTROLLER].variationFinished = false;
+                    this.memory.baseVariations[C.CONTROLLER].rampartsAmount = 0;
+                    this.memory.baseVariations[C.CONTROLLER].spawnPos = undefined
+                    /*
                     this.memory.baseVariations[C.SRC_1] = {}
                     this.memory.baseVariations[C.SRC_1].variationFinished = false;
                     this.memory.baseVariations[C.SRC_1].rampartsAmount = 0;
@@ -268,10 +273,7 @@ Room.prototype.roomManager = function roomManager() {
                     this.memory.baseVariations[C.SRC_1_2].variationFinished = false;
                     this.memory.baseVariations[C.SRC_1_2].rampartsAmount = 0;
                     this.memory.baseVariations[C.SRC_1_2].spawnPos = undefined
-                    this.memory.baseVariations[C.CONTROLLER] = {}
-                    this.memory.baseVariations[C.CONTROLLER].variationFinished = false;
-                    this.memory.baseVariations[C.CONTROLLER].rampartsAmount = 0;
-                    this.memory.baseVariations[C.CONTROLLER].spawnPos = undefined
+                    
                     this.memory.baseVariations[C.SRC_1_CONTROLLER] = {}
                     this.memory.baseVariations[C.SRC_1_CONTROLLER].variationFinished = false;
                     this.memory.baseVariations[C.SRC_1_CONTROLLER].rampartsAmount = 0;
@@ -284,6 +286,7 @@ Room.prototype.roomManager = function roomManager() {
                     this.memory.baseVariations[C.SRC_1_2_CONTROLLER].variationFinished = false;
                     this.memory.baseVariations[C.SRC_1_2_CONTROLLER].rampartsAmount = 0;
                     this.memory.baseVariations[C.SRC_1_2_CONTROLLER].spawnPos = undefined
+                    */
 
                     //if there is spawn in room use only one variation
                     if (this.memory.spawnId != undefined && Game.getObjectById(this.memory.spawnId) != null) {
@@ -311,8 +314,11 @@ Room.prototype.roomManager = function roomManager() {
 
                         if (this.memory.baseVariations[key].variationFinished == false) {
                             this.visual.text(key, 25, 4)
-
-                            this.buildRoom(key)
+                            if(Game.cpu.bucket>500)
+                            {
+                                this.buildRoom(key)
+                            }
+                            
                             break;
                         }
                         this.memory.finishedPlanning = true
@@ -356,7 +362,7 @@ Room.prototype.roomManager = function roomManager() {
                 }
                 else if(this.terminal.store[res]+this.storage.store[res]>C.MAX_RAW_RESOURCE_AMOUNT)
                 {
-                    global.hepa.rooms[this.name].excessRawResources.push(res)
+                    global.heap.rooms[this.name].excessRawResources.push(res)
                 }
             }
             for(boost of T3EconomicBoosts)

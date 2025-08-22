@@ -165,6 +165,12 @@ module.exports.loop = function () {
       }
     }
 
+
+    //Defining room to fastUpgrade
+    var roomToFastRclUpgrade=undefined
+    var minDistancetoFastRCLUpgrade=Infinity
+
+
     console.log(C.USERNAME)
     console.log("Construction sites: ", Object.keys(Game.constructionSites).length)
 
@@ -176,7 +182,13 @@ module.exports.loop = function () {
 
       var start = Game.cpu.getUsed()
 
-
+      if(Game.rooms[mainRoom].distanceToOthers!=undefined && Game.rooms[mainRoom].distanceToOthers<minDistancetoFastRCLUpgrade
+        && Game.rooms[mainRoom].storage!=undefined && Game.rooms[mainRoom].terminal!=undefined && Game.rooms[this.name].controller.level<8
+      )
+      {
+        minDistancetoFastRCLUpgrade= Game.rooms[mainRoom].distanceToOthers;
+        roomToFastRclUpgrade=mainRoom;
+      }
 
 
       Game.rooms[mainRoom].creepsManager()
@@ -210,6 +222,10 @@ module.exports.loop = function () {
 
     }
 
+    if(roomToFastRclUpgrade!=undefined)
+    {
+      Memory.fastRclUpgrade=roomToFastRclUpgrade
+    }
 
     var totalUsedCpu = Math.round(Game.cpu.getUsed() - totalStart)
     for (mainRoom of Memory.mainRooms) {

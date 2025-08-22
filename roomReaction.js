@@ -33,6 +33,21 @@ Room.prototype.roomReaction = function roomReaction() {
             return ["U", "L"]
         }
     }
+
+
+    // Ghodium for nuker
+    if(this.terminal!=undefined && storage.store["G"]+this.terminal.store["G"]<NUKER_GHODIUM_CAPACITY)
+    {
+        if (storage.store["ZK"] > C.REACTION_STEP && storage.store["UL"] > C.REACTION_STEP) {
+            return ["ZK", "UL"]
+        }
+        else if (storage.store["Z"] > C.REACTION_STEP && storage.store["K"] > C.REACTION_STEP && storage.store["ZK"]<C.REACTION_STEP*2) {
+            return ["Z", "K"]
+        }
+        else if (storage.store["U"] > C.REACTION_STEP && storage.store["L"] > C.REACTION_STEP && storage.store["UL"]<C.REACTION_STEP*2) {
+            return ["U", "L"]
+        }
+    }
     
     if(storage.store["XKHO2"]<C.MIN_ECONOMIC_BOOST_AMOUNT){ //2 ranged attack
         if (storage.store["KHO2"] > C.REACTION_STEP && storage.store["X"] > C.REACTION_STEP ) {

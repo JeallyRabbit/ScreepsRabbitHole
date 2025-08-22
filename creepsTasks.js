@@ -415,5 +415,52 @@ Creep.prototype.taskStoreMineral = function taskStoreMineral() {
 
 }
 
+Creep.prototype.taskFillNukerEnergy = function taskFillNukerEnergy()
+{
+    var nuker = Game.getObjectById(global.heap.rooms[this.room.name].myNuker)
+    var storage=this.room.storage;
+    var terminal = this.room.terminal;
+
+    if(nuker==null || storage==undefined || terminal==undefined)
+    {
+        return
+    }
+    var targetStore=undefined
+    if(storage.store[RESOURCE_ENERGY]>C.MIN_NUKER_RES_AMOUNT)
+    {
+        this.withdraw(storage,RESOURCE_ENERGY,Math.min(nuker.store.getFreeCapacity(RESOURCE_ENERGY),this.store.getCapacity(RESOURCE_ENERGY)))
+    }
+    else if(terminal.store[RESOURCE_ENERGY]>C.MIN_NUKER_RES_AMOUNT)
+    {
+        this.withdraw(terminal,RESOURCE_ENERGY,Math.min(nuker.store.getFreeCapacity(RESOURCE_ENERGY),this.store.getCapacity(RESOURCE_ENERGY)))
+    }
+
+    this.transfer(nuker,RESOURCE_ENERGY)
+    
+}
+
+Creep.prototype.taskFillNukerGhodium = function taskFillNukerGhodium()
+{
+    var nuker = Game.getObjectById(global.heap.rooms[this.room.name].myNuker)
+    var storage=this.room.storage;
+    var terminal = this.room.terminal;
+
+    if(nuker==null || storage==undefined || terminal==undefined)
+    {
+        return
+    }
+    var targetStore=undefined
+    if(storage.store[RESOURCE_GHODIUM]>C.MIN_NUKER_RES_AMOUNT)
+    {
+        this.withdraw(storage,RESOURCE_GHODIUM,Math.min(nuker.store.getFreeCapacity(RESOURCE_GHODIUM),this.store.getCapacity(RESOURCE_GHODIUM)))
+    }
+    else if(terminal.store[RESOURCE_GHODIUM]>C.MIN_NUKER_RES_AMOUNT)
+    {
+        this.withdraw(terminal,RESOURCE_GHODIUM,Math.min(nuker.store.getFreeCapacity(RESOURCE_GHODIUM),this.store.getCapacity(RESOURCE_GHODIUM)))
+    }
+
+    this.transfer(nuker,RESOURCE_GHODIUM)
+    
+}
 
 

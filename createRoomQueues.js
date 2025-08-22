@@ -153,8 +153,17 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
 
         }
-        else if (global.heap.rooms[this.name].workersParts == 0 && this.energyAvailable <= SPAWN_ENERGY_CAPACITY && areHarvestersSatisfied && areCarriersSatisfied) {//this moght be not fully correct but it should assure that on rcl 1 we start spawning workers
+        else if (global.heap.rooms[this.name].workersParts == 0 && this.energyAvailable <= SPAWN_ENERGY_CAPACITY && areHarvestersSatisfied && areCarriersSatisfied) {
+            //this moght be not fully correct but it should assure that on rcl 1 we start spawning workers
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
+        }
+        if(this.controller.level==4 && this.storage==undefined)
+        {//RCL 4 but no storage
+            if(global.heap.rooms[this.name].workersParts<1)
+            {
+                global.heap.rooms[this.name].needWorkersParts=1
+                global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
+            }
         }
     }
     else {//Workers above and on RCL4
