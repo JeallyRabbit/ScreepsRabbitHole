@@ -168,7 +168,7 @@ module.exports.loop = function () {
 
     //Defining room to fastUpgrade
     var roomToFastRclUpgrade=undefined
-    var minDistancetoFastRCLUpgrade=Infinity
+    var minDistanceToFastRclUpgrade=Infinity
 
 
     console.log(C.USERNAME)
@@ -182,11 +182,12 @@ module.exports.loop = function () {
 
       var start = Game.cpu.getUsed()
 
-      if(Game.rooms[mainRoom].distanceToOthers!=undefined && Game.rooms[mainRoom].distanceToOthers<minDistancetoFastRCLUpgrade
-        && Game.rooms[mainRoom].storage!=undefined && Game.rooms[mainRoom].terminal!=undefined && Game.rooms[this.name].controller.level<8
+      if(Game.rooms[mainRoom].memory.distanceToOthers!=undefined && Game.rooms[mainRoom].memory.distanceToOthers<minDistanceToFastRclUpgrade
+        && Game.rooms[mainRoom].storage!=undefined && Game.rooms[mainRoom].terminal!=undefined && Game.rooms[mainRoom].controller.level<8
+        && Game.rooms[mainRoom].memory.distanceToOthers!=0
       )
       {
-        minDistancetoFastRCLUpgrade= Game.rooms[mainRoom].distanceToOthers;
+        minDistanceToFastRclUpgrade= Game.rooms[mainRoom].memory.distanceToOthers;
         roomToFastRclUpgrade=mainRoom;
       }
 
@@ -222,6 +223,8 @@ module.exports.loop = function () {
 
     }
 
+
+    console.log("roomToFastRclUpgrade: ",roomToFastRclUpgrade)
     if(roomToFastRclUpgrade!=undefined)
     {
       Memory.fastRclUpgrade=roomToFastRclUpgrade

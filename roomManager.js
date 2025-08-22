@@ -23,6 +23,7 @@ Room.prototype.roomManager = function roomManager() {
     global.heap.rooms[this.name].needT3EconomicBoosts = []
     global.heap.rooms[this.name].excessT3EconomicBoost=[]
     global.heap.rooms[this.name].needT3MilitaryBoosts=[]
+    global.heap.rooms[this.name].excessT3MilitaryBoosts=[]
     global.heap.rooms[this.name].hostiles = []
     global.heap.rooms[this.name].hostileHealPower = 0;
     global.heap.rooms[this.name].hostileAttackPower = 0;
@@ -56,7 +57,7 @@ Room.prototype.roomManager = function roomManager() {
                     counter++;
                 }
             }
-            this.memory.distanceToOthers=distance.counter;
+            this.memory.distanceToOthers=distance/counter;
         }
 
 

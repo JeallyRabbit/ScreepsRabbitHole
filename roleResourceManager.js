@@ -11,7 +11,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 
     //TODO:
     // Add clearing creep store
-
+    this.say("Test")
     var terminal = this.room.terminal;
     var storage = this.room.storage;
     var managerLink = undefined
@@ -31,12 +31,12 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
         if (terminal != undefined && storage != undefined) {
 
 
-            console.log("T1/T2 boost in storage: ", this.room.name, " ", isT1orT2InStore(storage.store))
-            console.log(C.REVERSED_RESOURCE['UH2O'])
+            this.say("-1")
             if (global.heap.rooms[this.room.name].managerTask == undefined) {
                 this.say("0")
                 if (managerLink != undefined && managerLink.store[RESOURCE_ENERGY] < C.LINK_BOTTOM_ENERGY) {
                     this.say("1")
+                    
                     global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_LINK
                 }
                 else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_ENERGY_BOTTOM) {
@@ -96,7 +96,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                 if (terminal.store[resToTransfer] == 0) { global.heap.rooms[this.room.name].managerTask = undefined }
                 else {
                     this.withdraw(terminal, resToTransfer)
-                    this.transfer(storage, resToTransfer)
+                    this.transfer(storage, resToTransfer,this.store.getCapacity(resToTransfer))
                 }
                 if (terminal.store[resToTransfer] == 0) {
                     global.heap.rooms[this.room.name].managerTask = undefined
@@ -108,7 +108,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                 if (storage.store[resToTransfer] == 0) { global.heap.rooms[this.room.name].managerTask = undefined }
                 else {
                     this.withdraw(storage, resToTransfer)
-                    this.transfer(terminal, resToTransfer)
+                    this.transfer(terminal, resToTransfer,this.store.getCapacity(resToTransfer))
                 }
                 if (storage.store[resToTransfer] == 0) {
                     global.heap.rooms[this.room.name].managerTask = undefined

@@ -309,7 +309,7 @@ const MIN_ECONOMIC_BOOST_AMOUNT = 10000
 const MIN_MILITARY_BOOST_AMOUNT = 30000
 const REACTION_STEP = 500
 const MIN_NUKER_RES_AMOUNT = 100 // minimum amount of energy or ghodium in storage/temrinal to consider transfering it to nuker
-const ROOM_DISTANCE_CALC_STEP=1234
+const ROOM_DISTANCE_CALC_STEP=1
 
 // Room Visualization
 const OUTLINE_COLOR = 'black'
@@ -455,6 +455,7 @@ module.exports = {
   ATTACK_TYPE_DISMANTLE,
   ATTACK_TYPE_CONTROLLER_DOWNGRADE,
   ATTACK_TYPE_NUKE,
-  ATTACK_TYPE_SCOUT
+  ATTACK_TYPE_SCOUT,
+  ATTACK_TYPE_PLUNDER
 };
 
