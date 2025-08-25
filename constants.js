@@ -52,6 +52,14 @@ const TASK_TAKE_FROM_LINK = 'take_from_link'
 const TASK_FILL_MANAGER_LINK = 'fill_manager_link'
 const TASK_FILL_NUKER_GHODIUM = 'fill_nuker_ghodium'
 const TASK_FILL_NUKER_ENERGY = 'fill_nuker_energy'
+const TASK_CLEAR_CREEP = 'task_clear_creep'
+const TASK_FILL_INPUT_LAB_1_ENERGY = 'task_fill_input_lab_1_energy'
+const TASK_FILL_INPUT_LAB_2_ENERGY = 'task_fill_input_lab_2_energy'
+const TASK_BOOST_CREEP = 'task_boost_creep'
+const TASK_FILL_INPUT_LABS = 'task_fill_input_labs'
+const TASK_CLEAR_INPUT_LABS = 'task_clear_input_labs'
+const TASK_CLEAR_OUTPUT_LABS = 'task_clear_output_labs'
+
 
 
 const REVERSED_RESOURCE = {
@@ -309,7 +317,7 @@ const MIN_ECONOMIC_BOOST_AMOUNT = 10000
 const MIN_MILITARY_BOOST_AMOUNT = 30000
 const REACTION_STEP = 500
 const MIN_NUKER_RES_AMOUNT = 100 // minimum amount of energy or ghodium in storage/temrinal to consider transfering it to nuker
-const ROOM_DISTANCE_CALC_STEP=1
+const ROOM_DISTANCE_CALC_STEP = 1
 
 // Room Visualization
 const OUTLINE_COLOR = 'black'
@@ -343,7 +351,7 @@ const ATTACK_TYPE_DISMANTLE = 'attack_type_dismantle'
 const ATTACK_TYPE_CONTROLLER_DOWNGRADE = 'attack_type_controller_downgrade'
 const ATTACK_TYPE_NUKE = 'attack_type_nuke'
 const ATTACK_TYPE_SCOUT = 'attack_type_scout'
-const ATTACK_TYPE_PLUNDER='attack_type_plunder'// collecting resources from structures
+const ATTACK_TYPE_PLUNDER = 'attack_type_plunder'// collecting resources from structures
 
 
 module.exports = {
@@ -390,6 +398,13 @@ module.exports = {
   TASK_FILL_MANAGER_LINK,
   TASK_FILL_NUKER_GHODIUM,
   TASK_FILL_NUKER_ENERGY,
+  TASK_CLEAR_CREEP,
+  TASK_FILL_INPUT_LAB_1_ENERGY,
+  TASK_FILL_INPUT_LAB_2_ENERGY,
+  TASK_BOOST_CREEP,
+  TASK_FILL_INPUT_LABS,
+  TASK_CLEAR_INPUT_LABS,
+  TASK_CLEAR_OUTPUT_LABS,
 
 
 

@@ -2,7 +2,7 @@
 const C = require('constants');
 const buildRoom = require('buildRoom');
 const operateTowers = require('operateTowers')
-const roomReaction=require('roomReaction')
+const roomReaction = require('roomReaction')
 
 class Variation {
     constructor(variationName, variationFinished, rampartsAmount, spawnPos) {
@@ -17,13 +17,7 @@ Room.prototype.roomManager = function roomManager() {
 
 
 
-    global.heap.rooms[this.name].state = []
-    global.heap.rooms[this.name].needRawResources = []
-    global.heap.rooms[this.name].excessRawResources=[]
-    global.heap.rooms[this.name].needT3EconomicBoosts = []
-    global.heap.rooms[this.name].excessT3EconomicBoost=[]
-    global.heap.rooms[this.name].needT3MilitaryBoosts=[]
-    global.heap.rooms[this.name].excessT3MilitaryBoosts=[]
+
     global.heap.rooms[this.name].hostiles = []
     global.heap.rooms[this.name].hostileHealPower = 0;
     global.heap.rooms[this.name].hostileAttackPower = 0;
@@ -45,19 +39,16 @@ Room.prototype.roomManager = function roomManager() {
     if (Memory.mainRooms.includes(this.name)) {
         //If it is one of main rooms 
 
-        if(this.memory.distanceToOthers==undefined && Game.time%C.ROOM_DISTANCE_CALC_STEP==0)
-        {
-            var distance=0;
-            var counter=0
-            for(m of Memory.mainRooms)
-            {
-                if(m!=this.name)
-                {
-                    distance+=Game.map.getRoomLinearDistance(this.name,m)
+        if (this.memory.distanceToOthers == undefined && Game.time % C.ROOM_DISTANCE_CALC_STEP == 0) {
+            var distance = 0;
+            var counter = 0
+            for (m of Memory.mainRooms) {
+                if (m != this.name) {
+                    distance += Game.map.getRoomLinearDistance(this.name, m)
                     counter++;
                 }
             }
-            this.memory.distanceToOthers=distance/counter;
+            this.memory.distanceToOthers = distance / counter;
         }
 
 
@@ -72,11 +63,11 @@ Room.prototype.roomManager = function roomManager() {
 
         //second spawn ID
         if ((this.memory.spawn2Id != undefined && Game.getObjectById(this.memory.spawn2Id) == null) || this.memory.spawn2Id == undefined) {
-            var sp = this.find(FIND_MY_SPAWNS,{filter:
-                function (str)
-                {
-                    return str.name.endsWith("_2")
-                }
+            var sp = this.find(FIND_MY_SPAWNS, {
+                filter:
+                    function (str) {
+                        return str.name.endsWith("_2")
+                    }
             })
             if (sp.length > 0) {
                 this.memory.spawn2Id = sp[0].id
@@ -85,11 +76,11 @@ Room.prototype.roomManager = function roomManager() {
 
         //Third spawnID
         if ((this.memory.spawn3Id != undefined && Game.getObjectById(this.memory.spawn3Id) == null) || this.memory.spawn3Id == undefined) {
-            var sp = this.find(FIND_MY_SPAWNS,{filter:
-                function (str)
-                {
-                    return str.name.endsWith("_3")
-                }
+            var sp = this.find(FIND_MY_SPAWNS, {
+                filter:
+                    function (str) {
+                        return str.name.endsWith("_3")
+                    }
             })
             if (sp.length > 0) {
                 this.memory.spawn3Id = sp[0].id
@@ -145,6 +136,7 @@ Room.prototype.roomManager = function roomManager() {
 
         global.heap.rooms[this.name].myExtensions = []
         global.heap.rooms[this.name].myLabs = []
+        global.heap.rooms[this.name].outLabsId = []
         global.heap.rooms[this.name].myTowersId = []
         global.heap.rooms[this.name].towersNeedRefill = false
         global.heap.rooms[this.name].myRamparts = []
@@ -154,6 +146,17 @@ Room.prototype.roomManager = function roomManager() {
         global.heap.rooms[this.name].myExtractor = undefined
         global.heap.rooms[this.name].myObserver = undefined
 
+
+        global.heap.rooms[this.name].state = []
+        global.heap.rooms[this.name].needRawResources = []
+        global.heap.rooms[this.name].excessRawResources = []
+        global.heap.rooms[this.name].needT3EconomicBoosts = []
+        global.heap.rooms[this.name].excessT3EconomicBoost = []
+        global.heap.rooms[this.name].needT3MilitaryBoosts = []
+        global.heap.rooms[this.name].excessT3MilitaryBoosts = []
+        if (global.heap.rooms[this.name].boostingRequests == undefined) {
+            global.heap.rooms[this.name].boostingRequests = []
+        }
 
 
         if (this.memory.energyBalance == undefined && (this.storage == undefined
@@ -315,11 +318,10 @@ Room.prototype.roomManager = function roomManager() {
 
                         if (this.memory.baseVariations[key].variationFinished == false) {
                             this.visual.text(key, 25, 4)
-                            if(Game.cpu.bucket>500)
-                            {
+                            if (Game.cpu.bucket > 500) {
                                 this.buildRoom(key)
                             }
-                            
+
                             break;
                         }
                         this.memory.finishedPlanning = true
@@ -351,47 +353,38 @@ Room.prototype.roomManager = function roomManager() {
         }
 
         //minerals sharing
-        var rawResources = ["H","O", "U", "L", "K", "Z","X" ]//140k total
-        var T3EconomicBoosts=["XUHO2","XKH2O",  "XLH2O", "XGH2O" ]
-        var T3MilitaryBoosts=["XUH2O","XKHO2","XLHO2","XZH2O","XZHO2","XGHO2"]
+        var rawResources = ["H", "O", "U", "L", "K", "Z", "X"]//140k total
+        var T3EconomicBoosts = ["XUHO2", "XKH2O", "XLH2O", "XGH2O"]
+        var T3MilitaryBoosts = ["XUH2O", "XKHO2", "XLHO2", "XZH2O", "XZHO2", "XGHO2"]
         if (this.terminal != undefined && this.storage != undefined) {
-            for (res of rawResources)
-            {
-                if(this.terminal.store[res]+this.storage.store[res]<C.MIN_RAW_RESOURCE_AMOUNT)
-                {
+            for (res of rawResources) {
+                if (this.terminal.store[res] + this.storage.store[res] < C.MIN_RAW_RESOURCE_AMOUNT) {
                     global.heap.rooms[this.name].needRawResources.push(res)
                 }
-                else if(this.terminal.store[res]+this.storage.store[res]>C.MAX_RAW_RESOURCE_AMOUNT)
-                {
+                else if (this.terminal.store[res] + this.storage.store[res] > C.MAX_RAW_RESOURCE_AMOUNT) {
                     global.heap.rooms[this.name].excessRawResources.push(res)
                 }
             }
-            for(boost of T3EconomicBoosts)
-            {
-                if(this.terminal.store[boost]+this.storage.store[boost]<C.MIN_ECONOMIC_BOOST_AMOUNT)
-                {
+            for (boost of T3EconomicBoosts) {
+                if (this.terminal.store[boost] + this.storage.store[boost] < C.MIN_ECONOMIC_BOOST_AMOUNT) {
                     global.heap.rooms[this.name].needT3EconomicBoosts.push(boost)
                 }
-                else if(this.terminal.store[boost]+this.storage.store[boost]>C.MIN_ECONOMIC_BOOST_AMOUNT*2)
-                {
+                else if (this.terminal.store[boost] + this.storage.store[boost] > C.MIN_ECONOMIC_BOOST_AMOUNT * 2) {
                     global.heap.rooms[this.name].excessT3EconomicBoost.push(boost)
                 }
             }
-            for(boost of T3MilitaryBoosts)
-            {
-                if(this.terminal.store[boost]+this.storage.store[boost]<C.MIN_MILITARY_BOOST_AMOUNT)
-                {
+            for (boost of T3MilitaryBoosts) {
+                if (this.terminal.store[boost] + this.storage.store[boost] < C.MIN_MILITARY_BOOST_AMOUNT) {
                     global.heap.rooms[this.name].needT3MilitaryBoosts.push(boost)
                 }
-                else if(this.terminal.store[boost]+this.storage.store[boost]>C.MIN_MILITARY_BOOST_AMOUNT*2)
-                {
+                else if (this.terminal.store[boost] + this.storage.store[boost] > C.MIN_MILITARY_BOOST_AMOUNT * 2) {
                     global.heap.rooms[this.name].excessT3MilitaryBoosts.push(boost)
                 }
             }
         }
 
         //Define what reacion should labs run
-        global.heap.rooms[this.name].reaction=this.roomReaction()
+        global.heap.rooms[this.name].reaction = this.roomReaction()
 
     }
 
@@ -504,6 +497,23 @@ Room.prototype.roomManager = function roomManager() {
                     break;
                 case STRUCTURE_LAB:
                     global.heap.rooms[this.name].myLabs.push(str.id);
+                    if (str.pos.x == this.memory.inputLab1Pos.x && str.pos.y == this.memory.inputLab1Pos.y) {
+                        global.heap.rooms[this.name].inLab1Id = str.id
+                    }
+                    else if (str.pos.x == this.memory.inputLab2Pos.x && str.pos.y == this.memory.inputLab2Pos.y) {
+                        global.heap.rooms[this.name].inLab2Id = str.id
+                    }
+                    else if (str.pos.x == this.memory.boostingLabPos.x && str.pos.y == this.memory.boostingLabPos.y) {
+                        //boosting lab is also first output lab
+                        global.heap.rooms[this.name].boostingLabId = str.id
+                        global.heap.rooms[this.name].outLabsId.push(str.id)
+                    }
+                    else {
+                        global.heap.rooms[this.name].outLabsId.push(str.id)
+                    }
+
+
+
                     break;
                 case STRUCTURE_EXTRACTOR:
                     global.heap.rooms[this.name].myExtractor = str.id;

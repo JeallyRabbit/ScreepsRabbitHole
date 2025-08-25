@@ -36,7 +36,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                 this.say("0")
                 if (managerLink != undefined && managerLink.store[RESOURCE_ENERGY] < C.LINK_BOTTOM_ENERGY) {
                     this.say("1")
-                    
+
                     global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_LINK
                 }
                 else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_ENERGY_BOTTOM) {
@@ -65,15 +65,16 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                 }
                 else {
                     var nuker = Game.getObjectById(global.heap.rooms[this.room.name].myNuker)
-                    if ((nuker != null && nuker.store[RESOURCE_GHODIUM] < NUKER_GHODIUM_CAPACITY && (storage.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT))
-                        )
-                    {
-                        global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_GHODIUM
+                    if (nuker != null) {
+                        if ((nuker.store[RESOURCE_GHODIUM] < NUKER_GHODIUM_CAPACITY && (storage.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT))
+                        ) {
+                            global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_GHODIUM
+                        }
+                        else if ((nuker.store[RESOURCE_ENERGY] < NUKER_ENERGY_CAPACITY) && (storage.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT)) {
+                            global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_ENERGY
+                        }
                     }
-                    else if((nuker.store[RESOURCE_ENERGY] < NUKER_ENERGY_CAPACITY) && (storage.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT))
-                    {
-                        global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_ENERGY
-                    }
+
 
 
 
@@ -96,7 +97,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                 if (terminal.store[resToTransfer] == 0) { global.heap.rooms[this.room.name].managerTask = undefined }
                 else {
                     this.withdraw(terminal, resToTransfer)
-                    this.transfer(storage, resToTransfer,this.store.getCapacity(resToTransfer))
+                    this.transfer(storage, resToTransfer, this.store.getCapacity(resToTransfer))
                 }
                 if (terminal.store[resToTransfer] == 0) {
                     global.heap.rooms[this.room.name].managerTask = undefined
@@ -108,18 +109,16 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                 if (storage.store[resToTransfer] == 0) { global.heap.rooms[this.room.name].managerTask = undefined }
                 else {
                     this.withdraw(storage, resToTransfer)
-                    this.transfer(terminal, resToTransfer,this.store.getCapacity(resToTransfer))
+                    this.transfer(terminal, resToTransfer, this.store.getCapacity(resToTransfer))
                 }
                 if (storage.store[resToTransfer] == 0) {
                     global.heap.rooms[this.room.name].managerTask = undefined
                 }
             }
-            else if(global.heap.rooms[this.room.name].managerTask == C.TASK_FILL_NUKER_ENERGY)
-            {
+            else if (global.heap.rooms[this.room.name].managerTask == C.TASK_FILL_NUKER_ENERGY) {
                 this.taskFillNukerEnergy()
             }
-            else if(global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_GHODIUM)
-            {
+            else if (global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_GHODIUM) {
                 this.taskFillNukerGhodium();
             }
 

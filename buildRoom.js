@@ -682,7 +682,7 @@ Room.prototype.createLabsStamp = function createLabsStamp(x, y) {
 
     this.memory.roomPlan[x + 1][y + 1] = STRUCTURE_LAB;
     this.memory.buildingList.push(new buildingListElement(x + 1, y + 1, this.name, STRUCTURE_LAB, 6));
-    this.memoryboostingLabPos = new RoomPosition(x + 1, y + 1, this.name)
+    this.memory.boostingLabPos = new RoomPosition(x + 1, y + 1, this.name)
 
     this.memory.roomPlan[x + 1][y] = STRUCTURE_LAB;
     this.memory.buildingList.push(new buildingListElement(x + 1, y, this.name, STRUCTURE_LAB, 7));

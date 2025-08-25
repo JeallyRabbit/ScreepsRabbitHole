@@ -4,6 +4,47 @@ const C = require('constants');
 //TODO:
 //Add avopiding hostile areas during STATE_UNDER_ATTACK
 
+
+
+
+Creep.prototype.taskFillInputLabEnergy(lab)
+{
+    if(this.store[RESOURCE_ENERGY]>0)
+    {
+        if(lab!=undefined && this.transfer(lab,RESOURCE_ENERGY)==ERR_NOT_IN_RANGE)
+        {
+            this.travelTo(lab)
+        }
+
+    }
+    else{
+        if(this.room.storage!=undefined && this.withdraw(this.room.storage,RESOURCE_ENERGY)==ERR_NOT_IN_RANGE)
+        {
+            this.travelTo(this.room.storage)
+        }
+    }
+}
+
+Creep.prototype.taskClearCreep = function taskClearCreep(){
+
+    if(this.room.storage!=undefined)
+    {
+        if(this.pos.isNearTo(this.room.storage.pos.x,this.room.storage.pos.y))
+        {
+            for(res of this.store)
+            {
+                if(this.transfer(this.store,res)==OK)
+                {
+                    break;
+                }
+            }
+        }
+        else{
+            this.travelTo(this.room.storage)
+        }
+    }
+}
+
 Creep.prototype.taskFillManagerLink=function taskFillManagerLink()
 {
     if(this.room.memory.managerLinkId!=undefined  && Game.getObjectById(this.room.memory.managerLinkId)!=null)
