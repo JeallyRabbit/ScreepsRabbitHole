@@ -54,6 +54,7 @@ const TASK_FILL_MANAGER_LINK = 'fill_manager_link'
 const TASK_FILL_NUKER_GHODIUM = 'fill_nuker_ghodium'
 const TASK_FILL_NUKER_ENERGY = 'fill_nuker_energy'
 const TASK_CLEAR_CREEP = 'task_clear_creep'
+const TASK_FILL_LAB_ENERGY='task_fill_lab_energy'
 const TASK_FILL_INPUT_LAB_1_ENERGY = 'task_fill_input_lab_1_energy'
 const TASK_FILL_INPUT_LAB_2_ENERGY = 'task_fill_input_lab_2_energy'
 const TASK_BOOST_CREEP = 'task_boost_creep'
@@ -402,6 +403,7 @@ module.exports = {
   TASK_FILL_NUKER_ENERGY,
 
   TASK_CLEAR_CREEP,
+  TASK_FILL_LAB_ENERGY,
   TASK_FILL_INPUT_LAB_1_ENERGY,
   TASK_FILL_INPUT_LAB_2_ENERGY,
 

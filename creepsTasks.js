@@ -51,6 +51,33 @@ Creep.prototype.taskClearInputLabs=function taskClearInputLabs(in1,in2)
 }
     */
 
+Creep.prototype.taskFillLabEnergy = function taskFillLabEnergy(id)
+{
+    var lab=Game.getObjectById(id)
+
+    if(lab==null || (lab!=null && lab.store[RESOURCE_ENERGY]>LAB_ENERGY_CAPACITY/2))
+    {
+        global.heap.rooms[this.room.name].doctorTask=undefined
+        global.heap.rooms[this.room.name].labNeedEnergyId=undefined
+        return
+    }
+
+    if(this.store[RESOURCE_ENERGY]==0)
+    {
+        if(this.withdraw(this.room.storage,RESOURCE_ENERGY)==ERR_NOT_IN_RANGE)
+        {
+            this.travelTo(this.room.storage)
+        }
+    }
+    else{
+        if(this.transfer(lab,RESOURCE_ENERGY)==ERR_NOT_IN_RANGE)
+        {
+            this.travelTo(lab)
+        }
+    }
+
+}
+
 Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
     if (in1.store.getFreeCapacity[RESOURCE_OXYGEN] == LAB_MINERAL_CAPACITY && in2.store.getFreeCapacity[RESOURCE_OXYGEN] == LAB_MINERAL_CAPACITY) {
         global.heap.rooms[this.room.name].doctorTask = undefined
@@ -155,23 +182,27 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs() {
 
 Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1, in2) {
 
+
+this.say("fill inp")
     // just error controll
     if (in1 == undefined || in2 == undefined) {
         global.heap.rooms[this.room.name].doctorTask = undefined
+        this.say("ERR")
         return
     }
 
 
 
 
-    if (global.heap.rooms[this.name].reaction != undefined && global.heap.rooms[this.name].reaction.length > 0) {
-        var res1 = global.heap.rooms[this.name].reaction[0]
-        var res2 = global.heap.rooms[this.name].reaction[0]
+    if (global.heap.rooms[this.room.name].reaction != undefined && global.heap.rooms[this.room.name].reaction.length > 0) {
+        var res1 = global.heap.rooms[this.room.name].reaction[0]
+        var res2 = global.heap.rooms[this.room.name].reaction[0]
 
         // Minerals are already in labs
         if (in1.store[res1] > LAB_REACTION_AMOUNT && in2.store[res2] > LAB_REACTION_AMOUNT) {
             global.heap.rooms[this.room.name].doctorTask = undefined
             global.heap.rooms[this.room.name].reactionAmount = undefined
+            this.say("exit")
             return
         }
 

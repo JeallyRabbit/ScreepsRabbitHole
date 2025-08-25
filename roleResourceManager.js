@@ -106,10 +106,17 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
             else if (global.heap.rooms[this.room.name].managerTask != undefined && global.heap.rooms[this.room.name].managerTask.startsWith("transfer_to_terminal_")) {
                 var resToTransfer = global.heap.rooms[this.room.name].managerTask.replace("transfer_to_terminal_", "");
                 this.say("7")
-                if (storage.store[resToTransfer] == 0) { global.heap.rooms[this.room.name].managerTask = undefined }
+                if (storage.store[resToTransfer] == 0) { global.heap.rooms[this.room.name].managerTask = undefined 
+                    this.say("7.5")
+                    return
+                }
                 else {
+                    this.say(resToTransfer)
                     this.withdraw(storage, resToTransfer)
-                    this.transfer(terminal, resToTransfer, this.store.getCapacity(resToTransfer))
+                    if(this.transfer(terminal, resToTransfer,this.store.getCapacity(resToTransfer))!=OK)
+                    {
+                        this.transfer(terminal, resToTransfer,this.store[resToTransfer])
+                    }
                 }
                 if (storage.store[resToTransfer] == 0) {
                     global.heap.rooms[this.room.name].managerTask = undefined

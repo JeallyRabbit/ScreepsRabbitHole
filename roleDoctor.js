@@ -8,7 +8,7 @@ Creep.prototype.roleDoctor = function roleDoctor() {
     var inputLab1=Game.getObjectById(global.heap.rooms[this.room.name].inLab1Id)
     var inputLab2=Game.getObjectById(global.heap.rooms[this.room.name].inLab2Id)
     var outputLabs=[]
-    for(outputId in global.heap.rooms[this.room.name].outLabsId)
+    for(outputId of global.heap.rooms[this.room.name].outLabsId)
     {
         var outputLab=Game.getObjectById(outputId)
         if(outputLab!=null)
@@ -19,8 +19,18 @@ Creep.prototype.roleDoctor = function roleDoctor() {
 
     var boostingLab=Game.getObjectById(global.heap.rooms[this.room.name].inLab2Id)
 
-    if(storage==null || terminal==null || inputLab1==null || inputLab2==null || outputLabs.length==0)
+    
+    console.log("storage: ",storage)
+    console.log("terminal: ",terminal)
+    console.log("inputLab1: ",inputLab1)
+    console.log("inputLab2: ",inputLab2)
+    console.log("outputLabs: ",outputLabs.length)
+    console.log("boostingLab: ",boostingLab)
+    if(storage==null || terminal==null || inputLab1==null || inputLab2==null || outputLabs.length==0
+        || boostingLab==null
+    )
     {
+        this.say("error")
         return
     }
 
@@ -38,15 +48,25 @@ Creep.prototype.roleDoctor = function roleDoctor() {
     //filling input labs minerals-- when they are empty/(close to empty and match reaction)
     // clearing input labs -- one of them empty 
     // taking stuff from output labs -- 
-
+    console.log("ifBothInputMineralEmpty(inputLab1,inputLab2): ",ifBothInputMineralEmpty(inputLab1,inputLab2))
 
     if(global.heap.rooms[this.room.name].doctorTask==undefined)
     {
 
         if(this.store.getCapacity()!=this.store.getFreeCapacity(RESOURCE_ENERGY))
         {
+            this.say("1")
             global.heap.rooms[this.room.name].doctorTask=C.TASK_CLEAR_CREEP
         }
+        //
+        else if(anyLabNeedEnergy(this.room.name)!=false)
+        {
+            this.say("2")
+            global.heap.rooms[this.room.name].doctorTask=C.TASK_FILL_LAB_ENERGY
+            global.heap.rooms[this.room.name].labNeedEnergyId=anyLabNeedEnergy(this.room.name)
+        }
+        //changed to any need energy (above)
+        /*
         else if(inputsNeedEnergy(inputLab1,inputLab2)==1)
         {
             global.heap.rooms[this.room.name].doctorTask=C.TASK_FILL_INPUT_LAB_1_ENERGY
@@ -55,19 +75,24 @@ Creep.prototype.roleDoctor = function roleDoctor() {
         {
             global.heap.rooms[this.room.name].doctorTask=C.TASK_FILL_INPUT_LAB_2_ENERGY
         }
+            */
         else if(global.heap.rooms[this.room.name].boostingRequests.length>0)
         {
+            this.say("3")
             global.heap.rooms[this.room.name].doctorTask=C.TASK_BOOST_CREEP
         }
         else if(ifBothInputMineralEmpty(inputLab1,inputLab2)==true)
         {
-            global.heap.rooms[this.room.name].doctorTask=C.TASK_FILL_INPUT_LABS
+            this.say(C.TASK_FILL_INPUT_LABS_MINERAL)
+            global.heap.rooms[this.room.name].doctorTask=C.TASK_FILL_INPUT_LABS_MINERAL
         }
         else if(oneInputMineralEmpty(inputLab1,inputLab2)==true)
         {
+            this.say("5")
             global.heap.rooms[this.room.name].doctorTask=C.TASK_CLEAR_INPUT_LABS
         }
         else{
+            this.say("6")
             global.heap.rooms[this.room.name].doctorTask=C.TASK_CLEAR_OUTPUT_LABS
         }
 
@@ -80,6 +105,11 @@ Creep.prototype.roleDoctor = function roleDoctor() {
         {
             this.taskClearCreep()
         }
+        else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_FILL_LAB_ENERGY)
+        {
+            this.taskFillLabEnergy(global.heap.rooms[this.room.name].labNeedEnergyId)
+        }
+        /*
         else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_FILL_INPUT_LAB_1_ENERGY)
         {
             this.taskFillInputLabEnergy(inputLab1)
@@ -87,13 +117,15 @@ Creep.prototype.roleDoctor = function roleDoctor() {
         else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_FILL_INPUT_LAB_2_ENERGY)
         {
             this.taskFillInputLabEnergy(inputLab2)
-        }/*
+        }*/
+       /*
         else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_BOOST_CREEP)
         {
 
         }*/
-        else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_FILL_INPUT_LABS)
+        else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_FILL_INPUT_LABS_MINERAL)
         {
+            this.say("fill in")
             this.taskFillInputLabsMineral(inputLab1,inputLab2)
         }
         else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_CLEAR_INPUT_LABS)
@@ -155,6 +187,18 @@ function ifBothInputMineralEmpty(in1,in2)
     return true
 }
 
+function anyLabNeedEnergy(roomName)
+{
+    for(id of global.heap.rooms[roomName].myLabs)
+    {
+        var lab=Game.getObjectById(id)
+        if(lab.store[RESOURCE_ENERGY]<LAB_ENERGY_CAPACITY/2)
+        {
+            return id
+        }
+    }
+    return false
+}
 function inputsNeedEnergy(in1,in2)
 {
      if(in1.store.getUsedCapacity(RESOURCE_ENERGY)<LAB_ENERGY_CAPACITY/2)
