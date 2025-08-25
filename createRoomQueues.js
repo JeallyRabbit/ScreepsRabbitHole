@@ -238,7 +238,13 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     }
 
 
+    if(global.heap.rooms[this.name].outLabsId.length>0 && global.heap.rooms[this.name].doctorId==undefined
+        && global.heap.rooms[this.name].reaction!=undefined
+    )
+    {
+        global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_DOCTOR))
 
+    }
 
    // console.log("global.heap.rooms[this.name].mineralMiningPower: ", global.heap.rooms[this.name].mineralMiningPower, " / global.heap.rooms[this.name].mineralCarryPower: ", global.heap.rooms[this.name].mineralCarryPower)
 

@@ -22,6 +22,7 @@ Room.prototype.creepsManager = function creepsManager() {
     global.heap.rooms[this.name].haveScout = false;
     global.heap.rooms[this.name].haulersParts = 0;
     global.heap.rooms[this.name].resourceManagerId = undefined;
+    global.heap.rooms[this.name].doctorId=undefined;
     global.heap.rooms[this.name].mineralMiningPower = 0;//how much of mineral is extracted per tick
     if (global.heap.rooms[this.name].miners == undefined) {
         global.heap.rooms[this.name].miners = []
@@ -149,6 +150,10 @@ Room.prototype.creepsManager = function creepsManager() {
                 creep.roleMineralCarrier()
                 global.heap.rooms[this.name].mineralCarriers.push(creep)
                 global.heap.rooms[creep.memory.homeRoom].mineralCarryPower += creep.store.getCapacity() / (this.memory.mineralDistance * 2);
+                break;
+            case C.ROLE_DOCTOR:
+                creep.roleDoctor()
+                global.heap.rooms[this.name].doctorId=creep.id
                 break;
         }
     }

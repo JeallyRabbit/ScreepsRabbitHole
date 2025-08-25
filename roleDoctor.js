@@ -2,6 +2,7 @@ const C=require('constants')
 
 Creep.prototype.roleDoctor = function roleDoctor() {
 
+    this.say("D")
     var storage=this.room.storage
     var terminal=this.room.terminal
     var inputLab1=Game.getObjectById(global.heap.rooms[this.room.name].inLab1Id)
@@ -70,6 +71,39 @@ Creep.prototype.roleDoctor = function roleDoctor() {
             global.heap.rooms[this.room.name].doctorTask=C.TASK_CLEAR_OUTPUT_LABS
         }
 
+    }
+
+
+    if(global.heap.rooms[this.room.name].doctorTask!=undefined)
+    {
+        if(global.heap.rooms[this.room.name].doctorTask==C.TASK_CLEAR_CREEP)
+        {
+            this.taskClearCreep()
+        }
+        else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_FILL_INPUT_LAB_1_ENERGY)
+        {
+            this.taskFillInputLabEnergy(inputLab1)
+        }
+        else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_FILL_INPUT_LAB_2_ENERGY)
+        {
+            this.taskFillInputLabEnergy(inputLab2)
+        }/*
+        else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_BOOST_CREEP)
+        {
+
+        }*/
+        else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_FILL_INPUT_LABS)
+        {
+            this.taskFillInputLabsMineral(inputLab1,inputLab2)
+        }
+        else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_CLEAR_INPUT_LABS)
+        {
+            this.taskClearInputLabs(inputLab1,inputLab2)
+        }
+        else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_CLEAR_OUTPUT_LABS)
+        {
+            this.taskClearOutputLabs()
+        }
     }
 }
 

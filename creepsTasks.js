@@ -3,7 +3,53 @@ const C = require('constants');
 
 //TODO:
 //Add avopiding hostile areas during STATE_UNDER_ATTACK
-// task to clear input labs
+// task to boost creeps
+
+
+
+/*
+Creep.prototype.taskClearInputLabs=function taskClearInputLabs(in1,in2)
+{
+    if(in1.store.getFreeCapacity[RESOURCE_KEANIUM]==LAB_MINERAL_CAPACITY
+        && in2.store.getFreeCapacity[RESOURCE_KEANIUM]==LAB_MINERAL_CAPACITY
+    )
+    {
+        global.heap.rooms[this.room.name].doctorTask=undefined
+        return;
+    }
+
+    if(this.store.getFreeCapacity(RESOURCE_ENERGY)==0)
+    {
+        for(res in this.store)
+        {
+            if(this.transfer(this.room.storage,res)==ERR_NOT_IN_RANGE)
+            {
+                this.travelTo(this.room.storage)
+            }
+            break;
+        }
+    }
+    else{
+        var targetStore=in1.store
+        if(in2.store.getFreeCapacity[RESOURCE_KEANIUM]!=LAB_MINERAL_CAPACITY)
+        {
+            targetStore=in2.store
+        }
+        for(res in targetStore)
+        {
+            if(res!=RESOURCE_ENERGY)
+            {
+                if(this.withdraw(targetStore,res)==ERR_NOT_IN_RANGE)
+                {
+                    this.travelTo(targetStore)
+                }
+                break;
+            }
+
+        }
+    }
+}
+    */
 
 Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
     if (in1.store.getFreeCapacity[RESOURCE_OXYGEN] == LAB_MINERAL_CAPACITY && in2.store.getFreeCapacity[RESOURCE_OXYGEN] == LAB_MINERAL_CAPACITY) {

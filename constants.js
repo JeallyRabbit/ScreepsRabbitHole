@@ -28,6 +28,7 @@ const ROLE_CLAIMER = 'claimer'
 const ROLE_COLONIZER = 'colonizer'
 const ROLE_MINER = 'miner'
 const ROLE_MINERAL_CARRIER = 'mineral_carrier'
+const ROLE_DOCTOR='doctor'
 
 //Creep constants
 const CREEP_MAX_BODYPARTS = 50; // maximum creep body length - couldn't find in API
@@ -374,7 +375,8 @@ module.exports = {
   ROLE_COLONIZER,
   ROLE_MINER,
   ROLE_MINERAL_CARRIER,
-
+  ROLE_DOCTOR,
+  
   CREEP_MAX_BODYPARTS,
   HAULER_REQ_CARRY_PARTS,
   DEFAULT_COLONIZERS_AMOUNT,

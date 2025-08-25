@@ -212,6 +212,15 @@ Room.prototype.spawnManager = function spawnManager() {
                     }
                     break;
                 }
+            case C.ROLE_DOCTOR:
+                {
+                    var result = spawn.spawnCreep(carrierBody(energyCap), C.ROLE_DOCTOR + '_' + this.name + Game.time, { memory: { role: C.ROLE_DOCTOR, homeRoom: this.name } })
+                    if (result == OK) {
+                        global.heap.rooms[this.name].civilianQueue.shift()
+
+                    }
+                    break;
+                }
 
 
         }
