@@ -4,7 +4,6 @@ const C = require('constants');
 //TODO:
 //Add avopiding hostile areas during STATE_UNDER_ATTACK
 // task to clear input labs
-// finish clearing input labs
 
 Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
     if (in1.store.getFreeCapacity[RESOURCE_OXYGEN] == LAB_MINERAL_CAPACITY && in2.store.getFreeCapacity[RESOURCE_OXYGEN] == LAB_MINERAL_CAPACITY) {
@@ -19,11 +18,9 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
                     var withdrawResult = this.withdraw(in1, res)
                     if (withdrawResult == ERR_NOT_IN_RANGE) {
                         this.travelTo(in1)
-                        break
+                        
                     }
-                    else if (withdrawResult == OK) {
-                        break
-                    }
+                    break
                 }
             }
         }
@@ -34,11 +31,9 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
                     var withdrawResult = this.withdraw(in2, res)
                     if (withdrawResult == ERR_NOT_IN_RANGE) {
                         this.travelTo(in2)
-                        break
+                        
                     }
-                    else if (withdrawResult == OK) {
-                        break
-                    }
+                    break
                 }
             }
         }
@@ -46,7 +41,12 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
     else {
         // transfer to storage
         for (res in this.store) {
-
+            var transferResult=this.transfer(this.room.storage,res)
+            if(this.transferResult==ERR_NOT_IN_RANGE)
+            {
+                this.travelTo(this.room.storage)
+            }
+            break;
         }
     }
 
