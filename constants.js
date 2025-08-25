@@ -56,7 +56,7 @@ const TASK_CLEAR_CREEP = 'task_clear_creep'
 const TASK_FILL_INPUT_LAB_1_ENERGY = 'task_fill_input_lab_1_energy'
 const TASK_FILL_INPUT_LAB_2_ENERGY = 'task_fill_input_lab_2_energy'
 const TASK_BOOST_CREEP = 'task_boost_creep'
-const TASK_FILL_INPUT_LABS = 'task_fill_input_labs'
+const TASK_FILL_INPUT_LABS_MINERAL = 'task_fill_input_labs_mineral'
 const TASK_CLEAR_INPUT_LABS = 'task_clear_input_labs'
 const TASK_CLEAR_OUTPUT_LABS = 'task_clear_output_labs'
 
@@ -398,13 +398,16 @@ module.exports = {
   TASK_FILL_MANAGER_LINK,
   TASK_FILL_NUKER_GHODIUM,
   TASK_FILL_NUKER_ENERGY,
+
   TASK_CLEAR_CREEP,
   TASK_FILL_INPUT_LAB_1_ENERGY,
   TASK_FILL_INPUT_LAB_2_ENERGY,
-  TASK_BOOST_CREEP,
-  TASK_FILL_INPUT_LABS,
+
+TASK_FILL_INPUT_LABS_MINERAL,
   TASK_CLEAR_INPUT_LABS,
   TASK_CLEAR_OUTPUT_LABS,
+  TASK_BOOST_CREEP,
+
 
 
 
