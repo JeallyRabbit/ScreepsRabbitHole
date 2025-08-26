@@ -242,10 +242,15 @@ this.say("fill inp")
             if (this.store[res] == 0) {
                 this.say("with_" + res)
                 var store = this.room.storage
+                if(store[res]==0)
+                {
+                    store=this.room.terminal
+                }
+                /*
                 var rawResources = ["H", "O", "U", "L", "K", "Z", "X"]
                 if (rawResources.includes(res)) {
                     store = this.room.terminal
-                }
+                }*/
                 if (this.withdraw(store, res, Math.min(this.store.getCapacity(res), store[res])) == ERR_NOT_IN_RANGE) {
                     this.travelTo(store)
                 }
