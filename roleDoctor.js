@@ -86,7 +86,7 @@ Creep.prototype.roleDoctor = function roleDoctor() {
             this.say(C.TASK_FILL_INPUT_LABS_MINERAL)
             global.heap.rooms[this.room.name].doctorTask=C.TASK_FILL_INPUT_LABS_MINERAL
         }
-        else if(oneInputMineralEmpty(inputLab1,inputLab2)==true)
+        else if(this.room.oneInputMineralEmpty(inputLab1,inputLab2)==true)
         {
             this.say("5")
             global.heap.rooms[this.room.name].doctorTask=C.TASK_CLEAR_INPUT_LABS
@@ -134,12 +134,12 @@ Creep.prototype.roleDoctor = function roleDoctor() {
         }
         else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_CLEAR_OUTPUT_LABS)
         {
-            this.taskClearOutputLabs()
+            this.taskClearOutputLabs(inputLab1,inputLab2)
         }
     }
 }
 
-function oneInputMineralEmpty(in1,in2)
+Room.prototype.oneInputMineralEmpty=function oneInputMineralEmpty(in1,in2)
 {
     var in1Empty=true
     var in2Empty=true
@@ -148,7 +148,7 @@ function oneInputMineralEmpty(in1,in2)
     var res2=0
     for(res in in1.store)
     {
-        if(res!=RESOURCE_ENERGY)
+        if(res!=RESOURCE_ENERGY && in1.store[res]>LAB_REACTION_AMOUNT)
         {
             res1=res
             in1Empty= false
@@ -157,7 +157,7 @@ function oneInputMineralEmpty(in1,in2)
     }
     for(res in in2.store)
     {
-        if(res!=RESOURCE_ENERGY)
+        if(res!=RESOURCE_ENERGY && in2.store[res]>LAB_REACTION_AMOUNT)
         {
             res2=res
             in2Empty= false

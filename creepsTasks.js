@@ -126,7 +126,9 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
 
 }
 
-Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs() {
+Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1,in2) {
+
+
     var outputLabs = []
     for (id of global.heap.rooms[this.room.name].outLabsId) {
         var outLab = Game.getObjectById(id)
@@ -138,9 +140,9 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs() {
         return
     }
 
-    if (this.store.getFreeCapacity(RESOURCE_ENERGY) > 0 || this.ticksToLive>30) {
+    if (this.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && this.ticksToLive>30) {
         var maxLab = undefined
-        var auxAmount = Infinity
+        var auxAmount = LAB_MINERAL_CAPACITY
         for (l of outputLabs) {
             if (l.store.getFreeCapacity(RESOURCE_OXYGEN) < auxAmount) {
                 auxAmount = l.store.getFreeCapacity(RESOURCE_OXYGEN)
@@ -162,7 +164,7 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs() {
                 }
             }
         }
-        else {
+        else if(maxLab==undefined && this.room.oneInputMineralEmpty(in1,in2)) {
             global.heap.rooms[this.room.name].doctorTask = undefined
             return
         }

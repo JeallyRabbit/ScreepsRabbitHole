@@ -63,6 +63,10 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                     this.say("6")
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isT1orT2InStore(terminal.store)]
                 }
+                 else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_TOP_ENERGY) {
+                    this.say("2.5")
+                    global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[RESOURCE_ENERGY]
+                }
                 else {
                     var nuker = Game.getObjectById(global.heap.rooms[this.room.name].myNuker)
                     if (nuker != null) {
@@ -74,10 +78,6 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                             global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_ENERGY
                         }
                     }
-
-
-
-
                 }
 
             }
