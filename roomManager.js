@@ -499,13 +499,26 @@ Room.prototype.roomManager = function roomManager() {
                     global.heap.rooms[this.name].myLabs.push(str.id);
                     if (str.pos.x == this.memory.inputLab1Pos.x && str.pos.y == this.memory.inputLab1Pos.y) {
                         global.heap.rooms[this.name].inLab1Id = str.id
+                        if(Game.rooms[this.name].memory.inLab1Id==undefined)
+                        {
+                            Game.rooms[this.name].memory.inLab1Id=str.id
+                        }
                     }
                     else if (str.pos.x == this.memory.inputLab2Pos.x && str.pos.y == this.memory.inputLab2Pos.y) {
                         global.heap.rooms[this.name].inLab2Id = str.id
+                        if(Game.rooms[this.name].memory.inLab2Id==undefined)
+                        {
+                            Game.rooms[this.name].memory.inLab2Id=str.id
+                        }
                     }
-                    else if (str.pos.x == this.memory.boostingLabPos.x && str.pos.y == this.memory.boostingLabPos.y) {
+                    else if (this.memory.boostingLabPos!=undefined && str.pos.x == this.memory.boostingLabPos.x && str.pos.y == this.memory.boostingLabPos.y) {
                         //boosting lab is also first output lab
                         global.heap.rooms[this.name].boostingLabId = str.id
+                        if(Game.rooms[this.name].memory.boostingLabId==undefined)
+                        {
+                            Game.rooms[this.name].memory.boostingLabId=str.id
+                        }
+
                         global.heap.rooms[this.name].outLabsId.push(str.id)
                     }
                     else {

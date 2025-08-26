@@ -5,8 +5,8 @@ Creep.prototype.roleDoctor = function roleDoctor() {
     this.say("D")
     var storage=this.room.storage
     var terminal=this.room.terminal
-    var inputLab1=Game.getObjectById(global.heap.rooms[this.room.name].inLab1Id)
-    var inputLab2=Game.getObjectById(global.heap.rooms[this.room.name].inLab2Id)
+    var inputLab1=Game.getObjectById(Game.rooms[this.room.name].memory.inLab1Id)
+    var inputLab2=Game.getObjectById(Game.rooms[this.room.name].memory.inLab2Id)
     var outputLabs=[]
     for(outputId of global.heap.rooms[this.room.name].outLabsId)
     {
@@ -17,7 +17,7 @@ Creep.prototype.roleDoctor = function roleDoctor() {
         }
     }
 
-    var boostingLab=Game.getObjectById(global.heap.rooms[this.room.name].inLab2Id)
+    var boostingLab=Game.getObjectById(Game.rooms[this.room.name].memory.boostingLabId)
 
     
     console.log("storage: ",storage)
@@ -143,10 +143,14 @@ function oneInputMineralEmpty(in1,in2)
 {
     var in1Empty=true
     var in2Empty=true
+
+    var res1=1
+    var res2=0
     for(res in in1.store)
     {
         if(res!=RESOURCE_ENERGY)
         {
+            res1=res
             in1Empty= false
             break
         }
@@ -155,11 +159,12 @@ function oneInputMineralEmpty(in1,in2)
     {
         if(res!=RESOURCE_ENERGY)
         {
+            res2=res
             in2Empty= false
             break
         }
     }
-    if(in1Empty!=in2Empty)
+    if(in1Empty!=in2Empty || res1==res2)
     {
         return true
     }

@@ -79,7 +79,8 @@ Creep.prototype.taskFillLabEnergy = function taskFillLabEnergy(id)
 }
 
 Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
-    if (in1.store.getFreeCapacity[RESOURCE_OXYGEN] == LAB_MINERAL_CAPACITY && in2.store.getFreeCapacity[RESOURCE_OXYGEN] == LAB_MINERAL_CAPACITY) {
+    if (ifBothInputMineralEmpty(in1,in2)) {
+        console.log("return from clearing inputs")
         global.heap.rooms[this.room.name].doctorTask = undefined
         return
     }
@@ -115,7 +116,7 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
         // transfer to storage
         for (res in this.store) {
             var transferResult=this.transfer(this.room.storage,res)
-            if(this.transferResult==ERR_NOT_IN_RANGE)
+            if(transferResult==ERR_NOT_IN_RANGE)
             {
                 this.travelTo(this.room.storage)
             }
@@ -137,7 +138,7 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs() {
         return
     }
 
-    if (this.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
+    if (this.store.getFreeCapacity(RESOURCE_ENERGY) > 0 || this.ticksToLive>30) {
         var maxLab = undefined
         var auxAmount = Infinity
         for (l of outputLabs) {
@@ -147,7 +148,8 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs() {
             }
         }
         if (maxLab != undefined) {
-            for (res of maxLab.store) {
+            console.log("maxLab.id: ",maxLab.store)
+            for (res in maxLab.store) {
 
                 if (res != RESOURCE_ENERGY) {
                     var withdrawResult = this.withdraw(maxLab, res)
@@ -167,7 +169,7 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs() {
     }
     else {
         if (this.pos.isNearTo(this.room.storage.pos.x, this.room.storage.pos.y)) {
-            for (res of this.store) {
+            for (res in this.store) {
                 if (this.transfer(this.store, res) == OK) {
                     break;
                 }
@@ -196,7 +198,7 @@ this.say("fill inp")
 
     if (global.heap.rooms[this.room.name].reaction != undefined && global.heap.rooms[this.room.name].reaction.length > 0) {
         var res1 = global.heap.rooms[this.room.name].reaction[0]
-        var res2 = global.heap.rooms[this.room.name].reaction[0]
+        var res2 = global.heap.rooms[this.room.name].reaction[1]
 
         // Minerals are already in labs
         if (in1.store[res1] > LAB_REACTION_AMOUNT && in2.store[res2] > LAB_REACTION_AMOUNT) {
@@ -208,20 +210,32 @@ this.say("fill inp")
 
         global.heap.rooms[this.room.name].reactionAmount = Math.min()
 
+
+
         //creep have minerals in store or first mineral is already in lab and second in store
-        if ((this.store[res1] > 0 && this.store[res2] > 0)
-            || this.store[res2] > 0 && in1.store[res1] > 0) {
+        /*if ((this.store[res1] > 0 && this.store[res2] > 0)
+            || (this.store[res2] > 0 && in1.store[res1] > 0)) 
+        {
             if (this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) {
                 this.travelTo(in1)
             }
             else if (this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANGE) {
                 this.travelTo(in2)
             }
-        }
+        }*/
+       if(this.store[res1]>0 && this.transfer(in1,res1)==ERR_NOT_IN_RANGE)
+       {
+        this.travelTo(in1)
+       }
+       else if(this.store[res2]>0 && this.transfer(in2,res2)==ERR_NOT_IN_RANGE)
+       {
+        this.travelTo(in2)
+       }
         else {
 
+            this.say(res1+" "+res2)
             var res = res1
-            if (this.store[res1 > 0] && this.store[res2] == 0) {
+            if (in1.store[res1]>0 && in2.store[res2] == 0) {
                 res = res2
             }
 
@@ -272,8 +286,8 @@ Creep.prototype.taskClearCreep = function taskClearCreep() {
     }
     if (this.room.storage != undefined) {
         if (this.pos.isNearTo(this.room.storage.pos.x, this.room.storage.pos.y)) {
-            for (res of this.store) {
-                if (this.transfer(this.store, res) == OK) {
+            for (res in this.store) {
+                if (this.transfer(this.room.storage, res) == OK) {
                     break;
                 }
             }

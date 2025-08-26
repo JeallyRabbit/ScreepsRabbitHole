@@ -17,6 +17,7 @@ const roomManager = require('roomManager')
 const creepsManager = require('creepsManager')
 const linkManager = require('linkManager')
 const terminalManager=require('terminalManager')
+const labsManager=require('labsManager')
 const visualize = require('visualize');
 
 Room.prototype.removeConstructionSites=function removeConstructionSites()
@@ -201,6 +202,8 @@ module.exports.loop = function () {
       Game.rooms[mainRoom].linkManager()
 
       Game.rooms[mainRoom].terminalManager()
+
+      Game.rooms[mainRoom].labsManager()
 
       Game.rooms[mainRoom].visualize()
 
