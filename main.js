@@ -35,6 +35,12 @@ module.exports.loop = function () {
   profiler.wrap(function () {
 
     var totalStart = Game.cpu.getUsed()
+
+    if(Game.time%8911==0)
+    {
+      global.heap={}
+    } 
+
     //console.log("GIT TEST")
     //Setting allies
     Memory.allies = ["JeallyRabbit", "Alphonzo", "insainmonkey", "Trepidimous"]
