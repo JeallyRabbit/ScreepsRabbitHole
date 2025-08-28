@@ -18,6 +18,7 @@ const creepsManager = require('creepsManager')
 const linkManager = require('linkManager')
 const terminalManager = require('terminalManager')
 const labsManager = require('labsManager')
+const attackManager=require('attackManager')
 const visualize = require('visualize');
 
 Room.prototype.removeConstructionSites = function removeConstructionSites() {
@@ -183,6 +184,7 @@ module.exports.loop = function () {
       }
 
       //attackManager() here ?
+      attackManager(room)
 
       if (room.name != undefined && Game.rooms[room.name] != undefined && Game.rooms[room.name].controller.owner == undefined) {
         Memory.roomsToAttack = Memory.roomsToAttack.filter(function (obj) {
@@ -197,7 +199,7 @@ module.exports.loop = function () {
       }
     }
 
-    
+
 
 
     //Getting current userName - dumb first iteration over spawns//
