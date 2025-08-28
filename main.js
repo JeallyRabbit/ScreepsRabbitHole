@@ -76,36 +76,6 @@ module.exports.loop = function () {
     }
 
 
-    if (Memory.roomsToAttack == undefined) {
-      Memory.roomsToAttack = [];
-    }
-
-    if (Memory.manualAttack == undefined) {
-      Memory.manualAttack = '??'
-    }
-
-    if(!Memory.roomsToAttack.some(e => e.name === Memory.manualAttack) && Memory.roomsToAttack != '??')
-    {
-      Memory.roomsToAttack.push(new attackRoom(Memory.manualAttack))
-    }
-
-    //Clearing attack of now owned rooms
-    for (room of Memory.roomsToAttack) {
-      if (room.name != undefined && Game.rooms[room.name] != undefined && Game.rooms[room.name].controller.owner == undefined) {
-        Memory.roomsToAttack = Memory.roomsToAttack.filter(function (obj) {
-          return obj.name !== room.name;
-        });
-        delete global.heap.rooms[room.name]
-        break;
-      }
-      else if(Game.rooms[room.name]==undefined)
-      {
-        global.heap.rooms[room.name].attackTypes[C.ATTACK_TYPE_SCOUT]=true
-      }
-    }
-
-
-
 
     //automatic colonizing
     if (Memory.roomsToColonize == undefined) {
@@ -178,9 +148,6 @@ module.exports.loop = function () {
 
     for (roomName in Game.rooms) {
 
-
-
-
       if (global.heap.rooms[roomName] == undefined) {
         global.heap.rooms[roomName] = {}
         console.log("Setting heap for ", roomName)
@@ -191,10 +158,47 @@ module.exports.loop = function () {
       }
 
       Game.rooms[roomName].roomManager()
+    }
 
 
+    if (Memory.roomsToAttack == undefined) {
+      Memory.roomsToAttack = [];
+    }
+
+    if (Memory.manualAttack == undefined) {
+      Memory.manualAttack = '??'
+    }
+
+    if(!Memory.roomsToAttack.some(e => e.name === Memory.manualAttack) && Memory.manualAttack != '??')
+    {
+      Memory.roomsToAttack.push(new attackRoom(Memory.manualAttack))
 
     }
+
+    //Clearing attack of now owned rooms and running attackManager
+    for (room of Memory.roomsToAttack) {
+      if(global.heap.rooms[room.name]==undefined)
+      {
+        global.heap.rooms[room.name]=new attackRoom(room.name)
+      }
+
+      //attackManager() here ?
+
+      if (room.name != undefined && Game.rooms[room.name] != undefined && Game.rooms[room.name].controller.owner == undefined) {
+        Memory.roomsToAttack = Memory.roomsToAttack.filter(function (obj) {
+          return obj.name !== room.name;
+        });
+        delete global.heap.rooms[room.name]
+        break;
+      }
+      else if(Game.rooms[room.name]==undefined)
+      {
+        global.heap.rooms[room.name].attackTypes[C.ATTACK_TYPE_SCOUT]=true
+      }
+    }
+
+    
+
 
     //Getting current userName - dumb first iteration over spawns//
     for (spawnName in Game.spawns) {
