@@ -293,7 +293,7 @@ const UPGRADE_FACTOR = 10000
 const STORAGE_BALANCER_START = 50000
 const ENERGY_BALANCER_UPGRADER_START = 50
 const ENERGY_BALANCER_WORKER_SPAWN = 750
-const HARVESTING_BODYPARTS_FRACTION = 0.7 // percentage of body parts that we destinate to gather (harvest and carry) energy
+const HARVESTING_BODYPARTS_FRACTION = 0.6 // fraction of body parts that we destinate to gather (harvest and carry) energy
 const CONTROLLER_DOWNGRADE_BOTTOM_LIMIT = 0.3 // below that percentage of downgrade workers will ignore construction sites
 const CONTROLLER_DOWNGRADE_TOP_LIMIT = 0.8
 const STORAGE_ENERGY_UPGRADE_LIMIT = 5000 // below that amount workers wouldn't take energy from storage
@@ -320,6 +320,12 @@ const MIN_MILITARY_BOOST_AMOUNT = 30000
 const REACTION_STEP = 500
 const MIN_NUKER_RES_AMOUNT = 100 // minimum amount of energy or ghodium in storage/temrinal to consider transfering it to nuker
 const ROOM_DISTANCE_CALC_STEP = 1
+
+
+// Room attack
+const ROOM_ATTACK_HISTORY_RANGE=500
+
+
 
 // Room Visualization
 const OUTLINE_COLOR = 'black'
@@ -453,6 +459,8 @@ TASK_FILL_INPUT_LABS_MINERAL,
   REACTION_STEP,
   MIN_NUKER_RES_AMOUNT,
   ROOM_DISTANCE_CALC_STEP,
+
+  ROOM_ATTACK_HISTORY_RANGE,
 
   OUTLINE_COLOR,
   TEXT_COLOR,

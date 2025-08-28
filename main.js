@@ -16,18 +16,40 @@ const spawnManager = require('spawnManager')
 const roomManager = require('roomManager')
 const creepsManager = require('creepsManager')
 const linkManager = require('linkManager')
-const terminalManager=require('terminalManager')
-const labsManager=require('labsManager')
+const terminalManager = require('terminalManager')
+const labsManager = require('labsManager')
 const visualize = require('visualize');
 
-Room.prototype.removeConstructionSites=function removeConstructionSites()
-{
-    for(constr in Game.constructionSites)
-    {
-        Game.constructionSites[constr].remove()
-    }
+Room.prototype.removeConstructionSites = function removeConstructionSites() {
+  for (constr in Game.constructionSites) {
+    Game.constructionSites[constr].remove()
+  }
 }
 
+class attackRoom{
+  constructor(roomName)
+  {
+    this.name=roomName
+    this.attackTypes=[]
+    this.attackTypes[C.ATTACK_TYPE_QUAD]=false
+    this.attackTypes[C.ATTACK_TYPE_DUO]=false
+    this.attackTypes[C.ATTACK_TPE_SINGLE]=false
+    this.attackTypes[C.ATTACK_TYPE_ENERGY_DRAIN]=false
+    this.attackTypes[C.ATTACK_TYPE_DISMANTLE]=false
+    this.attackTypes[C.ATTACK_TYPE_CONTROLLER_DOWNGRADE]=false
+    this.attackTypes[C.ATTACK_TYPE_NUKE]=false
+    this.attackTypes[C.ATTACK_TYPE_SCOUT]=false
+    this.attackTypes[C.ATTACK_TYPE_PLUNDER]=false
+
+    this.quadId=undefined
+    this.dismantlePower=0
+    this.energyDrainers=[]
+    this.controllerAttackPower=0
+    this.nukes=[]
+    this.looters=[]
+    this.scoutId=undefined
+  }
+}
 
 // this line monkey patches the global prototypes.
 profiler.enable();
@@ -36,10 +58,9 @@ module.exports.loop = function () {
 
     var totalStart = Game.cpu.getUsed()
 
-    if(Game.time%8911==0)
-    {
-      global.heap={}
-    } 
+    if (Game.time % 8911 == 0) {
+      global.heap = {}
+    }
 
     //console.log("GIT TEST")
     //Setting allies
@@ -53,6 +74,36 @@ module.exports.loop = function () {
       global.heap.rooms = []
       console.log("setting global heap")
     }
+
+
+    if (Memory.roomsToAttack == undefined) {
+      Memory.roomsToAttack = [];
+    }
+
+    if (Memory.manualAttack == undefined) {
+      Memory.manualAttack = '??'
+    }
+
+    if(!Memory.roomsToAttack.some(e => e.name === Memory.manualAttack) && Memory.roomsToAttack != '??')
+    {
+      Memory.roomsToAttack.push(new attackRoom(Memory.manualAttack))
+    }
+
+    //Clearing attack of now owned rooms
+    for (room of Memory.roomsToAttack) {
+      if (room.name != undefined && Game.rooms[room.name] != undefined && Game.rooms[room.name].controller.owner == undefined) {
+        Memory.roomsToAttack = Memory.roomsToAttack.filter(function (obj) {
+          return obj.name !== room.name;
+        });
+        delete global.heap.rooms[room.name]
+        break;
+      }
+      else if(Game.rooms[room.name]==undefined)
+      {
+        global.heap.rooms[room.name].attackTypes[C.ATTACK_TYPE_SCOUT]=true
+      }
+    }
+
 
 
 
@@ -174,8 +225,8 @@ module.exports.loop = function () {
 
 
     //Defining room to fastUpgrade
-    var roomToFastRclUpgrade=undefined
-    var minDistanceToFastRclUpgrade=Infinity
+    var roomToFastRclUpgrade = undefined
+    var minDistanceToFastRclUpgrade = Infinity
 
 
     console.log(C.USERNAME)
@@ -189,13 +240,12 @@ module.exports.loop = function () {
 
       var start = Game.cpu.getUsed()
 
-      if(Game.rooms[mainRoom].memory.distanceToOthers!=undefined && Game.rooms[mainRoom].memory.distanceToOthers<minDistanceToFastRclUpgrade
-        && Game.rooms[mainRoom].storage!=undefined && Game.rooms[mainRoom].terminal!=undefined && Game.rooms[mainRoom].controller.level<8
-        && Game.rooms[mainRoom].memory.distanceToOthers!=0
-      )
-      {
-        minDistanceToFastRclUpgrade= Game.rooms[mainRoom].memory.distanceToOthers;
-        roomToFastRclUpgrade=mainRoom;
+      if (Game.rooms[mainRoom].memory.distanceToOthers != undefined && Game.rooms[mainRoom].memory.distanceToOthers < minDistanceToFastRclUpgrade
+        && Game.rooms[mainRoom].storage != undefined && Game.rooms[mainRoom].terminal != undefined && Game.rooms[mainRoom].controller.level < 8
+        && Game.rooms[mainRoom].memory.distanceToOthers != 0
+      ) {
+        minDistanceToFastRclUpgrade = Game.rooms[mainRoom].memory.distanceToOthers;
+        roomToFastRclUpgrade = mainRoom;
       }
 
 
@@ -233,10 +283,9 @@ module.exports.loop = function () {
     }
 
 
-    console.log("roomToFastRclUpgrade: ",roomToFastRclUpgrade)
-    if(roomToFastRclUpgrade!=undefined)
-    {
-      Memory.fastRclUpgrade=roomToFastRclUpgrade
+    console.log("roomToFastRclUpgrade: ", roomToFastRclUpgrade)
+    if (roomToFastRclUpgrade != undefined) {
+      Memory.fastRclUpgrade = roomToFastRclUpgrade
     }
 
     var totalUsedCpu = Math.round(Game.cpu.getUsed() - totalStart)
@@ -288,13 +337,13 @@ module.exports.loop = function () {
         //console.log(c)
         var inAnyHarvestingRoom = false
         for (m of Memory.mainRooms) {
-          if (Game.getObjectById(c).room!=undefined && Game.getObjectById(c).room.name == m) {
+          if (Game.getObjectById(c).room != undefined && Game.getObjectById(c).room.name == m) {
             inAnyHarvestingRoom = true
             break
           }
           else {
             for (h of Memory.rooms[m].harvestingRooms) {
-              if (Game.getObjectById(c).room!=undefined && h.name == Game.getObjectById(c).room.name) {
+              if (Game.getObjectById(c).room != undefined && h.name == Game.getObjectById(c).room.name) {
                 inAnyHarvestingRoom = true
                 break
               }

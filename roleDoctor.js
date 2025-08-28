@@ -48,7 +48,7 @@ Creep.prototype.roleDoctor = function roleDoctor() {
     //filling input labs minerals-- when they are empty/(close to empty and match reaction)
     // clearing input labs -- one of them empty 
     // taking stuff from output labs -- 
-    console.log("ifBothInputMineralEmpty(inputLab1,inputLab2): ",ifBothInputMineralEmpty(inputLab1,inputLab2))
+    console.log("ifBothInputMineralEmpty(inputLab1,inputLab2): ",this.room.ifBothInputMineralEmpty(inputLab1,inputLab2))
 
     if(global.heap.rooms[this.room.name].doctorTask==undefined)
     {
@@ -81,7 +81,7 @@ Creep.prototype.roleDoctor = function roleDoctor() {
             this.say("3")
             global.heap.rooms[this.room.name].doctorTask=C.TASK_BOOST_CREEP
         }
-        else if(ifBothInputMineralEmpty(inputLab1,inputLab2)==true)
+        else if(this.room.ifBothInputMineralEmpty(inputLab1,inputLab2)==true)
         {
             this.say(C.TASK_FILL_INPUT_LABS_MINERAL)
             global.heap.rooms[this.room.name].doctorTask=C.TASK_FILL_INPUT_LABS_MINERAL
@@ -172,7 +172,7 @@ Room.prototype.oneInputMineralEmpty=function oneInputMineralEmpty(in1,in2)
 
 }
 
-function ifBothInputMineralEmpty(in1,in2)
+Room.prototype.ifBothInputMineralEmpty=function ifBothInputMineralEmpty(in1,in2)
 {
 
     for(res in in1.store)
