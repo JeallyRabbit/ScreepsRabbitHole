@@ -32,23 +32,41 @@ class attackRoom{
   {
     this.name=roomName
     this.attackTypes=[]
-    this.attackTypes[C.ATTACK_TYPE_QUAD]=false
-    this.attackTypes[C.ATTACK_TYPE_DUO]=false
-    this.attackTypes[C.ATTACK_TPE_SINGLE]=false
-    this.attackTypes[C.ATTACK_TYPE_ENERGY_DRAIN]=false
-    this.attackTypes[C.ATTACK_TYPE_DISMANTLE]=false
-    this.attackTypes[C.ATTACK_TYPE_CONTROLLER_DOWNGRADE]=false
-    this.attackTypes[C.ATTACK_TYPE_NUKE]=false
-    this.attackTypes[C.ATTACK_TYPE_SCOUT]=false
-    this.attackTypes[C.ATTACK_TYPE_PLUNDER]=false
 
-    this.quadId=undefined
+    this.attackTypes[C.ATTACK_TYPE_QUAD]=false
+    this.reqQuads=0
+    this.quads=[]
+
+    this.attackTypes[C.ATTACK_TYPE_DUO]=false
+    this.reqDuos=0
+    this.duos=[]
+
+    this.attackTypes[C.ATTACK_TPE_SINGLE]=false
+    this.reqSingles=0
+    this.singlesId=[]
+
+    this.attackTypes[C.ATTACK_TYPE_ENERGY_DRAIN]=false
+    this.reqDrainers=0
+    this.drainersId=[]
+
+    this.attackTypes[C.ATTACK_TYPE_DISMANTLE]=false
+    this.reqDismantlePower=0
     this.dismantlePower=0
-    this.energyDrainers=[]
-    this.controllerAttackPower=0
+    this.dismantlersId=[]
+
+    this.attackTypes[C.ATTACK_TYPE_CONTROLLER_DOWNGRADE]=false
+    this.controllerAttackCreeps=0
+
+    this.attackTypes[C.ATTACK_TYPE_NUKE]=false
+    this.reqNukes=0
     this.nukes=[]
-    this.looters=[]
+
+    this.attackTypes[C.ATTACK_TYPE_SCOUT]=false
     this.scoutId=undefined
+
+    this.attackTypes[C.ATTACK_TYPE_PLUNDER]=false
+    this.looters=[]
+    
   }
 }
 

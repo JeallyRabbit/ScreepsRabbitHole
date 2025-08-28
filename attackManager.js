@@ -1,5 +1,17 @@
 const C = require('constants');
 
+
+class Quad{
+    constructor(quadId,targetRoom, homeRoom)
+    {
+        this.id=quadId;
+        this.targetRoom=targetRoom;
+        this.homeRoom=homeRoom
+        this.minEnergyOnCreep=-1;
+        this.members=[];
+    }
+}
+
 class attackHistoryData {
     constructor(areOperational, time,rangedPower=0,meleePower=0) {
         this.areOperational = areOperational
@@ -17,7 +29,14 @@ function attackManager(room)
 
 
     // TODO:
-    // 1. move that (code below) to attackManager
+    // 1. Calculate How many bodyparts or spawnTimeTicks is needed to every attack type instance 
+    // 
+    // (e.g quad needs 200 bodyparts, 
+    // single drainer need 50
+    // single dismantler needs 50)
+    // nuke needs 0
+    // plunder needs 50
+    // scout needs 1
     // 2. attackManager should decide who (which room) would spawn which creep
     // 3. attackManager should how many nuke should be launched and by which room
     // for attacking mechanic - gathering data
@@ -112,19 +131,29 @@ function attackManager(room)
 
 
         //Towers History
+
+        //Calculate how many towers are operational on average
+        var auxSum=0;
+        var auxCounter=0
         for (h of global.heap.rooms[room.name].areTowersOperationalHistory) {
             if(h.areOperational)
             {
                 global.heap.rooms[room.name].areTowersHistoryOperational=true
-                break;
+                
+                auxSum+=h.rangedPower //That is the name of attribute in class - keeping this name to make it easy to use 
+                //with other history data (about creeps)
+                auxCounter++;
             }
         }
+
+        global.heap.rooms[room.name].meanOperationalTowersAmount=auxSum/auxCounter
 
         //Decisions based on towers history
         if(global.heap.rooms[room.name].areTowersHistoryOperational==true)
         {
             global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_ENERGY_DRAIN]=true
 
+            global.heap.rooms[room.name].reqDrainers=global.heap.rooms[room.name].meanOperationalTowersAmount
         }
 
         if(global.heap.rooms[room.name].areTowersHistoryOperational==false)
@@ -157,7 +186,53 @@ function attackManager(room)
         }
 
 
+        
 
+        //Adding requests to rooms
+
+        //Adding quads
+        if(global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_QUAD]==true)
+        {
+            // for now keep two quads
+            global.heap.rooms[room.name].reqQuads=2
+
+            if(global.heap.rooms[room.name].quads.length<global.heap.rooms[room.name].reqQuads)
+            {
+                for(m of Memory.mainRooms)
+                {
+                    var maxBodyParts=CREEP_LIFE_TIME/CREEP_SPAWN_TIME
+                    if(Memory.rooms[m].spawn2Id!=undefined)
+                    {
+                        maxBodyParts+=CREEP_LIFE_TIME/CREEP_SPAWN_TIME
+                    }
+                    if(Memory.rooms[m].spawn3Id!=undefined)
+                    {
+                        maxBodyParts+=CREEP_LIFE_TIME/CREEP_SPAWN_TIME
+                    }
+
+                    if(maxBodyParts-global.heap.rooms[m].creepsBodyParts>QUAD_BODY_PARTS_AMOUNT)
+                    {
+                        //add quad with spawning set to room m
+                        global.heap.rooms[room.name].quads.push(new Quad(m+"_"+Game.time,this.name,m))
+                    }
+                }
+            }
+
+
+            for(q of global.heap.rooms[room.name].quads)
+            {
+                //Here add checking if quad is dead/needs to be spawnbed
+                //and operateQuad(q)
+            }
+        }
+
+        if(global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_ENERGY_DRAIN]==true)
+        {
+            if(global.heap.rooms[room.name].drainersId.length<global.heap.rooms[room.name].reqDrainers)
+            {
+                //
+            }
+        }
     }
 }
 module.exports=attackManager

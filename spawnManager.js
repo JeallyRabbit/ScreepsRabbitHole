@@ -42,6 +42,12 @@ Room.prototype.spawnManager = function spawnManager() {
         }
     }
 
+    //check if there is quad that has started spawning in offensiveQueue (members>0)
+    // if yes then spawn it before the rest
+    // else spawn after other queues
+
+
+
     if (global.heap.rooms[this.name].defensiveQueue.length > 0) {
         var request = global.heap.rooms[this.name].defensiveQueue[0]
         var type = request.type

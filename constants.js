@@ -361,6 +361,7 @@ const ATTACK_TYPE_NUKE = 'attack_type_nuke'
 const ATTACK_TYPE_SCOUT = 'attack_type_scout'
 const ATTACK_TYPE_PLUNDER = 'attack_type_plunder'// collecting resources from structures
 
+const QUAD_BODY_PARTS_AMOUNT=200
 
 module.exports = {
   TEST_CONST,
