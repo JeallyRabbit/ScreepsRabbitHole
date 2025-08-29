@@ -319,7 +319,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     }
                     else {
                         a=Math.floor(Math.random() * (8 - 1 + 1)) + 1
-                        this.increaseBalancer()
+                        //this.increaseBalancer()
                         this.say(a)
                         this.move(a)//Random number in range <1:8>
 
