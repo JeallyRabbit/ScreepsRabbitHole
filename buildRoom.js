@@ -1299,9 +1299,10 @@ Room.prototype.planSpawnPos = function planSpawnPos(type) {
 
         if (minPos.x != 0 && minPos.y != 0) {
             console.log(type)
-            this.memory.baseVariations[type].spawnPos = new RoomPosition(minPos.x, minPos.y - 2, this.name)
+
+            this.memory.baseVariations[type].spawnPos = new RoomPosition(minPos.x, minPos.y, this.name)
             this.memory.buildingList.push(new buildingListElement(minPos.x, minPos.y, this.name, STRUCTURE_SPAWN, 1))
-            this.memory.spawnPos = new RoomPosition(minPos.x, minPos.y-2, this.name)
+            this.memory.spawnPos = new RoomPosition(minPos.x, minPos.y, this.name)
 
         }
         else {
