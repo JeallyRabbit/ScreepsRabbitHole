@@ -209,14 +209,32 @@ function attackManager(attackRoom) {
 
                     if (maxBodyParts - global.heap.rooms[m].creepsBodyParts > QUAD_BODY_PARTS_AMOUNT) {
                         //add quad with spawning set to room m
-                        global.heap.rooms[m].quads.push(new Quad(m + "_" + Game.time, this.name, m))
+                        r.quads.push(new Quad(m + "_" + Game.time, this.name, m))
 
-                        Game.rooms[m].memory.quads.push(new Quad(m + "_" + Game.time, this.name, m))
+
                     }
                 }
             }
             else if (attackRoom.quads.length > attackRoom.reqQuads) {
                 attackRoom.quads.shift()
+            }
+
+
+            for (q of attackRoom.quads) {
+                if (q.isCompleted == false) {
+
+                    if (q.members.length = 0) {
+                        global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.Id, C.QUAD_MEMBER, C.RANGED_BODY, true))
+
+                    }
+                    else if (q.members.length = 1) {
+                        global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.Id, C.QUAD_MEMBER, C.RANGED_BODY, false))
+                    }
+                    else {
+                        global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.Id, C.QUAD_MEMBER, C.HEALER_BODY, false))
+                    }
+
+                }
             }
         }
 

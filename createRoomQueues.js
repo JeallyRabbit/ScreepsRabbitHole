@@ -293,28 +293,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
     }
 
-    for (q of Game.rooms[this.name].memory.quads) {
-        //Here add checking if quad is dead/needs to be spawnbed
-
-        if (q.isCompleted == false) {
-
-            if (q.members.length = 0) {
-                global.heap.rooms[room.name].offensiveQueue.push(new quadMemberRequest(q.Id,C.QUAD_MEMBER,C.RANGED_BODY,true))
-
-            }
-            else if (q.members.length = 1) {
-                global.heap.rooms[room.name].offensiveQueue.push(new quadMemberRequest(q.Id,C.QUAD_MEMBER,C.RANGED_BODY,false))
-            }
-            else
-            {
-                global.heap.rooms[room.name].offensiveQueue.push(new quadMemberRequest(q.Id,C.QUAD_MEMBER,C.HEALER_BODY,false))
-            }
-
-        }
-
-
-        //and operateQuad(q)
-    }
+   
 
 
 
