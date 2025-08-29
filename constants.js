@@ -357,7 +357,7 @@ const BUILD_TIME_STEP = 2
 
 const ATTACK_TYPE_QUAD = 'attack_type_quad'
 const ATTACK_TYPE_DUO = 'attack_type_duo'
-const ATTACK_TPE_SINGLE = 'attack_type_single'
+const ATTACK_TYPE_SINGLE = 'attack_type_single'
 const ATTACK_TYPE_ENERGY_DRAIN = 'attack_type_energy_drain'
 const ATTACK_TYPE_DISMANTLE = 'attack_type_dismantle'
 const ATTACK_TYPE_CONTROLLER_DOWNGRADE = 'attack_type_controller_downgrade'
@@ -489,7 +489,7 @@ module.exports = {
 
   ATTACK_TYPE_QUAD,
   ATTACK_TYPE_DUO,
-  ATTACK_TPE_SINGLE,
+  ATTACK_TYPE_SINGLE,
   ATTACK_TYPE_ENERGY_DRAIN,
   ATTACK_TYPE_DISMANTLE,
   ATTACK_TYPE_CONTROLLER_DOWNGRADE,

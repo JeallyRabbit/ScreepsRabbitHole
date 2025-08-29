@@ -30,41 +30,41 @@ Room.prototype.removeConstructionSites = function removeConstructionSites() {
 class attackRoom{
   constructor(roomName)
   {
-    this.name=roomName
-    this.attackTypes=[]
 
+    this.attackTypes={}
     this.attackTypes[C.ATTACK_TYPE_QUAD]=false
+    this.attackTypes[C.ATTACK_TYPE_DUO]=false
+    this.attackTypes[C.ATTACK_TYPE_SINGLE]=false
+    this.attackTypes[C.ATTACK_TYPE_ENERGY_DRAIN]=false
+    this.attackTypes[C.ATTACK_TYPE_DISMANTLE]=false
+    this.attackTypes[C.ATTACK_TYPE_CONTROLLER_DOWNGRADE]=false
+    this.attackTypes[C.ATTACK_TYPE_NUKE]=false
+    this.attackTypes[C.ATTACK_TYPE_SCOUT]=false
+    this.attackTypes[C.ATTACK_TYPE_PLUNDER]=false
+    this.name=roomName
     this.reqQuads=0
     this.quads=[]
 
-    this.attackTypes[C.ATTACK_TYPE_DUO]=false
     this.reqDuos=0
     this.duos=[]
 
-    this.attackTypes[C.ATTACK_TPE_SINGLE]=false
     this.reqSingles=0
     this.singlesId=[]
 
-    this.attackTypes[C.ATTACK_TYPE_ENERGY_DRAIN]=false
     this.reqDrainers=0
     this.drainersId=[]
 
-    this.attackTypes[C.ATTACK_TYPE_DISMANTLE]=false
     this.reqDismantlePower=0
     this.dismantlePower=0
     this.dismantlersId=[]
 
-    this.attackTypes[C.ATTACK_TYPE_CONTROLLER_DOWNGRADE]=false
     this.controllerAttackCreeps=0
 
-    this.attackTypes[C.ATTACK_TYPE_NUKE]=false
     this.reqNukes=0
     this.nukes=[]
 
-    this.attackTypes[C.ATTACK_TYPE_SCOUT]=false
     this.scoutId=undefined
 
-    this.attackTypes[C.ATTACK_TYPE_PLUNDER]=false
     this.looters=[]
     
   }
@@ -181,40 +181,40 @@ module.exports.loop = function () {
 
 
     if (Memory.roomsToAttack == undefined) {
-      Memory.roomsToAttack = [];
+      Memory.roomsToAttack = []
     }
 
     if (Memory.manualAttack == undefined) {
       Memory.manualAttack = '??'
     }
 
-    if(!Memory.roomsToAttack.some(e => e.name === Memory.manualAttack) && Memory.manualAttack != '??')
+    if(!Memory.roomsToAttack.some(e => e.name === Memory.manualAttack)  && Memory.manualAttack != '??')
     {
       Memory.roomsToAttack.push(new attackRoom(Memory.manualAttack))
-
+      console.log("Adding room: ",Memory.manualAttack," to Memor.roomsToAttack")
     }
 
+
     //Clearing attack of now owned rooms and running attackManager
-    for (room of Memory.roomsToAttack) {
-      if(global.heap.rooms[room.name]==undefined)
-      {
-        global.heap.rooms[room.name]=new attackRoom(room.name)
-      }
+    console.log("Memory.romsToATtack")
+    for (r of Memory.roomsToAttack) {
 
+      
+      var roomName=r.name
       //attackManager() here ?
-      attackManager(room)
+      attackManager(r)
 
-      if (room.name != undefined && Game.rooms[room.name] != undefined && Game.rooms[room.name].controller.owner == undefined) {
+      if (roomName != undefined && Game.rooms[roomName] != undefined && Game.rooms[roomName].controller.owner == undefined) {
+        console.log("Removing room: ", roomName," from Memory.roomsToAttack")
         Memory.roomsToAttack = Memory.roomsToAttack.filter(function (obj) {
-          return obj.name !== room.name;
+          return obj.name !== roomName;
         });
-        delete global.heap.rooms[room.name]
-        Game.rooms[room.name].memory={}
+        delete global.heap.rooms[roomName]
         break;
       }
-      else if(Game.rooms[room.name]==undefined)
+      else if(Game.rooms[roomName]==undefined && r.attackTypes!=undefined)
       {
-        global.heap.rooms[room.name].attackTypes[C.ATTACK_TYPE_SCOUT]=true
+        r.attackTypes[C.ATTACK_TYPE_SCOUT]=true
       }
     }
 

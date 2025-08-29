@@ -15,7 +15,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
     var terminal = this.room.terminal;
     var storage = this.room.storage;
     var managerLink = undefined
-    global.heap.rooms[this.room.name].managerTask = undefined;
+    //global.heap.rooms[this.room.name].managerTask = undefined;
     if (global.heap.rooms[this.memory.homeRoom].managerLinkId != undefined) {
         managerLink = Game.getObjectById(global.heap.rooms[this.memory.homeRoom].managerLinkId);
         if (managerLink == null) {
@@ -34,7 +34,11 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
             this.say("-1")
             if (global.heap.rooms[this.room.name].managerTask == undefined) {
                 this.say("0")
-                if (managerLink != undefined && managerLink.store[RESOURCE_ENERGY] < C.LINK_BOTTOM_ENERGY) {
+                if(this.store.getCapacity(RESOURCE_ENERGY)>this.store.getFreeCapacity(RESOURCE_ENERGY))
+                {
+                    global.heap.rooms[this.room.name].managerTask=C.TASK_CLEAR_CREEP
+                }
+                else if (managerLink != undefined && managerLink.store[RESOURCE_ENERGY] < C.LINK_BOTTOM_ENERGY) {
                     this.say("1")
 
                     global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_LINK
@@ -63,27 +67,33 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                     this.say("6")
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isT1orT2InStore(terminal.store)]
                 }
-                 else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_TOP_ENERGY) {
+                else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_TOP_ENERGY) {
                     this.say("2.5")
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[RESOURCE_ENERGY]
                 }
-                else {
+                else if (Game.getObjectById(global.heap.rooms[this.room.name].myNuker) != null) {
                     var nuker = Game.getObjectById(global.heap.rooms[this.room.name].myNuker)
-                    if (nuker != null) {
-                        if ((nuker.store[RESOURCE_GHODIUM] < NUKER_GHODIUM_CAPACITY && (storage.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT))
-                        ) {
-                            global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_GHODIUM
-                        }
-                        else if ((nuker.store[RESOURCE_ENERGY] < NUKER_ENERGY_CAPACITY) && (storage.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT)) {
-                            global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_ENERGY
-                        }
+                    if ((nuker.store[RESOURCE_GHODIUM] < NUKER_GHODIUM_CAPACITY && (storage.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT))
+                    ) {
+                        global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_GHODIUM
                     }
+                    else if ((nuker.store[RESOURCE_ENERGY] < NUKER_ENERGY_CAPACITY) && (storage.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT)) {
+                        global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_ENERGY
+                    }
+
                 }
 
             }
 
 
-
+            if(global.heap.rooms[this.room.name].managerTask==C.TASK_CLEAR_CREEP)
+            {
+                if(this.store.getCapacity()==this.store.getFreeCapacity())
+                {
+                    global.heap.rooms[this.room.name].managerTask=undefined;
+                }
+                this.taskClearCreep()
+            }
             if (global.heap.rooms[this.room.name].managerTask == C.TASK_FILL_LINK) {
                 this.withdraw(storage, RESOURCE_ENERGY)
                 this.withdraw(terminal, RESOURCE_ENERGY)
@@ -106,16 +116,16 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
             else if (global.heap.rooms[this.room.name].managerTask != undefined && global.heap.rooms[this.room.name].managerTask.startsWith("transfer_to_terminal_")) {
                 var resToTransfer = global.heap.rooms[this.room.name].managerTask.replace("transfer_to_terminal_", "");
                 this.say("7")
-                if (storage.store[resToTransfer] == 0) { global.heap.rooms[this.room.name].managerTask = undefined 
+                if (storage.store[resToTransfer] == 0) {
+                    global.heap.rooms[this.room.name].managerTask = undefined
                     this.say("7.5")
                     return
                 }
                 else {
                     this.say(resToTransfer)
                     this.withdraw(storage, resToTransfer)
-                    if(this.transfer(terminal, resToTransfer,this.store.getCapacity(resToTransfer))!=OK)
-                    {
-                        this.transfer(terminal, resToTransfer,this.store[resToTransfer])
+                    if (this.transfer(terminal, resToTransfer, this.store.getCapacity(resToTransfer)) != OK) {
+                        this.transfer(terminal, resToTransfer, this.store[resToTransfer])
                     }
                 }
                 if (storage.store[resToTransfer] == 0) {
@@ -125,7 +135,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
             else if (global.heap.rooms[this.room.name].managerTask == C.TASK_FILL_NUKER_ENERGY) {
                 this.taskFillNukerEnergy()
             }
-            else if (global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_GHODIUM) {
+            else if (global.heap.rooms[this.room.name].managerTask == C.TASK_FILL_NUKER_GHODIUM) {
                 this.taskFillNukerGhodium();
             }
 

@@ -1,42 +1,41 @@
 const C = require('constants');
 
 
-class Quad{
-    constructor(quadId,targetRoom, homeRoom)
-    {
-        this.id=quadId;
-        this.targetRoom=targetRoom;
-        this.homeRoom=homeRoom
-        this.minEnergyOnCreep=-1;
-        this.members=[];
+class Quad {
+    constructor(quadId, targetRoom, homeRoom) {
+        this.id = quadId;
+        this.targetRoom = targetRoom;
+        this.homeRoom = homeRoom
+        this.minEnergyOnCreep = -1;
+        this.members = [];
     }
 }
 
 class attackHistoryData {
-    constructor(areOperational, time,rangedPower=0,meleePower=0) {
+    constructor(areOperational, time, rangedPower = 0, meleePower = 0) {
         this.areOperational = areOperational
         this.time = time
-        this.rangedAttackPower=rangedPower;
-        this.meleeAtackPower=meleePower
+        this.rangedAttackPower = rangedPower;
+        this.meleeAtackPower = meleePower
     }
 }
 
 class generalRoomRequest {
     constructor(roomName, type) {
-        this.roomName = roomName
+        this.name = roomName
         this.type = type;
     }
 }
 
 
-function attackManager(room)
-{
+function attackManager(attackRoom) {
     console.log("AttackManager")
 
 
 
     // TODO:
     // 1. Calculate How many bodyparts or spawnTimeTicks is needed to every attack type instance 
+
     // 
     // (e.g quad needs 200 bodyparts, 
     // single drainer need 50
@@ -47,91 +46,86 @@ function attackManager(room)
     // 2. attackManager should decide who (which room) would spawn which creep
     // 3. attackManager should how many nuke should be launched and by which room
     // for attacking mechanic - gathering data
-    if (Memory.roomsToAttack.includes(room.name)) {
 
-        // Array to store history of towers availability
-        if (global.heap.rooms[room.name].areTowersOperationalHistory == undefined) {
-            global.heap.rooms[room.name].areTowersOperationalHistory = []
-        }
 
-        if(global.heap.rooms[room.name].areDefendersPresentHistory==undefined)
-        {
-            global.heap.rooms[room.name].areDefendersPresentHistory = []
-        }
+    // Array to store history of towers availability
+    if (attackRoom.areTowersOperationalHistory == undefined) {
+        attackRoom.areTowersOperationalHistory = []
+    }
 
-        if(global.heap.rooms[room.name].operationalTowersAmountHistory==undefined)
-        {
-            global.heap.rooms[room.name].operationalTowersAmountHistory=[]
-        }
+    if (attackRoom.areDefendersPresentHistory == undefined) {
+        attackRoom.areDefendersPresentHistory = []
+    }
+
+    if (attackRoom.operationalTowersAmountHistory == undefined) {
+        attackRoom.operationalTowersAmountHistory = []
+    }
 
 
 
-        global.heap.rooms[room.name].areDefendersPresent=false;
+    attackRoom.areDefendersPresent = false;
 
 
-        // boolean to agregate results of history into one value
-        global.heap.rooms[room.name].areTowersHistoryOperational=false
+    // boolean to agregate results of history into one value
+    attackRoom.areTowersHistoryOperational = false
 
-        // boolean to agregate status of all towers in single tick (gets status of one tick)
-        global.heap.rooms[room.name].areTowersOperational = true
+    // boolean to agregate status of all towers in single tick (gets status of one tick)
+    attackRoom.areTowersOperational = true
 
-        global.heap.rooms[room.name].towers = []
-        global.heap.rooms[room.name].ramparts = []
-        global.heap.rooms[room.name].walls = []
+    attackRoom.towers = []
+    attackRoom.ramparts = []
+    attackRoom.walls = []
 
-        str = this.find(FIND_STRUCTURES)
+    if (Game.rooms[attackRoom.name] != undefined) {
+        str = Game.rooms[attackRoom.name].find(FIND_STRUCTURES)
         var anyOperational = false
-        var operationalTowersAmount=0;
+        var operationalTowersAmount = 0;
         for (s of str) {
 
             if (s.structureType == STRUCTURE_TOWER) {
 
                 //tracking if towers are refilled/operational/can shoot
-                global.heap.rooms[room.name].towers.push(s)
+                attackRoom.towers.push(s)
                 if (s.store[RESOURCE_ENERGY] > 0) {
                     anyOperational = true
                 }
                 operationalTowersAmount++;
             }
-            else if(s.structureType==STRUCTURE_RAMPART)
-            {
+            else if (s.structureType == STRUCTURE_RAMPART) {
                 global.heap.rooms.ramparts.push(s)
             }
-            else if(s.structureType==STRUCTURE_WALL)
-            {
-                global.heap.rooms[room.name].walls.push(s)
+            else if (s.structureType == STRUCTURE_WALL) {
+                attackRoom.walls.push(s)
             }
 
         }
 
-        if(global.heap.rooms[room.name].hostileAttackPower>0 || global.heap.rooms[room.name].hostileRangedAttackPower>0)
-        {
-            global.heap.rooms[room.name].areDefendersPresentHistory.push(new attackHistoryData(true,Game.time,
-                 global.heap.rooms[room.name].hostileRangedAttackPower, global.heap.rooms[room.name].hostileAttackPower
+        if (attackRoom.hostileAttackPower > 0 || attackRoom.hostileRangedAttackPower > 0) {
+            attackRoom.areDefendersPresentHistory.push(new attackHistoryData(true, Game.time,
+                attackRoom.hostileRangedAttackPower, attackRoom.hostileAttackPower
             ))
         }
-        else{
-            global.heap.rooms[room.name].areDefendersPresentHistory.push(new attackHistoryData(false,Game.time))
+        else {
+            attackRoom.areDefendersPresentHistory.push(new attackHistoryData(false, Game.time))
 
         }
-        var historyLength = global.heap.rooms[room.name].areTowersOperationalHistory.length
-        global.heap.rooms[room.name].areTowersOperationalHistory.push(new attackHistoryData(anyOperational,Game.time,operationalTowersAmount))
+        var historyLength = attackRoom.areTowersOperationalHistory.length
+        attackRoom.areTowersOperationalHistory.push(new attackHistoryData(anyOperational, Game.time, operationalTowersAmount))
 
         //limiting towers history length
-        if (global.heap.rooms[room.name].areTowersOperationalHistory[historyLength - 1].time - global.heap.rooms[room.name].areTowersOperationalHistory[0].time > C.ROOM_ATTACK_HISTORY_RANGE) {
-            global.heap.rooms[room.name].areTowersOperationalHistory.shift()
+        if (attackRoom.areTowersOperationalHistory[historyLength - 1].time - attackRoom.areTowersOperationalHistory[0].time > C.ROOM_ATTACK_HISTORY_RANGE) {
+            attackRoom.areTowersOperationalHistory.shift()
         }
 
         //limiting creeps history length
-        if (global.heap.rooms[room.name].areDefendersPresentHistory[historyLength - 1].time - global.heap.rooms[room.name].areDefendersPresentHistory[0].time > C.ROOM_ATTACK_HISTORY_RANGE) {
-            global.heap.rooms[room.name].areDefendersPresentHistory.shift()
+        if (attackRoom.areDefendersPresentHistory[historyLength - 1].time - attackRoom.areDefendersPresentHistory[0].time > C.ROOM_ATTACK_HISTORY_RANGE) {
+            attackRoom.areDefendersPresentHistory.shift()
         }
 
         //Defender creeps (attack,rangedAttack) history
-        for (h of global.heap.rooms[room.name].areDefendersPresentHistory) {
-            if(h.areOperational)
-            {
-                global.heap.rooms[room.name].areDefendersPresent=true
+        for (h of attackRoom.areDefendersPresentHistory) {
+            if (h.areOperational) {
+                attackRoom.areDefendersPresent = true
                 break;
             }
         }
@@ -140,112 +134,103 @@ function attackManager(room)
         //Towers History
 
         //Calculate how many towers are operational on average
-        var auxSum=0;
-        var auxCounter=0
-        for (h of global.heap.rooms[room.name].areTowersOperationalHistory) {
-            if(h.areOperational)
-            {
-                global.heap.rooms[room.name].areTowersHistoryOperational=true
-                
-                auxSum+=h.rangedPower //That is the name of attribute in class - keeping this name to make it easy to use 
+        var auxSum = 0;
+        var auxCounter = 0
+        for (h of attackRoom.areTowersOperationalHistory) {
+            if (h.areOperational) {
+                attackRoom.areTowersHistoryOperational = true
+
+                auxSum += h.rangedPower //That is the name of attribute in class - keeping this name to make it easy to use 
                 //with other history data (about creeps)
                 auxCounter++;
             }
         }
 
-        global.heap.rooms[room.name].meanOperationalTowersAmount=auxSum/auxCounter
+        attackRoom.meanOperationalTowersAmount = auxSum / auxCounter
 
-        //Decisions based on towers history
-        if(global.heap.rooms[room.name].areTowersHistoryOperational==true)
-        {
-            global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_ENERGY_DRAIN]=true
+    }
 
-            global.heap.rooms[room.name].reqDrainers=global.heap.rooms[room.name].meanOperationalTowersAmount
+    //Decisions based on towers history
+    if (attackRoom.attackType != undefined) {
+        if (attackRoom.areTowersHistoryOperational == true) {
+            attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] = true
+
+            attackRoom.reqDrainers = attackRoom.meanOperationalTowersAmount
         }
 
-        if(global.heap.rooms[room.name].areTowersHistoryOperational==false)
-        {
-            global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_ENERGY_DRAIN]=false
+        if (attackRoom.areTowersHistoryOperational == false) {
+            attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] = false
         }
 
         //Decisions based on defender creeps history
-        if(global.heap.rooms[room.name].areDefendersPresent==true)
-        {
-            global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_QUAD]=true
+        if (attackRoom.areDefendersPresent == true) {
+            attackRoom.attackType[C.ATTACK_TYPE_QUAD] = true
         }
 
-        if(global.heap.rooms[room.name].areDefendersPresent==false)
-        {
-            global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_QUAD]=false
+        if (attackRoom.areDefendersPresent == false) {
+            attackRoom.attackType[C.ATTACK_TYPE_QUAD] = false
         }
-        
+
         // decisions based on both
-        if(global.heap.rooms[room.name].areDefendersPresent==false && 
-            global.heap.rooms[room.name].areTowersHistoryOperational==false
-        )
-        {
-            global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_DISMANTLE]=true
-            global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_PLUNDER]=true
+        if (attackRoom.areDefendersPresent == false &&
+            attackRoom.areTowersHistoryOperational == false
+        ) {
+            attackRoom.attackType[C.ATTACK_TYPE_DISMANTLE] = true
+            attackRoom.attackType[C.ATTACK_TYPE_PLUNDER] = true
         }
-        else{
-            global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_DISMANTLE]=false
-            global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_PLUNDER]=false
+        else {
+            attackRoom.attackType[C.ATTACK_TYPE_DISMANTLE] = false
+            attackRoom.attackType[C.ATTACK_TYPE_PLUNDER] = false
         }
 
 
-        if(Game.rooms[room.name].controller.safeMode!=undefined)
-        {
+        if (attackRoom.controller.safeMode != undefined) {
             return;
         }
+
 
         //Adding requests to rooms
 
         //Adding quads
-        if(global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_QUAD]==true)
-        {
+        if (attackRoom.attackType[C.ATTACK_TYPE_QUAD] == true) {
             // for now keep two quads
-            global.heap.rooms[room.name].reqQuads=2
-            
+            attackRoom.reqQuads = 2
 
-            if(Game.rooms[room.name].memory.quads.length<global.heap.rooms[room.name].reqQuads)
-            {
-                for(m of Memory.mainRooms)
-                {
-                    var maxBodyParts=CREEP_LIFE_TIME/CREEP_SPAWN_TIME
-                    if(Memory.rooms[m].spawn2Id!=undefined)
-                    {
-                        maxBodyParts+=CREEP_LIFE_TIME/CREEP_SPAWN_TIME
+
+            if (attackRoom.quads.length < attackRoom.reqQuads) {
+                for (m of Memory.mainRooms) {
+                    var maxBodyParts = CREEP_LIFE_TIME / CREEP_SPAWN_TIME
+                    if (Memory.rooms[m].spawn2Id != undefined) {
+                        maxBodyParts += CREEP_LIFE_TIME / CREEP_SPAWN_TIME
                     }
-                    if(Memory.rooms[m].spawn3Id!=undefined)
-                    {
-                        maxBodyParts+=CREEP_LIFE_TIME/CREEP_SPAWN_TIME
+                    if (Memory.rooms[m].spawn3Id != undefined) {
+                        maxBodyParts += CREEP_LIFE_TIME / CREEP_SPAWN_TIME
                     }
 
-                    if(maxBodyParts-global.heap.rooms[m].creepsBodyParts>QUAD_BODY_PARTS_AMOUNT)
-                    {
+                    if (maxBodyParts - global.heap.rooms[m].creepsBodyParts > QUAD_BODY_PARTS_AMOUNT) {
                         //add quad with spawning set to room m
-                        global.heap.rooms[m].quads.push(new Quad(m+"_"+Game.time,this.name,m))
-                        
-                        Game.rooms[m].memory.quads.push(new Quad(m+"_"+Game.time,this.name,m))
+                        global.heap.rooms[m].quads.push(new Quad(m + "_" + Game.time, this.name, m))
+
+                        Game.rooms[m].memory.quads.push(new Quad(m + "_" + Game.time, this.name, m))
                     }
                 }
             }
-            else if(Game.rooms[room.name].memory.quads.length>global.heap.rooms[room.name].reqQuads)
-            {
-                Game.rooms[room.name].memory.quads.shift()
+            else if (attackRoom.quads.length > attackRoom.reqQuads) {
+                attackRoom.quads.shift()
             }
-
-
-            
         }
 
-        if(global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_ENERGY_DRAIN]==true)
-        {
-            if(global.heap.rooms[room.name].drainersId.length<global.heap.rooms[room.name].reqDrainers)
-            {
+        if (attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] == true) {
+            if (attackRoom.drainersId.length < attackRoom.reqDrainers) {
                 //
             }
         }
+
     }
+
+
+
+
+
 }
-module.exports=attackManager
+module.exports = attackManager
