@@ -156,7 +156,21 @@ Room.prototype.creepsManager = function creepsManager() {
                 creep.roleDoctor()
                 global.heap.rooms[this.name].doctorId=creep.id
                 break;
+            case C.ROLE_QUAD_MEMBER:
+                for(q of this.memory.quads)
+                {
+                    if(q.id==creep.memory.quadId)
+                    {
+                        q.members.push(creep.id)
+                        break;
+                    }
+                }
         }
+    }
+
+    for(q of this.memory.quads)
+    {
+        operateQuad(q)
     }
 
     

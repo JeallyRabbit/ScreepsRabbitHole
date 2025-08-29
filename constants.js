@@ -28,7 +28,11 @@ const ROLE_CLAIMER = 'claimer'
 const ROLE_COLONIZER = 'colonizer'
 const ROLE_MINER = 'miner'
 const ROLE_MINERAL_CARRIER = 'mineral_carrier'
-const ROLE_DOCTOR='doctor'
+const ROLE_DOCTOR = 'doctor'
+
+const ROLE_QUAD_MEMBER = 'quad_member'
+const RANGED_BODY = 'ranged_body'
+const HEALER_BODY = 'healer_body'
 
 //Creep constants
 const CREEP_MAX_BODYPARTS = 50; // maximum creep body length - couldn't find in API
@@ -54,7 +58,7 @@ const TASK_FILL_MANAGER_LINK = 'fill_manager_link'
 const TASK_FILL_NUKER_GHODIUM = 'fill_nuker_ghodium'
 const TASK_FILL_NUKER_ENERGY = 'fill_nuker_energy'
 const TASK_CLEAR_CREEP = 'task_clear_creep'
-const TASK_FILL_LAB_ENERGY='task_fill_lab_energy'
+const TASK_FILL_LAB_ENERGY = 'task_fill_lab_energy'
 const TASK_FILL_INPUT_LAB_1_ENERGY = 'task_fill_input_lab_1_energy'
 const TASK_FILL_INPUT_LAB_2_ENERGY = 'task_fill_input_lab_2_energy'
 const TASK_BOOST_CREEP = 'task_boost_creep'
@@ -323,7 +327,7 @@ const ROOM_DISTANCE_CALC_STEP = 1
 
 
 // Room attack
-const ROOM_ATTACK_HISTORY_RANGE=500
+const ROOM_ATTACK_HISTORY_RANGE = 500
 
 
 
@@ -361,7 +365,7 @@ const ATTACK_TYPE_NUKE = 'attack_type_nuke'
 const ATTACK_TYPE_SCOUT = 'attack_type_scout'
 const ATTACK_TYPE_PLUNDER = 'attack_type_plunder'// collecting resources from structures
 
-const QUAD_BODY_PARTS_AMOUNT=200
+const QUAD_BODY_PARTS_AMOUNT = 200
 
 module.exports = {
   TEST_CONST,
@@ -384,7 +388,11 @@ module.exports = {
   ROLE_MINER,
   ROLE_MINERAL_CARRIER,
   ROLE_DOCTOR,
-  
+
+  ROLE_QUAD_MEMBER,
+  RANGED_BODY,
+  HEALER_BODY,
+
   CREEP_MAX_BODYPARTS,
   HAULER_REQ_CARRY_PARTS,
   DEFAULT_COLONIZERS_AMOUNT,
@@ -414,7 +422,7 @@ module.exports = {
   TASK_FILL_INPUT_LAB_1_ENERGY,
   TASK_FILL_INPUT_LAB_2_ENERGY,
 
-TASK_FILL_INPUT_LABS_MINERAL,
+  TASK_FILL_INPUT_LABS_MINERAL,
   TASK_CLEAR_INPUT_LABS,
   TASK_CLEAR_OUTPUT_LABS,
   TASK_BOOST_CREEP,

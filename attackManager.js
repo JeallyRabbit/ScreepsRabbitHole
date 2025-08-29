@@ -21,6 +21,13 @@ class attackHistoryData {
     }
 }
 
+class generalRoomRequest {
+    constructor(roomName, type) {
+        this.roomName = roomName
+        this.type = type;
+    }
+}
+
 
 function attackManager(room)
 {
@@ -195,8 +202,9 @@ function attackManager(room)
         {
             // for now keep two quads
             global.heap.rooms[room.name].reqQuads=2
+            
 
-            if(global.heap.rooms[room.name].quads.length<global.heap.rooms[room.name].reqQuads)
+            if(Game.rooms[room.name].memory.quads.length<global.heap.rooms[room.name].reqQuads)
             {
                 for(m of Memory.mainRooms)
                 {
@@ -213,17 +221,19 @@ function attackManager(room)
                     if(maxBodyParts-global.heap.rooms[m].creepsBodyParts>QUAD_BODY_PARTS_AMOUNT)
                     {
                         //add quad with spawning set to room m
-                        global.heap.rooms[room.name].quads.push(new Quad(m+"_"+Game.time,this.name,m))
+                        global.heap.rooms[m].quads.push(new Quad(m+"_"+Game.time,this.name,m))
+                        
+                        Game.rooms[m].memory.quads.push(new Quad(m+"_"+Game.time,this.name,m))
                     }
                 }
             }
-
-
-            for(q of global.heap.rooms[room.name].quads)
+            else if(Game.rooms[room.name].memory.quads.length>global.heap.rooms[room.name].reqQuads)
             {
-                //Here add checking if quad is dead/needs to be spawnbed
-                //and operateQuad(q)
+                Game.rooms[room.name].memory.quads.shift()
             }
+
+
+            
         }
 
         if(global.heap.rooms[room.name].attackType[C.ATTACK_TYPE_ENERGY_DRAIN]==true)

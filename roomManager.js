@@ -38,12 +38,16 @@ Room.prototype.roomManager = function roomManager() {
 
     this.memory.repairerId = undefined
 
-    
+
 
 
 
     if (Memory.mainRooms.includes(this.name)) {
         //If it is one of main rooms 
+
+        if (Memory.rooms[this.name].quads == undefined) {
+            Memory.rooms[this.name].quads = []
+        }
 
         if (this.memory.distanceToOthers == undefined && Game.time % C.ROOM_DISTANCE_CALC_STEP == 0) {
             var distance = 0;
@@ -662,7 +666,7 @@ Room.prototype.roomManager = function roomManager() {
 
 
 
-    
+
 
 
     this.operateTowers()

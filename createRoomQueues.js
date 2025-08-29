@@ -24,11 +24,24 @@ class harvestingSourceRequestCarrier {
 }
 
 class generalRoomRequest {
-    constructor(roomName, type) {
+    constructor(roomName, type,type2=undefined) {
         this.roomName = roomName
         this.type = type;
+        this.type2=type2
     }
 }
+
+class quadMemberRequest{
+    constructor(quadId,type,bodyType,isFirstMember=false)
+    {
+        this.quadId=quadId
+        this.type=type
+        this.bodyType=bodyType
+        this.isFirstMember=isFirstMember
+    }
+}
+
+
 
 class soldierRequest {
     constructor(roomName, type, isMelee) {
@@ -157,29 +170,26 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             //this moght be not fully correct but it should assure that on rcl 1 we start spawning workers
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
         }
-        if(this.controller.level==4 && this.storage==undefined)
-        {//RCL 4 but no storage
-            if(global.heap.rooms[this.name].workersParts<1)
-            {
-                global.heap.rooms[this.name].needWorkersParts=1
+        if (this.controller.level == 4 && this.storage == undefined) {//RCL 4 but no storage
+            if (global.heap.rooms[this.name].workersParts < 1) {
+                global.heap.rooms[this.name].needWorkersParts = 1
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
             }
         }
     }
     else {//Workers above and on RCL4
-        global.heap.rooms[this.name].needWorkersParts=1
+        global.heap.rooms[this.name].needWorkersParts = 1
 
 
-        if ((this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>C.UPGRADE_FACTOR && this.controller.level<8)
-            || (global.heap.rooms[this.name].construction.length>0 && this.controller.level==8)
+        if ((this.storage != undefined && this.storage.store[RESOURCE_ENERGY] > C.UPGRADE_FACTOR && this.controller.level < 8)
+            || (global.heap.rooms[this.name].construction.length > 0 && this.controller.level == 8)
         ) {
-            global.heap.rooms[this.name].needWorkersParts=this.storage.store[RESOURCE_ENERGY]/C.UPGRADE_FACTOR
-            console.log(global.heap.rooms[this.name].construction.length," ",this.name)
+            global.heap.rooms[this.name].needWorkersParts = this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR
+            console.log(global.heap.rooms[this.name].construction.length, " ", this.name)
         }
 
 
-        if(global.heap.rooms[this.name].workersParts <global.heap.rooms[this.name].needWorkersParts)
-        {
+        if (global.heap.rooms[this.name].workersParts < global.heap.rooms[this.name].needWorkersParts) {
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
         }
     }
@@ -238,15 +248,14 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     }
 
 
-    if(global.heap.rooms[this.name].outLabsId.length>0 && global.heap.rooms[this.name].doctorId==undefined
-        && global.heap.rooms[this.name].reaction!=undefined
-    )
-    {
+    if (global.heap.rooms[this.name].outLabsId.length > 0 && global.heap.rooms[this.name].doctorId == undefined
+        && global.heap.rooms[this.name].reaction != undefined
+    ) {
         global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_DOCTOR))
 
     }
 
-   // console.log("global.heap.rooms[this.name].mineralMiningPower: ", global.heap.rooms[this.name].mineralMiningPower, " / global.heap.rooms[this.name].mineralCarryPower: ", global.heap.rooms[this.name].mineralCarryPower)
+    // console.log("global.heap.rooms[this.name].mineralMiningPower: ", global.heap.rooms[this.name].mineralMiningPower, " / global.heap.rooms[this.name].mineralCarryPower: ", global.heap.rooms[this.name].mineralCarryPower)
 
     //Rampart Repairers - civilian queue
     if (global.heap.rooms[this.name].requiredRampartsRepairersPower > global.heap.rooms[this.name].rampartRepairersPower) {
@@ -284,7 +293,28 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
     }
 
+    for (q of Game.rooms[this.name].memory.quads) {
+        //Here add checking if quad is dead/needs to be spawnbed
 
+        if (q.isCompleted == false) {
+
+            if (q.members.length = 0) {
+                global.heap.rooms[room.name].offensiveQueue.push(new quadMemberRequest(q.Id,C.QUAD_MEMBER,C.RANGED_BODY,true))
+
+            }
+            else if (q.members.length = 1) {
+                global.heap.rooms[room.name].offensiveQueue.push(new quadMemberRequest(q.Id,C.QUAD_MEMBER,C.RANGED_BODY,false))
+            }
+            else
+            {
+                global.heap.rooms[room.name].offensiveQueue.push(new quadMemberRequest(q.Id,C.QUAD_MEMBER,C.HEALER_BODY,false))
+            }
+
+        }
+
+
+        //and operateQuad(q)
+    }
 
 
 
