@@ -209,6 +209,7 @@ module.exports.loop = function () {
           return obj.name !== room.name;
         });
         delete global.heap.rooms[room.name]
+        Game.rooms[room.name].memory={}
         break;
       }
       else if(Game.rooms[room.name]==undefined)

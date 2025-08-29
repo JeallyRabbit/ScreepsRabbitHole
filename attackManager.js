@@ -193,7 +193,10 @@ function attackManager(room)
         }
 
 
-        
+        if(Game.rooms[room.name].controller.safeMode!=undefined)
+        {
+            return;
+        }
 
         //Adding requests to rooms
 

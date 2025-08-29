@@ -17,6 +17,7 @@ const roleColonizer = require('roleColonizer')
 const roleMiner = require('roleMiner')
 const roleMineralCarrier = require('roleMineralCarrier')
 const roleDoctor=require('roleDoctor')
+const operateQuad=require('operateQuad')
 
 Room.prototype.creepsManager = function creepsManager() {
 
@@ -170,7 +171,7 @@ Room.prototype.creepsManager = function creepsManager() {
 
     for(q of this.memory.quads)
     {
-        operateQuad(q)
+        this.operateQuad(q)
     }
 
     
