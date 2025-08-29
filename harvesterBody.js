@@ -11,7 +11,7 @@ function harvesterBody(cap,ifLimit=true)// return array with max possible work p
     parts.push(CARRY)
     parts.push(WORK)
     parts.push(WORK)
-    cap-=(BODYPART_COST[MOVE]+(2*BODYPART_COST[WORK]));
+    cap-=(BODYPART_COST[MOVE]+(2*BODYPART_COST[WORK])+BODYPART_COST[CARRY]);
 
     for(let i=0;i<Math.floor(cap/(BODYPART_COST[MOVE]+(2*BODYPART_COST[WORK])));i++)
     {

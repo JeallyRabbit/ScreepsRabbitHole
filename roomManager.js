@@ -353,7 +353,7 @@ Room.prototype.roomManager = function roomManager() {
                 if (this.memory.variationToBuild == undefined) {
                     this.memory.finishedPlanning = undefined
                 }
-                if (Game.time % 5 == 0) {
+                if (Game.time % 5 == 0 || true) {
                     //console.log("room: ",this.name," is building from list")
                     this.buildRoom(this.memory.variationToBuild)
                     //global.heap.isSomeRoomPlanning = true

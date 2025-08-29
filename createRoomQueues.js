@@ -161,9 +161,10 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
     // Workers below RCL4 - wthout storage
     if (this.storage == undefined || this.controller.level < 4) {
-        if (this.memory.energyBalance > C.ENERGY_BALANCER_WORKER_SPAWN && Game.time % 5 == 0) {
+        if (this.memory.energyBalance > C.ENERGY_BALANCER_WORKER_SPAWN && Game.time % 2 == 0) {
 
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
+            console.log("Adding worker")
 
         }
         else if (global.heap.rooms[this.name].workersParts == 0 && this.energyAvailable <= SPAWN_ENERGY_CAPACITY && areHarvestersSatisfied && areCarriersSatisfied) {

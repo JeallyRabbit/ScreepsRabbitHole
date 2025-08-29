@@ -66,6 +66,7 @@ Room.prototype.spawnManager = function spawnManager() {
 
 
     if (global.heap.rooms[this.name].defensiveQueue.length > 0) {
+
         var request = global.heap.rooms[this.name].defensiveQueue[0]
         var type = request.type
         var energyCap = Game.rooms[this.name].energyAvailable
@@ -92,6 +93,7 @@ Room.prototype.spawnManager = function spawnManager() {
             case C.ROLE_HARVESTER:
                 {
                     var result = spawn.spawnCreep(harvesterBody(energyCap), C.ROLE_HARVESTER + '_' + this.name + Game.time, { memory: { role: C.ROLE_HARVESTER, homeRoom: this.name, targetRoom: request.sourceRoom, sourceId: request.sourceId } })
+
                     if (result == OK) {
                         global.heap.rooms[this.name].harvestingQueue.shift()
 
@@ -140,6 +142,7 @@ Room.prototype.spawnManager = function spawnManager() {
         var type = request.type
         var energyCap = Game.rooms[this.name].energyAvailable
         switch (type) {
+            
             case C.ROLE_SCOUT:
                 {
                     var result = spawn.spawnCreep([MOVE], C.ROLE_SCOUT + '_' + this.name + Game.time, { memory: { role: C.ROLE_SCOUT, homeRoom: this.name, homeSpawnID: spawn.id } })
@@ -151,11 +154,11 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_WORKER:
                 {
-                    console.log("trying spawn worker")
                     var body = []
                     if (this.energyAvailable <= SPAWN_ENERGY_CAPACITY) { body = [WORK, CARRY, MOVE] }
                     else { body = workerBody(energyCap) }
                     var result = spawn.spawnCreep(body, C.ROLE_WORKER + '_' + this.name + Game.time, { memory: { role: C.ROLE_WORKER, homeRoom: this.name } })
+
                     if (result == OK) {
                         global.heap.rooms[this.name].civilianQueue.shift()
 
@@ -165,7 +168,7 @@ Room.prototype.spawnManager = function spawnManager() {
             case C.ROLE_REPAIRER:
                 {
                     var result = spawn.spawnCreep(repairerBody(energyCap), C.ROLE_REPAIRER + '_' + this.name + Game.time, { memory: { role: C.ROLE_REPAIRER, targetRoom: request.roomName, homeRoom: this.name } })
-
+                    console.log("repairer spawn result: ",result)
                     if (result == OK) {
                         global.heap.rooms[this.name].civilianQueue.shift()
 
