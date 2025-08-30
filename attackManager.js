@@ -198,22 +198,7 @@ function attackManager(attackRoom) {
 
 
             if (attackRoom.quads.length < attackRoom.reqQuads) {
-                for (m of Memory.mainRooms) {
-                    var maxBodyParts = CREEP_LIFE_TIME / CREEP_SPAWN_TIME
-                    if (Memory.rooms[m].spawn2Id != undefined) {
-                        maxBodyParts += CREEP_LIFE_TIME / CREEP_SPAWN_TIME
-                    }
-                    if (Memory.rooms[m].spawn3Id != undefined) {
-                        maxBodyParts += CREEP_LIFE_TIME / CREEP_SPAWN_TIME
-                    }
 
-                    if (maxBodyParts - global.heap.rooms[m].creepsBodyParts > QUAD_BODY_PARTS_AMOUNT) {
-                        //add quad with spawning set to room m
-                        r.quads.push(new Quad(m + "_" + Game.time, this.name, m))
-
-
-                    }
-                }
             }
             else if (attackRoom.quads.length > attackRoom.reqQuads) {
                 attackRoom.quads.shift()
@@ -222,6 +207,36 @@ function attackManager(attackRoom) {
 
             for (q of attackRoom.quads) {
                 if (q.isCompleted == false) {
+
+                    if (q.homeRoom == undefined) {
+
+                        var distanceToTargetRoom = Infinity
+                        var roomToSpawnQuad = undefined
+                        for (m of Memory.mainRooms) {
+                            var maxBodyParts = CREEP_LIFE_TIME / CREEP_SPAWN_TIME
+                            if (Memory.rooms[m].spawn2Id != undefined) {
+                                maxBodyParts += CREEP_LIFE_TIME / CREEP_SPAWN_TIME
+                            }
+                            if (Memory.rooms[m].spawn3Id != undefined) {
+                                maxBodyParts += CREEP_LIFE_TIME / CREEP_SPAWN_TIME
+                            }
+
+                            if (maxBodyParts - global.heap.rooms[m].creepsBodyParts > QUAD_BODY_PARTS_AMOUNT) {
+
+                                if (Game.map.getRoomLinearDistance(m, attackRoom.name) < distanceToTargetRoom
+                            && Game.rooms[m].controller.level>=7) {
+                                    distanceToTargetRoom = Game.map.getRoomLinearDistance(m, attackRoom.name)
+                                    roomToSpawnQuad = m
+
+                                }
+
+                            }
+                        }
+                        if (roomToSpawnQuad != undefined) {
+                            q.homeRoom = roomToSpawnQuad
+                        }
+                    }
+
 
                     if (q.members.length = 0) {
                         global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.Id, C.QUAD_MEMBER, C.RANGED_BODY, true))

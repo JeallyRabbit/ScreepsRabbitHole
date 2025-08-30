@@ -218,6 +218,12 @@ Room.prototype.roomManager = function roomManager() {
                     break;
                 }
             }
+
+            if(this.memory.isMinimalRoom==true)
+            {//limiting some rooms to only 2 sources - those should be perfect rooms for attacks
+                counter=2;
+            }
+
             while (this.memory.harvestingSources.length > counter) {
                 this.memory.harvestingSources.pop()
             }
