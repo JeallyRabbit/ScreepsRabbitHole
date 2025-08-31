@@ -274,9 +274,8 @@ module.exports.loop = function () {
 
       Game.rooms[mainRoom].creepsManager()
 
-      console.log("global.heap.rooms[,", mainRoom, "].creepsBodyParts after creepsManger: ",
-        global.heap.rooms[mainRoom].creepsBodyParts
-      )
+      //console.log("global.heap.rooms[,", mainRoom, "].creepsBodyParts after creepsManger: ",
+      //  global.heap.rooms[mainRoom].creepsBodyParts)
 
       Game.rooms[mainRoom].createRoomQueues()
 

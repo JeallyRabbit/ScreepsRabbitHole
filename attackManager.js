@@ -1,4 +1,6 @@
+
 const C = require('constants');
+const { ROLE_QUAD_MEMBER } = require('./constants');
 
 
 class Quad {
@@ -27,13 +29,12 @@ class generalRoomRequest {
     }
 }
 
-class quadMemberRequest{
-    constructor(quadId,creepRole,bodyType,isFirstMember)
-    {
-        this.quadId=quadId
-        this.role=creepRole
-        this.bodyType=bodyType
-        this.isFirstMember=isFirstMember
+class quadMemberRequest {
+    constructor(quadId, creepRole, bodyType, isFirstMember) {
+        this.quadId = quadId
+        this.role = creepRole
+        this.bodyType = bodyType
+        this.isFirstMember = isFirstMember
     }
 }
 
@@ -205,7 +206,27 @@ function attackManager(attackRoom) {
         }
 
 
+        //Clearing data about dead quad members
+        if (attackRoom.quads.length > 0) {
+            for (q of attackRoom.quads) {
+                if (q.members != undefined && q.members.length > 0) {
+                    for (m of q.members) {
+                        console.log("checking member: ", m, " ", Game.getObjectById(m))
+                        if (Game.getObjectById(m) == null) {
 
+                            var index = q.members.indexOf(m)
+                            console.log("index: ", index)
+                            q.members.splice(index, 1)
+                            console.log("Q.members after splice: ", q.members)
+                        }
+                    }
+                }
+                else {
+                    q.members = []
+                }
+
+            }
+        }
 
 
         //Adding requests to rooms
@@ -258,23 +279,31 @@ function attackManager(attackRoom) {
                         }
                     }
 
-                    if (q.homeRoom != undefined && global.heap.rooms[q.homeRoom].offensiveQueue!=undefined) {
-                        if (q.members.length = 0) {
-                            global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.Id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, true))
+                    if (q.homeRoom != undefined && global.heap.rooms[q.homeRoom].offensiveQueue != undefined) {
+                        if (global.heap.rooms[q.homeRoom].offensiveQueue.find(({ role }) => role === C.ROLE_QUAD_MEMBER) == undefined) {
+                            if (q.members.length == 0) {
+                                global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, true))
+                                console.log("adding first member of quad: ".q.id)
 
+
+                            }
+                            else if (q.members.length == 1) {
+                                global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, false))
+                            }
+                            else {
+                                global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.HEALER_BODY, false))
+                            }
                         }
-                        else if (q.members.length = 1) {
-                            global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.Id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, false))
-                        }
-                        else {
-                            global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.Id, C.ROLE_QUAD_MEMBER, C.HEALER_BODY, false))
-                        }
+
+                        console.log("offensive queue[", q.homeRoom, "]: ", global.heap.rooms[q.homeRoom].offensiveQueue)
                     }
 
 
                 }
             }
         }
+
+
 
         //ATTACK_TYPE_DRAIN
         if (attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] == true) {

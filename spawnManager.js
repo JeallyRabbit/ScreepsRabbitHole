@@ -40,14 +40,19 @@ Room.prototype.spawnManager = function spawnManager() {
     }
     var energyCap = Game.rooms[this.name].energyAvailable
 
-
+  
 
     //check if there is quad that has started spawning in offensiveQueue (members>0)
     // if yes then spawn it before the rest
     // else spawn after other queues
-    if (global.heap.rooms[this.name].offensiveQueue.length > 0 && global.heap.rooms[this.name].offensiveQueue[0].type == C.ROLE_QUAD_MEMBER &&
+    if (global.heap.rooms[this.name].offensiveQueue.length) {
+       
+    }
+
+    if (global.heap.rooms[this.name].offensiveQueue.length > 0 && global.heap.rooms[this.name].offensiveQueue[0].role == C.ROLE_QUAD_MEMBER &&
         global.heap.rooms[this.name].offensiveQueue[0].isFirstMember == false
     ) {
+        console.log("spawning not first quad member")
         var request = global.heap.rooms[this.name].offensiveQueue[0]
         var body = []
         if (request.bodyType == C.RANGED_BODY) {
@@ -67,6 +72,7 @@ Room.prototype.spawnManager = function spawnManager() {
 
     if (global.heap.rooms[this.name].defensiveQueue.length > 0) {
 
+        console.log("spawning from defensive queue")
         var request = global.heap.rooms[this.name].defensiveQueue[0]
         var type = request.type
         var energyCap = Game.rooms[this.name].energyAvailable
@@ -85,6 +91,7 @@ Room.prototype.spawnManager = function spawnManager() {
     }
     else if (global.heap.rooms[this.name].harvestingQueue.length > 0) {
 
+        console.log("spawning from harvestingQueue")
         var request = global.heap.rooms[this.name].harvestingQueue[0]
         var type = request.type
         var energyCap = Game.rooms[this.name].energyAvailable
@@ -138,11 +145,15 @@ Room.prototype.spawnManager = function spawnManager() {
 
     }
     else if (global.heap.rooms[this.name].civilianQueue.length > 0) {
+
+
+        console.log("spawning from civilianQueue")
+
         var request = global.heap.rooms[this.name].civilianQueue[0]
         var type = request.type
         var energyCap = Game.rooms[this.name].energyAvailable
         switch (type) {
-            
+
             case C.ROLE_SCOUT:
                 {
                     var result = spawn.spawnCreep([MOVE], C.ROLE_SCOUT + '_' + this.name + Game.time, { memory: { role: C.ROLE_SCOUT, homeRoom: this.name, homeSpawnID: spawn.id } })
@@ -168,7 +179,7 @@ Room.prototype.spawnManager = function spawnManager() {
             case C.ROLE_REPAIRER:
                 {
                     var result = spawn.spawnCreep(repairerBody(energyCap), C.ROLE_REPAIRER + '_' + this.name + Game.time, { memory: { role: C.ROLE_REPAIRER, targetRoom: request.roomName, homeRoom: this.name } })
-                    console.log("repairer spawn result: ",result)
+                    
                     if (result == OK) {
                         global.heap.rooms[this.name].civilianQueue.shift()
 
@@ -253,21 +264,29 @@ Room.prototype.spawnManager = function spawnManager() {
     }
     else if (global.heap.rooms[this.name].offensiveQueue.length > 0) {
 
+        console.log("entering offensive queueeee")
         var request = global.heap.rooms[this.name].offensiveQueue[0]
-        var type = request.type
+        var type = request.role
+        console.log("type: ", type)
         var energyCap = Game.rooms[this.name].energyAvailable
 
         switch (type) {
             case C.ROLE_QUAD_MEMBER:
                 {
+                    //TODO
+                    // add waiting for minimal body (they all have to have similar body length)
+                    console.log("entered spawning quad member")
+                    console.log("request.quadId: ",request.quadId)
+                    var name="RabbitTail"
                     var body = []
                     if (request.bodyType == C.RANGED_BODY) {
+                        name="RabbitEye"
                         body = quadRangedBody(energyCap)
                     }
                     else if (request.bodyType == C.HEALER_BODY) {
                         body = quadHealerBody(energyCap)
                     }
-                    var result = spawn.spawnCreep(body, C.ROLE_QUAD_MEMBER + '_' + this.name + Game.time, { memory: { quadId: request.quadId, homeRoom: this.name } })
+                    var result = spawn.spawnCreep(body, name + '_' + this.name + Game.time, { memory: { quadId: request.quadId, homeRoom: this.name } })
                     if (result == OK) {
                         global.heap.rooms[this.name].offensiveQueue.shift()
 
