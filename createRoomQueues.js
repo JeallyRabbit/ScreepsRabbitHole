@@ -301,6 +301,13 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
 
     ifLog = false
+    if(this.name=='W9N6')
+    {
+        ifLog=true
+        console.log("global.heap.rooms[this.name].haulersParts < C.HAULER_REQ_CARRY_PARTS",
+        global.heap.rooms[this.name].haulersParts < C.HAULER_REQ_CARRY_PARTS)
+            console.log(global.heap.rooms[this.name].haulersParts)
+    }
     if (ifLog) {
         console.log("defensiveQueue:")
         for (a of global.heap.rooms[this.name].defensiveQueue) {

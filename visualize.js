@@ -150,33 +150,45 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.text('🔨', blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
-
+    //Hauler task
+    var tasksVisualizationPos = new RoomPosition(11, 1, this.name)
+    var blockPosWidth = 8
+    var blockPosHeight = 1
+    var blockPos = new RoomPosition(tasksVisualizationPos.x, tasksVisualizationPos.y, this.name)
+    this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.text("Hauler task: " + global.heap.rooms[this.name].haulerTask, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    tasksVisualizationPos.y += blockPosHeight
 
     //Manager task
     var blockPosWidth = 8
     var blockPosHeight = 1
-    var blockPos = new RoomPosition(3 + blockPosWidth, 1, this.name)
+    var blockPos = new RoomPosition(tasksVisualizationPos.x, tasksVisualizationPos.y, this.name)
     this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.text("Manager task: " + global.heap.rooms[this.name].managerTask, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
-
+    tasksVisualizationPos.y += blockPosHeight
 
     // what reaction to run
     var blockPosWidth = 8
     var blockPosHeight = 1
-    var blockPos = new RoomPosition(3 + blockPosWidth, 2, this.name)
+    var blockPos = new RoomPosition(tasksVisualizationPos.x, tasksVisualizationPos.y, this.name)
     this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.text("Lab reaction: " + global.heap.rooms[this.name].reaction, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    tasksVisualizationPos.y += blockPosHeight
 
     // Doctor task
-    var blockPos = new RoomPosition(3 + blockPosWidth, 2+blockPosHeight, this.name)
+    var blockPos = new RoomPosition(tasksVisualizationPos.x, tasksVisualizationPos.y, this.name)
     this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
