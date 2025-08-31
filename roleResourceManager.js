@@ -11,7 +11,6 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 
     //TODO:
     // Add clearing creep store
-    this.say("Test")
     var terminal = this.room.terminal;
     var storage = this.room.storage;
     var managerLink = undefined
@@ -31,44 +30,43 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
         if (terminal != undefined && storage != undefined) {
 
 
-            this.say("-1")
             if (global.heap.rooms[this.room.name].managerTask == undefined) {
-                this.say("0")
+      
                 if(this.store.getCapacity(RESOURCE_ENERGY)>this.store.getFreeCapacity(RESOURCE_ENERGY))
                 {
                     global.heap.rooms[this.room.name].managerTask=C.TASK_CLEAR_CREEP
                 }
                 else if (managerLink != undefined && managerLink.store[RESOURCE_ENERGY] < C.LINK_BOTTOM_ENERGY) {
-                    this.say("1")
+               
 
                     global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_LINK
                 }
                 else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_ENERGY_BOTTOM) {
-                    this.say("2")
+             
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[RESOURCE_ENERGY]
                 }
                 else if (terminal.store[RESOURCE_ENERGY] < C.TERMINAL_BOTTOM_ENERGY && storage.store[RESOURCE_ENERGY] > C.STORAGE_TOP_ENERGY) {
-                    this.say("3")
+           
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[RESOURCE_ENERGY]
-                    this.say(C.TASK_TRANSFER_TO_TERMINAL[RESOURCE_ENERGY])
+                    //this.say(C.TASK_TRANSFER_TO_TERMINAL[RESOURCE_ENERGY])
                 }
                 else if (isT3BoostInStore(terminal.store) != false)//T3 boosts should be only in storage
                 {
-                    this.say("4")
+              
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[isT3BoostInStore(terminal.store)]
                 }
                 else if (isRawResInStore(storage.store) != false)//Raw Resources should be in terminal
                 {
-                    this.say("5")
+             
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isRawResInStore(storage.store)]
                 }
                 else if (isT1orT2InStore(storage.store) != false)//T1/T2 should be only in storage
                 {
-                    this.say("6")
+            
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isT1orT2InStore(terminal.store)]
                 }
                 else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_TOP_ENERGY) {
-                    this.say("2.5")
+           
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[RESOURCE_ENERGY]
                 }
                 else if (Game.getObjectById(global.heap.rooms[this.room.name].myNuker) != null) {
@@ -115,14 +113,13 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
             }
             else if (global.heap.rooms[this.room.name].managerTask != undefined && global.heap.rooms[this.room.name].managerTask.startsWith("transfer_to_terminal_")) {
                 var resToTransfer = global.heap.rooms[this.room.name].managerTask.replace("transfer_to_terminal_", "");
-                this.say("7")
                 if (storage.store[resToTransfer] == 0 && this.store[resToTransfer]==0) {
                     global.heap.rooms[this.room.name].managerTask = undefined
-                    this.say("7.5")
+                   
                     return
                 }
                 else {
-                    this.say(resToTransfer)
+                    //this.say(resToTransfer)
                     this.withdraw(storage, resToTransfer)
                     if (this.transfer(terminal, resToTransfer, this.store.getCapacity(resToTransfer)) != OK) {
                         this.transfer(terminal, resToTransfer, this.store[resToTransfer])

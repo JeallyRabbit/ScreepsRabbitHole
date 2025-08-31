@@ -16,25 +16,24 @@ const roleClaimer = require('roleClaimer')
 const roleColonizer = require('roleColonizer')
 const roleMiner = require('roleMiner')
 const roleMineralCarrier = require('roleMineralCarrier')
-const roleDoctor=require('roleDoctor')
-const operateQuad=require('operateQuad')
+const roleDoctor = require('roleDoctor')
+const operateQuad = require('operateQuad')
 
 Room.prototype.creepsManager = function creepsManager() {
 
     global.heap.rooms[this.name].haveScout = false;
     global.heap.rooms[this.name].haulersParts = 0;
     global.heap.rooms[this.name].resourceManagerId = undefined;
-    global.heap.rooms[this.name].doctorId=undefined;
+    global.heap.rooms[this.name].doctorId = undefined;
     global.heap.rooms[this.name].mineralMiningPower = 0;//how much of mineral is extracted per tick
     if (global.heap.rooms[this.name].miners == undefined) {
         global.heap.rooms[this.name].miners = []
     }
-    if(global.heap.rooms[this.name].mineralCarriers==undefined)
-    {
-        global.heap.rooms[this.name].mineralCarriers=[]
+    if (global.heap.rooms[this.name].mineralCarriers == undefined) {
+        global.heap.rooms[this.name].mineralCarriers = []
     }
 
-    global.heap.rooms[this.name].mineralCarryPower=0
+    global.heap.rooms[this.name].mineralCarryPower = 0
 
 
     global.heap.rooms[this.name].creepsBodyParts = 0
@@ -155,26 +154,27 @@ Room.prototype.creepsManager = function creepsManager() {
                 break;
             case C.ROLE_DOCTOR:
                 creep.roleDoctor()
-                global.heap.rooms[this.name].doctorId=creep.id
+                global.heap.rooms[this.name].doctorId = creep.id
                 break;
             case C.ROLE_QUAD_MEMBER:
-                for(q of this.memory.quads)
-                {
-                    if(q.id==creep.memory.quadId)
-                    {
-                        q.members.push(creep.id)
-                        break;
+                for (attackRoom of Memory.roomsToAttack) {
+                    for (q of attackRoom.quads) {
+                        if (q.id == creep.memory.quadId) {
+                            q.members.push(creep.id)
+                            break;
+                        }
                     }
+
                 }
         }
     }
+    this.memory.creepsBodyParts = global.heap.rooms[this.name].creepsBodyParts
 
-    for(q of this.memory.quads)
-    {
+    for (q of this.memory.quads) {
         this.operateQuad(q)
     }
 
-    
+
 
     //Removing dead miners from array
     if (global.heap.rooms[this.name].miners.length > 0) {
@@ -189,8 +189,7 @@ Room.prototype.creepsManager = function creepsManager() {
     }
 
     //removin dead mineralCarriers
-    if(global.heap.rooms[this.name].mineralCarriers.length>0)
-    {
+    if (global.heap.rooms[this.name].mineralCarriers.length > 0) {
         for (mineralCarrier of global.heap.rooms[this.name].mineralCarriers) {
             if (Game.getObjectById(mineralCarrier.id) == null) {
                 const index = global.heap.rooms[this.name].mineralCarriers.indexOf(mineralCarrier);

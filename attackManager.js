@@ -27,6 +27,15 @@ class generalRoomRequest {
     }
 }
 
+class quadMemberRequest{
+    constructor(quadId,creepRole,bodyType,isFirstMember)
+    {
+        this.quadId=quadId
+        this.role=creepRole
+        this.bodyType=bodyType
+        this.isFirstMember=isFirstMember
+    }
+}
 
 function attackManager(attackRoom) {
     console.log("AttackManager")
@@ -63,7 +72,7 @@ function attackManager(attackRoom) {
 
 
 
-    attackRoom.areDefendersPresent = false;
+    attackRoom.areDefendersPresent = true;
 
 
     // boolean to agregate results of history into one value
@@ -148,8 +157,20 @@ function attackManager(attackRoom) {
 
         attackRoom.meanOperationalTowersAmount = auxSum / auxCounter
 
+        if (Game.rooms[attackRoom.name].controller.safeMode != undefined) {
+            console.log("attacked Room: ", attackRoom.name, " is in safe mode")
+            return;
+        }
+
+    }
+    else {
+        //we need vision on the room
+        if (!global.heap.visionRequests.includes(attackRoom.name)) {
+            global.heap.visionRequests.push(attackRoom.name)
+        }
     }
 
+    console.log("1111111111111111111111111111111111111")
     //Decisions based on towers history
     if (attackRoom.attackType != undefined) {
         if (attackRoom.areTowersHistoryOperational == true) {
@@ -184,9 +205,7 @@ function attackManager(attackRoom) {
         }
 
 
-        if (attackRoom.controller.safeMode != undefined) {
-            return;
-        }
+
 
 
         //Adding requests to rooms
@@ -204,9 +223,12 @@ function attackManager(attackRoom) {
                 attackRoom.quads.shift()
             }
 
+            if (attackRoom.quads.length < attackRoom.reqQuads) {
+                attackRoom.quads.push(new Quad(attackRoom.name + Game.time, attackRoom.name, undefined))
+            }
 
             for (q of attackRoom.quads) {
-                if (q.isCompleted == false) {
+                if (q.isCompleted != true) {
 
                     if (q.homeRoom == undefined) {
 
@@ -220,11 +242,10 @@ function attackManager(attackRoom) {
                             if (Memory.rooms[m].spawn3Id != undefined) {
                                 maxBodyParts += CREEP_LIFE_TIME / CREEP_SPAWN_TIME
                             }
-
-                            if (maxBodyParts - global.heap.rooms[m].creepsBodyParts > QUAD_BODY_PARTS_AMOUNT) {
+                            if (maxBodyParts - Game.rooms[m].memory.creepsBodyParts > C.QUAD_BODY_PARTS_AMOUNT) {
 
                                 if (Game.map.getRoomLinearDistance(m, attackRoom.name) < distanceToTargetRoom
-                            && Game.rooms[m].controller.level>=7) {
+                                    && Game.rooms[m].controller.level >= 7) {
                                     distanceToTargetRoom = Game.map.getRoomLinearDistance(m, attackRoom.name)
                                     roomToSpawnQuad = m
 
@@ -237,26 +258,44 @@ function attackManager(attackRoom) {
                         }
                     }
 
+                    if (q.homeRoom != undefined && global.heap.rooms[q.homeRoom].offensiveQueue!=undefined) {
+                        if (q.members.length = 0) {
+                            global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.Id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, true))
 
-                    if (q.members.length = 0) {
-                        global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.Id, C.QUAD_MEMBER, C.RANGED_BODY, true))
+                        }
+                        else if (q.members.length = 1) {
+                            global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.Id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, false))
+                        }
+                        else {
+                            global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.Id, C.ROLE_QUAD_MEMBER, C.HEALER_BODY, false))
+                        }
+                    }
 
-                    }
-                    else if (q.members.length = 1) {
-                        global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.Id, C.QUAD_MEMBER, C.RANGED_BODY, false))
-                    }
-                    else {
-                        global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.Id, C.QUAD_MEMBER, C.HEALER_BODY, false))
-                    }
 
                 }
             }
         }
 
+        //ATTACK_TYPE_DRAIN
         if (attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] == true) {
             if (attackRoom.drainersId.length < attackRoom.reqDrainers) {
                 //
             }
+        }
+
+
+
+
+
+        var ifLog = false
+        if (ifLog) {
+            console.log("data about room to attack")
+            if (attackRoom.attackType != undefined) {
+                for (t in attackRoom.attackType) {
+                    //console.log(t, " ", attackRoom.attackType[t])
+                }
+            }
+
         }
 
     }

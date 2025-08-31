@@ -18,7 +18,7 @@ const creepsManager = require('creepsManager')
 const linkManager = require('linkManager')
 const terminalManager = require('terminalManager')
 const labsManager = require('labsManager')
-const attackManager=require('attackManager')
+const attackManager = require('attackManager')
 const visualize = require('visualize');
 
 Room.prototype.removeConstructionSites = function removeConstructionSites() {
@@ -27,46 +27,45 @@ Room.prototype.removeConstructionSites = function removeConstructionSites() {
   }
 }
 
-class attackRoom{
-  constructor(roomName)
-  {
+class attackRoom {
+  constructor(roomName) {
 
-    this.attackTypes={}
-    this.attackTypes[C.ATTACK_TYPE_QUAD]=false
-    this.attackTypes[C.ATTACK_TYPE_DUO]=false
-    this.attackTypes[C.ATTACK_TYPE_SINGLE]=false
-    this.attackTypes[C.ATTACK_TYPE_ENERGY_DRAIN]=false
-    this.attackTypes[C.ATTACK_TYPE_DISMANTLE]=false
-    this.attackTypes[C.ATTACK_TYPE_CONTROLLER_DOWNGRADE]=false
-    this.attackTypes[C.ATTACK_TYPE_NUKE]=false
-    this.attackTypes[C.ATTACK_TYPE_SCOUT]=false
-    this.attackTypes[C.ATTACK_TYPE_PLUNDER]=false
-    this.name=roomName
-    this.reqQuads=0
-    this.quads=[]
+    this.attackType = {}
+    this.attackType[C.ATTACK_TYPE_QUAD] = false
+    this.attackType[C.ATTACK_TYPE_DUO] = false
+    this.attackType[C.ATTACK_TYPE_SINGLE] = false
+    this.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] = false
+    this.attackType[C.ATTACK_TYPE_DISMANTLE] = false
+    this.attackType[C.ATTACK_TYPE_CONTROLLER_DOWNGRADE] = false
+    this.attackType[C.ATTACK_TYPE_NUKE] = false
+    this.attackType[C.ATTACK_TYPE_SCOUT] = false
+    this.attackType[C.ATTACK_TYPE_PLUNDER] = false
+    this.name = roomName
+    this.reqQuads = 0
+    this.quads = []
 
-    this.reqDuos=0
-    this.duos=[]
+    this.reqDuos = 0
+    this.duos = []
 
-    this.reqSingles=0
-    this.singlesId=[]
+    this.reqSingles = 0
+    this.singlesId = []
 
-    this.reqDrainers=0
-    this.drainersId=[]
+    this.reqDrainers = 0
+    this.drainersId = []
 
-    this.reqDismantlePower=0
-    this.dismantlePower=0
-    this.dismantlersId=[]
+    this.reqDismantlePower = 0
+    this.dismantlePower = 0
+    this.dismantlersId = []
 
-    this.controllerAttackCreeps=0
+    this.controllerAttackCreeps = 0
 
-    this.reqNukes=0
-    this.nukes=[]
+    this.reqNukes = 0
+    this.nukes = []
 
-    this.scoutId=undefined
+    this.scoutId = undefined
 
-    this.looters=[]
-    
+    this.looters = []
+
   }
 }
 
@@ -94,7 +93,10 @@ module.exports.loop = function () {
       console.log("setting global heap")
     }
 
-
+    //vision requests (observer)
+    if (global.heap.visionRequests == undefined) {
+      global.heap.visionRequests = []
+    }
 
     //automatic colonizing
     if (Memory.roomsToColonize == undefined) {
@@ -188,33 +190,30 @@ module.exports.loop = function () {
       Memory.manualAttack = '??'
     }
 
-    if(!Memory.roomsToAttack.some(e => e.name === Memory.manualAttack)  && Memory.manualAttack != '??')
-    {
+    if (!Memory.roomsToAttack.some(e => e.name === Memory.manualAttack) && Memory.manualAttack != '??') {
       Memory.roomsToAttack.push(new attackRoom(Memory.manualAttack))
-      console.log("Adding room: ",Memory.manualAttack," to Memor.roomsToAttack")
+      console.log("Adding room: ", Memory.manualAttack, " to Memor.roomsToAttack")
     }
 
 
     //Clearing attack of now owned rooms and running attackManager
-    console.log("Memory.romsToATtack")
     for (r of Memory.roomsToAttack) {
 
-      
-      var roomName=r.name
-      //attackManager() here ?
+
+      var roomName = r.name
+
       attackManager(r)
 
       if (roomName != undefined && Game.rooms[roomName] != undefined && Game.rooms[roomName].controller.owner == undefined) {
-        console.log("Removing room: ", roomName," from Memory.roomsToAttack")
+        console.log("Removing room: ", roomName, " from Memory.roomsToAttack")
         Memory.roomsToAttack = Memory.roomsToAttack.filter(function (obj) {
           return obj.name !== roomName;
         });
         delete global.heap.rooms[roomName]
         break;
       }
-      else if(Game.rooms[roomName]==undefined && r.attackTypes!=undefined)
-      {
-        r.attackTypes[C.ATTACK_TYPE_SCOUT]=true
+      else if (Game.rooms[roomName] == undefined && r.attackType != undefined) {
+        r.attackType[C.ATTACK_TYPE_SCOUT] = true
       }
     }
 
@@ -273,8 +272,11 @@ module.exports.loop = function () {
         roomToFastRclUpgrade = mainRoom;
       }
 
-
       Game.rooms[mainRoom].creepsManager()
+
+      console.log("global.heap.rooms[,", mainRoom, "].creepsBodyParts after creepsManger: ",
+        global.heap.rooms[mainRoom].creepsBodyParts
+      )
 
       Game.rooms[mainRoom].createRoomQueues()
 

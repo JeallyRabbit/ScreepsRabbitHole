@@ -30,7 +30,7 @@ const ROLE_MINER = 'miner'
 const ROLE_MINERAL_CARRIER = 'mineral_carrier'
 const ROLE_DOCTOR = 'doctor'
 
-const ROLE_QUAD_MEMBER = 'quad_member'
+const ROLE_QUAD_MEMBER = 'ROLE_QUAD_MEMBER'
 const RANGED_BODY = 'ranged_body'
 const HEALER_BODY = 'healer_body'
 
@@ -599,6 +599,8 @@ module.exports = {
   ATTACK_TYPE_CONTROLLER_DOWNGRADE,
   ATTACK_TYPE_NUKE,
   ATTACK_TYPE_SCOUT,
-  ATTACK_TYPE_PLUNDER
+  ATTACK_TYPE_PLUNDER,
+
+  QUAD_BODY_PARTS_AMOUNT
 };
 
