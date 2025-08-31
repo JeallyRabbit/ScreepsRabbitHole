@@ -155,6 +155,45 @@ Room.prototype.roomManager = function roomManager() {
         global.heap.rooms[this.name].myFactory = undefined
         global.heap.rooms[this.name].myExtractor = undefined
         global.heap.rooms[this.name].myObserver = undefined
+        global.heap.rooms[this.name].myStorage = {}
+
+        if (this.name == 'W9N6') {
+            for (res in C.RESOURCES) {
+                //console.log("adding ", res, " to myStorage")
+                global.heap.rooms[this.name].myStorage[C.RESOURCES[res]] = 0
+            }
+            //global.heap.rooms[this.name].myStorage[RESOURCE_ENERGY]=123
+
+            //console.log("global.heap.rooms[this.name].myStorage[RESOURCE_ENERGY]: ",
+            //global.heap.rooms[this.name].myStorage['energy'])
+
+        }
+
+
+        
+        if (this.storage != undefined) {
+            for (res in this.storage.store) {
+                global.heap.rooms[this.name].myStorage[res] += this.storage.store[res]
+            }
+        }
+
+        if (this.terminal != undefined) {
+            for (res in this.terminal.store) {
+                global.heap.rooms[this.name].myStorage[res] += this.terminal.store[res]
+            }
+        }
+
+        /*
+        if (this.name == 'W9N6') {
+            for (res in global.heap.rooms[this.name].myStorage) {
+                if (global.heap.rooms[this.name].myStorage[res] > 0) {
+                    console.log(res, " ", global.heap.rooms[this.name].myStorage[res])
+                }
+            }
+        }
+            */
+
+
 
 
         global.heap.rooms[this.name].state = []
@@ -219,9 +258,8 @@ Room.prototype.roomManager = function roomManager() {
                 }
             }
 
-            if(this.memory.isMinimalRoom==true)
-            {//limiting some rooms to only 2 sources - those should be perfect rooms for attacks
-                counter=2;
+            if (this.memory.isMinimalRoom == true) {//limiting some rooms to only 2 sources - those should be perfect rooms for attacks
+                counter = 2;
             }
 
             while (this.memory.harvestingSources.length > counter) {

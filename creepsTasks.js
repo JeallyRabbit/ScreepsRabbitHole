@@ -7,50 +7,6 @@ const C = require('constants');
 
 
 
-/*
-Creep.prototype.taskClearInputLabs=function taskClearInputLabs(in1,in2)
-{
-    if(in1.store.getFreeCapacity[RESOURCE_KEANIUM]==LAB_MINERAL_CAPACITY
-        && in2.store.getFreeCapacity[RESOURCE_KEANIUM]==LAB_MINERAL_CAPACITY
-    )
-    {
-        global.heap.rooms[this.room.name].doctorTask=undefined
-        return;
-    }
-
-    if(this.store.getFreeCapacity(RESOURCE_ENERGY)==0)
-    {
-        for(res in this.store)
-        {
-            if(this.transfer(this.room.storage,res)==ERR_NOT_IN_RANGE)
-            {
-                this.travelTo(this.room.storage)
-            }
-            break;
-        }
-    }
-    else{
-        var targetStore=in1.store
-        if(in2.store.getFreeCapacity[RESOURCE_KEANIUM]!=LAB_MINERAL_CAPACITY)
-        {
-            targetStore=in2.store
-        }
-        for(res in targetStore)
-        {
-            if(res!=RESOURCE_ENERGY)
-            {
-                if(this.withdraw(targetStore,res)==ERR_NOT_IN_RANGE)
-                {
-                    this.travelTo(targetStore)
-                }
-                break;
-            }
-
-        }
-    }
-}
-    */
-
 Creep.prototype.taskFillLabEnergy = function taskFillLabEnergy(id)
 {
     var lab=Game.getObjectById(id)
@@ -243,18 +199,19 @@ this.say("fill inp")
 
             if (this.store[res] == 0) {
                 this.say("with_" + res)
-                var store = this.room.storage
-                if(store[res]==0)
+                var storage = this.room.storage
+                if(storage.store[res]==0)
                 {
-                    store=this.room.terminal
+                    this.say("term")
+                    storage=this.room.terminal
                 }
                 /*
                 var rawResources = ["H", "O", "U", "L", "K", "Z", "X"]
                 if (rawResources.includes(res)) {
                     store = this.room.terminal
                 }*/
-                if (this.withdraw(store, res, Math.min(this.store.getCapacity(res), store[res])) == ERR_NOT_IN_RANGE) {
-                    this.travelTo(store)
+                if (this.withdraw(storage, res, Math.min(this.store.getCapacity(res), storage.store[res])) == ERR_NOT_IN_RANGE) {
+                    this.travelTo(storage)
                 }
             }
         }

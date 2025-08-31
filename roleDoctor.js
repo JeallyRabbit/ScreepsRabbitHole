@@ -148,7 +148,9 @@ Room.prototype.oneInputMineralEmpty=function oneInputMineralEmpty(in1,in2)
     var res2=0
     for(res in in1.store)
     {
-        if(res!=RESOURCE_ENERGY && in1.store[res]>LAB_REACTION_AMOUNT)
+        if(res!=RESOURCE_ENERGY && in1.store[res]>LAB_REACTION_AMOUNT
+           // && res!=global.heap.rooms[this.name].reaction[0]
+        )
         {
             res1=res
             in1Empty= false
@@ -157,7 +159,9 @@ Room.prototype.oneInputMineralEmpty=function oneInputMineralEmpty(in1,in2)
     }
     for(res in in2.store)
     {
-        if(res!=RESOURCE_ENERGY && in2.store[res]>LAB_REACTION_AMOUNT)
+        if(res!=RESOURCE_ENERGY && in2.store[res]>LAB_REACTION_AMOUNT
+            //&& res!=global.heap.rooms[this.name].reaction[1]
+        )
         {
             res2=res
             in2Empty= false
