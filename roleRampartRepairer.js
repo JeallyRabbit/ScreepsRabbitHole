@@ -20,7 +20,7 @@ Creep.prototype.roleRampartRepairer = function roleRampartRepairer()
 
     if(this.memory.task==C.TASK_COLLECT)
     {
-        this.taskCollect()
+        this.taskCollect(localHeap)
     }
 
     if(this.memory.task==C.TASK_REPAIR_RAMPARTS)

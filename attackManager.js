@@ -283,7 +283,7 @@ function attackManager(attackRoom) {
                         if (global.heap.rooms[q.homeRoom].offensiveQueue.find(({ role }) => role === C.ROLE_QUAD_MEMBER) == undefined) {
                             if (q.members.length == 0) {
                                 global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, true))
-                                console.log("adding first member of quad: ".q.id)
+                                //console.log("adding first member of quad: ".q.id)
 
 
                             }

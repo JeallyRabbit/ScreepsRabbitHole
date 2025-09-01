@@ -157,9 +157,13 @@ Room.prototype.creepsManager = function creepsManager() {
                 global.heap.rooms[this.name].doctorId = creep.id
                 break;
             case C.ROLE_QUAD_MEMBER:
+                creep.say("quad")
                 for (attackRoom of Memory.roomsToAttack) {
+                    console.log("attackRoom.name: ",attackRoom.name)
                     for (q of attackRoom.quads) {
-                        if (q.id == creep.memory.quadId) {
+                        console.log("q.id: ",q.id)
+                        if (q.id == creep.memory.quadId && !q.members.includes(creep.id)) {
+                            creep.say("assi")
                             q.members.push(creep.id)
                             break;
                         }

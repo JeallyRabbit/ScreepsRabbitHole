@@ -17,11 +17,12 @@ Creep.prototype.roleRepairer = function roleRepairer() {
     }
 
 
-    if (this.room.name == this.memory.targetRoom) {
+    if (this.room.name == this.memory.targetRoom && this.pos.x>0 && this.pos.x<49 && this.pos.y>0 && this.pos.y<49) {
 
         this.say(global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length)
         if (this.store[RESOURCE_ENERGY] == 0) {
             this.taskCollect(localHeap)
+           // this.say("collect")
         }
         else if (((global.heap.rooms[this.memory.targetRoom].damagedStructuresId != undefined && global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length < 1) || global.heap.rooms[this.memory.targetRoom].damagedStructuresId == undefined)) {
             //this.move(BOTTOM)
@@ -82,8 +83,9 @@ Creep.prototype.roleRepairer = function roleRepairer() {
 
     }
     else {
+        this.travelTo(new RoomPosition(25,25,this.memory.targetRoom))
         if (this.memory.targetRoom != undefined) {
-            this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { reusePath: 17 });
+            //this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { reusePath: 17 });
         }
 
     }
