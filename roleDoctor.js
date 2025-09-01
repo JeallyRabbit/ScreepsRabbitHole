@@ -17,6 +17,11 @@ Creep.prototype.roleDoctor = function roleDoctor() {
 
     var boostingLab = Game.getObjectById(Game.rooms[this.room.name].memory.boostingLabId)
 
+    if(this.ticksToLive<C.DOCTOR_MIN_REMAINING_TIME)
+    {
+        this.taskClearCreep()
+        return;
+    }
 
     /*
     console.log("storage: ",storage)
