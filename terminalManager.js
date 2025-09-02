@@ -59,7 +59,7 @@ StructureTerminal.prototype.sellResource=function sell_resource(res,amount) {
     }
     for (let i = 1; i < sellOrders.length; i++) {
         var tradeAmount = Math.min(amount, sellOrders[i].amount)
-        var cost = Game.market.calcTransactionCost(tradeAmount, sellOrders[i].roomName, spawn.room.name)
+        var cost = Game.market.calcTransactionCost(tradeAmount, sellOrders[i].roomName, this.room.name)
         var profit = (sellOrders[i].price * tradeAmount) - cost
         var profitPerUnit = profit / tradeAmount
         if (profitPerUnit > biggestProfitAmount) {
@@ -71,10 +71,10 @@ StructureTerminal.prototype.sellResource=function sell_resource(res,amount) {
     if (bestOrderId != undefined) {
 
         //onsole.log("best offer: ",bestOrderId);
-        var tradeAmount = Math.min(terminal.store[res], Game.market.getOrderById(bestOrderId).amount)
+        var tradeAmount = Math.min(this.store[res], Game.market.getOrderById(bestOrderId).amount)
         tradeAmount = 1000
         var cost = Game.market.calcTransactionCost(tradeAmount, Game.market.getOrderById(bestOrderId).roomName,
-            spawn.room.name)
+            this.room.name)
         var profit = (Game.market.getOrderById(bestOrderId).price * tradeAmount) - cost
         var profitPerUnit = profit / tradeAmount
         //console.log("profit per unit: ",profitPerUnit)
