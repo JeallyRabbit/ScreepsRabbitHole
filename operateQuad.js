@@ -1212,7 +1212,7 @@ function operateQuad(quad) {
     if (dead_counter == 4 || topLeft == null) {
         console.log("quad: ", q.id, " is dead")
         quad.members = [];
-        quad.completed = false;
+        quad.isCompleted = false;
         quad.topLeftId = undefined;
         quad.topRightId = undefined;
         quad.bottomLeftId = undefined;
