@@ -1,6 +1,6 @@
 
 const C = require('constants');
-const { ROLE_QUAD_MEMBER } = require('./constants');
+const operateQuad=require('operateQuad')
 
 
 class Quad {
@@ -163,6 +163,10 @@ function attackManager(attackRoom) {
             return;
         }
 
+        global.heap.rooms[attackRoom.name].rampartsCM=caluclateRampartsCosts(str,attackRoom.name)
+        global.heap.rooms[attackRoom.name].towersDamageCM=calculateTowersDamage(attackRoom.towers)
+        global.heap.rooms[attackRoom.name].hostilesCM=calculateHostileCreepsCost()
+
     }
     else {
         //we need vision on the room
@@ -171,7 +175,6 @@ function attackManager(attackRoom) {
         }
     }
 
-    console.log("1111111111111111111111111111111111111")
     //Decisions based on towers history
     if (attackRoom.attackType != undefined) {
         if (attackRoom.areTowersHistoryOperational == true) {
@@ -228,6 +231,7 @@ function attackManager(attackRoom) {
             }
         }
 
+        
 
         //Adding requests to rooms
 
@@ -290,16 +294,22 @@ function attackManager(attackRoom) {
                             else if (q.members.length == 1) {
                                 global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, false))
                             }
-                            else {
+                            else if (q.members.length <4) {
                                 global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.HEALER_BODY, false))
                             }
                         }
 
-                        console.log("offensive queue[", q.homeRoom, "]: ", global.heap.rooms[q.homeRoom].offensiveQueue)
+                       // console.log("offensive queue[", q.homeRoom, "]: ", global.heap.rooms[q.homeRoom].offensiveQueue)
                     }
 
 
                 }
+            }
+
+
+            for(q of attackRoom.quads)
+            {
+                operateQuad(q)
             }
         }
 
@@ -321,7 +331,7 @@ function attackManager(attackRoom) {
             console.log("data about room to attack")
             if (attackRoom.attackType != undefined) {
                 for (t in attackRoom.attackType) {
-                    //console.log(t, " ", attackRoom.attackType[t])
+                    console.log(t, " ", attackRoom.attackType[t])
                 }
             }
 
@@ -334,4 +344,147 @@ function attackManager(attackRoom) {
 
 
 }
+function calculateTowersDamage(quad, towers) {
+    if (towers.length < 1) { return -1; }
+
+    if (global.heap.rooms[quad.targetRoom].towersDamageCM == undefined) {
+        const damageMatrix = new PathFinder.CostMatrix
+        for (var i = 0; i < 50; i++) {
+            for (var j = 0; j < 50; j++) {
+                totalDamage = 0;
+                for (t of towers) {
+                    let distance = t.pos.getRangeTo(i, j)
+                    let towerDamage = 0;
+                    if (distance <= 5) { towerDamage = TOWER_POWER_ATTACK; }
+                    else if (distance >= 20) { towerDamage = TOWER_POWER_ATTACK / 4; }
+                    else {
+                        const falloffPerUnit = (TOWER_POWER_ATTACK - TOWER_POWER_ATTACK / 4) / (20 - 5);
+                        totalDamage = TOWER_POWER_ATTACK - falloffPerUnit * (distance - 5);
+                        //towerDamage = ((TOWER_POWER_ATTACK - (TOWER_POWER_ATTACK / 4)) / (20 - 5)) * distance;
+                    }
+                    totalDamage += towerDamage;
+                }
+                tileCost = (totalDamage / (TOWER_POWER_ATTACK * towers.length)) * DAMAGE_MATRIX_FACTOR
+
+                damageMatrix.set(i, j, tileCost)
+
+            }
+        }
+        global.heap.rooms[quad.targetRoom].towersDamageCM =damageMatrix.serialize();
+    }
+    return 0;
+}
+
+function caluclateRampartsCosts(quad, structures) {
+
+    // TODO or TO THINK OVER
+    // instead of dividing by str.hitsMax, divide by biggest str.hits (biggest out of ramparts)
+    // maxHits = str.hits of most fortified rampart
+    // var tileCost = (str.hits / maxHits) * DAMAGE_MATRIX_FACTOR
+    if (structures.length < 1) { return -1; }
+    if (global.heap.rooms[quad.targetRoom].rampartsCM == undefined) {
+        const rampartsMatrix = new PathFinder.CostMatrix
+
+        var maxHits = 0
+        for (s of structures) {
+            str = Game.getObjectById(s)
+            if (str == null) { continue }
+            if (str.structureType == STRUCTURE_RAMPART || str.structureType == STRUCTURE_WALL) {
+
+                if (str.hits > maxHits) {
+                    maxHits = str.hits
+                }
+
+                //Game.rooms[quad.targetRoom].visual.rect(str.pos.x - 0.5, str.pos.y - 0.5, 1, 1, { fill: 'blue', opacity: tileCost })
+                //Game.rooms[quad.targetRoom].visual.text(tileCost,i,j)
+            }
+        }
+
+        for (s of structures) {
+            str = Game.getObjectById(s)
+            if (str == null) { continue }
+            if (str.structureType == STRUCTURE_RAMPART || str.structureType == STRUCTURE_WALL) {
+                var tileCost = 0.0
+                tileCost = (str.hits / maxHits) * DAMAGE_MATRIX_FACTOR
+                if (Memory.allies.includes(str.owner.username) || str.pos.roomName !=quad.targetRoom) {
+                    tileCost = 255
+                }
+                rampartsMatrix.set(str.pos.x, str.pos.y, tileCost)
+
+                //might need debuggin:
+                rampartsMatrix.set(str.pos.x + 1, str.pos.y, tileCost)
+                rampartsMatrix.set(str.pos.x, str.pos.y + 1, tileCost)
+                rampartsMatrix.set(str.pos.x + 1, str.pos.y + 1, tileCost)
+                //////
+
+            }
+        }
+        global.heap.rooms[quad.targetRoom].rampartsCM = rampartsMatrix.serialize();
+
+    }
+    return 0;
+}
+
+function calculateHostileCreepsCost(quad, hostiles) {
+    if (hostiles.length < 1) { return -1; }
+    if (global.heap.rooms[quad.targetRoom].hostilesCM == undefined || true) {
+        const hostilesMatrix = new PathFinder.CostMatrix
+        for (h of hostiles) {
+            //TODO add counting boosted body parts
+            var meleeAttack = getAttackPower(h.body)
+
+            var rangedAttack = getRangedAttackPower(h.body)
+            var maxAttack = 200 * ATTACK_POWER
+            var maxRangedAttack = 200 * RANGED_ATTACK_POWER
+
+            if (meleeAttack >= quad.minHp + quad.minHealPower)//quad member will het one shoted by enemy creep 
+            {
+                for (var i = h.pos.x - 2; i <= h.pos.x + 1; i++) {
+                    for (var j = h.pos.y - 2; j <= h.pos.y + 1; j++) {
+                        hostilesMatrix.set(i, j, 255)
+                    }
+                }
+
+            }
+            else if (meleeAttack > 0) {
+
+                var tileCost = (meleeAttack / maxAttack) * DAMAGE_MATRIX_FACTOR
+
+                // -2 in this loop because additional tile for quad
+                for (var i = h.pos.x - 2; i <= h.pos.x + 1; i++) {
+                    for (var j = h.pos.y - 2; j <= h.pos.y + 1; j++) {
+                        var currentCost = hostilesMatrix.get(i, j)
+                        hostilesMatrix.set(i, j, currentCost + tileCost)
+                    }
+                }
+
+            }
+
+            const RANGED_ATTACK_RANGE = 3
+            if (rangedAttack >= quad.minHp + quad.minHealPower)//quad member will het one shoted by enemy creep (RANGED_ATTACK)
+            {
+                for (var i = h.pos.x - RANGED_ATTACK_RANGE; i <= h.pos.x + RANGED_ATTACK_RANGE; i++) {
+                    for (var j = h.pos.y - RANGED_ATTACK_RANGE; j <= h.pos.y + RANGED_ATTACK_RANGE; j++) {
+                        hostilesMatrix.set(i, j, 255)
+                    }
+                }
+
+            }
+            else if (rangedAttack > 0) {
+                var tileCost = (rangedAttack / maxRangedAttack) * DAMAGE_MATRIX_FACTOR
+                
+                for (var i = h.pos.x - RANGED_ATTACK_RANGE; i <= h.pos.x + RANGED_ATTACK_RANGE; i++) {
+                    for (var j = h.pos.y - RANGED_ATTACK_RANGE; j <= h.pos.y + RANGED_ATTACK_RANGE; j++) {
+                        var currentCost = hostilesMatrix.get(i, j)
+                        hostilesMatrix.set(i, j, Math.min(255, currentCost + tileCost))
+                    }
+                }
+            }
+
+
+        }
+        global.heap.rooms[quad.targetRoom].hostilesCM= hostilesMatrix.serialize()
+    }
+}
+
 module.exports = attackManager

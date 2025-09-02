@@ -157,15 +157,27 @@ Room.prototype.creepsManager = function creepsManager() {
                 global.heap.rooms[this.name].doctorId = creep.id
                 break;
             case C.ROLE_QUAD_MEMBER:
-                creep.say("quad")
                 for (attackRoom of Memory.roomsToAttack) {
-                    console.log("attackRoom.name: ",attackRoom.name)
                     for (q of attackRoom.quads) {
-                        console.log("q.id: ",q.id)
+                        console.log("q.id: ", q.id)
                         if (q.id == creep.memory.quadId && !q.members.includes(creep.id)) {
-                            creep.say("assi")
                             q.members.push(creep.id)
-                            break;
+                            if (q.topLeftId == undefined || q.topLeftId == creep.id) {
+                                q.topLeftId = creep.id
+                                break;
+                            }
+                            else if (q.topRightId == undefined || q.topRightId == creep.id) {
+                                q.topRightId = creep.id
+                                break;
+                            }
+                            else if (q.bottomLeftId == undefined || q.bottomLeftId == creep.id) {
+                                q.bottomLeftId = creep.id
+                                break;
+                            }
+                            else if (q.bottomRightId == undefined || q.bottomRightId == creep.id) {
+                                q.bottomRightId = creep.id
+                                break;
+                            }
                         }
                     }
 
