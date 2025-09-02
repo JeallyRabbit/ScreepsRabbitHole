@@ -1,7 +1,7 @@
 const { groupBy, range, inRange, startCase } = require("lodash");
 const { distanceTransform } = require("./distanceTransform");
 const { floodFill } = require("./floodFill");
-const C=require('constants')
+const C = require('constants')
 
 const ERR_NOT_IN_FULL_RANGE = -20
 const DAMAGE_MATRIX_FACTOR = 20
@@ -364,7 +364,7 @@ function moveQuad(quad, targetPos, reusePath = 3, myRange = 1, myFlee = false, m
             else if (direction == BOTTOM_RIGHT && bottomRight != null && bottomRight.pos.x + 1 < 49 && bottomRight.pos.y + 1 < 49) {
                 topLeft.say("↘️", true)
                 structuresAtPath = bottomRight.room.lookForAt(LOOK_STRUCTURES, bottomRight.pos.x + 1, bottomRight.pos.y + 1)
-                if(structuresAtPath==undefined){structuresAtPath=[]}
+                if (structuresAtPath == undefined) { structuresAtPath = [] }
                 if (bottomLeft != null && bottomLeft.pos.x + 1 < 49 && bottomLeft.pos.y + 1 < 49) {
                     structuresAtPath.push(bottomLeft.room.lookForAt(LOOK_STRUCTURES, bottomLeft.pos.x + 1, bottomLeft.pos.y + 1))
                     if (structuresAtPath == undefined) { structuresAtPath = [] }
@@ -499,7 +499,7 @@ function moveQuad(quad, targetPos, reusePath = 3, myRange = 1, myFlee = false, m
             //quad.path = undefined
         }
         else if (move_result == 0 || Math.abs(move_result) % 11 == 0) {
-           // console.log("quad is moving from: ", topLeft.pos, " to ", nextPos)
+            // console.log("quad is moving from: ", topLeft.pos, " to ", nextPos)
             //if (Math.abs(move_result) % 11 == 0 && move_result != 0) { console.log("Quad ERR_TIRED") }
             return move_result
         }
@@ -860,13 +860,11 @@ function quadNearTo(quad, target) {
     return false;
 }
 
-/*
-//calculates damage on quad target room
-function calculateTowersDamage(quad, towers) {
-    //console.log("calculating towers damage")
+
+function calculateTowersDamage(quad, towers, currentRoom) {
     if (towers.length < 1) { return -1; }
 
-    if (global.heap.rooms[quad.targetRoom].towersDamageCM == undefined) {
+    if (global.heap.rooms[currentRoom].towersDamageCM == undefined) {
         const damageMatrix = new PathFinder.CostMatrix
         for (var i = 0; i < 50; i++) {
             for (var j = 0; j < 50; j++) {
@@ -887,26 +885,23 @@ function calculateTowersDamage(quad, towers) {
 
                 damageMatrix.set(i, j, tileCost)
 
-                //debugging - coloring room
-                //Game.rooms[quad.targetRoom].visual.rect(i - 0.5, j - 0.5, 1, 1, { fill: 'red', opacity: tileCost })
-                //Game.rooms[quad.targetRoom].visual.text(totalDamage, i, j)
             }
         }
-        global.heap.rooms[quad.targetRoom].towersDamageCM = damageMatrix.serialize();
+        global.heap.rooms[currentRoom].towersDamageCM = damageMatrix.serialize();
     }
     return 0;
 }
-    */
 
-/*
-function caluclateRampartsCosts(quad, structures) {
+
+
+function caluclateRampartsCosts(quad, structures, currentRoom) {
 
     // TODO or TO THINK OVER
     // instead of dividing by str.hitsMax, divide by biggest str.hits (biggest out of ramparts)
     // maxHits = str.hits of most fortified rampart
     // var tileCost = (str.hits / maxHits) * DAMAGE_MATRIX_FACTOR
     if (structures.length < 1) { return -1; }
-    if (global.heap.rooms[quad.targetRoom].rampartsCM == undefined) {
+    if (global.heap.rooms[currentRoom].rampartsCM == undefined) {
         const rampartsMatrix = new PathFinder.CostMatrix
 
         var maxHits = 0
@@ -933,7 +928,6 @@ function caluclateRampartsCosts(quad, structures) {
                 if (Memory.allies.includes(str.owner.username) || str.pos.roomName != quad.targetRoom) {
                     tileCost = 255
                 }
-                //console.log("tile cost at: ",str.pos.x," ",str.pos.y," ",tileCost)
                 rampartsMatrix.set(str.pos.x, str.pos.y, tileCost)
 
                 //might need debuggin:
@@ -942,15 +936,14 @@ function caluclateRampartsCosts(quad, structures) {
                 rampartsMatrix.set(str.pos.x + 1, str.pos.y + 1, tileCost)
                 //////
 
-                //Game.rooms[quad.targetRoom].visual.rect(str.pos.x - 0.5, str.pos.y - 0.5, 1, 1, { fill: 'blue', opacity: tileCost })
-                //Game.rooms[quad.targetRoom].visual.text(tileCost,i,j)
             }
         }
-        global.heap.rooms[quad.targetRoom].rampartsCM = rampartsMatrix.serialize();
+        global.heap.rooms[currentRoom].rampartsCM = rampartsMatrix.serialize();
 
     }
+    return 0;
 }
-    */
+
 
 
 //Calculates heal power of weakest creep in quad (the one with least HEAL parts) and heal power of all of them
@@ -1014,10 +1007,10 @@ function getAttackPower(body) {
     return attackSum
 }
 
-/*
-function calculateHostileCreepsCost(quad, hostiles) {
+
+function calculateHostileCreepsCost(quad, hostiles, currentRoom) {
     if (hostiles.length < 1) { return -1; }
-    if (quad.hostilesCM == undefined || true) {
+    if (global.heap.rooms[currentRoom].hostilesCM == undefined || true) {
         const hostilesMatrix = new PathFinder.CostMatrix
         for (h of hostiles) {
             //TODO add counting boosted body parts
@@ -1062,7 +1055,7 @@ function calculateHostileCreepsCost(quad, hostiles) {
             }
             else if (rangedAttack > 0) {
                 var tileCost = (rangedAttack / maxRangedAttack) * DAMAGE_MATRIX_FACTOR
-                
+
                 for (var i = h.pos.x - RANGED_ATTACK_RANGE; i <= h.pos.x + RANGED_ATTACK_RANGE; i++) {
                     for (var j = h.pos.y - RANGED_ATTACK_RANGE; j <= h.pos.y + RANGED_ATTACK_RANGE; j++) {
                         var currentCost = hostilesMatrix.get(i, j)
@@ -1073,10 +1066,11 @@ function calculateHostileCreepsCost(quad, hostiles) {
 
 
         }
-        quad.hostilesCM = hostilesMatrix.serialize()
+        global.heap.rooms[currentRoom].hostilesCM = hostilesMatrix.serialize()
     }
 }
-    */
+
+
 
 
 function findTargetStructure(quad, structures, room) {
@@ -1158,7 +1152,7 @@ function findTargetCreepInRange(quad, hostiles) {// finds creep in range of Rang
 
 function operateQuad(quad) {
 
-    console.log("operating quad ",quad.id)
+    console.log("operating quad ", quad.id)
     startCpu = Game.cpu.getUsed()
     var topLeft = Game.getObjectById(quad.topLeftId);
     var topRight = Game.getObjectById(quad.topRightId);
@@ -1183,7 +1177,7 @@ function operateQuad(quad) {
     }
 
 
-    console.log("quad: ",q.id," have: ",quad.members.length," members")
+    console.log("quad: ", q.id, " have: ", quad.members.length, " members")
 
     if (quad.members != undefined && quad.members.length >= 4) {
         quad.completed = true
@@ -1219,7 +1213,7 @@ function operateQuad(quad) {
     }
 
     if (dead_counter == 4 || topLeft == null) {
-        console.log("quad: ",q.id," is dead")
+        console.log("quad: ", q.id, " is dead")
         quad.members = [];
         quad.completed = false;
         quad.topLeftId = undefined;
@@ -1339,7 +1333,7 @@ function operateQuad(quad) {
         }
         if (bottomLeft != null && quad.grouping_pos != undefined) {
             if (topLeft != null) {
-                bottomLeft.moveTo(new RoomPosition(topLeft.pos.x, Math.min(topLeft.pos.y + 1,49), topLeft.pos.roomName))
+                bottomLeft.moveTo(new RoomPosition(topLeft.pos.x, Math.min(topLeft.pos.y + 1, 49), topLeft.pos.roomName))
             }
             else {
                 bottomLeft.moveTo(new RoomPosition(quad.grouping_pos.x, quad.grouping_pos.y + 1, quad.grouping_pos.roomName), { maxStuck: 1 })
@@ -1362,9 +1356,10 @@ function operateQuad(quad) {
     }
 
 
-    console.log("quad: ",quad.id," targetRoom: ",quad.targetRoom)
+    console.log("quad: ", quad.id, " targetRoom: ", quad.targetRoom)
     var currentRoom = topLeft.room.name
-    if (currentRoom == quad.targetRoom || (Memory.rooms[currentRoom].hostiles != undefined && Memory.rooms[currentRoom].hostiles.length > 0)) {
+    console.log("currentRoom: ", currentRoom, global.heap.rooms[currentRoom].hostiles.length)
+    if (currentRoom == quad.targetRoom || (global.heap.rooms[currentRoom].hostiles != undefined && global.heap.rooms[currentRoom].hostiles.length > 0)) {
 
         if (currentRoom == quad.targetRoom) {
             //console.log("QUAD IS IN TARGET ROOM")
@@ -1376,19 +1371,19 @@ function operateQuad(quad) {
 
         var hostileCreeps = [] // just not mine/allied creeps
         var hostileNotProtectedCreeps = [] // hostile creeps, not under rampart and in quad range
-        for (h of global.heap.rooms[currentRoom].hostiles) {
-            var hos = Game.getObjectById(h)
-            if (hos != null) {
-                hostileCreeps.push(hos)
-                if (hos.pos.inRangeTo(topLeft.pos.x, topLeft.pos.y, 5) || hos.pos.inRangeTo(topLeft.pos.x + 1, topLeft.pos.y, 5)
-                    || hos.pos.inRangeTo(topLeft.pos.x, topLeft.pos.y + 1, 5) || hos.pos.inRangeTo(topLeft.pos.x + 1, topLeft.pos.y + 1, 5)) {
-                    hostileNotProtectedCreeps.push(hos)
-                }
+        for (hos of global.heap.rooms[currentRoom].hostiles) {
+
+            hostileCreeps.push(hos)
+            if (hos.pos.inRangeTo(topLeft.pos.x, topLeft.pos.y, 5) || hos.pos.inRangeTo(topLeft.pos.x + 1, topLeft.pos.y, 5)
+                || hos.pos.inRangeTo(topLeft.pos.x, topLeft.pos.y + 1, 5) || hos.pos.inRangeTo(topLeft.pos.x + 1, topLeft.pos.y + 1, 5)) {
+                hostileNotProtectedCreeps.push(hos)
             }
+
 
         }
         var hostilesFound = false
         if (hostileCreeps.length > 0) { hostilesFound = true }
+        console.log("hostilesFound: ", hostilesFound)
 
         var hostileStructures = global.heap.rooms[currentRoom].hostileStructures;
         var towers = []
@@ -1418,9 +1413,9 @@ function operateQuad(quad) {
         //var target = null;
 
         calculateHealPower(quad)
-        //calculateTowersDamage(quad, towers)
-        caluclateRampartsCosts(quad, hostileStructures)
-        calculateHostileCreepsCost(quad, hostileCreeps)
+        calculateTowersDamage(quad, towers, currentRoom)
+        caluclateRampartsCosts(quad, hostileStructures, currentRoom)
+        calculateHostileCreepsCost(quad, hostileCreeps, currentRoom)
 
 
 
@@ -1441,13 +1436,15 @@ function operateQuad(quad) {
             target = Game.getObjectById(quad.targetStructureId)
         }
 
-
+        console.log("hostileCreeps: ", hostileCreeps.length)
         var targetCreep = findTargetCreepInRange(quad, hostileCreeps)
 
 
 
         if (targetCreep != null) { target = targetCreep }
         console.log(topLeft.pos, " ", target)
+
+        console.log("target: ", target)
         if (target != null) {
 
 
@@ -1501,7 +1498,7 @@ function operateQuad(quad) {
         }
     }
     else if (quadHits(quad) >= quadHitsMax(quad) - quadHealPower(quad)) {
-        console.log("Quad: ",quad.id," is moving to: ",quad.targetRoom)
+        console.log("Quad: ", quad.id, " is moving to: ", quad.targetRoom)
         //moveQuad(quad, new RoomPosition(25, 25, quad.targetRoom), 10)
         if (quad.targetId != undefined && Game.getObjectById(quad.targetId) != null && Game.getObjectById(quad.targetId).pos.roomName == quad.targetRoom) {
             moveQuad(quad, Game.getObjectById(quad.targetId).pos, 3, 1, false, 1)

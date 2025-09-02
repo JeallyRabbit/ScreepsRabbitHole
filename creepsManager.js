@@ -159,23 +159,27 @@ Room.prototype.creepsManager = function creepsManager() {
             case C.ROLE_QUAD_MEMBER:
                 for (attackRoom of Memory.roomsToAttack) {
                     for (q of attackRoom.quads) {
-                        console.log("q.id: ", q.id)
+                        //console.log("q.id: ", q.id)
                         if (q.id == creep.memory.quadId && !q.members.includes(creep.id)) {
-                            q.members.push(creep.id)
+                            
                             if (q.topLeftId == undefined || q.topLeftId == creep.id) {
                                 q.topLeftId = creep.id
+                                q.members.push(creep.id)
                                 break;
                             }
                             else if (q.topRightId == undefined || q.topRightId == creep.id) {
                                 q.topRightId = creep.id
+                                q.members.push(creep.id)
                                 break;
                             }
                             else if (q.bottomLeftId == undefined || q.bottomLeftId == creep.id) {
                                 q.bottomLeftId = creep.id
+                                q.members.push(creep.id)
                                 break;
                             }
                             else if (q.bottomRightId == undefined || q.bottomRightId == creep.id) {
                                 q.bottomRightId = creep.id
+                                q.members.push(creep.id)
                                 break;
                             }
                         }

@@ -495,6 +495,7 @@ Room.prototype.roomManager = function roomManager() {
     })
 
     if (hostiles.length > 0) {
+        console.log("Adding hostiles in ", this.name)
         for (a of hostiles) {
             global.heap.rooms[this.name].hostiles.push(a)
             global.heap.rooms[this.name].hostileHealPower += _.filter(a.body, { type: HEAL }).length * HEAL_POWER

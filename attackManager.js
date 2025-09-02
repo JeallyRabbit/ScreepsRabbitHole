@@ -214,13 +214,13 @@ function attackManager(attackRoom) {
             for (q of attackRoom.quads) {
                 if (q.members != undefined && q.members.length > 0) {
                     for (m of q.members) {
-                        console.log("checking member: ", m, " ", Game.getObjectById(m))
+                        //console.log("checking member: ", m, " ", Game.getObjectById(m))
                         if (Game.getObjectById(m) == null) {
 
                             var index = q.members.indexOf(m)
-                            console.log("index: ", index)
+                            //console.log("index: ", index)
                             q.members.splice(index, 1)
-                            console.log("Q.members after splice: ", q.members)
+                            //console.log("Q.members after splice: ", q.members)
                         }
                     }
                 }
@@ -344,6 +344,8 @@ function attackManager(attackRoom) {
 
 
 }
+
+
 function calculateTowersDamage(quad, towers) {
     if (towers.length < 1) { return -1; }
 
