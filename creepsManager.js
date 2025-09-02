@@ -178,6 +178,7 @@ Room.prototype.creepsManager = function creepsManager() {
                                 break;
                             }
                             else if (q.bottomRightId == undefined || q.bottomRightId == creep.id) {
+                                q.isCompleted=true
                                 q.bottomRightId = creep.id
                                 q.members.push(creep.id)
                                 break;
