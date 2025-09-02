@@ -105,6 +105,14 @@ Room.prototype.visualize = function visualizeroomManager() {
     var usedHeap = (Math.round((heapData.used_heap_size / 1024) / 1024) * 100) / 100
     this.visual.text("Heap: " + usedHeap + " MB\\" + (heapData.heap_size_limit / 1024) / 1024 + " MB", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
+    blockPos.y+=blockPosHeight
+    // spawning result
+    this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.text("Spawn: " + global.heap.rooms[this.name].spawnRole + " -> "+global.heap.rooms[this.name].spawnResult, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
     //Player Name
