@@ -102,7 +102,7 @@ function attackManager(attackRoom) {
                 operationalTowersAmount++;
             }
             else if (s.structureType == STRUCTURE_RAMPART) {
-                global.heap.rooms.ramparts.push(s)
+                attackRoom.ramparts.push(s)
             }
             else if (s.structureType == STRUCTURE_WALL) {
                 attackRoom.walls.push(s)
@@ -163,9 +163,9 @@ function attackManager(attackRoom) {
             return;
         }
 
-        global.heap.rooms[attackRoom.name].rampartsCM=caluclateRampartsCosts(str,attackRoom.name)
-        global.heap.rooms[attackRoom.name].towersDamageCM=calculateTowersDamage(attackRoom.towers)
-        global.heap.rooms[attackRoom.name].hostilesCM=calculateHostileCreepsCost()
+        //global.heap.rooms[attackRoom.name].rampartsCM=caluclateRampartsCosts(str,attackRoom.name)
+        //global.heap.rooms[attackRoom.name].towersDamageCM=calculateTowersDamage(attackRoom.towers)
+        //global.heap.rooms[attackRoom.name].hostilesCM=calculateHostileCreepsCost()
 
     }
     else {

@@ -1082,10 +1082,7 @@ function findTargetStructure(quad, structures, room) {
     var targetStructure = null
     var minHits = Infinity
 
-    for (str of structures) {
-        var isCovered = false;
-        var s = Game.getObjectById(str)
-        if (s == null) { continue }
+    for (s of structures) {
         var type = s.structureType
         if (type != STRUCTURE_RAMPART && type != STRUCTURE_CONTROLLER && type != STRUCTURE_CONTAINER && type != STRUCTURE_EXTRACTOR
             && type != STRUCTURE_LINK
