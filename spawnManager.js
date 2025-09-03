@@ -99,7 +99,7 @@ Room.prototype.spawnManager = function spawnManager() {
     }
 
 
-    if (global.heap.rooms[this.name].defensiveQueue.length > 0) {
+    if (global.heap.rooms[this.name].defensiveQueue.length > 0 && Game.rooms[this.name].energyAvailable>300) {
 
         console.log("spawning from defensive queue")
         var request = global.heap.rooms[this.name].defensiveQueue[0]
@@ -114,9 +114,9 @@ Room.prototype.spawnManager = function spawnManager() {
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
                         global.heap.rooms[this.name].defensiveQueue.shift()
-
+                        break;
                     }
-                    break;
+                    
                 }
         }
     }
