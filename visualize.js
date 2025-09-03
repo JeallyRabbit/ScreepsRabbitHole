@@ -230,7 +230,6 @@ Room.prototype.visualize = function visualizeroomManager() {
             this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
             this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
 
-            console.log("src.harvestingPower: ",src.harvestingPower)
             var aux = Math.round((src.harvestingPower / (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)) * Math.min(1, src.carryPower / src.harvestingPower) * 100)
             this.visual.text(src.roomName + " (" + src.pos.x + " " + src.pos.y + ") -> " + aux + "%"
                 , blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
