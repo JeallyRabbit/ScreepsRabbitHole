@@ -67,7 +67,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         global.heap.rooms[this.name].civilianQueue = []
     }
 
-
+    console.log("hauler: ", global.heap.rooms[this.name].haulersParts, " < ", C.HAULER_REQ_CARRY_PARTS)
 
 
     // Scout
@@ -87,7 +87,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     if (this.storage != undefined) {
 
         if (global.heap.rooms[this.name].haulersParts < C.HAULER_REQ_CARRY_PARTS) {
-            console.log("Adding hauler: ", global.heap.rooms[this.name].haulersParts, " < ", C.HAULER_REQ_CARRY_PARTS)
+            //console.log("Adding hauler: ", global.heap.rooms[this.name].haulersParts, " < ", C.HAULER_REQ_CARRY_PARTS)
             if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_HAULER) == undefined) {
                 global.heap.rooms[this.name].harvestingQueue.push(new generalRoomRequest(this.name, C.ROLE_HAULER))
             }

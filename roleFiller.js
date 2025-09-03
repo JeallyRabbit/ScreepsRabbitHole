@@ -8,29 +8,26 @@ Creep.prototype.roleFiller = function (spawn) {
         return -1;
     }
     
-    //this.say("F");
     if (this.memory.workingPos == undefined) {
         var atFirstPos = this.room.lookAt(spawnPos.x + 1, spawnPos.y - 1);
         if (atFirstPos.length == 0 ||
-            (atFirstPos.length > 0 && atFirstPos[0].role != 'creep')
+            (atFirstPos.length > 0 && atFirstPos[0].type != 'creep')
             || (this.pos.x == spawnPos.x + 1 && this.pos.y == spawnPos.y - 1)) {
             this.memory.workingPos = new RoomPosition(spawnPos.x + 1, spawnPos.y - 1, this.room.name);
 
         }
         else {
-            ////this.say(2);
             var atSecondPos = this.room.lookAt(spawnPos.x + 1, spawnPos.y - 3);
             if (atSecondPos.length == 0 ||
-                (atSecondPos.length > 0 && atSecondPos[0].role != 'creep')
+                (atSecondPos.length > 0 && atSecondPos[0].type != 'creep')
                 || (this.pos.x == spawnPos.x + 1 && this.pos.y == spawnPos.y - 3)) {
                 this.memory.workingPos = new RoomPosition(spawnPos.x + 1, spawnPos.y - 3, this.room.name);
 
             }
             else {
-                //this.say(3);
                 var atThirdPos = this.room.lookAt(spawnPos.x - 1, spawnPos.y - 1);
                 if (atThirdPos.length == 0 ||
-                    (atThirdPos.length > 0 && atThirdPos[0].role != 'creep')
+                    (atThirdPos.length > 0 && atThirdPos[0].type != 'creep')
                     || (this.pos.x == spawnPos.x - 1 && this.pos.y == spawnPos.y - 1)) {
                     this.memory.workingPos = new RoomPosition(spawnPos.x - 1, spawnPos.y - 1, this.room.name);
 
@@ -38,7 +35,7 @@ Creep.prototype.roleFiller = function (spawn) {
                 else {
                     var atFourthPos = this.room.lookAt(spawnPos.x - 1, spawnPos.y - 3);
                     if (atFourthPos.length == 0 ||
-                        (atFourthPos.length > 0 && atFourthPos[0].role != 'creep')
+                        (atFourthPos.length > 0 && atFourthPos[0].type != 'creep')
                         || (this.pos.x == spawnPos.x - 1 && this.pos.y == spawnPos.y - 3)) {
                         this.memory.workingPos = new RoomPosition(spawnPos.x - 1, spawnPos.y - 3, this.room.name);
 
@@ -50,26 +47,22 @@ Creep.prototype.roleFiller = function (spawn) {
     }
     if (this.memory.workingPos != undefined && (this.pos.x != this.memory.workingPos.x || this.pos.y != this.memory.workingPos.y)) {
 
-        //this.say("moving");
         var atPos = this.room.lookForAt(LOOK_CREEPS, this.memory.workingPos.x, this.memory.workingPos.y, this.room.name);
         this.memory.atPos = atPos;
         if (atPos.length > 0 && atPos[0].id != this.id) {
             this.memory.workingPos = undefined;
         }
         else {
-            //this.say("Free");
             this.memory.atPos = undefined;
             this.moveTo(new RoomPosition(this.memory.workingPos.x, this.memory.workingPos.y, this.room.name), { range: 0 });
         }
 
     }
     if ((this.memory.workingPos != undefined) && this.memory.workingPos.x == this.pos.x && this.memory.workingPos.y == this.pos.y) {
-        //this.say('at pos');
         this.memory.isWorking = true;
         if ((this.memory.myContainer != undefined && Game.getObjectById(this.memory.myContainer) == null)
             || (Game.getObjectById(this.memory.myContainer) != null && Game.getObjectById(this.memory.myContainer).store[RESOURCE_ENERGY] == 0)) {
             this.memory.myContainer = undefined;
-            //this.say("clearing");
         }
 
         if (this.memory.myContainer == undefined) {
@@ -103,7 +96,6 @@ Creep.prototype.roleFiller = function (spawn) {
             if(this.room.memory.fillerLinkId!=undefined && Game.getObjectById(this.room.memory.fillerLinkId)!=null && Game.getObjectById(this.room.memory.fillerLinkId).store[RESOURCE_ENERGY]>0)
             {
                 this.memory.myContainer=this.room.memory.fillerLinkId;
-                //this.say("C -> L")
             }
         }
 
@@ -125,17 +117,12 @@ Creep.prototype.roleFiller = function (spawn) {
                 }
             }
             if (this.memory.toFill != undefined) {
-                ////this.say("WITH");
                 if (this.store[RESOURCE_ENERGY] == 0) {
-                    ////this.say("with2")
                     if (Game.getObjectById(this.memory.myContainer) != null && Game.getObjectById(this.memory.myContainer).store[RESOURCE_ENERGY] > 0) {
-                        ////this.say("with3");
                         this.withdraw(Game.getObjectById(this.memory.myContainer), RESOURCE_ENERGY);
                         this.decreaseBalancer();
                     }
                     else {
-                        ////this.say("with4");
-                        ////this.say(Game.getObjectById(Game.rooms[this.memory.homeRoom].memory.filler_link).store[RESOURCE_ENERGY>0 )
                         this.withdraw(Game.getObjectById(this.memory.myContainer), RESOURCE_ENERGY);
                         this.decreaseBalancer();
                     }
@@ -144,19 +131,14 @@ Creep.prototype.roleFiller = function (spawn) {
                     var allFull = true;
                     for (let i = 0; i < this.memory.toFill.length; i++) {
                         var result = this.transfer(Game.getObjectById(this.memory.toFill[i]), RESOURCE_ENERGY);
-                        //if (Game.getObjectById(this.memory.toFill[i]).store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
-                        //    var result=this.transfer(Game.getObjectById(this.memory.toFill[i]), RESOURCE_ENERGY);
                         if (result == OK) { allFull = false; }
                         if (result == OK && this.store[RESOURCE_ENERGY] == 0) { break; }
 
-                        //}
-
                     }
-                    //this.say(allFull)
                     var isContainerFull=true;
                     if (allFull && (Game.getObjectById(this.memory.myContainer) != null && Game.getObjectById(this.memory.myContainer).structureType == STRUCTURE_LINK)
                         && Game.rooms[this.memory.homeRoom].memory.fillerContainers != undefined && Game.rooms[this.memory.homeRoom].memory.fillerContainers.length > 0) {
-                        //this.say("cnt")
+
                         for (let i = 0; i < Game.rooms[this.memory.homeRoom].memory.fillerContainers.length; i++) {
                             var result = this.transfer(Game.getObjectById(Game.rooms[this.memory.homeRoom].memory.fillerContainers[i]), RESOURCE_ENERGY)
                             if (result == OK) { isContainerFull=false;break; }
