@@ -64,13 +64,14 @@ Room.prototype.creepsManager = function creepsManager() {
             creep.suicide()
             continue
         }
-        
+
         if (creep.ticksToLive > creep.memory.TimeToSleep
             || creep.memory.homeRoom != this.name
         ) {
             //creep.say('💤')
             continue;
         }
+
 
         role = creep.memory.role
         switch (role) {
@@ -112,6 +113,7 @@ Room.prototype.creepsManager = function creepsManager() {
             case C.ROLE_HAULER:
                 global.heap.rooms[creep.memory.homeRoom].haulersParts += _.filter(creep.body, { type: CARRY }).length
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
+                this.say(global.heap.rooms[creep.memory.homeRoom].haulersParts)
                 creep.roleHauler()
                 break
             case C.ROLE_RESERVER:

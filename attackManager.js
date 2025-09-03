@@ -301,7 +301,7 @@ function attackManager(attackRoom) {
                     }
                 }
                 if (minRoom != undefined) {
-                    if (global.heap.rooms[minRoom].offensiveQueue.find(({ role }) => role === C.ROLE_ENERGY_DRAINER)) {
+                    if (global.heap.rooms[minRoom].offensiveQueue.find(({ role }) => role === C.ROLE_ENERGY_DRAINER)==undefined) {
                         global.heap.rooms[minRoom].offensiveQueue.push(new generalRoomRequest(attackRoom.name,C.ROLE_ENERGY_DRAINER));
                     }
                 }

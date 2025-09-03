@@ -296,7 +296,11 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
                 if (global.heap.rooms[r.name].myAttackPower + global.heap.rooms[r.name].myRangedAttackPower <= global.heap.rooms[r.name].hostileHealPower
                     || global.heap.rooms[r.name].myAttackPower + global.heap.rooms[r.name].myRangedAttackPower == 0
                 ) {
-                    global.heap.rooms[this.name].defensiveQueue.push(new soldierRequest(r.name, C.ROLE_SOLDIER, ifNeedMelee))
+                    if(global.heap.rooms[minRoom].defensiveQueue.find(({ role }) => role === C.ROLE_SOLDIER)==undefined)
+                    {
+                        global.heap.rooms[this.name].defensiveQueue.push(new soldierRequest(r.name, C.ROLE_SOLDIER, ifNeedMelee))
+                    }
+                    
 
 
                 }
