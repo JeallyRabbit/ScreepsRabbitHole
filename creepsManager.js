@@ -64,7 +64,7 @@ Room.prototype.creepsManager = function creepsManager() {
             creep.suicide()
             continue
         }
-
+        
         if (creep.ticksToLive > creep.memory.TimeToSleep
             || creep.memory.homeRoom != this.name
         ) {
@@ -88,7 +88,7 @@ Room.prototype.creepsManager = function creepsManager() {
                 }
                 break;
             case C.ROLE_HARVESTER:
-                global.heap.rooms[creep.memory.homeRoom].harvestingParts += creep.body.length
+                global.heap.rooms[creep.memory.homeRoom].harvestingParts += _.filter(creep.body, { type:  WORK }).length
                 creep.roleHarvester()
                 break;
             case C.ROLE_CARRIER:

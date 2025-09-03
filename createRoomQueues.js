@@ -124,7 +124,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
                 areCarriersSatisfied = false
                 break;
 
-            }//Farmers
+            }//Harvesters
             else if (harvestingSource.harvestingPower < (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME) && harvestingSource.harvesters < harvestingSource.maxHarvesters) {
                 global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestFarmer(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
 
@@ -144,7 +144,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
                 }
 
-            }//Farmers
+            }//Harvesters
             else if (harvestingSource.harvestingPower < (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME) && harvestingSource.harvesters < harvestingSource.maxHarvesters) {
                 global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestFarmer(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
 

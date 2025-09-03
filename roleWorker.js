@@ -26,7 +26,7 @@ Creep.prototype.roleWorker = function roleWorker() {
     
 
     if (this.memory.workPartsNum == undefined) {
-        this.memory.workPartsNum = _.filter(this.body, { role: WORK }).length
+        this.memory.workPartsNum = _.filter(this.body, { type: WORK }).length
     }
 
 
