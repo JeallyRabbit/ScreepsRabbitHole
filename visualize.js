@@ -270,6 +270,16 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.text("Workers Parts: " + global.heap.rooms[this.name].workersParts + "/" + global.heap.rooms[this.name].needWorkersParts, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
+    //global.heap.rooms[creep.memory.homeRoom].haulersParts
+    //Haulers
+    blockPos.y+=blockPosHeight
+    this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.text("Haulers Parts: " + global.heap.rooms[this.name].haulersParts + "/" + C.HAULER_REQ_CARRY_PARTS, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+
 
 
 

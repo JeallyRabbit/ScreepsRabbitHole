@@ -19,6 +19,7 @@ const roleMineralCarrier = require('roleMineralCarrier')
 const roleDoctor = require('roleDoctor')
 const roleDrainer=require('roleDrainer')
 const operateQuad = require('operateQuad')
+const _=require('lodash')
 
 Room.prototype.creepsManager = function creepsManager() {
 
@@ -97,7 +98,7 @@ Room.prototype.creepsManager = function creepsManager() {
             case C.ROLE_WORKER:
                 creep.roleWorker()
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
-                global.heap.rooms[creep.memory.homeRoom].workersParts += _.filter(creep.body, { role: WORK }).length
+                global.heap.rooms[creep.memory.homeRoom].workersParts += _.filter(creep.body, { type:  WORK }).length
                 break
             case C.ROLE_FILLER:
                 creep.roleFiller()
@@ -109,7 +110,7 @@ Room.prototype.creepsManager = function creepsManager() {
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
                 break
             case C.ROLE_HAULER:
-                global.heap.rooms[creep.memory.homeRoom].haulersParts += _.filter(creep.body, { role: CARRY }).length
+                global.heap.rooms[creep.memory.homeRoom].haulersParts += _.filter(creep.body, { type: CARRY }).length
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
                 creep.roleHauler()
                 break
@@ -120,7 +121,7 @@ Room.prototype.creepsManager = function creepsManager() {
             case C.ROLE_RAMPART_REPAIRER:
                 creep.roleRampartRepairer()
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
-                global.heap.rooms[creep.memory.homeRoom].rampartRepairersPower += _.filter(creep.body, { role: WORK }).length
+                global.heap.rooms[creep.memory.homeRoom].rampartRepairersPower += _.filter(creep.body, { type:  WORK }).length
                 break;
             case C.ROLE_RESOURCE_MANAGER:
                 creep.roleResourceManager()
@@ -131,9 +132,9 @@ Room.prototype.creepsManager = function creepsManager() {
                 creep.roleSoldier()
                 global.heap.rooms[creep.memory.homeRoom].militaryParts += creep.body.length
                 if (global.heap.rooms[creep.memory.targetRoom] != undefined) {
-                    global.heap.rooms[creep.memory.targetRoom].myHealPower += _.filter(creep.body, { role: HEAL }).length * HEAL_POWER;
-                    global.heap.rooms[creep.memory.targetRoom].myAttackPower += _.filter(creep.body, { role: ATTACK }).length * ATTACK_POWER;
-                    global.heap.rooms[creep.memory.targetRoom].myRangedAttackPower += _.filter(creep.body, { role: RANGED_ATTACK }).length * RANGED_ATTACK_POWER;
+                    global.heap.rooms[creep.memory.targetRoom].myHealPower += _.filter(creep.body, { type:  HEAL }).length * HEAL_POWER;
+                    global.heap.rooms[creep.memory.targetRoom].myAttackPower += _.filter(creep.body, { type:  ATTACK }).length * ATTACK_POWER;
+                    global.heap.rooms[creep.memory.targetRoom].myRangedAttackPower += _.filter(creep.body, { type:  RANGED_ATTACK }).length * RANGED_ATTACK_POWER;
                 }
 
                 break;
@@ -151,7 +152,7 @@ Room.prototype.creepsManager = function creepsManager() {
                 break;
             case C.ROLE_MINER:
                 creep.roleMiner()
-                global.heap.rooms[creep.memory.homeRoom].mineralMiningPower += (_.filter(creep.body, { role: WORK }).length * HARVEST_MINERAL_POWER) / EXTRACTOR_COOLDOWN
+                global.heap.rooms[creep.memory.homeRoom].mineralMiningPower += (_.filter(creep.body, { type:  WORK }).length * HARVEST_MINERAL_POWER) / EXTRACTOR_COOLDOWN
                 if (!global.heap.rooms[creep.memory.homeRoom].miners.includes(creep.id)) {
                     global.heap.rooms[creep.memory.homeRoom].miners.push(creep.id);
                 }
@@ -196,6 +197,7 @@ Room.prototype.creepsManager = function creepsManager() {
                     }
 
                 }
+                break;
             case C.ROLE_ENERGY_DRAINER:
                 creep.roleDrainer();
                 for(a of Memory.roomsToAttack)
@@ -212,8 +214,6 @@ Room.prototype.creepsManager = function creepsManager() {
     for (q of this.memory.quads) {
         this.operateQuad(q)
     }
-
-
 
     //Removing dead miners from array
     if (global.heap.rooms[this.name].miners.length > 0) {

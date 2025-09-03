@@ -362,6 +362,8 @@ Room.prototype.spawnManager = function spawnManager() {
                         var name = "MasochisticRabbit"
                         var body = drainerBody(energyCap)
                         var result = spawn.spawnCreep(body, name + '_' + this.name + Game.time, { memory: { role: C.ROLE_ENERGY_DRAINER, targetRoom: request.roomName, homeRoom: this.name } })
+                        global.heap.rooms[this.name].spawnResult = result
+                        global.heap.rooms[this.name].spawnRole = role
                         if (result == OK) {
                             global.heap.rooms[this.name].offensiveQueue.shift()
 
