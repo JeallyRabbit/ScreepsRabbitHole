@@ -276,6 +276,7 @@ function attackManager(attackRoom) {
                     }
                 }
                 if (minRoom != undefined && global.heap.rooms[minRoom].civilianQueue != undefined) {
+                    console.log("need scout from: ",minRoom," to attackRoom: ",attackRoom.name)
                     if (global.heap.rooms[minRoom].civilianQueue.find(({ role }) => role === C.ROLE_SCOUT) == undefined) {
                         global.heap.rooms[minRoom].civilianQueue.push(new scoutRequest(attackRoom.name, C.ROLE_SCOUT))
                     }
@@ -301,6 +302,7 @@ function attackManager(attackRoom) {
                     }
                 }
                 if (minRoom != undefined) {
+                    console.log("Need ENERGY_DRAINER")
                     if (global.heap.rooms[minRoom].offensiveQueue.find(({ role }) => role === C.ROLE_ENERGY_DRAINER)==undefined) {
                         global.heap.rooms[minRoom].offensiveQueue.push(new generalRoomRequest(attackRoom.name,C.ROLE_ENERGY_DRAINER));
                     }
@@ -348,7 +350,7 @@ function quadAttack(attackRoom) {
     }
 
     for (q of attackRoom.quads) {
-        if (q.isCompleted != true) {
+        if (q.isCompleted != true && q.members.length==0) {
 
             if (q.homeRoom == undefined) {
 
@@ -379,6 +381,7 @@ function quadAttack(attackRoom) {
             }
 
             if (q.homeRoom != undefined && global.heap.rooms[q.homeRoom].offensiveQueue != undefined) {
+                console.log("Starting adding quad members")
                 if (global.heap.rooms[q.homeRoom].offensiveQueue.find(({ role }) => role === C.ROLE_QUAD_MEMBER) == undefined) {
                     if (q.members.length == 0) {
                         global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, true));

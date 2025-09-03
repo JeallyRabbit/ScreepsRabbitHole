@@ -359,13 +359,18 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             console.log(a.role)
         }
 
-        console.log("civilian queue")
+        console.log("civilian queue:")
         for (a of global.heap.rooms[this.name].civilianQueue) {
             console.log(a.role)
         }
 
-        console.log("harvestingQueue")
+        console.log("harvestingQueue:")
         for (a of global.heap.rooms[this.name].harvestingQueue) {
+            console.log(a.role)
+        }
+
+        console.log("offensiveQueue:")
+        for (a of global.heap.rooms[this.name].offensiveQueue) {
             console.log(a.role)
         }
     }

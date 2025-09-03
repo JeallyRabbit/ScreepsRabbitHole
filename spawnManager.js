@@ -334,7 +334,7 @@ Room.prototype.spawnManager = function spawnManager() {
         switch (role) {
             case C.ROLE_QUAD_MEMBER:
                 {
-                    if (this.storage[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
+                    if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
                         console.log("entered spawning quad member")
                         console.log("request.quadId: ", request.quadId)
                         var name = "RabbitTail"
