@@ -9,6 +9,7 @@ const soldierBody = require('soldierBody')
 const minerBody = require('minerBody')
 const quadHealerBody = require('quadHealerBody')
 const quadRangedBody = require('quadRangedBody')
+const drainerBody = require('drainerBody')
 
 //defining local heap
 const localHeap = {}
@@ -193,9 +194,9 @@ Room.prototype.spawnManager = function spawnManager() {
 
             case C.ROLE_SCOUT:
                 {
-                    var targetRoom=undefined
-                    if(request.targetRoom!=undefined){targetRoom=request.targetRoom}
-                    var result = spawn.spawnCreep([MOVE], C.ROLE_SCOUT + '_' + this.name + Game.time, { memory: { role: C.ROLE_SCOUT, homeRoom: this.name, homeSpawnID: spawn.id,targetRoom: targetRoom } })
+                    var targetRoom = undefined
+                    if (request.targetRoom != undefined) { targetRoom = request.targetRoom }
+                    var result = spawn.spawnCreep([MOVE], C.ROLE_SCOUT + '_' + this.name + Game.time, { memory: { role: C.ROLE_SCOUT, homeRoom: this.name, homeSpawnID: spawn.id, targetRoom: targetRoom } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -354,6 +355,21 @@ Room.prototype.spawnManager = function spawnManager() {
                         break;
                     }
 
+                }
+            case C.ROLE_ENERGY_DRAINER:
+                {
+                    if (this.storage[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
+                        var name = "MasochisticRabbit"
+                        var body = drainerBody(energyCap)
+                        var result = spawn.spawnCreep(body, name + '_' + this.name + Game.time, { memory: { role: C.ROLE_ENERGY_DRAINER, targetRoom: request.roomName, homeRoom: this.name } })
+                        if (result == OK) {
+                            global.heap.rooms[this.name].offensiveQueue.shift()
+
+                        }
+                        break;
+
+
+                    }
                 }
         }
     }

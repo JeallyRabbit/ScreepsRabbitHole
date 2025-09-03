@@ -22,17 +22,16 @@ class attackHistoryData {
     }
 }
 
-class scoutRequest{
-    constructor(targetRoom,role)
-    {
-        this.targetRoom=targetRoom
-        this.role=role
+class scoutRequest {
+    constructor(targetRoom, role) {
+        this.targetRoom = targetRoom
+        this.role = role
     }
 }
 
 class generalRoomRequest {
     constructor(roomName, role) {
-        this.name = roomName
+        this.roomName = roomName
         this.role = role;
     }
 }
@@ -79,7 +78,21 @@ function attackManager(attackRoom) {
         attackRoom.operationalTowersAmountHistory = []
     }
 
-
+    if(attackRoom.drainersId==undefined)
+    {
+        attackRoom.drainersId=[]
+    }
+    else if(attackRoom.drainersId.length>0)
+    {
+        for(id of attackRoom.drainersId)
+        if(Game.getObjectById(id)==null)
+        {
+             const index = attackRoom.drainersId.indexOf(id);
+                if (index > -1) { // only splice array when item is found
+                    attackRoom.drainersId.splice(index, 1); // 2nd parameter means remove one item only
+                }
+        }
+    }
 
     attackRoom.areDefendersPresent = true;
 
@@ -180,8 +193,7 @@ function attackManager(attackRoom) {
     }
     else {
         //we need vision on the room
-        if(attackRoom.lastDataGatherTime!=undefined && Game.time-attackRoom.lastDataGatherTime>C.MAX_ROOM_INVISIBILITY_TIME)
-        {
+        if (attackRoom.lastDataGatherTime != undefined && Game.time - attackRoom.lastDataGatherTime > C.MAX_ROOM_INVISIBILITY_TIME) {
             attackRoom.attackType[C.ATTACK_TYPE_SCOUT] = true
         }
     }
@@ -263,8 +275,7 @@ function attackManager(attackRoom) {
                         minRoom = m
                     }
                 }
-                console.log("minRoom: ",minRoom)
-                if (minRoom != undefined && global.heap.rooms[minRoom].civilianQueue!=undefined) {
+                if (minRoom != undefined && global.heap.rooms[minRoom].civilianQueue != undefined) {
                     if (global.heap.rooms[minRoom].civilianQueue.find(({ role }) => role === C.ROLE_SCOUT) == undefined) {
                         global.heap.rooms[minRoom].civilianQueue.push(new scoutRequest(attackRoom.name, C.ROLE_SCOUT))
                     }
@@ -281,6 +292,20 @@ function attackManager(attackRoom) {
         if (attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] == true) {
             if (attackRoom.drainersId.length < attackRoom.reqDrainers) {
                 //
+                var minDistance = Infinity
+                var minRoom = undefined
+                for (m of Memory.mainRooms) {
+                    if (Game.map.getRoomLinearDistance(m, attackRoom.name) < minDistance) {
+                        minDistance = Game.map.getRoomLinearDistance(m, attackRoom.name)
+                        minRoom = m
+                    }
+                }
+                if (minRoom != undefined) {
+                    if (global.heap.rooms[minRoom].offensiveQueue.find(({ role }) => role === C.ROLE_ENERGY_DRAINER)) {
+                        global.heap.rooms[minRoom].offensiveQueue.push(new generalRoomRequest(attackRoom.name,C.ROLE_ENERGY_DRAINER));
+                    }
+                }
+
             }
         }
 

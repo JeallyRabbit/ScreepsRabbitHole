@@ -195,6 +195,15 @@ Room.prototype.creepsManager = function creepsManager() {
                     }
 
                 }
+            case C.ROLE_ENERGY_DRAINER:
+                creep.roleDrainer();
+                for(a of Memory.roomsToAttack)
+                {
+                    if(a.name==creep.memory.targetRoom)
+                    {
+                        a.drainersId.push(creep.id)
+                    }
+                }
         }
     }
     this.memory.creepsBodyParts = global.heap.rooms[this.name].creepsBodyParts

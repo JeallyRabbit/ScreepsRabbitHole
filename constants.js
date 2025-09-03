@@ -30,6 +30,8 @@ const ROLE_MINER = 'miner'
 const ROLE_MINERAL_CARRIER = 'mineral_carrier'
 const ROLE_DOCTOR = 'doctor'
 
+const ROLE_ENERGY_DRAINER='energy_drainer'
+
 const ROLE_QUAD_MEMBER = 'ROLE_QUAD_MEMBER'
 const RANGED_BODY = 'ranged_body'
 const HEALER_BODY = 'healer_body'
@@ -493,6 +495,7 @@ module.exports = {
   ROLE_MINER,
   ROLE_MINERAL_CARRIER,
   ROLE_DOCTOR,
+  ROLE_ENERGY_DRAINER,
 
   ROLE_QUAD_MEMBER,
   RANGED_BODY,
