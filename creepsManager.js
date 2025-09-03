@@ -113,7 +113,6 @@ Room.prototype.creepsManager = function creepsManager() {
             case C.ROLE_HAULER:
                 global.heap.rooms[creep.memory.homeRoom].haulersParts += _.filter(creep.body, { type: CARRY }).length
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
-                this.say(global.heap.rooms[creep.memory.homeRoom].haulersParts)
                 creep.roleHauler()
                 break
             case C.ROLE_RESERVER:
