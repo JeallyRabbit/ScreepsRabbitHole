@@ -110,7 +110,7 @@ Room.prototype.spawnManager = function spawnManager() {
         switch (role) {
             case C.ROLE_SOLDIER:
                 {
-                    var result = spawn.spawnCreep(soldierBody(energyCap, request.isMelee), 'BraveRabbit' + '_' + this.name + Game.time, { memory: { role: C.ROLE_SOLDIER, homeRoom: this.name, targetRoom: request.roomName } })
+                    var result = spawn.spawnCreep(soldierBody(energyCap, request.isMelee), 'SadisticRabbit' + '_' + this.name + Game.time, { memory: { role: C.ROLE_SOLDIER, homeRoom: this.name, targetRoom: request.roomName } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
