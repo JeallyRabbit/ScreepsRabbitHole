@@ -28,6 +28,8 @@ Room.prototype.spawnManager = function spawnManager() {
     }
 
     if (spawn.spawning != undefined && spawn.spawning.remainingTime < spawn.spawning.needTime - 2) {
+
+
         if (this.memory.spawn2Id != undefined) {
             spawn = Game.getObjectById(this.memory.spawn2Id)
         }
@@ -40,8 +42,7 @@ Room.prototype.spawnManager = function spawnManager() {
     }
     var energyCap = Game.rooms[this.name].energyAvailable
 
-
-
+    
     //check if there is quad that has started spawning in offensiveQueue (members>0)
     // if yes then spawn it before the rest
     // else spawn after other queues

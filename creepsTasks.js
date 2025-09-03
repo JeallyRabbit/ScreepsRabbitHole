@@ -426,7 +426,7 @@ Creep.prototype.taskCollect = function taskCollect(localHeap) {// go to deposits
 
     if (Game.getObjectById(localHeap.deposit) != null) {
         this.say(Game.getObjectById(localHeap.deposit).room.name)
-        if ((this.room.controller.level >= 4 && this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_UPGRADE_LIMIT)
+        if ((this.room.controller!=undefined && this.room.controller.level >= 4 && this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_UPGRADE_LIMIT)
 
             || (this.room.memory.energyBalance != undefined && this.room.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START)) {
             if (this.withdraw(Game.getObjectById(localHeap.deposit), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
