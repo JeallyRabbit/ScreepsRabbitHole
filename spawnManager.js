@@ -110,7 +110,7 @@ Room.prototype.spawnManager = function spawnManager() {
         switch (role) {
             case C.ROLE_SOLDIER:
                 {
-                    var result = spawn.spawnCreep(soldierBody(energyCap, request.isMelee), C.ROLE_SOLDIER + '_' + this.name + Game.time, { memory: { role: C.ROLE_SOLDIER, homeRoom: this.name, targetRoom: request.roomName } })
+                    var result = spawn.spawnCreep(soldierBody(energyCap, request.isMelee), 'BraveRabbit' + '_' + this.name + Game.time, { memory: { role: C.ROLE_SOLDIER, homeRoom: this.name, targetRoom: request.roomName } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -131,7 +131,7 @@ Room.prototype.spawnManager = function spawnManager() {
         switch (role) {
             case C.ROLE_HARVESTER:
                 {
-                    var result = spawn.spawnCreep(harvesterBody(energyCap), C.ROLE_HARVESTER + '_' + this.name + Game.time, { memory: { role: C.ROLE_HARVESTER, homeRoom: this.name, targetRoom: request.sourceRoom, sourceId: request.sourceId } })
+                    var result = spawn.spawnCreep(harvesterBody(energyCap), "HungryRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_HARVESTER, homeRoom: this.name, targetRoom: request.sourceRoom, sourceId: request.sourceId } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -160,7 +160,7 @@ Room.prototype.spawnManager = function spawnManager() {
                     else if (spawn.room.controller.level == 8) {
                         body = [MOVE, CARRY, CARRY, CARRY, CARRY]
                     }
-                    var result = spawn.spawnCreep(body, C.ROLE_FILLER + '_' + this.name + Game.time, { memory: { role: C.ROLE_FILLER, homeRoom: this.name, spawnId: this.id } })
+                    var result = spawn.spawnCreep(body, 'FillingRabbit' + '_' + this.name + Game.time, { memory: { role: C.ROLE_FILLER, homeRoom: this.name, spawnId: this.id } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -171,7 +171,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_HAULER:
                 {
-                    var result = spawn.spawnCreep(carrierBody(energyCap), C.ROLE_HAULER + '_' + this.name + Game.time, { memory: { role: C.ROLE_HAULER, homeRoom: this.name } })
+                    var result = spawn.spawnCreep(carrierBody(energyCap), "HaulingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_HAULER, homeRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -197,7 +197,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 {
                     var targetRoom = undefined
                     if (request.targetRoom != undefined) { targetRoom = request.targetRoom }
-                    var result = spawn.spawnCreep([MOVE], C.ROLE_SCOUT + '_' + this.name + Game.time, { memory: { role: C.ROLE_SCOUT, homeRoom: this.name, homeSpawnID: spawn.id, targetRoom: targetRoom } })
+                    var result = spawn.spawnCreep([MOVE], "WanderingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_SCOUT, homeRoom: this.name, homeSpawnID: spawn.id, targetRoom: targetRoom } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -211,7 +211,7 @@ Room.prototype.spawnManager = function spawnManager() {
                     var body = []
                     if (this.energyAvailable <= SPAWN_ENERGY_CAPACITY) { body = [WORK, CARRY, MOVE] }
                     else { body = workerBody(energyCap) }
-                    var result = spawn.spawnCreep(body, C.ROLE_WORKER + '_' + this.name + Game.time, { memory: { role: C.ROLE_WORKER, homeRoom: this.name } })
+                    var result = spawn.spawnCreep(body, "SlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_WORKER, homeRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -222,7 +222,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_REPAIRER:
                 {
-                    var result = spawn.spawnCreep(repairerBody(energyCap), C.ROLE_REPAIRER + '_' + this.name + Game.time, { memory: { role: C.ROLE_REPAIRER, targetRoom: request.roomName, homeRoom: this.name } })
+                    var result = spawn.spawnCreep(repairerBody(energyCap), "HandymanRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_REPAIRER, targetRoom: request.roomName, homeRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -244,7 +244,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_RAMPART_REPAIRER:
                 {
-                    var result = spawn.spawnCreep(workerBody(energyCap), C.ROLE_RAMPART_REPAIRER + '_' + this.name + Game.time, { memory: { role: C.ROLE_RAMPART_REPAIRER, homeRoom: this.name } })
+                    var result = spawn.spawnCreep(workerBody(energyCap), "RampartLovingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RAMPART_REPAIRER, homeRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -255,7 +255,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_RESOURCE_MANAGER:
                 {
-                    var result = spawn.spawnCreep(carrierBody(energyCap), C.ROLE_RESOURCE_MANAGER + '_' + this.name + Game.time, { memory: { role: C.ROLE_RESOURCE_MANAGER, homeRoom: this.name } })
+                    var result = spawn.spawnCreep(carrierBody(energyCap), "GreedyRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RESOURCE_MANAGER, homeRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -277,7 +277,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_COLONIZER:
                 {
-                    var result = spawn.spawnCreep(workerBody(energyCap, [MOVE, CARRY, WORK, MOVE]), C.ROLE_COLONIZER + '_' + this.name + Game.time, { memory: { role: C.ROLE_COLONIZER, homeRoom: this.name, targetRoom: request.roomName } })
+                    var result = spawn.spawnCreep(workerBody(energyCap, [MOVE, CARRY, WORK, MOVE]), "PioneerRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_COLONIZER, homeRoom: this.name, targetRoom: request.roomName } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -288,7 +288,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_MINER:
                 {
-                    var result = spawn.spawnCreep(minerBody(energyCap), C.ROLE_MINER + '_' + this.name + Game.time, { memory: { role: C.ROLE_MINER, homeRoom: this.name } })
+                    var result = spawn.spawnCreep(minerBody(energyCap), "OtherSlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_MINER, homeRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -299,7 +299,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_MINERAL_CARRIER:
                 {
-                    var result = spawn.spawnCreep(carrierBody(energyCap), C.ROLE_MINERAL_CARRIER + '_' + this.name + Game.time, { memory: { role: C.ROLE_MINERAL_CARRIER, homeRoom: this.name } })
+                    var result = spawn.spawnCreep(carrierBody(energyCap), "OverseerRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_MINERAL_CARRIER, homeRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -310,7 +310,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_DOCTOR:
                 {
-                    var result = spawn.spawnCreep(carrierBody(energyCap), C.ROLE_DOCTOR + '_' + this.name + Game.time, { memory: { role: C.ROLE_DOCTOR, homeRoom: this.name } })
+                    var result = spawn.spawnCreep(carrierBody(energyCap), "CrazyScientisRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_DOCTOR, homeRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
