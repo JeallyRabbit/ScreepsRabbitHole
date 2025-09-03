@@ -1,6 +1,6 @@
 
 const C = require('constants');
-const operateQuad=require('operateQuad')
+const operateQuad = require('operateQuad')
 
 
 class Quad {
@@ -22,10 +22,18 @@ class attackHistoryData {
     }
 }
 
+class scoutRequest{
+    constructor(targetRoom,role)
+    {
+        this.targetRoom=targetRoom
+        this.role=role
+    }
+}
+
 class generalRoomRequest {
-    constructor(roomName, type) {
+    constructor(roomName, role) {
         this.name = roomName
-        this.type = type;
+        this.role = role;
     }
 }
 
@@ -44,7 +52,7 @@ function attackManager(attackRoom) {
 
 
     // TODO:
-    // 1. Calculate How many bodyparts or spawnTimeTicks is needed to every attack type instance 
+    // 1. Calculate How many bodyparts or spawnTimeTicks is needed to every attack role instance 
 
     // 
     // (e.g quad needs 200 bodyparts, 
@@ -87,6 +95,8 @@ function attackManager(attackRoom) {
     attackRoom.walls = []
 
     if (Game.rooms[attackRoom.name] != undefined) {
+
+        attackRoom.lastDataGatherTime = Game.time
         str = Game.rooms[attackRoom.name].find(FIND_STRUCTURES)
         var anyOperational = false
         var operationalTowersAmount = 0;
@@ -170,8 +180,9 @@ function attackManager(attackRoom) {
     }
     else {
         //we need vision on the room
-        if (!global.heap.visionRequests.includes(attackRoom.name)) {
-            global.heap.visionRequests.push(attackRoom.name)
+        if(attackRoom.lastDataGatherTime!=undefined && Game.time-attackRoom.lastDataGatherTime>C.MAX_ROOM_INVISIBILITY_TIME)
+        {
+            attackRoom.attackType[C.ATTACK_TYPE_SCOUT] = true
         }
     }
 
@@ -231,90 +242,39 @@ function attackManager(attackRoom) {
             }
         }
 
-        
+
 
         //Adding requests to rooms
 
         //Adding quads
         if (attackRoom.attackType[C.ATTACK_TYPE_QUAD] == true) {
             // for now keep two quads
-            attackRoom.reqQuads = 2
+            quadAttack(attackRoom);
+        }
 
-
-            if (attackRoom.quads.length < attackRoom.reqQuads) {
-
-            }
-            else if (attackRoom.quads.length > attackRoom.reqQuads) {
-                attackRoom.quads.shift()
-            }
-
-            if (attackRoom.quads.length < attackRoom.reqQuads) {
-                attackRoom.quads.push(new Quad(attackRoom.name + Game.time, attackRoom.name, undefined))
-            }
-
-            for (q of attackRoom.quads) {
-                if (q.isCompleted != true) {
-
-                    if (q.homeRoom == undefined) {
-
-                        var distanceToTargetRoom = Infinity
-                        var roomToSpawnQuad = undefined
-                        for (m of Memory.mainRooms) {
-                            var maxBodyParts = CREEP_LIFE_TIME / CREEP_SPAWN_TIME
-                            if (Memory.rooms[m].spawn2Id != undefined) {
-                                maxBodyParts += CREEP_LIFE_TIME / CREEP_SPAWN_TIME
-                            }
-                            if (Memory.rooms[m].spawn3Id != undefined) {
-                                maxBodyParts += CREEP_LIFE_TIME / CREEP_SPAWN_TIME
-                            }
-                            if (maxBodyParts - Game.rooms[m].memory.creepsBodyParts > C.QUAD_BODY_PARTS_AMOUNT) {
-
-                                if (Game.map.getRoomLinearDistance(m, attackRoom.name) < distanceToTargetRoom
-                                    && Game.rooms[m].controller.level >= 7) {
-                                    distanceToTargetRoom = Game.map.getRoomLinearDistance(m, attackRoom.name)
-                                    roomToSpawnQuad = m
-
-                                }
-
-                            }
-                        }
-                        if (roomToSpawnQuad != undefined) {
-                            q.homeRoom = roomToSpawnQuad
-                        }
+        if (attackRoom.attackType[C.ATTACK_TYPE_SCOUT] == true) {
+            if (attackRoom.scoutId == undefined) {
+                //add request
+                var minDistance = Infinity
+                var minRoom = undefined
+                for (m of Memory.mainRooms) {
+                    if (Game.map.getRoomLinearDistance(m, attackRoom.name) < minDistance) {
+                        minDistance = Game.map.getRoomLinearDistance(m, attackRoom.name)
+                        minRoom = m
                     }
-
-                    if (q.homeRoom != undefined && global.heap.rooms[q.homeRoom].offensiveQueue != undefined) {
-                        if (global.heap.rooms[q.homeRoom].offensiveQueue.find(({ role }) => role === C.ROLE_QUAD_MEMBER) == undefined) {
-                            if (q.members.length == 0) {
-                                global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, true))
-                                console.log("adding first member of quad: ".q.id)
-                                break;
-
-                            }
-                            else if (q.members.length == 1) {
-                                global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, false))
-                                break;
-                            }
-                            else if (q.members.length <4) {
-                                global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.HEALER_BODY, false))
-                                break;
-                            }
-                        }
-
-                       // console.log("offensive queue[", q.homeRoom, "]: ", global.heap.rooms[q.homeRoom].offensiveQueue)
+                }
+                console.log("minRoom: ",minRoom)
+                if (minRoom != undefined && global.heap.rooms[minRoom].civilianQueue!=undefined) {
+                    if (global.heap.rooms[minRoom].civilianQueue.find(({ role }) => role === C.ROLE_SCOUT) == undefined) {
+                        global.heap.rooms[minRoom].civilianQueue.push(new scoutRequest(attackRoom.name, C.ROLE_SCOUT))
                     }
-
 
                 }
             }
-
-
-            for(q of attackRoom.quads)
-            {
-                operateQuad(q)
+            else if (Game.getObjectById(attackRoom.scoutId) == null) {
+                attackRoom.scoutId = undefined
             }
         }
-
 
 
         //ATTACK_TYPE_DRAIN
@@ -348,6 +308,82 @@ function attackManager(attackRoom) {
 }
 
 
+function quadAttack(attackRoom) {
+    attackRoom.reqQuads = 2;
+
+
+    if (attackRoom.quads.length < attackRoom.reqQuads) {
+    }
+    else if (attackRoom.quads.length > attackRoom.reqQuads) {
+        attackRoom.quads.shift();
+    }
+
+    if (attackRoom.quads.length < attackRoom.reqQuads) {
+        attackRoom.quads.push(new Quad(attackRoom.name + Game.time, attackRoom.name, undefined));
+    }
+
+    for (q of attackRoom.quads) {
+        if (q.isCompleted != true) {
+
+            if (q.homeRoom == undefined) {
+
+                var distanceToTargetRoom = Infinity;
+                var roomToSpawnQuad = undefined;
+                for (m of Memory.mainRooms) {
+                    var maxBodyParts = CREEP_LIFE_TIME / CREEP_SPAWN_TIME;
+                    if (Memory.rooms[m].spawn2Id != undefined) {
+                        maxBodyParts += CREEP_LIFE_TIME / CREEP_SPAWN_TIME;
+                    }
+                    if (Memory.rooms[m].spawn3Id != undefined) {
+                        maxBodyParts += CREEP_LIFE_TIME / CREEP_SPAWN_TIME;
+                    }
+                    if (maxBodyParts - Game.rooms[m].memory.creepsBodyParts > C.QUAD_BODY_PARTS_AMOUNT) {
+
+                        if (Game.map.getRoomLinearDistance(m, attackRoom.name) < distanceToTargetRoom
+                            && Game.rooms[m].controller.level >= 7) {
+                            distanceToTargetRoom = Game.map.getRoomLinearDistance(m, attackRoom.name);
+                            roomToSpawnQuad = m;
+
+                        }
+
+                    }
+                }
+                if (roomToSpawnQuad != undefined) {
+                    q.homeRoom = roomToSpawnQuad;
+                }
+            }
+
+            if (q.homeRoom != undefined && global.heap.rooms[q.homeRoom].offensiveQueue != undefined) {
+                if (global.heap.rooms[q.homeRoom].offensiveQueue.find(({ role }) => role === C.ROLE_QUAD_MEMBER) == undefined) {
+                    if (q.members.length == 0) {
+                        global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, true));
+                        console.log("adding first member of quad: ".q.id);
+                        break;
+
+                    }
+                    else if (q.members.length == 1) {
+                        global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, false));
+                        break;
+                    }
+                    else if (q.members.length < 4) {
+                        global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.HEALER_BODY, false));
+                        break;
+                    }
+                }
+
+                // console.log("offensive queue[", q.homeRoom, "]: ", global.heap.rooms[q.homeRoom].offensiveQueue)
+            }
+
+
+        }
+    }
+
+
+    for (q of attackRoom.quads) {
+        operateQuad(q);
+    }
+}
+
 function calculateTowersDamage(quad, towers) {
     if (towers.length < 1) { return -1; }
 
@@ -374,7 +410,7 @@ function calculateTowersDamage(quad, towers) {
 
             }
         }
-        global.heap.rooms[quad.targetRoom].towersDamageCM =damageMatrix.serialize();
+        global.heap.rooms[quad.targetRoom].towersDamageCM = damageMatrix.serialize();
     }
     return 0;
 }
@@ -410,7 +446,7 @@ function caluclateRampartsCosts(quad, structures) {
             if (str.structureType == STRUCTURE_RAMPART || str.structureType == STRUCTURE_WALL) {
                 var tileCost = 0.0
                 tileCost = (str.hits / maxHits) * DAMAGE_MATRIX_FACTOR
-                if (Memory.allies.includes(str.owner.username) || str.pos.roomName !=quad.targetRoom) {
+                if (Memory.allies.includes(str.owner.username) || str.pos.roomName != quad.targetRoom) {
                     tileCost = 255
                 }
                 rampartsMatrix.set(str.pos.x, str.pos.y, tileCost)
@@ -476,7 +512,7 @@ function calculateHostileCreepsCost(quad, hostiles) {
             }
             else if (rangedAttack > 0) {
                 var tileCost = (rangedAttack / maxRangedAttack) * DAMAGE_MATRIX_FACTOR
-                
+
                 for (var i = h.pos.x - RANGED_ATTACK_RANGE; i <= h.pos.x + RANGED_ATTACK_RANGE; i++) {
                     for (var j = h.pos.y - RANGED_ATTACK_RANGE; j <= h.pos.y + RANGED_ATTACK_RANGE; j++) {
                         var currentCost = hostilesMatrix.get(i, j)
@@ -487,7 +523,7 @@ function calculateHostileCreepsCost(quad, hostiles) {
 
 
         }
-        global.heap.rooms[quad.targetRoom].hostilesCM= hostilesMatrix.serialize()
+        global.heap.rooms[quad.targetRoom].hostilesCM = hostilesMatrix.serialize()
     }
 }
 

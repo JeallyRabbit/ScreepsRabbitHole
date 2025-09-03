@@ -468,6 +468,7 @@ const ATTACK_TYPE_CONTROLLER_DOWNGRADE = 'attack_type_controller_downgrade'
 const ATTACK_TYPE_NUKE = 'attack_type_nuke'
 const ATTACK_TYPE_SCOUT = 'attack_type_scout'
 const ATTACK_TYPE_PLUNDER = 'attack_type_plunder'// collecting resources from structures
+const MAX_ROOM_INVISIBILITY_TIME=500
 
 const QUAD_BODY_PARTS_AMOUNT = 200
 
@@ -602,6 +603,7 @@ module.exports = {
   ATTACK_TYPE_NUKE,
   ATTACK_TYPE_SCOUT,
   ATTACK_TYPE_PLUNDER,
+  MAX_ROOM_INVISIBILITY_TIME,
 
   QUAD_BODY_PARTS_AMOUNT
 };

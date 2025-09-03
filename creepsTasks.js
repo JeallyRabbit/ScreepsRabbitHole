@@ -546,22 +546,22 @@ Creep.prototype.taskBuild = function taskBuild(localHeap) {
             }
             toFocus = this.pos.findClosestByRange(aux)
         }
-        else { // workers should prioritize by type
+        else { // workers should prioritize by role
             for (c of global.heap.rooms[this.room.name].construction) {
                 if (Game.getObjectById(c) != null && (Game.getObjectById(c).pos.x !== this.pos.x || Game.getObjectById(c).pos.y != this.pos.y)
                     && Game.getObjectById(c).pos.roomName == this.pos.roomName) {
                     sites.push(Game.getObjectById(c))
-                    var type = Game.getObjectById(c).structureType
-                    if (type == STRUCTURE_SPAWN) {
+                    var role = Game.getObjectById(c).structureType
+                    if (role == STRUCTURE_SPAWN) {
                         toFocus = Game.getObjectById(c)
                         break
                     }
-                    else if (toFocus == null && type == STRUCTURE_CONTAINER) {
+                    else if (toFocus == null && role == STRUCTURE_CONTAINER) {
                         toFocus = Game.getObjectById(c)
                         break
                     }
                     /*
-                    else if (toFocus == null && type === STRUCTURE_EXTENSION) {
+                    else if (toFocus == null && role === STRUCTURE_EXTENSION) {
                         toFocus = Game.getObjectById(c)
                         break;
                     }

@@ -10,7 +10,7 @@ class harvestingSourceRequestFarmer {
     constructor(sourceId, sourceRoom) {
         this.sourceId = sourceId;
         this.sourceRoom = sourceRoom
-        this.type = C.ROLE_HARVESTER;
+        this.role = C.ROLE_HARVESTER;
     }
 }
 
@@ -19,34 +19,33 @@ class harvestingSourceRequestCarrier {
         this.sourceId = sourceId;
         this.sourceRoom = roomName
         this.srcDistance = distance
-        this.type = C.ROLE_CARRIER;
+        this.role = C.ROLE_CARRIER;
     }
 }
 
 class generalRoomRequest {
-    constructor(roomName, type,type2=undefined) {
+    constructor(roomName, role, type2 = undefined) {
         this.roomName = roomName
-        this.type = type;
-        this.type2=type2
+        this.role = role;
+        this.type2 = type2
     }
 }
 
-class quadMemberRequest{
-    constructor(quadId,type,bodyType,isFirstMember=false)
-    {
-        this.quadId=quadId
-        this.type=type
-        this.bodyType=bodyType
-        this.isFirstMember=isFirstMember
+class quadMemberRequest {
+    constructor(quadId, role, bodyType, isFirstMember = false) {
+        this.quadId = quadId
+        this.role = role
+        this.bodyType = bodyType
+        this.isFirstMember = isFirstMember
     }
 }
 
 
 
 class soldierRequest {
-    constructor(roomName, type, isMelee) {
+    constructor(roomName, role, isMelee) {
         this.roomName = roomName
-        this.type = type
+        this.role = role
         this.isMelee = isMelee
     }
 }
@@ -54,14 +53,21 @@ class soldierRequest {
 
 Room.prototype.createRoomQueues = function createRoomQueues() {
 
-    if(global.heap.rooms[this.name].offensiveQueue==undefined)
-    {
+    if (global.heap.rooms[this.name].offensiveQueue == undefined) {
         global.heap.rooms[this.name].offensiveQueue = []
     }
-    global.heap.rooms[this.name].defensiveQueue = []
-    global.heap.rooms[this.name].harvestingQueue = []
-    global.heap.rooms[this.name].civilianQueue = []
-    
+    if (global.heap.rooms[this.name].defensiveQueue == undefined) {
+        global.heap.rooms[this.name].defensiveQueue = []
+    }
+    if (global.heap.rooms[this.name].harvestingQueue == undefined) {
+        global.heap.rooms[this.name].harvestingQueue = []
+    }
+
+    if (global.heap.rooms[this.name].civilianQueue == undefined) {
+        global.heap.rooms[this.name].civilianQueue = []
+    }
+
+
 
 
     // Scout
@@ -298,7 +304,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
     }
 
-   
+
 
 
 
@@ -308,17 +314,17 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     if (ifLog) {
         console.log("defensiveQueue:")
         for (a of global.heap.rooms[this.name].defensiveQueue) {
-            console.log(a.type)
+            console.log(a.role)
         }
 
         console.log("civilian queue")
         for (a of global.heap.rooms[this.name].civilianQueue) {
-            console.log(a.type)
+            console.log(a.role)
         }
 
         console.log("harvestingQueue")
         for (a of global.heap.rooms[this.name].harvestingQueue) {
-            console.log(a.type)
+            console.log(a.role)
         }
     }
 

@@ -34,8 +34,8 @@ function setupProfiler() {
           // so add 1.
           duration = Memory.profiler.disableTick - Memory.profiler.enabledTick + 1;
         }
-        const type = Memory.profiler.type;
-        setupMemory(type, duration, filter);
+        const role = Memory.profiler.role;
+        setupMemory(role, duration, filter);
       }
     },
     reset: resetMemory,
@@ -54,7 +54,7 @@ function setupMemory(profileType, duration, filter) {
       totalTime: 0,
       enabledTick: Game.time + 1,
       disableTick,
-      type: profileType,
+      role: profileType,
       filter,
     };
   }
@@ -292,19 +292,19 @@ const Profiler = {
     return !Memory.profiler.disableTick || Game.time <= Memory.profiler.disableTick;
   },
 
-  type() {
-    return Memory.profiler.type;
+  role() {
+    return Memory.profiler.role;
   },
 
   shouldPrint() {
-    const streaming = Profiler.type() === 'stream';
-    const profiling = Profiler.type() === 'profile';
+    const streaming = Profiler.role() === 'stream';
+    const profiling = Profiler.role() === 'profile';
     const onEndingTick = Memory.profiler.disableTick === Game.time;
     return streaming || (profiling && onEndingTick);
   },
 
   shouldEmail() {
-    return Profiler.type() === 'email' && Memory.profiler.disableTick === Game.time;
+    return Profiler.role() === 'email' && Memory.profiler.disableTick === Game.time;
   },
 };
 

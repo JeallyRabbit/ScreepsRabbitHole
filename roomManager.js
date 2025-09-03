@@ -498,9 +498,9 @@ Room.prototype.roomManager = function roomManager() {
         console.log("Adding hostiles in ", this.name)
         for (a of hostiles) {
             global.heap.rooms[this.name].hostiles.push(a)
-            global.heap.rooms[this.name].hostileHealPower += _.filter(a.body, { type: HEAL }).length * HEAL_POWER
-            global.heap.rooms[this.name].hostileAttackPower += _.filter(a.body, { type: ATTACK }).length * ATTACK_POWER
-            global.heap.rooms[this.name].hostileRangedAttackPower += _.filter(a.body, { type: RANGED_ATTACK }).length * RANGED_ATTACK_POWER
+            global.heap.rooms[this.name].hostileHealPower += _.filter(a.body, { role: HEAL }).length * HEAL_POWER
+            global.heap.rooms[this.name].hostileAttackPower += _.filter(a.body, { role: ATTACK }).length * ATTACK_POWER
+            global.heap.rooms[this.name].hostileRangedAttackPower += _.filter(a.body, { role: RANGED_ATTACK }).length * RANGED_ATTACK_POWER
         }
     }
 
@@ -534,13 +534,13 @@ Room.prototype.roomManager = function roomManager() {
     var structures = this.find(FIND_STRUCTURES)
     for (str of structures) {
 
-        const type = str.structureType
+        const role = str.structureType
 
-        if (type != STRUCTURE_RAMPART && type != STRUCTURE_WALL && str.hits < str.hitsMax) {
+        if (role != STRUCTURE_RAMPART && role != STRUCTURE_WALL && str.hits < str.hitsMax) {
             global.heap.rooms[this.name].damagedStructuresId.push(str.id)
         }
         /*
-        else if ((type == STRUCTURE_RAMPART || type == STRUCTURE_WALL) && str.hits < C.RAMPART_HITS_BOTTOM_LIMIT) {
+        else if ((role == STRUCTURE_RAMPART || role == STRUCTURE_WALL) && str.hits < C.RAMPART_HITS_BOTTOM_LIMIT) {
             global.heap.rooms[this.name].damagedStructuresId.push(str.id)
         }
             */
@@ -549,7 +549,7 @@ Room.prototype.roomManager = function roomManager() {
         if (str.my && Memory.mainRooms.includes(this.name)) {
             this.memory.myStructures.push(str.id)
 
-            switch (type) {
+            switch (role) {
 
                 case STRUCTURE_EXTENSION:
                     global.heap.rooms[this.name].myExtensions.push(str.id);
@@ -626,8 +626,8 @@ Room.prototype.roomManager = function roomManager() {
             // What allied structures we need to know ??
         }
         else {
-            const type = str.structureType
-            switch (type) {
+            const role = str.structureType
+            switch (role) {
                 case STRUCTURE_CONTAINER:
                     global.heap.rooms[this.name].containersId.push(str.id)
                     //this.memory.containersId.push(str.id);

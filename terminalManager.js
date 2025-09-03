@@ -11,7 +11,7 @@ StructureTerminal.prototype.buyResource=function buyResource(res, amount) {
     //console.log("i have storage");
     bestPrice = 0
     var bestOrderId = undefined
-    const resourceOrders = Game.market.getAllOrders({ type: ORDER_SELL, resourceType: res }) // fast
+    const resourceOrders = Game.market.getAllOrders({ role: ORDER_SELL, resourceType: res }) // fast
     if (resourceOrders != undefined && resourceOrders.length > 0) {
         bestOrderId = resourceOrders[0].id
     }
@@ -53,7 +53,7 @@ StructureTerminal.prototype.sellResource=function sell_resource(res,amount) {
 
     biggestProfitAmount = 0
     var bestOrderId = undefined
-    const sellOrders = Game.market.getAllOrders({ type: ORDER_BUY, resourceType: res }) // fast
+    const sellOrders = Game.market.getAllOrders({ role: ORDER_BUY, resourceType: res }) // fast
     if (sellOrders != undefined && sellOrders.length > 0) {
         bestOrderId = sellOrders[0].id
     }

@@ -657,10 +657,10 @@ function getQuadDirection(quad) {
     var rightPower = 0;
     var bottomPower = 0;
 
-    topPower = (_.filter(topLeft.body, { type: RANGED_ATTACK }).length * RANGED_ATTACK_POWER) + _.filter(topRight.body, { type: RANGED_ATTACK }).length * RANGED_ATTACK_POWER;
-    leftPower = (_.filter(topLeft.body, { type: RANGED_ATTACK }).length * RANGED_ATTACK_POWER) + _.filter(bottomLeft.body, { type: RANGED_ATTACK }).length * RANGED_ATTACK_POWER;
-    rightPower = (_.filter(topRight.body, { type: RANGED_ATTACK }).length * RANGED_ATTACK_POWER) + _.filter(bottomRight.body, { type: RANGED_ATTACK }).length * RANGED_ATTACK_POWER;
-    bottomPower = (_.filter(bottomLeft.body, { type: RANGED_ATTACK }).length * RANGED_ATTACK_POWER) + _.filter(bottomRight.body, { type: RANGED_ATTACK }).length * RANGED_ATTACK_POWER;
+    topPower = (_.filter(topLeft.body, { role: RANGED_ATTACK }).length * RANGED_ATTACK_POWER) + _.filter(topRight.body, { role: RANGED_ATTACK }).length * RANGED_ATTACK_POWER;
+    leftPower = (_.filter(topLeft.body, { role: RANGED_ATTACK }).length * RANGED_ATTACK_POWER) + _.filter(bottomLeft.body, { role: RANGED_ATTACK }).length * RANGED_ATTACK_POWER;
+    rightPower = (_.filter(topRight.body, { role: RANGED_ATTACK }).length * RANGED_ATTACK_POWER) + _.filter(bottomRight.body, { role: RANGED_ATTACK }).length * RANGED_ATTACK_POWER;
+    bottomPower = (_.filter(bottomLeft.body, { role: RANGED_ATTACK }).length * RANGED_ATTACK_POWER) + _.filter(bottomRight.body, { role: RANGED_ATTACK }).length * RANGED_ATTACK_POWER;
 
     var max = Math.max(topPower, leftPower, rightPower, bottomPower)
     if (max == topPower) { return TOP }
@@ -820,7 +820,7 @@ function quadHealPower(quad) {
     for (q of quad.members) {
         cr = Game.getObjectById(q)
         if (cr == null) { continue }
-        healPower += _.filter(cr.body, { type: HEAL }).length * HEAL_POWER;
+        healPower += _.filter(cr.body, { role: HEAL }).length * HEAL_POWER;
     }
     return healPower
 }
@@ -954,9 +954,9 @@ function calculateHealPower(quad) {
     for (m of quad.members) {
         member = Game.getObjectById(m)
         if (member == null) { continue }
-        if (_.filter(member.body, { type: HEAL }).length * HEAL_POWER < minHealPower) { minHealPower = _.filter(member.body, { type: HEAL }).length * HEAL_POWER }
+        if (_.filter(member.body, { role: HEAL }).length * HEAL_POWER < minHealPower) { minHealPower = _.filter(member.body, { role: HEAL }).length * HEAL_POWER }
         if (member.hitsMax < minHp) { minHp = member.hitsMax }
-        totalHealPower += _.filter(member.body, { type: HEAL }).length * HEAL_POWER
+        totalHealPower += _.filter(member.body, { role: HEAL }).length * HEAL_POWER
 
     }
     quad.minHealPower = minHealPower;
@@ -967,7 +967,7 @@ function calculateHealPower(quad) {
 function getRangedAttackPower(body) {
     var attackSum = 0;
     for (b of body) {
-        if (b.type == RANGED_ATTACK) {
+        if (b.role == RANGED_ATTACK) {
             if (b.boost == undefined) {
                 attackSum += RANGED_ATTACK_POWER;
                 continue;
@@ -988,7 +988,7 @@ function getRangedAttackPower(body) {
 function getAttackPower(body) {
     var attackSum = 0;
     for (b of body) {
-        if (b.type == ATTACK) {
+        if (b.role == ATTACK) {
             if (b.boost == undefined) {
                 attackSum += ATTACK_POWER;
                 continue;
@@ -1083,9 +1083,9 @@ function findTargetStructure(quad, structures, room) {
     var minHits = Infinity
 
     for (s of structures) {
-        var type = s.structureType
-        if (type != STRUCTURE_RAMPART && type != STRUCTURE_CONTROLLER && type != STRUCTURE_CONTAINER && type != STRUCTURE_EXTRACTOR
-            && type != STRUCTURE_LINK
+        var role = s.structureType
+        if (role != STRUCTURE_RAMPART && role != STRUCTURE_CONTROLLER && role != STRUCTURE_CONTAINER && role != STRUCTURE_EXTRACTOR
+            && role != STRUCTURE_LINK
         ) {
             structuresAt = Game.rooms[room].lookForAt(LOOK_STRUCTURES, s.pos)
             var rampHits = 0

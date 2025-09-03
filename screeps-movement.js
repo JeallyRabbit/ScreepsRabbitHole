@@ -734,7 +734,7 @@ module.exports =
             function getCreepWeightInfo(creep) {
                 const calcCarry = config_1.CREEPS_MOVEMENT_CONFIG.calculateCarryWeight;
                 const unWeightedParts = calcCarry ? [MOVE, CARRY] : [MOVE];
-                const bodyParts = _.countBy(creep.body, (p) => _.contains(unWeightedParts, p.type) ? p.type : "weighted");
+                const bodyParts = _.countBy(creep.body, (p) => _.contains(unWeightedParts, p.role) ? p.role : "weighted");
                 bodyParts.weighted = bodyParts.weighted || 0;
                 return {
                     move: bodyParts.move || 0,

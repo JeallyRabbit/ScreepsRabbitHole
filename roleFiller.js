@@ -12,7 +12,7 @@ Creep.prototype.roleFiller = function (spawn) {
     if (this.memory.workingPos == undefined) {
         var atFirstPos = this.room.lookAt(spawnPos.x + 1, spawnPos.y - 1);
         if (atFirstPos.length == 0 ||
-            (atFirstPos.length > 0 && atFirstPos[0].type != 'creep')
+            (atFirstPos.length > 0 && atFirstPos[0].role != 'creep')
             || (this.pos.x == spawnPos.x + 1 && this.pos.y == spawnPos.y - 1)) {
             this.memory.workingPos = new RoomPosition(spawnPos.x + 1, spawnPos.y - 1, this.room.name);
 
@@ -21,7 +21,7 @@ Creep.prototype.roleFiller = function (spawn) {
             ////this.say(2);
             var atSecondPos = this.room.lookAt(spawnPos.x + 1, spawnPos.y - 3);
             if (atSecondPos.length == 0 ||
-                (atSecondPos.length > 0 && atSecondPos[0].type != 'creep')
+                (atSecondPos.length > 0 && atSecondPos[0].role != 'creep')
                 || (this.pos.x == spawnPos.x + 1 && this.pos.y == spawnPos.y - 3)) {
                 this.memory.workingPos = new RoomPosition(spawnPos.x + 1, spawnPos.y - 3, this.room.name);
 
@@ -30,7 +30,7 @@ Creep.prototype.roleFiller = function (spawn) {
                 //this.say(3);
                 var atThirdPos = this.room.lookAt(spawnPos.x - 1, spawnPos.y - 1);
                 if (atThirdPos.length == 0 ||
-                    (atThirdPos.length > 0 && atThirdPos[0].type != 'creep')
+                    (atThirdPos.length > 0 && atThirdPos[0].role != 'creep')
                     || (this.pos.x == spawnPos.x - 1 && this.pos.y == spawnPos.y - 1)) {
                     this.memory.workingPos = new RoomPosition(spawnPos.x - 1, spawnPos.y - 1, this.room.name);
 
@@ -38,7 +38,7 @@ Creep.prototype.roleFiller = function (spawn) {
                 else {
                     var atFourthPos = this.room.lookAt(spawnPos.x - 1, spawnPos.y - 3);
                     if (atFourthPos.length == 0 ||
-                        (atFourthPos.length > 0 && atFourthPos[0].type != 'creep')
+                        (atFourthPos.length > 0 && atFourthPos[0].role != 'creep')
                         || (this.pos.x == spawnPos.x - 1 && this.pos.y == spawnPos.y - 3)) {
                         this.memory.workingPos = new RoomPosition(spawnPos.x - 1, spawnPos.y - 3, this.room.name);
 
