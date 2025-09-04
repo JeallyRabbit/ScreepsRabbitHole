@@ -9,7 +9,7 @@ const soldierBody = require('soldierBody')
 const minerBody = require('minerBody')
 const quadHealerBody = require('quadHealerBody')
 const quadRangedBody = require('quadRangedBody')
-const drainerBody = require('drainerBody')
+const drainerBody = require('drainerBody');
 
 //defining local heap
 const localHeap = {}
@@ -42,7 +42,7 @@ Room.prototype.spawnManager = function spawnManager() {
     }
     var energyCap = Game.rooms[this.name].energyAvailable
 
-    
+
     //check if there is quad that has started spawning in offensiveQueue (members>0)
     // if yes then spawn it before the rest
     // else spawn after other queues
@@ -51,10 +51,26 @@ Room.prototype.spawnManager = function spawnManager() {
     }
 
     if (global.heap.rooms[this.name].offensiveQueue.length > 0 && global.heap.rooms[this.name].offensiveQueue[0].role == C.ROLE_QUAD_MEMBER &&
-        global.heap.rooms[this.name].offensiveQueue[0].isFirstMember == false
+        global.heap.rooms[this.name].offensiveQueue[0].isFirstMember == false && global.heap.rooms[this.name].fillers>0
     ) {
+
+        
+
         console.log("spawning not first quad member")
         var request = global.heap.rooms[this.name].offensiveQueue[0]
+
+        var blockPos = new RoomPosition(38, 5, this.name)
+        var blockPosWidth = 8
+        var blockPosHeight = 1
+        this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+        this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.text("🗡️ Queue: "+C.ROLE_QUAD_MEMBER, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+
+
+
         var body = []
         var name = "RabbitEye"
         var minBodyCost = EXTENSION_ENERGY_CAPACITY[this.controller.level] * CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][this.controller.level]
@@ -100,12 +116,22 @@ Room.prototype.spawnManager = function spawnManager() {
     }
 
 
-    if (global.heap.rooms[this.name].defensiveQueue.length > 0 && Game.rooms[this.name].energyAvailable>300) {
+    if (global.heap.rooms[this.name].defensiveQueue.length > 0 && Game.rooms[this.name].energyAvailable > 300) {
 
         console.log("spawning from defensive queue")
         var request = global.heap.rooms[this.name].defensiveQueue[0]
         var role = request.role
         var energyCap = Game.rooms[this.name].energyAvailable
+
+        var blockPos = new RoomPosition(38, 6, this.name)
+        var blockPosWidth = 8
+        var blockPosHeight = 1
+        this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+        this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.text("🛡️ Queue: "+role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
         switch (role) {
             case C.ROLE_SOLDIER:
@@ -117,7 +143,7 @@ Room.prototype.spawnManager = function spawnManager() {
                         global.heap.rooms[this.name].defensiveQueue.shift()
                         break;
                     }
-                    
+
                 }
         }
     }
@@ -127,6 +153,16 @@ Room.prototype.spawnManager = function spawnManager() {
         var request = global.heap.rooms[this.name].harvestingQueue[0]
         var role = request.role
         var energyCap = Game.rooms[this.name].energyAvailable
+
+        var blockPos = new RoomPosition(38, 7, this.name)
+        var blockPosWidth = 8
+        var blockPosHeight = 1
+        this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+        this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.text("⛏️ Queue: "+role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
         switch (role) {
             case C.ROLE_HARVESTER:
@@ -175,7 +211,7 @@ Room.prototype.spawnManager = function spawnManager() {
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
-                        global.heap.rooms[this.name].civilianQueue.shift()
+                        global.heap.rooms[this.name].harvestingQueue.shift()
 
                     }
                     break;
@@ -191,6 +227,18 @@ Room.prototype.spawnManager = function spawnManager() {
         var request = global.heap.rooms[this.name].civilianQueue[0]
         var role = request.role
         var energyCap = Game.rooms[this.name].energyAvailable
+
+        var blockPos = new RoomPosition(38, 8, this.name)
+        var blockPosWidth = 8
+        var blockPosHeight = 1
+        this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+        this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.text("🏦 Queue: "+role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+
+
         switch (role) {
 
             case C.ROLE_SCOUT:
@@ -332,7 +380,7 @@ Room.prototype.spawnManager = function spawnManager() {
         var energyCap = Game.rooms[this.name].energyAvailable
 
         switch (role) {
-            case C.ROLE_QUAD_MEMBER:
+        case C.ROLE_QUAD_MEMBER:
                 {
                     if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
                         console.log("entered spawning quad member")

@@ -46,6 +46,7 @@ class quadMemberRequest {
 }
 
 function attackManager(attackRoom) {
+    console.log()
     console.log("AttackManager")
 
 
@@ -350,7 +351,7 @@ function quadAttack(attackRoom) {
     }
 
     for (q of attackRoom.quads) {
-        if (q.isCompleted != true && q.members.length==0) {
+        if (q.isCompleted != true) {
 
             if (q.homeRoom == undefined) {
 
@@ -380,7 +381,7 @@ function quadAttack(attackRoom) {
                 }
             }
 
-            if (q.homeRoom != undefined && global.heap.rooms[q.homeRoom].offensiveQueue != undefined) {
+            if (q.homeRoom != undefined && global.heap.rooms[q.homeRoom].offensiveQueue != undefined ) {
                 console.log("Starting adding quad members")
                 if (global.heap.rooms[q.homeRoom].offensiveQueue.find(({ role }) => role === C.ROLE_QUAD_MEMBER) == undefined) {
                     if (q.members.length == 0) {
@@ -391,10 +392,13 @@ function quadAttack(attackRoom) {
                     }
                     else if (q.members.length == 1) {
                         global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, false));
+                         console.log("Adding second member")
                         break;
+                       
                     }
                     else if (q.members.length < 4) {
                         global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.HEALER_BODY, false));
+                        console.log("adding third/fourth member")
                         break;
                     }
                 }

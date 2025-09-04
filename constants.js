@@ -32,7 +32,7 @@ const ROLE_DOCTOR = 'doctor'
 
 const ROLE_ENERGY_DRAINER='energy_drainer'
 
-const ROLE_QUAD_MEMBER = 'ROLE_QUAD_MEMBER'
+const ROLE_QUAD_MEMBER = 'quad_member'
 const RANGED_BODY = 'ranged_body'
 const HEALER_BODY = 'healer_body'
 

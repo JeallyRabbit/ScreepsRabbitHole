@@ -1,3 +1,4 @@
+const C=require('constants')
 function soldierBody(cap,isMelee)// return array with max possible work parts for builder
 {
     var parts = [];
@@ -10,7 +11,9 @@ function soldierBody(cap,isMelee)// return array with max possible work parts fo
         healAttack=ATTACK
     }
 
-    while (cap > BODYPART_COST[MOVE] + BODYPART_COST[MOVE] + BODYPART_COST[attackType] + BODYPART_COST[healAttack]) {
+    while (cap > BODYPART_COST[MOVE] + BODYPART_COST[MOVE] + BODYPART_COST[attackType] + BODYPART_COST[healAttack]
+        && parts.length<C.CREEP_MAX_BODYPARTS-4
+    ) {
 
         parts.push(MOVE)
         cap -= BODYPART_COST[MOVE]
