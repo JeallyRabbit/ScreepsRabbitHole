@@ -14,6 +14,16 @@ const drainerBody = require('drainerBody');
 //defining local heap
 const localHeap = {}
 
+Array.prototype.getBodyCost = function getBodyCost(body)
+{
+    cost=0;
+    for(b of body)
+    {
+        cost+=BODYPART_COST[b]
+    }
+    return cost
+}
+
 Room.prototype.spawnManager = function spawnManager() {
 
 
@@ -78,10 +88,8 @@ Room.prototype.spawnManager = function spawnManager() {
         for (a of Memory.roomsToAttack) {
             for (q of a.quads) {
                 if (q.id == request.quadId) {
-                    if (q.minEnergyOnCreep != undefined) {
-                        minEnergyOnCreep = q.minEnergyOnCreep
-                        break;
-                    }
+                    q.minEnergyOnCreep=Math.max(q.minEnergyOnCreep,getBodyCost(body))
+                    
                 }
             }
         }

@@ -54,7 +54,17 @@ Creep.prototype.roleDoctor = function roleDoctor() {
     // taking stuff from output labs -- 
     if (global.heap.rooms[this.room.name].doctorTask == undefined) {
 
-        if (this.store.getCapacity() != this.store.getFreeCapacity(RESOURCE_ENERGY)) {
+        var res1=undefined
+        var res2=undefined
+        if(global.heap.rooms[this.name].reaction!=undefined)
+        {
+            res1= (global.heap.rooms[this.name].reaction[0]!=undefined)? global.heap.rooms[this.name].reaction[0] : undefined;
+            res2= (global.heap.rooms[this.name].reaction[0]!=undefined)? global.heap.rooms[this.name].reaction[1] : undefined;
+        }
+        
+        if (this.store.getCapacity() != this.store.getFreeCapacity(RESOURCE_ENERGY)
+        &&  (res1!=undefined && this.store[res1]==0 && res2!=undefined && this.store[res2]==0) // this line might be wrong
+    ) {
             this.say("1")
             global.heap.rooms[this.room.name].doctorTask = C.TASK_CLEAR_CREEP
         }

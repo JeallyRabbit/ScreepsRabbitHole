@@ -95,6 +95,14 @@ function attackManager(attackRoom) {
         }
     }
 
+    if(attackRoom.scoutId!=undefined)
+    {
+        if(Game.getObjectById(attackRoom.scoutId)==null)
+        {
+            attackRoom.scoutId=undefined
+        }
+    }
+
     attackRoom.areDefendersPresent = true;
 
 
@@ -194,7 +202,9 @@ function attackManager(attackRoom) {
     }
     else {
         //we need vision on the room
-        if (attackRoom.lastDataGatherTime != undefined && Game.time - attackRoom.lastDataGatherTime > C.MAX_ROOM_INVISIBILITY_TIME) {
+        if (attackRoom.lastDataGatherTime != undefined && Game.time - attackRoom.lastDataGatherTime > C.MAX_ROOM_INVISIBILITY_TIME
+            && attackRoom.scoutId==undefined
+        ) {
             attackRoom.attackType[C.ATTACK_TYPE_SCOUT] = true
         }
     }

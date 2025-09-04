@@ -81,8 +81,9 @@ Room.prototype.creepsManager = function creepsManager() {
                 global.heap.rooms[creep.memory.homeRoom].haveScout = true
                 for(a of Memory.roomsToAttack)
                 {
-                    if(a.name==creep.targetRoom)
+                    if(a.name==creep.memory.targetRoom)
                     {
+                        creep.say(a.name)
                         a.scoutId=creep.id
                         break
                     }
