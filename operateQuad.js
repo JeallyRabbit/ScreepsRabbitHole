@@ -193,7 +193,7 @@ function transformCosts(quad, costs, roomName, swampCost = 5, plainCost = 1, myF
     return result
 }
 
-function moveQuad(quad, targetPos, reusePath = 3, myRange = 1, myFlee = false, maxRooms = 16) {
+function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, maxRooms = 16) {
 
     //delete quad.path
     //QUad is currently spinning
@@ -323,7 +323,6 @@ function moveQuad(quad, targetPos, reusePath = 3, myRange = 1, myFlee = false, m
     }
 
     if (movePath != undefined) {
-        //topLeft.say(movePath.length)
 
         var direction = topLeft.pos.getDirectionTo(nextPos)
 
@@ -349,7 +348,7 @@ function moveQuad(quad, targetPos, reusePath = 3, myRange = 1, myFlee = false, m
                 }
             }
             else if (direction == BOTTOM_LEFT && bottomLeft != null && bottomLeft.pos.x - 1 > 0 && bottomLeft.pos.y + 1 < 49) {
-                topLeft.say("↙️", true)
+                bottomLeft.say("↙️", true)
                 structuresAtPath = bottomLeft.room.lookForAt(LOOK_STRUCTURES, bottomLeft.pos.x - 1, bottomLeft.pos.y + 1)
                 if (structuresAtPath == undefined) { structuresAtPath = [] }
                 if (topLeft != null && topLeft.pos.x - 1 > 0 && topLeft.pos.y + 1 < 49) {
@@ -362,7 +361,7 @@ function moveQuad(quad, targetPos, reusePath = 3, myRange = 1, myFlee = false, m
                 }
             }
             else if (direction == BOTTOM_RIGHT && bottomRight != null && bottomRight.pos.x + 1 < 49 && bottomRight.pos.y + 1 < 49) {
-                topLeft.say("↘️", true)
+                bottomRight.say("↘️", true)
                 structuresAtPath = bottomRight.room.lookForAt(LOOK_STRUCTURES, bottomRight.pos.x + 1, bottomRight.pos.y + 1)
                 if (structuresAtPath == undefined) { structuresAtPath = [] }
                 if (bottomLeft != null && bottomLeft.pos.x + 1 < 49 && bottomLeft.pos.y + 1 < 49) {
@@ -375,7 +374,7 @@ function moveQuad(quad, targetPos, reusePath = 3, myRange = 1, myFlee = false, m
                 }
             }
             else if (direction == TOP_RIGHT && topRight != null && topRight.pos.x + 1 < 49 && topRight.pos.y - 1 > 0) {
-                topLeft.say("↗️", true)
+                topRight.say("↗️", true)
                 structuresAtPath = topRight.room.lookForAt(LOOK_STRUCTURES, topRight.pos.x + 1, topRight.pos.y - 1)
                 if (structuresAtPath == undefined) { structuresAtPath = [] }
                 if (topLeft != null && topLeft.pos.x + 1 < 49 && topLeft.pos.y - 1 > 0) {
@@ -388,7 +387,7 @@ function moveQuad(quad, targetPos, reusePath = 3, myRange = 1, myFlee = false, m
                 }
             }
             else if (direction == BOTTOM && bottomLeft != null && bottomLeft.pos.y + 1 < 49) {
-                topLeft.say("⬇️", true)
+                bottomLeft.say("⬇️", true)
                 structuresAtPath = bottomLeft.room.lookForAt(LOOK_STRUCTURES, bottomLeft.pos.x, bottomLeft.pos.y + 1)
                 if (structuresAtPath == undefined) { structuresAtPath = [] }
                 if (bottomRight != null && bottomRight.pos.y + 1 > 0) {
@@ -415,7 +414,7 @@ function moveQuad(quad, targetPos, reusePath = 3, myRange = 1, myFlee = false, m
                 }
             }
             else if (direction == RIGHT && topRight != null && topRight.pos.x + 1 < 49) {
-                topLeft.say("➡️", true)
+                topRight.say("➡️", true)
                 structuresAtPath = topRight.room.lookForAt(LOOK_STRUCTURES, topRight.pos.x + 1, topRight.pos.y)
                 if (structuresAtPath == undefined) { structuresAtPath = [] }
                 if (bottomRight != null && bottomRight.pos.x + 1 < 49) {
@@ -518,7 +517,7 @@ function quadRetreat(quad, position, range = 55) {
     //quad.noSpin = true
     //quad.isRotating = false
     localHeap.isRotating = false;
-    retreatResult = moveQuad(quad, position, 3, range, true, 2)
+    retreatResult = moveQuad(quad, position, 9, range, true, 2)
     //console.log("retreatResult: ", retreatResult)
 }
 
@@ -1452,7 +1451,7 @@ function operateQuad(quad) {
 
             //console.log("quad is attacking: ", target, " result ", quadRangedAttack(quad, target))
             if ((quadRangedAttack(quad, target) == ERR_NOT_IN_RANGE || quadNearTo(quad, target) == false) && quadHits(quad) >= quadHitsMax(quad) - quadHealPower(quad)) {
-                moveQuad(quad, target.pos, 3, 1, false, 1)
+                moveQuad(quad, target.pos, 9, 1, false, 1)
                 //console.log("quad: ", quad.id, " is moving to target: ", target.pos)
             }
             else if (quadNearTo(quad, target)) {
@@ -1498,7 +1497,7 @@ function operateQuad(quad) {
         console.log("Quad: ", quad.id, " is moving to: ", quad.targetRoom)
         //moveQuad(quad, new RoomPosition(25, 25, quad.targetRoom), 10)
         if (quad.targetId != undefined && Game.getObjectById(quad.targetId) != null && Game.getObjectById(quad.targetId).pos.roomName == quad.targetRoom) {
-            moveQuad(quad, Game.getObjectById(quad.targetId).pos, 3, 1, false, 1)
+            moveQuad(quad, Game.getObjectById(quad.targetId).pos, 9, 1, false, 1)
         }
         else {
             quad.targetId = undefined
