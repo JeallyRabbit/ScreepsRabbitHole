@@ -14,12 +14,10 @@ const drainerBody = require('drainerBody');
 //defining local heap
 const localHeap = {}
 
-Array.prototype.getBodyCost = function getBodyCost(body)
-{
-    cost=0;
-    for(b of body)
-    {
-        cost+=BODYPART_COST[b]
+function getBodyCost(body) {
+    var cost = 0;
+    for (b of body) {
+        cost += BODYPART_COST[b]
     }
     return cost
 }
@@ -61,10 +59,10 @@ Room.prototype.spawnManager = function spawnManager() {
     }
 
     if (global.heap.rooms[this.name].offensiveQueue.length > 0 && global.heap.rooms[this.name].offensiveQueue[0].role == C.ROLE_QUAD_MEMBER &&
-        global.heap.rooms[this.name].offensiveQueue[0].isFirstMember == false && global.heap.rooms[this.name].fillers>0
+        global.heap.rooms[this.name].offensiveQueue[0].isFirstMember == false && global.heap.rooms[this.name].fillers > 0
     ) {
 
-        
+
 
         console.log("spawning not first quad member")
         var request = global.heap.rooms[this.name].offensiveQueue[0]
@@ -77,7 +75,7 @@ Room.prototype.spawnManager = function spawnManager() {
         this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-        this.visual.text("🗡️ Queue: "+C.ROLE_QUAD_MEMBER, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+        this.visual.text("🗡️ Queue: " + C.ROLE_QUAD_MEMBER, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
 
@@ -85,14 +83,7 @@ Room.prototype.spawnManager = function spawnManager() {
         var name = "RabbitEye"
         var minBodyCost = EXTENSION_ENERGY_CAPACITY[this.controller.level] * CONTROLLER_STRUCTURES[STRUCTURE_EXTENSION][this.controller.level]
         var minEnergyOnCreep = 0;
-        for (a of Memory.roomsToAttack) {
-            for (q of a.quads) {
-                if (q.id == request.quadId) {
-                    q.minEnergyOnCreep=Math.max(q.minEnergyOnCreep,getBodyCost(body))
-                    
-                }
-            }
-        }
+
 
 
         if (request.bodyType == C.RANGED_BODY) {
@@ -109,10 +100,9 @@ Room.prototype.spawnManager = function spawnManager() {
             for (a of Memory.roomsToAttack) {
                 for (q of a.quads) {
                     if (q.id == request.quadId) {
-                        if (minEnergyOnCreep > q.minEnergyOnCreep) {
-                            q.minEnergyOnCreep = minEnergyOnCreep
-                            break;
-                        }
+                        q.minEnergyOnCreep = Math.max(q.minEnergyOnCreep, getBodyCost(body))
+                        break;
+
                     }
                 }
             }
@@ -139,7 +129,7 @@ Room.prototype.spawnManager = function spawnManager() {
         this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-        this.visual.text("🛡️ Queue: "+role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+        this.visual.text("🛡️ Queue: " + role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
         switch (role) {
             case C.ROLE_SOLDIER:
@@ -170,7 +160,7 @@ Room.prototype.spawnManager = function spawnManager() {
         this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-        this.visual.text("⛏️ Queue: "+role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+        this.visual.text("⛏️ Queue: " + role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
         switch (role) {
             case C.ROLE_HARVESTER:
@@ -244,7 +234,7 @@ Room.prototype.spawnManager = function spawnManager() {
         this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-        this.visual.text("🏦 Queue: "+role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+        this.visual.text("🏦 Queue: " + role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
         switch (role) {
@@ -388,7 +378,7 @@ Room.prototype.spawnManager = function spawnManager() {
         var energyCap = Game.rooms[this.name].energyAvailable
 
         switch (role) {
-        case C.ROLE_QUAD_MEMBER:
+            case C.ROLE_QUAD_MEMBER:
                 {
                     if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
                         console.log("entered spawning quad member")
