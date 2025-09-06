@@ -56,10 +56,10 @@ Creep.prototype.roleDoctor = function roleDoctor() {
 
         var res1=undefined
         var res2=undefined
-        if(global.heap.rooms[this.name].reaction!=undefined)
+        if(global.heap.rooms[this.room.name].reaction!=undefined)
         {
-            res1= (global.heap.rooms[this.name].reaction[0]!=undefined)? global.heap.rooms[this.name].reaction[0] : undefined;
-            res2= (global.heap.rooms[this.name].reaction[0]!=undefined)? global.heap.rooms[this.name].reaction[1] : undefined;
+            res1= (global.heap.rooms[this.room.name].reaction[0]!=undefined)? global.heap.rooms[this.room.name].reaction[0] : undefined;
+            res2= (global.heap.rooms[this.room.name].reaction[0]!=undefined)? global.heap.rooms[this.room.name].reaction[1] : undefined;
         }
         
         if (this.store.getCapacity() != this.store.getFreeCapacity(RESOURCE_ENERGY)

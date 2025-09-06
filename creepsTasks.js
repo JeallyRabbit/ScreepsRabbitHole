@@ -143,11 +143,9 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1,in2) {
 Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1, in2) {
 
 
-//this.say("fill inp")
     // just error controll
     if (in1 == undefined || in2 == undefined) {
         global.heap.rooms[this.room.name].doctorTask = undefined
-        //this.say("ERR")
         return
     }
 
@@ -162,7 +160,6 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
         if (in1.store[res1] > LAB_REACTION_AMOUNT && in2.store[res2] > LAB_REACTION_AMOUNT) {
             global.heap.rooms[this.room.name].doctorTask = undefined
             global.heap.rooms[this.room.name].reactionAmount = undefined
-            //this.say("exit")
             return
         }
 
@@ -191,18 +188,15 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
        }
         else {
 
-            //this.say(res1+" "+res2)
             var res = res1
             if (in1.store[res1]>0 && in2.store[res2] == 0) {
                 res = res2
             }
 
             if (this.store[res] == 0) {
-                //this.say("with_" + res)
                 var storage = this.room.storage
                 if(storage.store[res]==0)
                 {
-                    //this.say("term")
                     storage=this.room.terminal
                 }
                 /*
@@ -363,11 +357,9 @@ Creep.prototype.decreaseBalancer = function decreaseBalancer() {
 //TASK_COLLECT
 Creep.prototype.taskCollect = function taskCollect(localHeap) {// go to deposits
 
-    //this.say("Coll 1")
     if (this.store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
         localHeap.task = undefined
         this.memory.task = 'undefined_debugging_collect'
-        //this.say("Full")
         return -1;
     }
     if (localHeap.depposit!=undefined && Game.getObjectById(localHeap.deposit) != null && Game.getObjectById(localHeap.deposit).store[RESOURCE_ENERGY] == 0) {
@@ -392,7 +384,6 @@ Creep.prototype.taskCollect = function taskCollect(localHeap) {// go to deposits
 
     if (localHeap.deposit == undefined) {
 
-        this.say("FDep")
         if (this.room.memory.controllerLinkId != undefined && Game.getObjectById(this.room.memory.controllerLinkId) != null
             && Game.getObjectById(this.room.memory.controllerLinkId).store[RESOURCE_ENERGY] > 0) {
             localHeap.deposit = this.room.memory.controllerLinkId
@@ -425,7 +416,6 @@ Creep.prototype.taskCollect = function taskCollect(localHeap) {// go to deposits
     }
 
     if (Game.getObjectById(localHeap.deposit) != null) {
-        this.say(Game.getObjectById(localHeap.deposit).room.name)
         if ((this.room.controller!=undefined && this.room.controller.level >= 4 && this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_UPGRADE_LIMIT)
 
             || (this.room.memory.energyBalance != undefined && this.room.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START)) {
@@ -447,7 +437,6 @@ Creep.prototype.taskCollect = function taskCollect(localHeap) {// go to deposits
         }
     }
     else { // collect dropped energy
-        //this.say("ener")
         const droppedEnergy = this.room.find(FIND_DROPPED_RESOURCES, {
             filter: resource => resource.resourceType == RESOURCE_ENERGY
         })
@@ -463,7 +452,6 @@ Creep.prototype.taskCollect = function taskCollect(localHeap) {// go to deposits
             }
         }
         else {//no container or dropped energy to collect from
-            //this.say("sleep")
             this.sleep(10)
         }
     }

@@ -288,6 +288,10 @@ function attackManager(attackRoom) {
                 }
                 if (minRoom != undefined && global.heap.rooms[minRoom].civilianQueue != undefined) {
                     console.log("need scout from: ",minRoom," to attackRoom: ",attackRoom.name)
+                    if(global.heap.rooms[minRoom].civilianQueue==undefined)
+                    {
+                        global.heap.rooms[minRoom].civilianQueue=[]
+                    }
                     if (global.heap.rooms[minRoom].civilianQueue.find(({ role }) => role === C.ROLE_SCOUT) == undefined) {
                         global.heap.rooms[minRoom].civilianQueue.push(new scoutRequest(attackRoom.name, C.ROLE_SCOUT))
                     }
