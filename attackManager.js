@@ -218,7 +218,8 @@ function attackManager(attackRoom) {
         }
 
         if (attackRoom.areTowersHistoryOperational == false) {
-            attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] = false
+            //turned of for debugging
+            //attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] = false
         }
 
         //Decisions based on defender creeps history

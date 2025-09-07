@@ -198,6 +198,20 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
     //delete quad.path
     //QUad is currently spinning
     //if (quad.isRotating != undefined && quad.isRotating == true) { return -1; }
+    if(myFlee==false)
+    {
+        localHeap.isRetreating=false
+    }
+    else
+    {
+        if(localHeap.isRetreating==false)
+        {
+            localHeap.isRetreating=true
+            quad.path=undefined//clear path on first restreat tick
+        }
+    }
+
+
     if (localHeap.isRotating != undefined && localHeap.isRotating == true) { return -1; }
     if (localHeap.isQuadPacked != undefined && localHeap.isQuadPacked == false) { return -1; }
     //if all can move - fatique==0
@@ -514,6 +528,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
 function quadRetreat(quad, position, range = 55) {
 
     localHeap.noSpin = true
+    
     //quad.noSpin = true
     //quad.isRotating = false
     localHeap.isRotating = false;
@@ -1485,6 +1500,7 @@ function operateQuad(quad) {
                 topLeft.say("retr1")
                 var homePos = new RoomPosition(25, 25, topLeft.memory.homeRoom)
                 moveQuad(quad, homePos, 5, 10)
+                
             }
             else {
                 topLeft.say("retTar")
@@ -1499,25 +1515,24 @@ function operateQuad(quad) {
         //moveQuad(quad, new RoomPosition(25, 25, quad.targetRoom), 10)
         if (quad.targetId != undefined && Game.getObjectById(quad.targetId) != null && Game.getObjectById(quad.targetId).pos.roomName == quad.targetRoom) {
             moveQuad(quad, Game.getObjectById(quad.targetId).pos, 9, 1, false, 1)
+            
         }
         else {
             quad.targetId = undefined
             moveQuad(quad, new RoomPosition(25, 25, quad.targetRoom), 10)
+            
         }
     }
     else {
         console.log("quad: ", quad.id, " is retreating to spawn")
         var homePos = new RoomPosition(25, 25, topLeft.memory.homeRoom)
-        moveQuad(quad, homePos, 5, 10)
+        //moveQuad(quad, homePos, 5, 10)
+        quadRetreat(quad, target.pos)
     }
 
     if (global.heap.rooms[currentRoom].allies == undefined || global.heap.rooms[currentRoom].allies.length < 0) {
         //quadRangedMassAttack(quad)
     }
-
-
-    //moving to flag
-    //moveQuad(quad, Game.flags["quad"])
 
 
     if (topLeft.room.name != topLeft.memory.homeRoom && target != undefined && target.id == undefined) {

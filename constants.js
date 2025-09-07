@@ -38,6 +38,7 @@ const HEALER_BODY = 'healer_body'
 
 //Creep constants
 const CREEP_MAX_BODYPARTS = 50; // maximum creep body length - couldn't find in API
+const CREEP_TICKS_TO_LIVE_BUFFER=100
 const HAULER_REQ_CARRY_PARTS = 6;
 const DEFAULT_COLONIZERS_AMOUNT = 4;
 
@@ -504,6 +505,7 @@ module.exports = {
   HEALER_BODY,
 
   CREEP_MAX_BODYPARTS,
+  CREEP_TICKS_TO_LIVE_BUFFER,
   HAULER_REQ_CARRY_PARTS,
   DEFAULT_COLONIZERS_AMOUNT,
 

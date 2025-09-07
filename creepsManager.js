@@ -115,8 +115,12 @@ Room.prototype.creepsManager = function creepsManager() {
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
                 break
             case C.ROLE_HAULER:
-                global.heap.rooms[creep.memory.homeRoom].haulersParts += _.filter(creep.body, { type: CARRY }).length
+                if(creep.ticksToLive>C.CREEP_TICKS_TO_LIVE_BUFFER)
+                {
+                    global.heap.rooms[creep.memory.homeRoom].haulersParts += _.filter(creep.body, { type: CARRY }).length
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
+                
+                }
                 creep.roleHauler()
                 break
             case C.ROLE_RESERVER:
