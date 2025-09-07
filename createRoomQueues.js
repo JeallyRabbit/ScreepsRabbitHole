@@ -184,10 +184,11 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
     // Workers below RCL4 - wthout storage
     if (this.storage == undefined || this.controller.level < 4) {
+        
         if (this.memory.energyBalance > C.ENERGY_BALANCER_WORKER_SPAWN && Game.time % 2 == 0) {
             if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_WORKER) == undefined) {
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
-                console.log("Adding worker")
+               
             }
 
         }
@@ -207,18 +208,26 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
     }
     else {//Workers above and on RCL4
-        global.heap.rooms[this.name].needWorkersParts = 1
+        global.heap.rooms[this.name].needWorkersParts = 2
 
+        console.log("ASDASDJKASHJKDKL")
 
         if ((this.storage != undefined && this.storage.store[RESOURCE_ENERGY] > C.UPGRADE_FACTOR && this.controller.level < 8)
             || (global.heap.rooms[this.name].construction.length > 0 && this.controller.level == 8)
         ) {
+            console.log("Create Room Queues Debug 1")
             global.heap.rooms[this.name].needWorkersParts = this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR
-            console.log(global.heap.rooms[this.name].construction.length, " ", this.name)
+            global.heap.rooms[this.name].needWorkersParts=999
+        }
+        else if ( (this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]< C.UPGRADE_FACTOR) || (this.controller.ticksToDowngrade!=undefined && this.controller.ticksToDowngrade>CONTROLLER_DOWNGRADE[this.controller.level]))
+        {
+            console.log("Create Room Queues Debug 2")
+            global.heap.rooms[this.name].needWorkersParts=0;
         }
 
-
+        console.log("global.heap.rooms[this.name].needWorkersParts: ",global.heap.rooms[this.name].needWorkersParts)
         if (global.heap.rooms[this.name].workersParts < global.heap.rooms[this.name].needWorkersParts) {
+            console.log("Create Room Queues Debug 3")
             if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_WORKER) == undefined) {
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
 
