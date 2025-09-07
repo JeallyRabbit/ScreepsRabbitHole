@@ -362,7 +362,7 @@ Room.prototype.planExtensionStamp = function planExtensionStamp(roomCM, rcl, spa
         this.memory.baseVariations[type].extensionsStampsPos.length > 0
     ) {
         for (stampPos of this.memory.baseVariations[type].extensionsStampsPos) {
-            seeds.push(stampPos)
+            //seeds.push(stampPos)
         }
     }
     else {
