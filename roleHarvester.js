@@ -26,7 +26,6 @@ Creep.prototype.roleHarvester = function roleHarvester() {
         if (src.id == this.memory.sourceId) {
 
             src.harvestingPower+= (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
-            this.say( (_.filter(this.body, { type: WORK }).length * HARVEST_POWER))
             src.harvesters++;
             break;
         }
@@ -36,7 +35,6 @@ Creep.prototype.roleHarvester = function roleHarvester() {
         // if have some free space and at destination room - go harvest
 
         if (this.memory.closestContainerId != undefined && Game.getObjectById(this.memory.closestContainerId) == null) {
-            //this.say("reset");
             this.memory.closestContainerId = undefined;
         }
         if (this.memory.closestContainerId == undefined) {
@@ -71,12 +69,10 @@ Creep.prototype.roleHarvester = function roleHarvester() {
 
         if (this.memory.closestContainerId != undefined && this.store.getFreeCapacity(RESOURCE_ENERGY) <= this.memory.harvestingPower) {
 
-            //this.say("transfer")
             var energy_amount = this.store[RESOURCE_ENERGY]
             var transferResult = this.transfer(Game.getObjectById(this.memory.closestContainerId), RESOURCE_ENERGY)
             if (transferResult == ERR_NOT_IN_RANGE) {
                 this.travelTo(Game.getObjectById(this.memory.closestContainerId))
-                this.say("C");
             }
             else if (transferResult == OK) {
                 this.harvest(Game.getObjectById(this.memory.sourceId))
@@ -112,7 +108,6 @@ Creep.prototype.roleHarvester = function roleHarvester() {
         //const destination = new RoomPosition(25, 25, this.memory.targetRoom); 
         if (this.memory.sourceId != undefined && Game.getObjectById(this.memory.sourceId) != null) {
             this.travelTo(Game.getObjectById(this.memory.sourceId), { reusePath: 17, swampCost: 1, plainCost: 1 });
-            //this.say("A");
         }
         if (Game.rooms[this.memory.targetRoom] == undefined) {
             const destination = new RoomPosition(25, 25, this.memory.targetRoom); // Replace with your destination coordinates and room name

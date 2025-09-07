@@ -59,10 +59,10 @@ Room.prototype.spawnManager = function spawnManager() {
     }
 
     if (global.heap.rooms[this.name].offensiveQueue.length > 0 && global.heap.rooms[this.name].offensiveQueue[0].role == C.ROLE_QUAD_MEMBER &&
-        global.heap.rooms[this.name].offensiveQueue[0].isFirstMember == false && global.heap.rooms[this.name].fillers >=4
+        global.heap.rooms[this.name].offensiveQueue[0].isFirstMember == false && global.heap.rooms[this.name].fillers >= 4
     ) {
 
-        this.memory._lastTimeEnteredTriedSpawningAnotherSpawnMember=Game.time
+        this.memory._lastTimeEnteredTriedSpawningAnotherSpawnMember = Game.time
 
         console.log("spawning not first quad member")
         var request = global.heap.rooms[this.name].offensiveQueue[0]
@@ -391,6 +391,11 @@ Room.prototype.spawnManager = function spawnManager() {
                         }
                         else if (request.bodyType == C.HEALER_BODY) {
                             body = quadHealerBody(energyCap)
+                        }
+                        if (body.length < C.MIN_QUAD_MEMBER_BODY_LENGTH
+                            && this.controller.level>=7
+                        ) {
+                            body = []
                         }
                         var result = spawn.spawnCreep(body, name + '_' + this.name + Game.time, { memory: { role: C.ROLE_QUAD_MEMBER, quadId: request.quadId, homeRoom: this.name } })
                         global.heap.rooms[this.name].spawnResult = result
