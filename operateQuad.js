@@ -1493,7 +1493,8 @@ function operateQuad(quad) {
             }
         }
     }
-    else if (quadHits(quad) >= quadHitsMax(quad) - quadHealPower(quad)) {
+    else if (quadHits(quad) >= quadHitsMax(quad)){
+        ///if (quadHits(quad) >= quadHitsMax(quad) - quadHealPower(quad)) {
         console.log("Quad: ", quad.id, " is moving to: ", quad.targetRoom)
         //moveQuad(quad, new RoomPosition(25, 25, quad.targetRoom), 10)
         if (quad.targetId != undefined && Game.getObjectById(quad.targetId) != null && Game.getObjectById(quad.targetId).pos.roomName == quad.targetRoom) {

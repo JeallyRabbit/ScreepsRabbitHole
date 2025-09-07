@@ -317,7 +317,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     }
 
 
-    if (this.storage != undefined && global.heap.rooms[this.name].resourceManagerId == undefined) {
+    if (this.storage != undefined && this.memory.resourceManagerId == undefined) {
         if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RESOURCE_MANAGER) == undefined) {
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_RESOURCE_MANAGER))
         }

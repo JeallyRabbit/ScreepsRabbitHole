@@ -55,6 +55,7 @@ const TASK_REPAIR_RAMPARTS = 'repair_ramparts'
 const TASK_FILL_TERMINAL_ENERGY = 'fill_terminal_energy'
 const TASK_FILL_STORAGE_ENERGY = 'fill_storage_energy'
 const TASK_FILL_LINK = 'fill_link'
+const TASK_FILL_FILLERS_CONTAINERS='fill_fillers_containers'
 const TASK_TAKE_FROM_LINK = 'take_from_link'
 const TASK_FILL_MANAGER_LINK = 'fill_manager_link'
 const TASK_FILL_NUKER_GHODIUM = 'fill_nuker_ghodium'
@@ -518,6 +519,7 @@ module.exports = {
   TASK_FILL_TERMINAL_ENERGY,
   TASK_FILL_LINK,
   TASK_TAKE_FROM_LINK,
+  TASK_FILL_FILLERS_CONTAINERS,
   REVERSED_RESOURCE,
   RESOURCES,
   TASK_TRANSFER_TO_STORAGE,

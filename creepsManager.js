@@ -25,8 +25,11 @@ Room.prototype.creepsManager = function creepsManager() {
 
     global.heap.rooms[this.name].haveScout = false;
     global.heap.rooms[this.name].haulersParts = 0;
-    global.heap.rooms[this.name].resourceManagerId = undefined;
     global.heap.rooms[this.name].doctorId = undefined;
+    if(this.memory.resourceManagerId!=undefined && Game.getObjectById(this.memory.resourceManagerId)==null)
+    {
+        this.memory.resourceManagerId=undefined
+    }
     global.heap.rooms[this.name].mineralMiningPower = 0;//how much of mineral is extracted per tick
     if (global.heap.rooms[this.name].miners == undefined) {
         global.heap.rooms[this.name].miners = []
@@ -128,7 +131,7 @@ Room.prototype.creepsManager = function creepsManager() {
             case C.ROLE_RESOURCE_MANAGER:
                 creep.roleResourceManager()
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
-                global.heap.rooms[creep.memory.homeRoom].resourceManagerId = creep.id
+                this.memory.resourceManagerId = creep.id
                 break;
             case C.ROLE_SOLDIER:
                 creep.roleSoldier()

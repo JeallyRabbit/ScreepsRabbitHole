@@ -62,7 +62,7 @@ Room.prototype.spawnManager = function spawnManager() {
         global.heap.rooms[this.name].offensiveQueue[0].isFirstMember == false && global.heap.rooms[this.name].fillers >=4
     ) {
 
-
+        this.memory._lastTimeEnteredTriedSpawningAnotherSpawnMember=Game.time
 
         console.log("spawning not first quad member")
         var request = global.heap.rooms[this.name].offensiveQueue[0]
