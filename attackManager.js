@@ -289,7 +289,7 @@ function attackManager(attackRoom) {
                     {
                         global.heap.rooms[minRoom].civilianQueue=[]
                     }
-                    if (global.heap.rooms[minRoom].civilianQueue.find(({ role }) => role === C.ROLE_SCOUT) == undefined) {
+                    if (global.heap.rooms[minRoom].civilianQueue.find(( {role} ) => role === C.ROLE_SCOUT) == undefined) {
                         global.heap.rooms[minRoom].civilianQueue.push(new scoutRequest(attackRoom.name, C.ROLE_SCOUT))
                     }
 

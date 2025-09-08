@@ -70,12 +70,19 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
     // Scout
     if (this.memory.roomsToScan == undefined) {
-        global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_SCOUT))
+        if(global.heap.rooms[this.name].civilianQueue.find(( {role} ) => role === C.ROLE_SCOUT)==undefined)
+        {
+            console.log("adding socut because of roomsToScan=undefined")
+            global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_SCOUT))
+        }
+        
     }
     else if (this.memory.roomsToScan != undefined) {
         if (this.memory.roomsToScan.length > 0) {
             if (global.heap.rooms[this.name].haveScout == false) {
-                if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_SCOUT) == undefined) {
+                if (global.heap.rooms[this.name].civilianQueue.find(( {role} ) => role === C.ROLE_SCOUT) == undefined) {
+                    console.log("adding socut")
+                    crossOriginIsolated.log(global.heap.rooms[this.name].civilianQueue.find(( role ) => role === C.ROLE_SCOUT))
                     global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_SCOUT))
                 }
             }
