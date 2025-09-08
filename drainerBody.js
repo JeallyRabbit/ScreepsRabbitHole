@@ -12,12 +12,16 @@ function drainerBody(cap)
         body.push(part)
     }
     cap-=startingCost
-    for(var i=0;i<cap-(BODYPART_COST[MOVE]+BODYPART_COST[TOUGH]);i++)
+    if(cap/(BODYPART_COST[MOVE]+BODYPART_COST[TOUGH])>23)
+    {
+        cap=(BODYPART_COST[MOVE]+BODYPART_COST[TOUGH])*23
+    }
+    for(var i=0;i<cap/(BODYPART_COST[MOVE]+BODYPART_COST[TOUGH]);i++)
     {
         body.push(MOVE)
     }
 
-    for(var i=0;i<cap-(BODYPART_COST[MOVE]+BODYPART_COST[TOUGH]);i++)
+    for(var i=0;i<cap/(BODYPART_COST[MOVE]+BODYPART_COST[TOUGH]);i++)
     {
         body.push(TOUGH)
     }

@@ -427,6 +427,8 @@ Room.prototype.spawnManager = function spawnManager() {
                     if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
                         var name = "MasochisticRabbit"
                         var body = drainerBody(energyCap)
+                        console.log(body)
+                        console.log(body.length)
                         var result = spawn.spawnCreep(body, name + '_' + this.name + Game.time, { memory: { role: C.ROLE_ENERGY_DRAINER, targetRoom: request.roomName, homeRoom: this.name } })
                         global.heap.rooms[this.name].spawnResult = result
                         global.heap.rooms[this.name].spawnRole = role

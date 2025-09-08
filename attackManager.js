@@ -214,9 +214,8 @@ function attackManager(attackRoom) {
         if (attackRoom.areTowersHistoryOperational == true) {
             attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] = true
 
-            attackRoom.reqDrainers = attackRoom.meanOperationalTowersAmount
-        }
-
+            attackRoom.reqDrainers = (attackRoom.meanOperationalTowersAmount!=null)? attackRoom.meanOperationalTowersAmount:2
+        }   
         if (attackRoom.areTowersHistoryOperational == false) {
             //turned of for debugging
             //attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] = false
