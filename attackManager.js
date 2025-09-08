@@ -249,13 +249,10 @@ function attackManager(attackRoom) {
             for (q of attackRoom.quads) {
                 if (q.members != undefined && q.members.length > 0) {
                     for (m of q.members) {
-                        //console.log("checking member: ", m, " ", Game.getObjectById(m))
                         if (Game.getObjectById(m) == null) {
 
                             var index = q.members.indexOf(m)
-                            //console.log("index: ", index)
                             q.members.splice(index, 1)
-                            //console.log("Q.members after splice: ", q.members)
                         }
                     }
                 }
@@ -405,7 +402,6 @@ function quadAttack(attackRoom) {
             }
 
             if (q.homeRoom != undefined && global.heap.rooms[q.homeRoom].offensiveQueue != undefined ) {
-                console.log("Starting adding quad members")
                 if (global.heap.rooms[q.homeRoom].offensiveQueue.find(({ role }) => role === C.ROLE_QUAD_MEMBER) == undefined) {
                     if (q.members.length == 0) {
                         global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.HEALER_BODY, true));
@@ -426,7 +422,6 @@ function quadAttack(attackRoom) {
                     }
                 }
 
-                // console.log("offensive queue[", q.homeRoom, "]: ", global.heap.rooms[q.homeRoom].offensiveQueue)
             }
 
 

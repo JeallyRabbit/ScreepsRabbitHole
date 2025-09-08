@@ -508,12 +508,9 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
             //cr.say(cr.move(direction))
         }
         if (move_result > 0 && Math.abs(move_result) % 11 != 0) {// 0 - OK,11 - err_tired
-            //console.log("RESETING PATH - UNABLE TO MOVE")
             //quad.path = undefined
         }
         else if (move_result == 0 || Math.abs(move_result) % 11 == 0) {
-            // console.log("quad is moving from: ", topLeft.pos, " to ", nextPos)
-            //if (Math.abs(move_result) % 11 == 0 && move_result != 0) { console.log("Quad ERR_TIRED") }
             return move_result
         }
     }
@@ -533,7 +530,6 @@ function quadRetreat(quad, position, range = 55) {
     //quad.isRotating = false
     localHeap.isRotating = false;
     retreatResult = moveQuad(quad, position, 9, range, true, 2)
-    //console.log("retreatResult: ", retreatResult)
 }
 
 function quadRangedAttack(quad, target) {
@@ -1163,7 +1159,6 @@ function findTargetCreepInRange(quad, hostiles) {// finds creep in range of Rang
 
 function operateQuad(quad) {
 
-    console.log("operating quad ", quad.id)
     startCpu = Game.cpu.getUsed()
     var topLeft = Game.getObjectById(quad.topLeftId);
     var topRight = Game.getObjectById(quad.topRightId);
@@ -1188,7 +1183,6 @@ function operateQuad(quad) {
     }
 
 
-    console.log("quad: ", q.id, " have: ", quad.members.length, " members")
 
     if (quad.members != undefined && quad.members.length >= 4) {
         quad.completed = true
@@ -1224,7 +1218,6 @@ function operateQuad(quad) {
     }
 
     if (dead_counter == 4 || topLeft == null) {
-        console.log("quad: ", q.id, " is dead")
         quad.members = [];
         quad.isCompleted = false;
         quad.topLeftId = undefined;

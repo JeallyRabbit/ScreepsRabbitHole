@@ -420,11 +420,11 @@ Room.prototype.spawnManager = function spawnManager() {
                         }
                         break;
                     }
-
+                    break;
                 }
             case C.ROLE_ENERGY_DRAINER:
                 {
-                    if (this.storage[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
+                    if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
                         var name = "MasochisticRabbit"
                         var body = drainerBody(energyCap)
                         var result = spawn.spawnCreep(body, name + '_' + this.name + Game.time, { memory: { role: C.ROLE_ENERGY_DRAINER, targetRoom: request.roomName, homeRoom: this.name } })
@@ -434,6 +434,7 @@ Room.prototype.spawnManager = function spawnManager() {
                             global.heap.rooms[this.name].offensiveQueue.shift()
 
                         }
+                        console.log("drainer spawning result: ",result)
                         break;
 
 

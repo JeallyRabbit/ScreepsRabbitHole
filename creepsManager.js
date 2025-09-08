@@ -211,7 +211,9 @@ Room.prototype.creepsManager = function creepsManager() {
                 creep.roleDrainer();
                 for(a of Memory.roomsToAttack)
                 {
-                    if(a.name==creep.memory.targetRoom)
+                    if(a.name==creep.memory.targetRoom
+                        && a.drainersId.find((id)=> id==creep.id)==undefined
+                    )
                     {
                         a.drainersId.push(creep.id)
                     }

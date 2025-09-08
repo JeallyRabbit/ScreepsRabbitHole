@@ -9,17 +9,19 @@ function drainerBody(cap)
     for(part of startingSegment)
     {
         startingCost+=BODYPART_COST[part]
+        body.push(part)
     }
-    body+=startingSegment
     cap-=startingCost
-    while (cap>0 && body.length<C.CREEP_MAX_BODYPARTS-2)
+    for(var i=0;i<cap-(BODYPART_COST[MOVE]+BODYPART_COST[TOUGH]);i++)
     {
         body.push(MOVE)
-        body.push(TOUGH)
-        cap-=BODYPART_COST[MOVE]
-        cap-=BODYPART_COST[TOUGH]
     }
 
+    for(var i=0;i<cap-(BODYPART_COST[MOVE]+BODYPART_COST[TOUGH]);i++)
+    {
+        body.push(TOUGH)
+    }
+    body.reverse();
     return body
 }
 module.exports = drainerBody

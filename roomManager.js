@@ -19,7 +19,7 @@ Room.prototype.roomManager = function roomManager() {
 
 
 
-
+    global.heap.rooms[this.name].myCreeps=[]
     global.heap.rooms[this.name].hostiles = []
     global.heap.rooms[this.name].hostileHealPower = 0;
     global.heap.rooms[this.name].hostileAttackPower = 0;
@@ -697,17 +697,17 @@ Room.prototype.roomManager = function roomManager() {
         }
     }
 
+    var myCreeps=this.find(FIND_MY_CREEPS)
 
-    //Finding my workers
-    var workers = this.find(FIND_MY_CREEPS, {
-        filter:
-            function (cr) {
-                return cr.memory.role == C.ROLE_WORKER
-            }
-    })
-    for (w of workers) {
-        global.heap.rooms[this.name].myWorkers.push(w.id)
+    for(cr of myCreeps)
+    {
+        if(cr.memory.role==C.ROLE_WORKER)
+        {
+            global.heap.rooms[this.name].myWorkers.push(cr.id)
+        }
+        global.heap.rooms[this.name].myCreeps.push(cr.id)
     }
+
 
 
 
