@@ -1361,7 +1361,7 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
 
     }
 
-    this.visual.text("Stage: " + stage, 25, 5)
+    //this.visual.text("Stage: " + stage, 25, 5)
 
     if (stage == 0) {
 

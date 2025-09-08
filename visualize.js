@@ -117,7 +117,7 @@ Room.prototype.visualize = function visualizeroomManager() {
 
     //Player Name
     var blockPos = new RoomPosition(22, 1, this.name)
-    var blockPosWidth = 6
+    var blockPosWidth = 8
     var blockPosHeight = 1
     this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
@@ -129,9 +129,7 @@ Room.prototype.visualize = function visualizeroomManager() {
 
     //GCL Data
     var progress = (Math.round((Game.gcl.progress / Game.gcl.progressTotal) * 100))
-    var blockPos = new RoomPosition(22, 2, this.name)
-    var blockPosWidth = 6
-    var blockPosHeight = 1
+    blockPos.y+=blockPosHeight
     this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
@@ -140,6 +138,16 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.text("GCL: " + Game.gcl.level + " " + progress + "%", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
+    //Construction sites
+    blockPos.y+=blockPosHeight
+    this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.text("Construction Sites: " + Object.keys(Game.constructionSites).length, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+
+    
 
     //building
     //global.heap.rooms[this.name].construction
@@ -269,7 +277,7 @@ Room.prototype.visualize = function visualizeroomManager() {
 
     var maxBodyParts = (CONTROLLER_STRUCTURES[STRUCTURE_SPAWN][this.controller.level]) * (CREEP_LIFE_TIME / CREEP_SPAWN_TIME)
 
-    this.visual.text("Workers Parts: " + global.heap.rooms[this.name].workersParts + "/" + global.heap.rooms[this.name].needWorkersParts, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    this.visual.text("Workers Parts: " + global.heap.rooms[this.name].workersParts + "/" + Math.round(global.heap.rooms[this.name].needWorkersParts), blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
     //global.heap.rooms[creep.memory.homeRoom].haulersParts
@@ -313,7 +321,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.text("Civilian Queue:", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75,{color: 'pink', stroke: 'black'})
 
     for (req of global.heap.rooms[this.name].civilianQueue) {
-        //blockPos.y += blockPosHeight
+        blockPos.y += blockPosHeight
         this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
         this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })

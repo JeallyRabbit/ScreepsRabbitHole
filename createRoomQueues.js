@@ -67,8 +67,6 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         global.heap.rooms[this.name].civilianQueue = []
     }
 
-    console.log("hauler: ", global.heap.rooms[this.name].haulersParts, " < ", C.HAULER_REQ_CARRY_PARTS)
-
 
     // Scout
     if (this.memory.roomsToScan == undefined) {
