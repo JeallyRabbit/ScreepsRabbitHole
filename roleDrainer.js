@@ -17,6 +17,10 @@ Creep.prototype.roleDrainer = function roleDrainer() {
         }
     }
 
+    if(this.room.name==this.memory.targetRoom &&this.hits==this.hitsMax)
+    {
+        this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom))
+    }
 
     //getting healed in homeRoom
     if (this.room.name == this.memory.homeRoom && this.hits<this.hitsMax) {
