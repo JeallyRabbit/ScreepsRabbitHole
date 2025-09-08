@@ -36,7 +36,6 @@ Creep.prototype.taskFillLabEnergy = function taskFillLabEnergy(id)
 
 Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
     if (this.room.ifBothInputMineralEmpty(in1,in2)) {
-        console.log("return from clearing inputs")
         global.heap.rooms[this.room.name].doctorTask = undefined
         return
     }
@@ -106,7 +105,6 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1,in2) {
             }
         }
         if (maxLab != undefined) {
-            console.log("maxLab.id: ",maxLab.store)
             for (res in maxLab.store) {
 
                 if (res != RESOURCE_ENERGY) {

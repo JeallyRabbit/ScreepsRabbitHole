@@ -372,7 +372,7 @@ Room.prototype.roomManager = function roomManager() {
 
                         if (this.memory.baseVariations[key].variationFinished == false) {
                             this.visual.text(key, 25, 4)
-                            if (Game.cpu.bucket > 500) {
+                            if (Game.cpu.bucket > 200) {
                                 this.buildRoom(key)
                             }
 

@@ -216,10 +216,12 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         ) {
             global.heap.rooms[this.name].needWorkersParts = this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR
         }
+        /*
         else if ( (this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]< C.UPGRADE_FACTOR) || (this.controller.ticksToDowngrade!=undefined && this.controller.ticksToDowngrade>CONTROLLER_DOWNGRADE[this.controller.level]))
         {
             global.heap.rooms[this.name].needWorkersParts=0;
         }
+            */
 
         if (global.heap.rooms[this.name].workersParts < global.heap.rooms[this.name].needWorkersParts) {
             if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_WORKER) == undefined) {

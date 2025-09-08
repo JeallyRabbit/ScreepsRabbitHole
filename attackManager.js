@@ -307,6 +307,10 @@ function attackManager(attackRoom) {
 
         //ATTACK_TYPE_DRAIN
         if (attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] == true) {
+            if(attackRoom.reqDrainers==null)
+            {
+                attackRoom.reqDrainers=1
+            }
             if (attackRoom.drainersId.length < attackRoom.reqDrainers) {
                 //
                 var minDistance = Infinity
@@ -318,7 +322,11 @@ function attackManager(attackRoom) {
                     }
                 }
                 if (minRoom != undefined) {
-                    console.log("Need ENERGY_DRAINER")
+                    console.log("Need ENERGY_DRAINER from ", minRoom)
+                    if(global.heap.rooms[minRoom].offensiveQueue==undefined)
+                    {
+                        global.heap.rooms[minRoom].offensiveQueue=[]
+                    }
                     if (global.heap.rooms[minRoom].offensiveQueue.find(({ role }) => role === C.ROLE_ENERGY_DRAINER)==undefined) {
                         global.heap.rooms[minRoom].offensiveQueue.push(new generalRoomRequest(attackRoom.name,C.ROLE_ENERGY_DRAINER));
                     }

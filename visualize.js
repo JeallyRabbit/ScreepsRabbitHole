@@ -313,7 +313,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.text("Civilian Queue:", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75,{color: 'pink', stroke: 'black'})
 
     for (req of global.heap.rooms[this.name].civilianQueue) {
-        blockPos.y += blockPosHeight
+        //blockPos.y += blockPosHeight
         this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
         this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })

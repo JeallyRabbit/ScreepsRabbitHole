@@ -370,7 +370,7 @@ Room.prototype.spawnManager = function spawnManager() {
         }
     }
     else if (global.heap.rooms[this.name].offensiveQueue.length > 0
-        && global.heap.rooms[creep.memory.homeRoom].haulersParts>0
+        && global.heap.rooms[this.name].haulersParts>0
     ) {
 
         console.log("entering offensive queueeee")
