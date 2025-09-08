@@ -106,13 +106,37 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.text("Heap: " + usedHeap + " MB\\" + (heapData.heap_size_limit / 1024) / 1024 + " MB", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
     blockPos.y += blockPosHeight
-    // spawning result
+    // What spawn1 is spawning
     this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    this.visual.text("Spawn: " + global.heap.rooms[this.name].spawnRole + " -> " + global.heap.rooms[this.name].spawnResult, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    var shortenedName=global.heap.rooms[this.name].spawn1Name.substring(0,  global.heap.rooms[this.name].spawn1Name.indexOf("_"))
+    this.visual.text("Spawn1: " +  shortenedName, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+
+
+    blockPos.y += blockPosHeight
+    // What spawn2 is spawning
+    this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    shortenedName=global.heap.rooms[this.name].spawn2Name.substring(0,  global.heap.rooms[this.name].spawn2Name.indexOf("_"))
+    this.visual.text("Spawn2: " + shortenedName , blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+
+
+    blockPos.y += blockPosHeight
+    // What spawn3 is spawning
+    this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    shortenedName=global.heap.rooms[this.name].spawn3Name.substring(0,  global.heap.rooms[this.name].spawn3Name.indexOf("_"))
+    this.visual.text("Spawn3: " + shortenedName, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+
 
 
     //Player Name

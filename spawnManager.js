@@ -25,6 +25,10 @@ function getBodyCost(body) {
 Room.prototype.spawnManager = function spawnManager() {
 
 
+    
+    global.heap.rooms[this.name].spawn1Name=""
+    global.heap.rooms[this.name].spawn2Name=""
+    global.heap.rooms[this.name].spawn3Name=""
 
     var spawn = Game.spawns[this.name + '_1']
     if (spawn == undefined && Game.spawns['Spawn1'] != undefined && Game.spawns['Spawn1'].room.name == this.name) {
@@ -37,20 +41,27 @@ Room.prototype.spawnManager = function spawnManager() {
 
     if (spawn.spawning != undefined && spawn.spawning.remainingTime < spawn.spawning.needTime - 2) {
 
-
+        global.heap.rooms[this.name].spawn1Name=spawn.spawning.name
         if (this.memory.spawn2Id != undefined) {
             spawn = Game.getObjectById(this.memory.spawn2Id)
         }
     }
 
     if (spawn.spawning != undefined && spawn.spawning.remainingTime < spawn.spawning.needTime - 2) {
+        global.heap.rooms[this.name].spawn2Name=spawn.spawning.name
         if (this.memory.spawn3Id != undefined) {
             spawn = Game.getObjectById(this.memory.spawn3Id)
+
+            //for visualization
+            if(spawn.spawning!=undefined)
+            {
+                global.heap.rooms[this.name].spawn3Name=spawn.spawning.name
+            }
         }
     }
     var energyCap = Game.rooms[this.name].energyAvailable
 
-
+    
     //check if there is quad that has started spawning in offensiveQueue (members>0)
     // if yes then spawn it before the rest
     // else spawn after other queues
@@ -94,6 +105,7 @@ Room.prototype.spawnManager = function spawnManager() {
             body = quadHealerBody(Math.max(energyCap, minBodyCost, minEnergyOnCreep))
         }
         var result = spawn.spawnCreep(body, name + '_' + this.name + Game.time, { memory: { role: C.ROLE_QUAD_MEMBER, quadId: request.quadId, homeRoom: this.name } })
+        console.log("result of spawning not first spawn member: ",result)
         if (result == OK) {
             global.heap.rooms[this.name].spawnResult = result
             global.heap.rooms[this.name].spawnRole = C.ROLE_QUAD_MEMBER
@@ -176,7 +188,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_CARRIER:
                 {
-                    var result = spawn.spawnCreep(carrierBody(energyCap), C.ROLE_CARRIER + '_' + this.name + Game.time, { memory: { role: C.ROLE_CARRIER, homeRoom: this.name, targetRoom: request.sourceRoom, sourceId: request.sourceId } })
+                    var result = spawn.spawnCreep(carrierBody(energyCap), "SisypheanRabbit"+ '_' + this.name + Game.time, { memory: { role: C.ROLE_CARRIER, homeRoom: this.name, targetRoom: request.sourceRoom, sourceId: request.sourceId } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
