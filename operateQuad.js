@@ -198,16 +198,16 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
     //delete quad.path
     //QUad is currently spinning
     //if (quad.isRotating != undefined && quad.isRotating == true) { return -1; }
-    if(myFlee==false)
-    {
-        localHeap.isRetreating=false
+    if (myFlee == false) {
+        if (localHeap.isRetreating == true) {
+            localHeap.isRetreating = false
+            quad.path = undefined
+        }
     }
-    else
-    {
-        if(localHeap.isRetreating==false)
-        {
-            localHeap.isRetreating=true
-            quad.path=undefined//clear path on first restreat tick
+    else {
+        if (localHeap.isRetreating == false) {
+            localHeap.isRetreating = true
+            quad.path = undefined//clear path on first restreat tick
         }
     }
 
@@ -346,94 +346,170 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
         var topRight = Game.getObjectById(quad.topRightId)
         //check PATH is blocked by not STRUCTURE_CONTAINER and not STRUCTURE_ROAD
         var structuresAtPath = []
+        var creepsAtPath = []
+        var terrainAtPath = []
         if (topLeft.pos.x > 0 && topLeft.pos.x < 49 && topLeft.pos.y > 0 && topLeft.pos.y < 49) {
 
             if (direction == TOP_LEFT && topLeft != null && topLeft.pos.x - 1 > 0) {
                 topLeft.say("↖️", true)
                 if (structuresAtPath == undefined) { structuresAtPath = [] }
+                if (creepsAtPath == undefined) { creepsAtPath = [] }
+
                 structuresAtPath = topLeft.room.lookForAt(LOOK_STRUCTURES, topLeft.pos.x - 1, topLeft.pos.y - 1)
+                creepsAtPath = topLeft.room.lookForAt(LOOK_CREEPS, topLeft.pos.x - 1, topLeft.pos.y - 1)
+
                 if (topRight != null && topRight.pos.x > 0 && topRight.pos.y > 0) {
+
                     structuresAtPath.push(topRight.room.lookForAt(LOOK_STRUCTURES, topRight.pos.x - 1, topRight.pos.y - 1))
+                    creepsAtPath.push(topRight.room.lookForAt(LOOK_CREEPS, topRight.pos.x - 1, topRight.pos.y - 1))
+
                     if (structuresAtPath == undefined) { structuresAtPath = [] }
+                    if (creepsAtPath == undefined) { creepsAtPath = [] }
                 }
                 if (bottomLeft != null && bottomLeft.pos.x > 0 && bottomLeft.pos.y > 0) {
+
                     structuresAtPath.push(bottomLeft.room.lookForAt(LOOK_STRUCTURES, bottomLeft.pos.x - 1, bottomLeft.pos.y - 1))
+                    creepsAtPath.push(bottomLeft.room.lookForAt(LOOK_CREEPS, bottomLeft.pos.x - 1, bottomLeft.pos.y - 1))
+
                     if (structuresAtPath == undefined) { structuresAtPath = [] }
+                    if (creepsAtPath == undefined) { creepsAtPath = [] }
                 }
             }
             else if (direction == BOTTOM_LEFT && bottomLeft != null && bottomLeft.pos.x - 1 > 0 && bottomLeft.pos.y + 1 < 49) {
                 bottomLeft.say("↙️", true)
+
                 structuresAtPath = bottomLeft.room.lookForAt(LOOK_STRUCTURES, bottomLeft.pos.x - 1, bottomLeft.pos.y + 1)
+                creepsAtPath = bottomLeft.room.lookForAt(LOOK_CREEPS, bottomLeft.pos.x - 1, bottomLeft.pos.y + 1)
+
                 if (structuresAtPath == undefined) { structuresAtPath = [] }
+                if (creepsAtPath == undefined) { creepsAtPath = [] }
                 if (topLeft != null && topLeft.pos.x - 1 > 0 && topLeft.pos.y + 1 < 49) {
+
                     structuresAtPath.push(topLeft.room.lookForAt(LOOK_STRUCTURES, topLeft.pos.x - 1, topLeft.pos.y + 1))
+                    creepsAtPath.push(topLeft.room.lookForAt(LOOK_CREEPS, topLeft.pos.x - 1, topLeft.pos.y + 1))
+
                     if (structuresAtPath == undefined) { structuresAtPath = [] }
+                    if (creepsAtPath == undefined) { creepsAtPath = [] }
                 }
                 if (bottomRight != null && bottomRight.pos.x - 1 > 0 && bottomRight.pos.y + 1 < 49) {
+
                     structuresAtPath.push(bottomRight.room.lookForAt(LOOK_STRUCTURES, bottomRight.pos.x - 1, bottomRight.pos.y + 1))
+                    creepsAtPath.push(bottomRight.room.lookForAt(LOOK_CREEPS, bottomRight.pos.x - 1, bottomRight.pos.y + 1))
+
                     if (structuresAtPath == undefined) { structuresAtPath = [] }
+                    if (creepsAtPath == undefined) { creepsAtPath = [] }
                 }
             }
             else if (direction == BOTTOM_RIGHT && bottomRight != null && bottomRight.pos.x + 1 < 49 && bottomRight.pos.y + 1 < 49) {
                 bottomRight.say("↘️", true)
+
                 structuresAtPath = bottomRight.room.lookForAt(LOOK_STRUCTURES, bottomRight.pos.x + 1, bottomRight.pos.y + 1)
+                creepsAtPath = bottomRight.room.lookForAt(LOOK_CREEPS, bottomRight.pos.x + 1, bottomRight.pos.y + 1)
+
                 if (structuresAtPath == undefined) { structuresAtPath = [] }
+                if (creepsAtPath == undefined) { creepsAtPath = [] }
                 if (bottomLeft != null && bottomLeft.pos.x + 1 < 49 && bottomLeft.pos.y + 1 < 49) {
+
                     structuresAtPath.push(bottomLeft.room.lookForAt(LOOK_STRUCTURES, bottomLeft.pos.x + 1, bottomLeft.pos.y + 1))
+                    creepsAtPath.push(bottomLeft.room.lookForAt(LOOK_CREEPS, bottomLeft.pos.x + 1, bottomLeft.pos.y + 1))
+
                     if (structuresAtPath == undefined) { structuresAtPath = [] }
+                    if (creepsAtPath == undefined) { creepsAtPath = [] }
                 }
                 if (topRight != null) {
+
                     structuresAtPath.push(topRight.room.lookForAt(LOOK_STRUCTURES, topRight.pos.x + 1, topRight.pos.y + 1))
+                    creepsAtPath.push(topRight.room.lookForAt(LOOK_CREEPS, topRight.pos.x + 1, topRight.pos.y + 1))
+
                     if (structuresAtPath == undefined) { structuresAtPath = [] }
+                    if (creepsAtPath == undefined) { creepsAtPath = [] }
                 }
             }
             else if (direction == TOP_RIGHT && topRight != null && topRight.pos.x + 1 < 49 && topRight.pos.y - 1 > 0) {
                 topRight.say("↗️", true)
                 structuresAtPath = topRight.room.lookForAt(LOOK_STRUCTURES, topRight.pos.x + 1, topRight.pos.y - 1)
+                creepsAtPath = topRight.room.lookForAt(LOOK_CREEPS, topRight.pos.x + 1, topRight.pos.y - 1)
+
                 if (structuresAtPath == undefined) { structuresAtPath = [] }
+                if (creepsAtPath == undefined) { creepsAtPath = [] }
                 if (topLeft != null && topLeft.pos.x + 1 < 49 && topLeft.pos.y - 1 > 0) {
+
                     structuresAtPath.push(topLeft.room.lookForAt(LOOK_STRUCTURES, topLeft.pos.x + 1, topLeft.pos.y - 1))
+                    creepsAtPath.push(topLeft.room.lookForAt(LOOK_CREEPS, topLeft.pos.x + 1, topLeft.pos.y - 1))
+
                     if (structuresAtPath == undefined) { structuresAtPath = [] }
+                    if (creepsAtPath == undefined) { creepsAtPath = [] }
                 }
                 if (bottomRight != null && bottomRight.pos.x + 1 < 49 && bottomRight.pos.y - 1 > 0) {
+
                     structuresAtPath.push(bottomRight.room.lookForAt(LOOK_STRUCTURES, bottomRight.pos.x + 1, bottomRight.pos.y - 1))
+                    creepsAtPath.push(bottomRight.room.lookForAt(LOOK_CREEPS, bottomRight.pos.x + 1, bottomRight.pos.y - 1))
+
                     if (structuresAtPath == undefined) { structuresAtPath = [] }
+                    if (creepsAtPath == undefined) { creepsAtPath = [] }
                 }
             }
             else if (direction == BOTTOM && bottomLeft != null && bottomLeft.pos.y + 1 < 49) {
                 bottomLeft.say("⬇️", true)
                 structuresAtPath = bottomLeft.room.lookForAt(LOOK_STRUCTURES, bottomLeft.pos.x, bottomLeft.pos.y + 1)
+                creepsAtPath = bottomLeft.room.lookForAt(LOOK_CREEPS, bottomLeft.pos.x, bottomLeft.pos.y + 1)
+
                 if (structuresAtPath == undefined) { structuresAtPath = [] }
+                if (creepsAtPath == undefined) { creepsAtPath = [] }
                 if (bottomRight != null && bottomRight.pos.y + 1 > 0) {
+
                     structuresAtPath.push(topLeft.room.lookForAt(LOOK_STRUCTURES, bottomRight.pos.x, bottomRight.pos.y + 1))
+                    creepsAtPath.push(topLeft.room.lookForAt(LOOK_CREEPS, bottomRight.pos.x, bottomRight.pos.y + 1))
+
                     if (structuresAtPath == undefined) { structuresAtPath = [] }
+                    if (creepsAtPath == undefined) { creepsAtPath = [] }
                 }
             }
             else if (direction == TOP && topLeft != null && topLeft.pos.y - 1 > 0) {
                 topLeft.say("⬆️", true)
                 structuresAtPath = topLeft.room.lookForAt(LOOK_STRUCTURES, topLeft.pos.x, topLeft.pos.y - 1)
+                creepsAtPath = topLeft.room.lookForAt(LOOK_CREEPS, topLeft.pos.x, topLeft.pos.y - 1)
+
                 if (structuresAtPath == undefined) { structuresAtPath = [] }
+                if (creepsAtPath == undefined) { creepsAtPath = [] }
                 if (topRight != null && topRight.pos.y - 1 > 0) {
                     structuresAtPath.push(topRight.room.lookForAt(LOOK_STRUCTURES, topRight.pos.x, topRight.pos.y - 1))
+                    creepsAtPath.push(topRight.room.lookForAt(LOOK_CREEPS, topRight.pos.x, topRight.pos.y - 1))
+
                     if (structuresAtPath == undefined) { structuresAtPath = [] }
+                    if (creepsAtPath == undefined) { creepsAtPath = [] }
                 }
             }
             else if (direction == LEFT && topLeft != null && topLeft.pos.x - 1 > 0) {
                 topLeft.say("⬅️", true)
                 structuresAtPath = topLeft.room.lookForAt(LOOK_STRUCTURES, topLeft.pos.x - 1, topLeft.pos.y)
+                creepsAtPath = topLeft.room.lookForAt(LOOK_CREEPS, topLeft.pos.x - 1, topLeft.pos.y)
+
                 if (structuresAtPath == undefined) { structuresAtPath = [] }
+                if (creepsAtPath == undefined) { creepsAtPath = [] }
                 if (bottomLeft != null && bottomLeft.pos.x - 1 > 0) {
+
                     structuresAtPath.push(bottomLeft.room.lookForAt(LOOK_STRUCTURES, bottomLeft.pos.x - 1, bottomLeft.pos.y))
+                    creepsAtPath.push(bottomLeft.room.lookForAt(LOOK_CREEPS, bottomLeft.pos.x - 1, bottomLeft.pos.y))
+
                     if (structuresAtPath == undefined) { structuresAtPath = [] }
+                    if (creepsAtPath == undefined) { creepsAtPath = [] }
                 }
             }
             else if (direction == RIGHT && topRight != null && topRight.pos.x + 1 < 49) {
                 topRight.say("➡️", true)
                 structuresAtPath = topRight.room.lookForAt(LOOK_STRUCTURES, topRight.pos.x + 1, topRight.pos.y)
+                creepsAtPath = topRight.room.lookForAt(LOOK_CREEPS, topRight.pos.x + 1, topRight.pos.y)
+
                 if (structuresAtPath == undefined) { structuresAtPath = [] }
+                if (creepsAtPath == undefined) { creepsAtPath = [] }
                 if (bottomRight != null && bottomRight.pos.x + 1 < 49) {
+
                     structuresAtPath.push(bottomRight.room.lookForAt(LOOK_STRUCTURES, bottomRight.pos.x + 1, bottomRight.pos.y))
+                    creepsAtPath.push(bottomRight.room.lookForAt(LOOK_CREEPS, bottomRight.pos.x + 1, bottomRight.pos.y))
+
                     if (structuresAtPath == undefined) { structuresAtPath = [] }
+                    if (creepsAtPath == undefined) { creepsAtPath = [] }
                 }
             }
         }
@@ -443,7 +519,9 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
         structuresAtPath = _.filter(structuresAtPath, function (str) {
             return str.my == false && (str.structureType != STRUCTURE_CONTAINER && str.structureType != STRUCTURE_ROAD);
         });
-        if (movePath != undefined && movePath.length > 0 && structuresAtPath.length > 0 && structuresAtPath[0].structureType != undefined) {
+        if (movePath != undefined && movePath.length > 0 && ((structuresAtPath.length > 0 && structuresAtPath[0].structureType != undefined)
+            || (creepsAtPath.length > 0)
+        )) {
 
             localHeap.isBlocked = false;
 
@@ -525,7 +603,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
 function quadRetreat(quad, position, range = 55) {
 
     localHeap.noSpin = true
-    
+
     //quad.noSpin = true
     //quad.isRotating = false
     localHeap.isRotating = false;
@@ -830,7 +908,7 @@ function quadHealPower(quad) {
     for (q of quad.members) {
         cr = Game.getObjectById(q)
         if (cr == null) { continue }
-        healPower += _.filter(cr.body, { type: HEAL, hits:100 }).length * HEAL_POWER;
+        healPower += _.filter(cr.body, { type: HEAL, hits: 100 }).length * HEAL_POWER;
     }
     return healPower
 }
@@ -964,7 +1042,7 @@ function calculateHealPower(quad) {
     for (m of quad.members) {
         member = Game.getObjectById(m)
         if (member == null) { continue }
-        if (_.filter(member.body, { type: HEAL,hits:100 }).length * HEAL_POWER < minHealPower) { minHealPower = _.filter(member.body, { type: HEAL }).length * HEAL_POWER }
+        if (_.filter(member.body, { type: HEAL, hits: 100 }).length * HEAL_POWER < minHealPower) { minHealPower = _.filter(member.body, { type: HEAL }).length * HEAL_POWER }
         if (member.hitsMax < minHp) { minHp = member.hitsMax }
         totalHealPower += _.filter(member.body, { type: HEAL }).length * HEAL_POWER
 
@@ -1185,7 +1263,7 @@ function operateQuad(quad) {
 
 
     if (quad.members != undefined && quad.members.length >= 4) {
-        quad.completed = true
+        quad.isCompleted = true
         //while (quad.members.length > 4) { quad.members.pop() }
     }
 
@@ -1486,35 +1564,34 @@ function operateQuad(quad) {
 
 
         //console.log(quad.id, " hits: ", quadHits(quad), " / ", quadHitsMax(quad))
-        //if (quadHits(quad) < quadHitsMax(quad) && (quadHitsMax(quad) - quadHits(quad)) > quadHealPower(quad)) {
-        console.log("Quad heal power: ",quadHealPower(quad))
-        if (quadHits(quad)+(quadHealPower(quad)/2) < quadHitsMax(quad)){
-            if (target == undefined || target.pos == undefined) {
+        if (quadHits(quad) < quadHitsMax(quad) && (quadHitsMax(quad) - quadHits(quad)) > quadHealPower(quad)) {
+            //if (quadHits(quad)+(quadHealPower(quad)/2) < quadHitsMax(quad)){
+            /*if (target == undefined || target.pos == undefined) {
                 console.log("quad: ", quad.id, " is retreating - no target")
                 topLeft.say("retr1")
                 var homePos = new RoomPosition(25, 25, topLeft.memory.homeRoom)
                 moveQuad(quad, homePos, 5, 10)
                 
             }
-            else {
-                topLeft.say("retTar")
-                console.log("quad: ", quad.id, " is retreating away from target")
-                quadRetreat(quad, target.pos)
-            }
+            else {*/
+            topLeft.say("retTar")
+            console.log("quad: ", quad.id, " is retreating away from target")
+            quadRetreat(quad, target.pos)
+            //}
         }
     }
-    else if (quadHits(quad) >= quadHitsMax(quad)){
+    else if (quadHits(quad) >= quadHitsMax(quad)) {
         ///if (quadHits(quad) >= quadHitsMax(quad) - quadHealPower(quad)) {
         console.log("Quad: ", quad.id, " is moving to: ", quad.targetRoom)
         //moveQuad(quad, new RoomPosition(25, 25, quad.targetRoom), 10)
         if (quad.targetId != undefined && Game.getObjectById(quad.targetId) != null && Game.getObjectById(quad.targetId).pos.roomName == quad.targetRoom) {
             moveQuad(quad, Game.getObjectById(quad.targetId).pos, 9, 1, false, 1)
-            
+
         }
         else {
             quad.targetId = undefined
             moveQuad(quad, new RoomPosition(25, 25, quad.targetRoom), 10)
-            
+
         }
     }
     else {

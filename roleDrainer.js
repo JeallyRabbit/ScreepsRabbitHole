@@ -3,7 +3,7 @@ const C = require('constants')
 Creep.prototype.roleDrainer = function roleDrainer() {
     this.say("D")
 
-    this.heal()
+    this.heal(this)
     if (this.room.name != this.memory.targetRoom && this.hits == this.hitsMax) {
         if (this.memory.targetRoom != undefined) {
             this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom))
@@ -17,7 +17,9 @@ Creep.prototype.roleDrainer = function roleDrainer() {
         }
     }
 
-    if(this.room.name==this.memory.targetRoom &&this.hits==this.hitsMax)
+    if(this.room.name==this.memory.targetRoom && this.hits==this.hitsMax
+        && Game.time%3==0
+    )
     {
         this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom))
     }
