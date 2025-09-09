@@ -523,7 +523,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
             || (creepsAtPath.length > 0)
         )) {
 
-            localHeap.isBlocked = false;
+            localHeap.isBlocked = true;
 
             if (structuresAtPath.length > 0) {
                 localHeap.isBlocked = true;
@@ -1600,6 +1600,7 @@ function operateQuad(quad) {
         //moveQuad(quad, homePos, 5, 10)
         if(target.pos!=undefined)
         {
+            topLeft.say("RUN!",true)
             quadRetreat(quad, target.pos)
         }
         

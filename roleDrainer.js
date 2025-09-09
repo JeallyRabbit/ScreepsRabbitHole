@@ -56,7 +56,7 @@ Creep.prototype.roleDrainer = function roleDrainer() {
         if (this.memory.healingTowerId != undefined
             && Game.getObjectById(this.memory.healingTowerId) != null
         ) {
-            this.travelTo(Game.getObjectById(this.memory.healingTowerId).pos,{range: 23})
+            this.travelTo(Game.getObjectById(this.memory.healingTowerId).pos)
         }
     }
 }
