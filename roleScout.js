@@ -159,7 +159,7 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
     if(this.memory.targetRoom!=undefined)
     {
         //Combat scout
-        this.travelTo(new RoomPosition(25,25,this.memory.targetRoom))
+        this.travelTo(new RoomPosition(25,25,this.memory.targetRoom,{range: 22}))
         return
     }
 

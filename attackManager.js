@@ -182,7 +182,7 @@ function attackManager(attackRoom) {
             if (h.areOperational) {
                 attackRoom.areTowersHistoryOperational = true
 
-                auxSum += h.rangedPower //That is the name of attribute in class - keeping this name to make it easy to use 
+                auxSum += h.rangedAttackPower //That is the name of attribute in class - keeping this name to make it easy to use 
                 //with other history data (about creeps)
                 auxCounter++;
             }
@@ -303,10 +303,7 @@ function attackManager(attackRoom) {
 
         //ATTACK_TYPE_DRAIN
         if (attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] == true) {
-            if(attackRoom.reqDrainers==null)
-            {
-                attackRoom.reqDrainers=1
-            }
+            
             if (attackRoom.drainersId.length < attackRoom.reqDrainers) {
                 //
                 var minDistance = Infinity
