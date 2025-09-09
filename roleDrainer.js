@@ -2,18 +2,18 @@ const C = require('constants')
 
 Creep.prototype.roleDrainer = function roleDrainer() {
     this.say("D")
-
+     
     this.heal(this)
     if (this.room.name != this.memory.targetRoom && this.hits == this.hitsMax) {
         if (this.memory.targetRoom != undefined) {
-            this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom))
+            this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom),{range: 23})
         }
 
 
     }
     else {
         if (this.hits < this.hitsMax) {
-            this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom))
+            this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom),{range: 23})
         }
     }
 
@@ -21,9 +21,11 @@ Creep.prototype.roleDrainer = function roleDrainer() {
         && Game.time%3==0
     )
     {
-        this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom))
+        this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom),{range: 23})
     }
 
+    
+    
     //getting healed in homeRoom
     if (this.room.name == this.memory.homeRoom && this.hits<this.hitsMax) {
 
@@ -39,7 +41,7 @@ Creep.prototype.roleDrainer = function roleDrainer() {
                 for (t of global.heap.rooms[this.room.name].myTowersId) {
                     var aux = Game.getObjectById(t)
                     if (aux != null) {
-                        towers.push(t)
+                        towers.push(aux)
                     }
                 }
                 if (towers.length > 0) {
@@ -49,11 +51,12 @@ Creep.prototype.roleDrainer = function roleDrainer() {
 
             }
         }
+        
 
         if (this.memory.healingTowerId != undefined
             && Game.getObjectById(this.memory.healingTowerId) != null
         ) {
-            this.travelTo(Game.getObjectById(this.memory.healingTowerId))
+            this.travelTo(Game.getObjectById(this.memory.healingTowerId).pos,{range: 23})
         }
     }
 }

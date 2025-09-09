@@ -1598,7 +1598,11 @@ function operateQuad(quad) {
         console.log("quad: ", quad.id, " is retreating to spawn")
         var homePos = new RoomPosition(25, 25, topLeft.memory.homeRoom)
         //moveQuad(quad, homePos, 5, 10)
-        quadRetreat(quad, target.pos)
+        if(target.pos!=undefined)
+        {
+            quadRetreat(quad, target.pos)
+        }
+        
     }
 
     if (global.heap.rooms[currentRoom].allies == undefined || global.heap.rooms[currentRoom].allies.length < 0) {
