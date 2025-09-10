@@ -1556,8 +1556,13 @@ function operateQuad(quad) {
         }
 
 
-        towersDamageAtQuadPos= (global.heap.rooms[currentRoom].towersDamageCM!=undefined)? global.heap.rooms[currentRoom].towersDamageCM.deserialize().get(topLeft.pos.x, topLeft.pos.y) : 0 
+        towersDamageAtQuadPos= (global.heap.rooms[currentRoom].towersDamageCM!=undefined)? global.heap.rooms[currentRoom].towersDamageCM.deserialize().get(topLeft.pos.x, topLeft.pos.y) : 1 
+        console.log("global.heap.rooms[currentRoom].towersDamageCM.deserialize().get(topLeft.pos.x, topLeft.pos.y): ",
+            global.heap.rooms[currentRoom].towersDamageCM.deserialize().get(topLeft.pos.x, topLeft.pos.y))
+        console.log("global.heap.rooms[currentRoom].towersDamageCM.deserialize(): ",global.heap.rooms[currentRoom].towersDamageCM.deserialize())
         console.log("Towers damage at: (",topLeft.pos.x,":",topLeft.pos.y,"): ",towersDamageAtQuadPos)
+        console.log(global.heap.rooms[currentRoom].towersDamageCM!=undefined)
+        console.log("currentRoom: ",currentRoom)
         if (quadHits(quad) < quadHitsMax(quad) && (quadHitsMax(quad) - quadHits(quad)) > quadHealPower(quad)-towersDamageAtQuadPos) {
             
             console.log("quad: ", quad.id, " is retreating away from target")
