@@ -375,7 +375,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
                 }
             }
             else if (direction == BOTTOM_LEFT && bottomLeft != null && bottomLeft.pos.x - 1 > 0 && bottomLeft.pos.y + 1 < 49) {
-                bottomLeft.say("↙️", true)
+                topLeft.say("↙️", true)
 
                 structuresAtPath = bottomLeft.room.lookForAt(LOOK_STRUCTURES, bottomLeft.pos.x - 1, bottomLeft.pos.y + 1)
                 creepsAtPath = bottomLeft.room.lookForAt(LOOK_CREEPS, bottomLeft.pos.x - 1, bottomLeft.pos.y + 1)
@@ -400,7 +400,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
                 }
             }
             else if (direction == BOTTOM_RIGHT && bottomRight != null && bottomRight.pos.x + 1 < 49 && bottomRight.pos.y + 1 < 49) {
-                bottomRight.say("↘️", true)
+                topLeft.say("↘️", true)
 
                 structuresAtPath = bottomRight.room.lookForAt(LOOK_STRUCTURES, bottomRight.pos.x + 1, bottomRight.pos.y + 1)
                 creepsAtPath = bottomRight.room.lookForAt(LOOK_CREEPS, bottomRight.pos.x + 1, bottomRight.pos.y + 1)
@@ -425,7 +425,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
                 }
             }
             else if (direction == TOP_RIGHT && topRight != null && topRight.pos.x + 1 < 49 && topRight.pos.y - 1 > 0) {
-                topRight.say("↗️", true)
+                topLeft.say("↗️", true)
                 structuresAtPath = topRight.room.lookForAt(LOOK_STRUCTURES, topRight.pos.x + 1, topRight.pos.y - 1)
                 creepsAtPath = topRight.room.lookForAt(LOOK_CREEPS, topRight.pos.x + 1, topRight.pos.y - 1)
 
@@ -449,7 +449,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
                 }
             }
             else if (direction == BOTTOM && bottomLeft != null && bottomLeft.pos.y + 1 < 49) {
-                bottomLeft.say("⬇️", true)
+                topLeft.say("⬇️", true)
                 structuresAtPath = bottomLeft.room.lookForAt(LOOK_STRUCTURES, bottomLeft.pos.x, bottomLeft.pos.y + 1)
                 creepsAtPath = bottomLeft.room.lookForAt(LOOK_CREEPS, bottomLeft.pos.x, bottomLeft.pos.y + 1)
 
@@ -496,7 +496,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
                 }
             }
             else if (direction == RIGHT && topRight != null && topRight.pos.x + 1 < 49) {
-                topRight.say("➡️", true)
+                topLeft.say("➡️", true)
                 structuresAtPath = topRight.room.lookForAt(LOOK_STRUCTURES, topRight.pos.x + 1, topRight.pos.y)
                 creepsAtPath = topRight.room.lookForAt(LOOK_CREEPS, topRight.pos.x + 1, topRight.pos.y)
 
@@ -525,7 +525,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
             localHeap.isBlocked = false;
 
             if (structuresAtPath.length > 0 || creepsAtPath.length>0) {
-                topLeft.say("blocked",true)
+                topRight.say("blocked",true)
                 localHeap.isBlocked = true;
                 if (topLeft != null && topLeft.room.name == quad.targetRoom) {
                     if (Game.time % 131 == 0) {
