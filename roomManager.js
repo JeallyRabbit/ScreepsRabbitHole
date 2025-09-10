@@ -562,13 +562,13 @@ Room.prototype.roomManager = function roomManager() {
                     break;
                 case STRUCTURE_LAB:
                     global.heap.rooms[this.name].myLabs.push(str.id);
-                    if (str.pos.x == this.memory.inputLab1Pos.x && str.pos.y == this.memory.inputLab1Pos.y) {
+                    if (this.memory.inputLab1Pos!=undefined && str.pos.x == this.memory.inputLab1Pos.x && str.pos.y == this.memory.inputLab1Pos.y) {
                         global.heap.rooms[this.name].inLab1Id = str.id
                         if (Game.rooms[this.name].memory.inLab1Id == undefined) {
                             Game.rooms[this.name].memory.inLab1Id = str.id
                         }
                     }
-                    else if (str.pos.x == this.memory.inputLab2Pos.x && str.pos.y == this.memory.inputLab2Pos.y) {
+                    else if (this.memory.inputLab2Pos!=undefined && str.pos.x == this.memory.inputLab2Pos.x && str.pos.y == this.memory.inputLab2Pos.y) {
                         global.heap.rooms[this.name].inLab2Id = str.id
                         if (Game.rooms[this.name].memory.inLab2Id == undefined) {
                             Game.rooms[this.name].memory.inLab2Id = str.id

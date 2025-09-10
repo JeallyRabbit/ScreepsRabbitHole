@@ -82,7 +82,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             if (global.heap.rooms[this.name].haveScout == false) {
                 if (global.heap.rooms[this.name].civilianQueue.find(( {role} ) => role === C.ROLE_SCOUT) == undefined) {
                     console.log("adding socut")
-                    crossOriginIsolated.log(global.heap.rooms[this.name].civilianQueue.find(( role ) => role === C.ROLE_SCOUT))
+                    console.log(global.heap.rooms[this.name].civilianQueue.find(( role ) => role === C.ROLE_SCOUT))
                     global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_SCOUT))
                 }
             }

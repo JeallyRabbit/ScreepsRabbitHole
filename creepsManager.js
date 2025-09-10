@@ -55,7 +55,6 @@ Room.prototype.creepsManager = function creepsManager() {
     for (cr in Game.creeps) {
 
         var creep = Game.creeps[cr];
-
         if (global.heap.rooms[creep.memory.homeRoom] != undefined) {
             global.heap.rooms[creep.memory.homeRoom].creepsBodyParts += creep.body.length
         }
@@ -74,7 +73,6 @@ Room.prototype.creepsManager = function creepsManager() {
             //creep.say('💤')
             continue;
         }
-
 
         role = creep.memory.role
         switch (role) {
@@ -222,6 +220,7 @@ Room.prototype.creepsManager = function creepsManager() {
                         a.drainersId.push(creep.id)
                     }
                 }
+            
         }
     }
     this.memory.creepsBodyParts = global.heap.rooms[this.name].creepsBodyParts

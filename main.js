@@ -82,10 +82,17 @@ module.exports.loop = function () {
 
     //console.log("GIT TEST")
     //Setting allies
-    Memory.allies = ["JeallyRabbit", "Alphonzo", "insainmonkey", "Trepidimous"]
+    Memory.allies = ["JeallyRabbit", "Alphonzo", "insainmonkey", "Trepidimous","csW"]
 
     //Setting enemies
     Memory.enemies = ["IronVengeance"]
+
+    if (Game.shard.name == 'shard0' || Game.shard.name == 'shard1'|| Game.shard.name == 'shard2') {
+      if (Game.cpu.bucket == 10000) {
+        Game.cpu.generatePixel();
+      }
+    }
+
     //Defining global.heap.rooms which is supposed to have identical structure as Memory.rooms but is available always on the same tick and is not using Memory limit
     //Heap size limit is much higher than Memory size limit - as mentioned somewhere on discord it is notable achivement to reach Heap size limit
     if (global.heap.rooms == undefined) {

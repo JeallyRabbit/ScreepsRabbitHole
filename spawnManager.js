@@ -22,6 +22,35 @@ function getBodyCost(body) {
     return cost
 }
 
+Room.prototype.removeWrongStructures=function removeWrongStructures()
+{
+    var counter=0;
+    if(this.memory.finalBuildingList!=undefined && this.memory.finalBuildingList.length>0)
+    {
+        var structures=this.find(FIND_STRUCTURES,{
+            filter: function (str)
+            {
+                return str.structureType!=STRUCTURE_SPAWN && str.structureType!=STRUCTURE_STORAGE
+                && str.structureType!=STRUCTURE_TERMINAL && str.structureType!=STRUCTURE_RAMPART
+            }
+        })
+        for(s of structures)
+        {
+            if(counter>5)
+            {
+                break;
+            }
+            if(!this.memory.finalBuildingList.some(structure => structure.structureType==s.structureType && structure.x==s.pos.x && structure.y==s.pos.y))
+            {
+                counter++
+                console.log("removing: ",s.structureType," (",s.pos.x,":",s.pos.y,") with result: ",s.destroy())
+                //s.destroy();
+            }
+        }
+    }
+    return counter
+}
+
 Room.prototype.spawnManager = function spawnManager() {
 
 

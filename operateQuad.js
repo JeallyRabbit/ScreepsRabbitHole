@@ -338,7 +338,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
 
         var direction = topLeft.pos.getDirectionTo(nextPos)
 
-        var topLeft = Game.getObjectById(quad.topLeftId); 
+        var topLeft = Game.getObjectById(quad.topLeftId);
         var bottomRight = Game.getObjectById(quad.bottomRightId);
         var bottomLeft = Game.getObjectById(quad.bottomLeftId)
         var topRight = Game.getObjectById(quad.topRightId)
@@ -635,7 +635,7 @@ function quadSpinLeft(quad) {
         return -1;
     }
 
-    topLeft.say("<-",true)
+    topLeft.say("<-", true)
     /*
     console.log("before spin")
     console.log("topLeft.pos: ", topLeft.pos)
@@ -943,10 +943,12 @@ function quadNearTo(quad, target) {
 }
 
 
-function calculateTowersDamage(quad, towers, currentRoom) {
+function calculateTowersDamage(topLeftPos, towers, currentRoom) {
+    console.log("calculateTowersDamage")
+    var damageAtQuadPos=0;
     if (towers.length < 1) { return -1; }
-
-    if (global.heap.rooms[currentRoom].towersDamageCM == undefined) {
+    console.log("Calculating towers Damage2")
+    if (global.heap.rooms[currentRoom].towersDamageCM == undefined || true) {
         const damageMatrix = new PathFinder.CostMatrix
         for (var i = 0; i < 50; i++) {
             for (var j = 0; j < 50; j++) {
@@ -964,14 +966,17 @@ function calculateTowersDamage(quad, towers, currentRoom) {
                     totalDamage += towerDamage;
                 }
                 tileCost = (totalDamage / (TOWER_POWER_ATTACK * towers.length)) * DAMAGE_MATRIX_FACTOR
-
+                if(i==topLeftPos.x && j==topLeftPos.y)
+                {
+                    damageAtQuadPos=totalDamage
+                }
                 damageMatrix.set(i, j, tileCost)
 
             }
         }
         global.heap.rooms[currentRoom].towersDamageCM = damageMatrix.serialize();
     }
-    return 0;
+    return damageAtQuadPos;
 }
 
 
@@ -1467,12 +1472,13 @@ function operateQuad(quad) {
         var spawns = []
         var ramparts = []
 
-        for (str of hostileStructures) {
-            aux = Game.getObjectById(str)
+        for (aux of hostileStructures) {
+            //aux = Game.getObjectById(str)
             if (aux == null) {
                 continue;
             }
             if (aux.structureType == STRUCTURE_TOWER) {
+                console.log("adding tower")
                 towers.push(aux)
             }
             else if (aux.structureType == STRUCTURE_EXTENSION) {
@@ -1486,9 +1492,9 @@ function operateQuad(quad) {
             }
         }
 
-        //var target = null;
+        var towersDamageAtQuadPos=0
         calculateHealPower(quad)
-        calculateTowersDamage(quad, towers, currentRoom)
+        towersDamageAtQuadPos=calculateTowersDamage(topLeft.pos, towers, currentRoom)
         caluclateRampartsCosts(quad, hostileStructures, currentRoom)
         calculateHostileCreepsCost(quad, hostileCreeps, currentRoom)
 
@@ -1538,7 +1544,7 @@ function operateQuad(quad) {
                 quadRangedMassAttack(quad, target)
 
                 //if Quad will for sure not retreat
-                if (!(quadHits(quad) < quadHitsMax(quad) && (quadHitsMax(quad) - quadHits(quad)) > quadHealPower(quad))
+                if (!(quadHits(quad) < quadHitsMax(quad) && (quadHitsMax(quad) - quadHits(quad)) > quadHealPower(quad) - towersDamageAtQuadPos)
                     && localHeap.isBlocked == false) {
                     rotateToTarget(quad, target)
                 }
@@ -1555,19 +1561,23 @@ function operateQuad(quad) {
 
         }
 
+        if (global.heap.rooms[currentRoom].towersDamageCM != undefined) {
+            console.log("Towers damage at: (", topLeft.pos.x, ":", topLeft.pos.y, "): ", towersDamageAtQuadPos)
+            console.log(global.heap.rooms[currentRoom].towersDamageCM != undefined)
+        }
+        else{
+            console.log("towersHitsCM is undefined")
+        }
 
-        towersDamageAtQuadPos= (global.heap.rooms[currentRoom].towersDamageCM!=undefined)? global.heap.rooms[currentRoom].towersDamageCM.deserialize().get(topLeft.pos.x, topLeft.pos.y) : 1 
-        console.log("global.heap.rooms[currentRoom].towersDamageCM.deserialize().get(topLeft.pos.x, topLeft.pos.y): ",
-            global.heap.rooms[currentRoom].towersDamageCM.deserialize().get(topLeft.pos.x, topLeft.pos.y))
-        console.log("global.heap.rooms[currentRoom].towersDamageCM.deserialize(): ",global.heap.rooms[currentRoom].towersDamageCM.deserialize())
-        console.log("Towers damage at: (",topLeft.pos.x,":",topLeft.pos.y,"): ",towersDamageAtQuadPos)
-        console.log(global.heap.rooms[currentRoom].towersDamageCM!=undefined)
-        console.log("currentRoom: ",currentRoom)
-        if (quadHits(quad) < quadHitsMax(quad) && (quadHitsMax(quad) - quadHits(quad)) > quadHealPower(quad)-towersDamageAtQuadPos) {
-            
+
+        console.log("currentRoom: ", currentRoom)
+        console.log("towers damage at quad pos: ",towersDamageAtQuadPos)
+        if (quadHits(quad) < quadHitsMax(quad) && (quadHitsMax(quad) - quadHits(quad)) > quadHealPower(quad) - towersDamageAtQuadPos) {
+
             console.log("quad: ", quad.id, " is retreating away from target")
             quadRetreat(quad, target.pos)
-            
+            topLeft.say("retreat",true)
+
         }
     }
     else if (quadHits(quad) >= quadHitsMax(quad)) {
@@ -1588,12 +1598,11 @@ function operateQuad(quad) {
         console.log("quad: ", quad.id, " is retreating to spawn")
         var homePos = new RoomPosition(25, 25, topLeft.memory.homeRoom)
         //moveQuad(quad, homePos, 5, 10)
-        if(target!=undefined && target.pos!=undefined)
-        {
-            topLeft.say("RUN!",true)
+        if (target != undefined && target.pos != undefined) {
+            topLeft.say("RUN!", true)
             quadRetreat(quad, target.pos)
         }
-        
+
     }
 
     if (global.heap.rooms[currentRoom].allies == undefined || global.heap.rooms[currentRoom].allies.length < 0) {

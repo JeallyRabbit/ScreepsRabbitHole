@@ -77,7 +77,8 @@ Room.prototype.operateTowers = function operateTowers() {
     if (towersPos != undefined) {
         for (a of global.heap.rooms[this.name].allies) {
             var aux = Game.getObjectById(a)
-            if (aux != null && aux.pos.getRangeTo(towersPos) < 10) {
+            if (aux != null && aux.pos.getRangeTo(towersPos) < 10
+        && aux.hits<aux.hitsMax) {
                 alliesToHeal.push(aux)
             }
         }
