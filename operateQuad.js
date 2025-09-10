@@ -259,8 +259,8 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
 
 
     if (movePath != undefined && movePath.length == 0) {
-        //quad.path = undefined
-        //movePath = undefined
+        quad.path = undefined
+        movePath = undefined
     }
 
 
@@ -271,10 +271,8 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
 
 
 
-
     if (Game.time % reusePath == 0 || quad.path == undefined /* || (topLeft.pos.x == 49 || topLeft.pos.y == 49 || topLeft.pos.x == 0 || topLeft.pos.y == 0 ) */) {
 
-        topLeft.say("FndPath")
         startCPU = Game.cpu.getUsed()
         const path = PathFinder.search(
             topLeft.pos,
@@ -340,7 +338,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
 
         var direction = topLeft.pos.getDirectionTo(nextPos)
 
-
+        var topLeft = Game.getObjectById(quad.topLeftId); 
         var bottomRight = Game.getObjectById(quad.bottomRightId);
         var bottomLeft = Game.getObjectById(quad.bottomLeftId)
         var topRight = Game.getObjectById(quad.topRightId)
@@ -348,6 +346,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
         var structuresAtPath = []
         var creepsAtPath = []
         var terrainAtPath = []
+
         if (topLeft.pos.x > 0 && topLeft.pos.x < 49 && topLeft.pos.y > 0 && topLeft.pos.y < 49) {
 
             if (direction == TOP_LEFT && topLeft != null && topLeft.pos.x - 1 > 0) {
@@ -523,7 +522,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
             || (creepsAtPath.length > 0)
         )) {
 
-            localHeap.isBlocked = true;
+            localHeap.isBlocked = false;
 
             if (structuresAtPath.length > 0) {
                 localHeap.isBlocked = true;
@@ -545,9 +544,6 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
 
                 //need testing
                 if (structuresAtPath[0] != undefined && structuresAtPath[0].pos != undefined) {
-                    //topLeft.say("rtObs")
-                    //quad.targetStructureId=structuresAtPath[0].id
-                    //quad.targetId=structuresAtPath[0].id
                     console.log("changing target to: ", structuresAtPath[0])
                     rotateToTarget(quad, structuresAtPath[0])
                 }
@@ -583,7 +579,6 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
             if (cr == null) { continue }
 
             move_result += cr.move(direction)
-            //cr.say(cr.move(direction))
         }
         if (move_result > 0 && Math.abs(move_result) % 11 != 0) {// 0 - OK,11 - err_tired
             //quad.path = undefined
@@ -640,7 +635,7 @@ function quadSpinLeft(quad) {
         return -1;
     }
 
-    topLeft.say("<-")
+    topLeft.say("<-",true)
     /*
     console.log("before spin")
     console.log("topLeft.pos: ", topLeft.pos)
@@ -677,7 +672,6 @@ function quadSpinRight(quad) {
         return -1;
     }
 
-    topRight.say("->")
     topLeft.move(RIGHT);
     topRight.move(BOTTOM);
     bottomRight.move(LEFT);
@@ -1305,7 +1299,7 @@ function operateQuad(quad) {
         quad.minEnergyOnCreep = -1;
         //global.heap.rooms[quad.targetRoom].towersDamageCM = undefined;
         //global.heap.rooms[quad.targetRoom].rampartsCM = undefined;
-        quad.grouping_pos = undefined
+        quad.groupingPos = undefined
         quad.targetStructureId = undefined;
         quad.minHealPower = undefined;
         quad.totalHealPower = undefined;
@@ -1318,9 +1312,10 @@ function operateQuad(quad) {
 
     if (localHeap.isQuadPacked == false) {
 
+        quad.path = undefined
         if (topLeft.pos.x > 0 && topLeft.pos.x < 48 && topLeft.pos.y > 0 && topLeft.pos.y < 48 || true) {
             //console.log("grouping 2")
-            if (quad.grouping_pos == undefined) {
+            if (quad.groupingPos == undefined) {
                 var seeds = [];
                 seeds.push(topLeft.pos);
                 let roomCM = new PathFinder.CostMatrix;
@@ -1379,17 +1374,17 @@ function operateQuad(quad) {
                 var floodCM = topLeft.room.floodFill(seeds);
                 let distanceCM = topLeft.room.diagonalDistanceTransform(roomCM, false);
                 var min_distance = Infinity
-                grouping_pos = new RoomPosition(25, 25, topLeft.room.name)
-                for (let i = 1; i < 48; i++) {
-                    for (let j = 1; j < 48; j++) {
+                groupingPos = new RoomPosition(25, 25, topLeft.room.name)
+                for (let i = 2; i < 47; i++) {
+                    for (let j = 2; j < 47; j++) {
                         if (distanceCM.get(i, j) >= 3 && floodCM.get(i, j) < min_distance) {
                             min_distance = floodCM.get(i, j);
-                            grouping_pos.x = i;
-                            grouping_pos.y = j;
+                            groupingPos.x = i;
+                            groupingPos.y = j;
                         }
                     }
                 }
-                quad.grouping_pos = grouping_pos
+                quad.groupingPos = groupingPos
             }
         }
         else {
@@ -1399,34 +1394,33 @@ function operateQuad(quad) {
 
         //quad.path = false
 
-        if (topLeft != null && quad.grouping_pos != undefined) {
-            //topLeft.say(quad.grouping_pos.x + " " + quad.grouping_pos.y)
-            topLeft.travelTo(new RoomPosition(quad.grouping_pos.x, quad.grouping_pos.y, quad.grouping_pos.roomName), { maxStuck: 1 })
+        if (topLeft != null && quad.groupingPos != undefined) {
+            topLeft.travelTo(new RoomPosition(quad.groupingPos.x, quad.groupingPos.y, quad.groupingPos.roomName), { maxStuck: 1 })
         }
-        if (topRight != null && quad.grouping_pos != undefined) {
+        if (topRight != null && quad.groupingPos != undefined) {
             if (topLeft != null) {
                 topRight.travelTo(new RoomPosition(topLeft.pos.x + 1, topLeft.pos.y, topLeft.pos.roomName))
             }
             else {
-                topRight.travelTo(new RoomPosition(quad.grouping_pos.x + 1, quad.grouping_pos.y, quad.grouping_pos.roomName), { maxStuck: 1 })
+                topRight.travelTo(new RoomPosition(quad.groupingPos.x + 1, quad.groupingPos.y, quad.groupingPos.roomName), { maxStuck: 1 })
 
             }
 
         }
-        if (bottomLeft != null && quad.grouping_pos != undefined) {
+        if (bottomLeft != null && quad.groupingPos != undefined) {
             if (topLeft != null) {
                 bottomLeft.travelTo(new RoomPosition(topLeft.pos.x, Math.min(topLeft.pos.y + 1, 49), topLeft.pos.roomName))
             }
             else {
-                bottomLeft.travelTo(new RoomPosition(quad.grouping_pos.x, quad.grouping_pos.y + 1, quad.grouping_pos.roomName), { maxStuck: 1 })
+                bottomLeft.travelTo(new RoomPosition(quad.groupingPos.x, quad.groupingPos.y + 1, quad.groupingPos.roomName), { maxStuck: 1 })
             }
         }
-        if (bottomRight != null && quad.grouping_pos != undefined) {
+        if (bottomRight != null && quad.groupingPos != undefined) {
             if (topLeft != null) {
                 bottomRight.travelTo(new RoomPosition(topLeft.pos.x + 1, topLeft.pos.y + 1, topLeft.pos.roomName))
             }
             else {
-                bottomRight.travelTo(new RoomPosition(quad.grouping_pos.x + 1, quad.grouping_pos.y + 1, quad.grouping_pos.roomName), { maxStuck: 1 })
+                bottomRight.travelTo(new RoomPosition(quad.groupingPos.x + 1, quad.groupingPos.y + 1, quad.groupingPos.roomName), { maxStuck: 1 })
             }
         }
 
@@ -1434,7 +1428,7 @@ function operateQuad(quad) {
 
     }
     else {
-        quad.grouping_pos = undefined
+        quad.groupingPos = undefined
     }
 
 
@@ -1493,7 +1487,6 @@ function operateQuad(quad) {
         }
 
         //var target = null;
-
         calculateHealPower(quad)
         calculateTowersDamage(quad, towers, currentRoom)
         caluclateRampartsCosts(quad, hostileStructures, currentRoom)
@@ -1563,21 +1556,13 @@ function operateQuad(quad) {
         }
 
 
-        //console.log(quad.id, " hits: ", quadHits(quad), " / ", quadHitsMax(quad))
-        if (quadHits(quad) < quadHitsMax(quad) && (quadHitsMax(quad) - quadHits(quad)) > quadHealPower(quad)) {
-            //if (quadHits(quad)+(quadHealPower(quad)/2) < quadHitsMax(quad)){
-            /*if (target == undefined || target.pos == undefined) {
-                console.log("quad: ", quad.id, " is retreating - no target")
-                topLeft.say("retr1")
-                var homePos = new RoomPosition(25, 25, topLeft.memory.homeRoom)
-                moveQuad(quad, homePos, 5, 10)
-                
-            }
-            else {*/
-            topLeft.say("retTar")
+        towersDamageAtQuadPos= (global.heap.rooms[currentRoom].towersDamageCM!=undefined)? global.heap.rooms[currentRoom].towersDamageCM.deserialize().get(topLeft.pos.x, topLeft.pos.y) : 0 
+        console.log("Towers damage at: (",topLeft.pos.x,":",topLeft.pos.y,"): ",towersDamageAtQuadPos)
+        if (quadHits(quad) < quadHitsMax(quad) && (quadHitsMax(quad) - quadHits(quad)) > quadHealPower(quad)-towersDamageAtQuadPos) {
+            
             console.log("quad: ", quad.id, " is retreating away from target")
             quadRetreat(quad, target.pos)
-            //}
+            
         }
     }
     else if (quadHits(quad) >= quadHitsMax(quad)) {
@@ -1598,7 +1583,7 @@ function operateQuad(quad) {
         console.log("quad: ", quad.id, " is retreating to spawn")
         var homePos = new RoomPosition(25, 25, topLeft.memory.homeRoom)
         //moveQuad(quad, homePos, 5, 10)
-        if(target.pos!=undefined)
+        if(target!=undefined && target.pos!=undefined)
         {
             topLeft.say("RUN!",true)
             quadRetreat(quad, target.pos)

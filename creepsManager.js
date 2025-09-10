@@ -178,7 +178,7 @@ Room.prototype.creepsManager = function creepsManager() {
             case C.ROLE_QUAD_MEMBER:
                 //var debugId=new String(creep.memory.quadId)
 
-                creep.say(creep.memory.quadId.slice(creep.memory.quadId.length-2))
+                //creep.say(creep.memory.quadId.slice(creep.memory.quadId.length-2))
                 for (attackRoom of Memory.roomsToAttack) {
                     for (q of attackRoom.quads) {
                         //console.log("q.id: ", q.id)
