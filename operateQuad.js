@@ -524,7 +524,8 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
 
             localHeap.isBlocked = false;
 
-            if (structuresAtPath.length > 0) {
+            if (structuresAtPath.length > 0 || creepsAtPath.length>0) {
+                topLeft.say("blocked",true)
                 localHeap.isBlocked = true;
                 if (topLeft != null && topLeft.room.name == quad.targetRoom) {
                     if (Game.time % 131 == 0) {
@@ -552,6 +553,7 @@ function moveQuad(quad, targetPos, reusePath = 9, myRange = 1, myFlee = false, m
                 console.log("Path blocked by WALL or RAMPART at: ", s.pos)
                 return -13;//path in reality is blocked by rampart/wall
             }
+            topRight.say('not blocked',true)
 
         }
 
