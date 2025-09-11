@@ -127,7 +127,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER)
             ) {
                 const destination = new RoomPosition(25, 25, this.memory.targetRoom);
-                this.travelTo(destination, { range: 22 })
+                this.travelTo(destination)
             }
             if (this.memory.targetRoomContainers != undefined && this.memory.targetRoomContainers.length > 0) {// find max_container and take resources from it or go sleep
 
@@ -340,7 +340,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     }
                 }
                 else {
-                    this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom), { range: 22 })
+                    this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom))
                 }
 
                 //}
@@ -366,7 +366,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     for (let res in this.store) {
                         var transferResut = this.transfer(Game.getObjectById(this.memory.homeContainer), res);
                         if (transferResut == ERR_NOT_IN_RANGE) {
-                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { range: 1 })
+                            this.travelTo(Game.getObjectById(this.memory.homeContainer))
                             break;
                         }
                         else if (transferResut == OK) {
