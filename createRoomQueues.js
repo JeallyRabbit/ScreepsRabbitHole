@@ -92,7 +92,10 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     if (this.storage != undefined) {
 
         if (global.heap.rooms[this.name].haulersParts < C.HAULER_REQ_CARRY_PARTS && Game.time%2==0) {
-            //console.log("Adding hauler: ", global.heap.rooms[this.name].haulersParts, " < ", C.HAULER_REQ_CARRY_PARTS)
+            this.memory._haulersParts=global.heap.rooms[this.name].haulersParts
+            this.memory._needHaulersParts=C.HAULER_REQ_CARRY_PARTS
+            this.memory._haulersPartsTime=Game.time
+            console.log("Adding hauler: ", global.heap.rooms[this.name].haulersParts, " < ", C.HAULER_REQ_CARRY_PARTS)
             if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_HAULER) == undefined) {
                 global.heap.rooms[this.name].harvestingQueue.push(new generalRoomRequest(this.name, C.ROLE_HAULER))
             }
@@ -282,7 +285,8 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
 
     //Mineral Carriers
-    if (Game.getObjectById(this.memory.mineralId) != null && Game.getObjectById(this.memory.mineralId).mineralAmount > 0 && global.heap.rooms[this.name].mineralCarryPower < global.heap.rooms[this.name].mineralMiningPower) {//Add to civilian queue
+    if (Game.getObjectById(this.memory.mineralId) != null && Game.getObjectById(this.memory.mineralId).mineralAmount > 0 && global.heap.rooms[this.name].mineralCarryPower < global.heap.rooms[this.name].mineralMiningPower
+    && this.storage!=undefined && this.storage[RESOURCE_ENERGY]>C.STORAGE_ENERGY_BOTTOM) {//Add to civilian queue
         //console.log("Adding mineralCarrier")
         if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_MINERAL_CARRIER) == undefined) {
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_MINERAL_CARRIER))

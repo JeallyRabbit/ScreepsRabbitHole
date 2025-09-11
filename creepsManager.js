@@ -113,7 +113,7 @@ Room.prototype.creepsManager = function creepsManager() {
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
                 break
             case C.ROLE_HAULER:
-                if(creep.ticksToLive>C.CREEP_TICKS_TO_LIVE_BUFFER)
+                if(creep.ticksToLive>C.CREEP_TICKS_TO_LIVE_BUFFER || creep.spawning)
                 {
                     global.heap.rooms[creep.memory.homeRoom].haulersParts += _.filter(creep.body, { type: CARRY }).length
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
@@ -183,25 +183,27 @@ Room.prototype.creepsManager = function creepsManager() {
 
                         if (q.id == creep.memory.quadId && !q.members.includes(creep.id)) {
                             
+                            q.members.push(creep.id)
+
+
                             if (q.topLeftId == undefined || q.topLeftId == creep.id) {
+                                
                                 q.topLeftId = creep.id
-                                q.members.push(creep.id)
                                 break;
                             }
                             else if (q.topRightId == undefined || q.topRightId == creep.id) {
                                 q.topRightId = creep.id
-                                q.members.push(creep.id)
                                 break;
                             }
                             else if (q.bottomLeftId == undefined || q.bottomLeftId == creep.id) {
                                 q.bottomLeftId = creep.id
-                                q.members.push(creep.id)
+                                
                                 break;
                             }
                             else if (q.bottomRightId == undefined || q.bottomRightId == creep.id) {
                                 q.isCompleted=true
                                 q.bottomRightId = creep.id
-                                q.members.push(creep.id)
+                                
                                 break;
                             }
                         }

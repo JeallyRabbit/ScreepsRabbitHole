@@ -10,6 +10,11 @@ localHeap={}
 Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom containers (and storage) to extensions and spawn (if they are full equalize energy at containers)
 
 
+    if(this.ticksToLive<50)
+    {
+        this.taskClearCreep()
+        return
+    }
     //this.move(TOP);
     //this.memory.cIdMax=undefined;
     if ((this.room.controller!=undefined && this.room.controller.level <= 2) || (this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] == 0)) {

@@ -1,8 +1,8 @@
-const C=require('constants');
+const C = require('constants');
 
 
 
-StructureTerminal.prototype.buyResource=function buyResource(res, amount) {
+StructureTerminal.prototype.buyResource = function buyResource(res, amount) {
     if (res == undefined) {
         return false;
     }
@@ -36,7 +36,16 @@ StructureTerminal.prototype.buyResource=function buyResource(res, amount) {
         var price = (Game.market.getOrderById(bestOrderId).price * tradeAmount) - transferCost
         var pricePerUnit = price / tradeAmount
         if (pricePerUnit < 2000) {
-            buyResult = Game.market.deal(bestOrderId, tradeAmount, this.room.name)
+            if (res == RESOURCE_ENERGY) {
+                if (tradeAmount > transferCost) {
+                    buyResult = Game.market.deal(bestOrderId, tradeAmount, this.room.name)
+
+                }
+            }
+            else {
+                buyResult = Game.market.deal(bestOrderId, tradeAmount, this.room.name)
+
+            }
 
         }
 
@@ -44,12 +53,12 @@ StructureTerminal.prototype.buyResource=function buyResource(res, amount) {
     return buyResult
 }
 
-StructureTerminal.prototype.sellResource=function sell_resource(res,amount) {
+StructureTerminal.prototype.sellResource = function sell_resource(res, amount) {
 
     if (res == undefined) {
         return;
     }
-    var sellResult=null;
+    var sellResult = null;
 
     biggestProfitAmount = 0
     var bestOrderId = undefined
@@ -79,7 +88,7 @@ StructureTerminal.prototype.sellResource=function sell_resource(res,amount) {
         var profitPerUnit = profit / tradeAmount
         //console.log("profit per unit: ",profitPerUnit)
         if (profitPerUnit > 10 || true) {
-            sellResult= Game.market.deal(bestOrderId, tradeAmount, this.room.name)
+            sellResult = Game.market.deal(bestOrderId, tradeAmount, this.room.name)
         }
 
     }
@@ -88,7 +97,8 @@ StructureTerminal.prototype.sellResource=function sell_resource(res,amount) {
 
 
 Room.prototype.terminalManager = function terminalManager() {
-    if (this.terminal == undefined || (this.terminal!=undefined && this.terminal.cooldown!=0)) {
+    if (this.terminal == undefined || (this.terminal != undefined && this.terminal.cooldown != 0)
+        || Game.time % 5 != 0) {
         return
     }
 
@@ -98,77 +108,69 @@ Room.prototype.terminalManager = function terminalManager() {
     for (m of Memory.mainRooms) {
         if (m != this.name && Game.rooms[m].terminal != undefined) {
             for (boost of global.heap.rooms[this.name].excessT3MilitaryBoosts) {
-                if (global.heap.rooms[m].needT3MilitaryBoosts==boost) {
-                    resourceToShare=boost;
-                    roomToShareWith=m;
+                if (global.heap.rooms[m].needT3MilitaryBoosts == boost) {
+                    resourceToShare = boost;
+                    roomToShareWith = m;
                     break
                 }
             }
         }
     }
-    if(resourceToShare!=null && roomToShareWith!=null)
-    {
-        var sendResult=this.terminal.send(resourceToShare,C.RESOURCE_SHARE_AMOUNT,roomToShareWith)
-        if(sendResult==OK)
-        {
+    if (resourceToShare != null && roomToShareWith != null) {
+        var sendResult = this.terminal.send(resourceToShare, C.RESOURCE_SHARE_AMOUNT, roomToShareWith)
+        if (sendResult == OK) {
             return;
         }
     }
 
-    
+
     //Sharing T3 Economic Boosts
     var resourceToShare = null
     var roomToShareWith = null
     for (m of Memory.mainRooms) {
         if (m != this.name && Game.rooms[m].terminal != undefined) {
             for (boost of global.heap.rooms[this.name].excessT3EconomicBoost) {
-                if (global.heap.rooms[m].needT3EconomicBoosts==boost) {
-                    resourceToShare=boost;
-                    roomToShareWith=m;
+                if (global.heap.rooms[m].needT3EconomicBoosts == boost) {
+                    resourceToShare = boost;
+                    roomToShareWith = m;
                     break
                 }
             }
         }
     }
-    if(resourceToShare!=null && roomToShareWith!=null)
-    {
-        var sendResult=this.terminal.send(resourceToShare,C.RESOURCE_SHARE_AMOUNT,roomToShareWith)
-        if(sendResult==OK)
-        {
+    if (resourceToShare != null && roomToShareWith != null) {
+        var sendResult = this.terminal.send(resourceToShare, C.RESOURCE_SHARE_AMOUNT, roomToShareWith)
+        if (sendResult == OK) {
             return;
         }
     }
 
-    
+
     //Sharing raw resources
     var resourceToShare = null
     var roomToShareWith = null
     for (m of Memory.mainRooms) {
         if (m != this.name && Game.rooms[m].terminal != undefined) {
             for (res of global.heap.rooms[this.name].excessRawResources) {
-                if (global.heap.rooms[m].needRawResources==res) {
-                    resourceToShare=res;
-                    roomToShareWith=m;
+                if (global.heap.rooms[m].needRawResources == res) {
+                    resourceToShare = res;
+                    roomToShareWith = m;
                     break
                 }
             }
         }
     }
-    if(resourceToShare!=null && roomToShareWith!=null)
-    {
-        var sendResult=this.terminal.send(resourceToShare,C.RESOURCE_SHARE_AMOUNT,roomToShareWith)
-        if(sendResult==OK)
-        {
+    if (resourceToShare != null && roomToShareWith != null) {
+        var sendResult = this.terminal.send(resourceToShare, C.RESOURCE_SHARE_AMOUNT, roomToShareWith)
+        if (sendResult == OK) {
             return;
         }
     }
 
 
     //Selling Raw Resources
-    for(res of global.heap.rooms[this.name].excessRawResources)
-    {
-        if(this.terminal.sellResource(res,C.RAW_RES_SELL_AMOUNT)==OK)
-        {
+    for (res of global.heap.rooms[this.name].excessRawResources) {
+        if (this.terminal.sellResource(res, C.RAW_RES_SELL_AMOUNT) == OK) {
             return
         }
     }
@@ -177,27 +179,23 @@ Room.prototype.terminalManager = function terminalManager() {
 
 
     //Buying Raw Resources
-    for(res of global.heap.rooms[this.name].needRawResources)
-    {
-        if(this.terminal.buyResource(res,C.RAW_RES_BUY_AMOUNT)==OK)
-        {
+    for (res of global.heap.rooms[this.name].needRawResources) {
+        if (this.terminal.buyResource(res, C.RAW_RES_BUY_AMOUNT) == OK) {
             return;
         }
     }
 
     //Sharing energy to fastRclUpgrade
-    if(Memory.fastRclUpgrade!=undefined && Memory.fastRclUpgrade!=this.name)
-    {
-        if(this.terminal.send(RESOURCE_ENERGY,C.RESOURCE_SHARE_AMOUNT,Memory.fastRclUpgrade)==OK)
-        {
+    if (Memory.fastRclUpgrade != undefined && Memory.fastRclUpgrade != this.name) {
+        if (this.terminal.send(RESOURCE_ENERGY, C.RESOURCE_SHARE_AMOUNT, Memory.fastRclUpgrade) == OK) {
             return;
         }
     }
 
-    if(this.terminal.store[RESOURCE_ENERGY]<C.TERMINAL_BOTTOM_ENERGY)
-    {
-        if(this.terminal.buyResource(RESOURCE_ENERGY,C.RAW_RES_BUY_AMOUNT)==OK)
-        {
+    if (this.terminal.store[RESOURCE_ENERGY] < C.TERMINAL_BOTTOM_ENERGY) {
+        let result = this.terminal.buyResource(RESOURCE_ENERGY, C.RAW_RES_BUY_AMOUNT)
+        console.log("trying to buy energy: ", result)
+        if (result == OK) {
             return;
         }
     }

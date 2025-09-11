@@ -1276,6 +1276,24 @@ function operateQuad(quad) {
     var bottomLeft = Game.getObjectById(quad.bottomLeftId);
     var bottomRight = Game.getObjectById(quad.bottomRightId);
 
+    if(topLeft!=null)
+    {
+        topLeft.room.visual.text("tl",topLeft.pos)
+    }
+    
+    if(topRight!=null)
+    {
+        topRight.room.visual.text("tr",topRight.pos)
+    }
+    if(bottomLeft!=null)
+    {
+        bottomLeft.room.visual.text("bl",bottomLeft.pos)
+    }
+    if(bottomRight!=null)
+    {
+        bottomRight.room.visual.text("br",bottomRight.pos)
+    }
+    
     if (topLeft != undefined) {
         topLeft.room.visual.circle(topLeft.pos, { fill: 'transparent', radius: 0.55, stroke: 'purple' })
     }

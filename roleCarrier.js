@@ -127,7 +127,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER)
             ) {
                 const destination = new RoomPosition(25, 25, this.memory.targetRoom);
-                this.travelTo(destination, { range: 22, ignoreCreeps: false })
+                this.travelTo(destination, { range: 22 })
             }
             if (this.memory.targetRoomContainers != undefined && this.memory.targetRoomContainers.length > 0) {// find max_container and take resources from it or go sleep
 
@@ -157,7 +157,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     for (let resource in Game.getObjectById(this.memory.maxContainer).store) {
                         if (this.withdraw(Game.getObjectById(this.memory.maxContainer), resource) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
-                            this.travelTo(Game.getObjectById(this.memory.maxContainer).pos, { range: 1, ignoreCreeps: false })
+                            this.travelTo(Game.getObjectById(this.memory.maxContainer).pos)
                             break;
                         }
                     }
@@ -246,7 +246,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         this.memory.maxContainer = undefined;
                         if (this.pickup(Game.getObjectById(this.memory.resourceToCollect)) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
-                            this.travelTo(Game.getObjectById(this.memory.resourceToCollect), { range: 1, ignoreCreeps: false })
+                            this.travelTo(Game.getObjectById(this.memory.resourceToCollect))
                         }
                     }
                     else {
@@ -388,7 +388,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         }
                         if (transferResut == ERR_NOT_IN_RANGE) {
 
-                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { avoidSk: true, ignoreCreeps: false, range: 1 })
+                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { avoidSk: true, range: 1 })
 
                             break;
                         }
