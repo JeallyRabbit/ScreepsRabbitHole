@@ -4,6 +4,8 @@ const C = require('constants');
 Room.prototype.visualize = function visualizeroomManager() {
 
 
+    console.log("Visualizing ", this.name)
+
     // energyBalance visualization
     if (Game.rooms[this.name].memory.energyBalance != undefined) {
         console.log("energy Balance: ", Game.rooms[this.name].memory.energyBalance)

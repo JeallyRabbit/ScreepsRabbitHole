@@ -12,7 +12,7 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
 
     //this.move(TOP);
     //this.memory.cIdMax=undefined;
-    if (this.room.controller.level <= 2 || (this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] == 0)) {
+    if ((this.room.controller!=undefined && this.room.controller.level <= 2) || (this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] == 0)) {
         this.memory.targetRoom = this.room.name;
         this.roleCarrier();
         return;
@@ -71,7 +71,7 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
 
 
         if (this.room.memory.managerLinkId != undefined && Game.rooms[this.room.name].memory.resourceManagerId == undefined
-            && Game.getObjectById(this.room.memory.managerLinkId)!=null && Game.getObjectById(this.room.memory.managerLinkId).store[RESOURCE_ENERGY]<C.LINK_BOTTOM_ENERGY
+            && Game.getObjectById(this.room.memory.managerLinkId)!=null && Game.getObjectById(this.room.memory.managerLinkId).store[RESOURCE_ENERGY]<C.LINK_ENERGY_EDGE
         ) {
             global.heap.rooms[this.room.name].haulerTask = C.TASK_FILL_MANAGER_LINK
         }
@@ -233,7 +233,19 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
                     //this.fleeFrom(avoid, 3);
                 }
                 else {
-                    this.sleep(20);
+                    var spawn1=Game.getObjectById(this.room.memory.spawnId)
+                    var spawn2=Game.getObjectById(this.room.memory.spawn2Id)
+                    var spawn3=Game.getObjectById(this.room.memory.spawn3Id)
+                    if((spawn1!=undefined && this.pos.inRangeTo(spawn1.pos.x,spawn1.pos.y,4)) || 
+                    (spawn2!=undefined && this.pos.inRangeTo(spawn2.pos.x,spawn2.pos.y,4))
+                || (spawn3!=undefined && this.pos.inRangeTo(spawn3.pos.x,spawn3.pos.y,4)))
+                    {
+                        this.move(Math.random() * (8 - 1) + 1)
+                    }
+                    else{
+                        this.sleep(20);
+                    }
+                    
 
                 }
 

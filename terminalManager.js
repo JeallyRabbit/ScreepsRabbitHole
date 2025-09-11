@@ -193,4 +193,12 @@ Room.prototype.terminalManager = function terminalManager() {
             return;
         }
     }
+
+    if(this.terminal.store[RESOURCE_ENERGY]<C.TERMINAL_BOTTOM_ENERGY)
+    {
+        if(this.terminal.buyResource(RESOURCE_ENERGY,C.RAW_RES_BUY_AMOUNT)==OK)
+        {
+            return;
+        }
+    }
 }

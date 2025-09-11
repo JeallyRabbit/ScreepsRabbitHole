@@ -300,6 +300,12 @@ Room.prototype.spawnManager = function spawnManager() {
                     var body = []
                     if (this.energyAvailable <= SPAWN_ENERGY_CAPACITY) { body = [WORK, CARRY, MOVE] }
                     else { body = workerBody(energyCap) }
+
+                    if(this.controller.level==8 && global.heap.rooms[this.name].needWorkersParts==1)
+                    {
+                        body=[MOVE,CARRY,WORK]
+                    }
+
                     var result = spawn.spawnCreep(body, "SlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_WORKER,directions: myDirections, homeRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
