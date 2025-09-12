@@ -1446,21 +1446,21 @@ function operateQuad(quad) {
             }
         }
         else {
-            //topLeft.travelTo(new RoomPosition(25, 25, quad.targetRoom), { maxStuck: 1 })
+            //topLeft.travelTo(new RoomPosition(25, 25, quad.targetRoom), { stuckValue: 1 })
         }
 
 
         //localHeap.path = false
 
         if (topLeft != null && quad.groupingPos != undefined) {
-            topLeft.travelTo(new RoomPosition(quad.groupingPos.x, quad.groupingPos.y, quad.groupingPos.roomName), { maxStuck: 1 })
+            topLeft.travelTo(new RoomPosition(quad.groupingPos.x, quad.groupingPos.y, quad.groupingPos.roomName), { stuckValue: 1 })
         }
         if (topRight != null && quad.groupingPos != undefined) {
             if (topLeft != null) {
                 topRight.travelTo(new RoomPosition(topLeft.pos.x + 1, topLeft.pos.y, topLeft.pos.roomName))
             }
             else {
-                topRight.travelTo(new RoomPosition(quad.groupingPos.x + 1, quad.groupingPos.y, quad.groupingPos.roomName), { maxStuck: 1 })
+                topRight.travelTo(new RoomPosition(quad.groupingPos.x + 1, quad.groupingPos.y, quad.groupingPos.roomName), { stuckValue: 1 })
 
             }
 
@@ -1470,7 +1470,7 @@ function operateQuad(quad) {
                 bottomLeft.travelTo(new RoomPosition(topLeft.pos.x, Math.min(topLeft.pos.y + 1, 49), topLeft.pos.roomName))
             }
             else {
-                bottomLeft.travelTo(new RoomPosition(quad.groupingPos.x, quad.groupingPos.y + 1, quad.groupingPos.roomName), { maxStuck: 1 })
+                bottomLeft.travelTo(new RoomPosition(quad.groupingPos.x, quad.groupingPos.y + 1, quad.groupingPos.roomName), { stuckValue: 1 })
             }
         }
         if (bottomRight != null && quad.groupingPos != undefined) {
@@ -1478,7 +1478,7 @@ function operateQuad(quad) {
                 bottomRight.travelTo(new RoomPosition(topLeft.pos.x + 1, topLeft.pos.y + 1, topLeft.pos.roomName))
             }
             else {
-                bottomRight.travelTo(new RoomPosition(quad.groupingPos.x + 1, quad.groupingPos.y + 1, quad.groupingPos.roomName), { maxStuck: 1 })
+                bottomRight.travelTo(new RoomPosition(quad.groupingPos.x + 1, quad.groupingPos.y + 1, quad.groupingPos.roomName), { stuckValue: 1 })
             }
         }
 
@@ -1493,7 +1493,10 @@ function operateQuad(quad) {
     console.log("quad: ", quad.id, " targetRoom: ", quad.targetRoom)
     var currentRoom = topLeft.room.name
     console.log("currentRoom: ", currentRoom, global.heap.rooms[currentRoom].hostiles.length)
-    if (currentRoom == quad.targetRoom || (global.heap.rooms[currentRoom].hostiles != undefined && global.heap.rooms[currentRoom].hostiles.length > 0)) {
+    console.log((Game.rooms[currentRoom].controller!=undefined && Game.rooms[currentRoom].controller.safeMode==undefined))
+    if (currentRoom == quad.targetRoom || (global.heap.rooms[currentRoom].hostiles != undefined && global.heap.rooms[currentRoom].hostiles.length > 0
+        && (Game.rooms[currentRoom].controller!=undefined && Game.rooms[currentRoom].controller.safeMode==undefined)
+    )) {
 
         if (currentRoom == quad.targetRoom) {
             //console.log("QUAD IS IN TARGET ROOM")

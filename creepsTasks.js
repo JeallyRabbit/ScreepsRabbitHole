@@ -424,6 +424,7 @@ Creep.prototype.taskCollect = function taskCollect(localHeap) {// go to deposits
             }
             else if (this.withdraw(Game.getObjectById(localHeap.deposit), RESOURCE_ENERGY) == OK) {
 
+                this.move((Math.random() * (8 - 1) + 1))
                 this.decreaseBalancer();
             }
         }
