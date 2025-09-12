@@ -296,7 +296,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         //Miners
 
         if (Game.getObjectById(this.memory.mineralId) != null && Game.getObjectById(this.memory.mineralId).mineralAmount > 0 && global.heap.rooms[this.name].miners.length < this.memory.mineralOpenPositions.length
-            && this.memory.extractorId != undefined) {//Add to civilian queue
+            && this.memory.extractorId != undefined && this.storage!=undefined && this.storage[RESOURCE_ENERGY]>C.STORAGE_ENERGY_BOTTOM) {//Add to civilian queue
             if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_MINER) == undefined) {
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_MINER))
             }
