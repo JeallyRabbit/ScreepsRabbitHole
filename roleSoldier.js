@@ -15,7 +15,7 @@ Creep.prototype.roleSoldier = function roleSoldier(ceep) {
     if (this.memory.isMelee == undefined) {
         for (let part of this.body) {
 
-            if (part.role == ATTACK) {
+            if (part.type == ATTACK) {
                 this.memory.isMelee = true;
             }
         }
@@ -53,9 +53,9 @@ Creep.prototype.roleSoldier = function roleSoldier(ceep) {
 
             if (this.memory.isMelee == false) {
                 if (this.pos.inRangeTo(targetCreep, 2) && (_.filter(targetCreep.body, function (part) {
-                    return part.role === RANGED_ATTACK && part.hits > 0;
+                    return part.type === RANGED_ATTACK && part.hits > 0;
                 }).length > 0 || _.filter(targetCreep.body, function (part) {
-                    return part.role === ATTACK && part.hits > 0;
+                    return part.type === ATTACK && part.hits > 0;
                 }).length > 0)) {
                     this.fleeFrom({ targetCreep }, 3, { maxRooms: 1 })
                     this.say("flee")

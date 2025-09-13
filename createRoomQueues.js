@@ -70,19 +70,18 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
     // Scout
     if (this.memory.roomsToScan == undefined) {
-        if(global.heap.rooms[this.name].civilianQueue.find(( {role} ) => role === C.ROLE_SCOUT)==undefined)
-        {
+        if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_SCOUT) == undefined) {
             console.log("adding socut because of roomsToScan=undefined")
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_SCOUT))
         }
-        
+
     }
     else if (this.memory.roomsToScan != undefined) {
         if (this.memory.roomsToScan.length > 0) {
             if (global.heap.rooms[this.name].haveScout == false) {
-                if (global.heap.rooms[this.name].civilianQueue.find(( {role} ) => role === C.ROLE_SCOUT) == undefined) {
+                if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_SCOUT) == undefined) {
                     console.log("adding socut")
-                    console.log(global.heap.rooms[this.name].civilianQueue.find(( role ) => role === C.ROLE_SCOUT))
+                    console.log(global.heap.rooms[this.name].civilianQueue.find((role) => role === C.ROLE_SCOUT))
                     global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_SCOUT))
                 }
             }
@@ -91,10 +90,10 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
     if (this.storage != undefined) {
 
-        if (global.heap.rooms[this.name].haulersParts < C.HAULER_REQ_CARRY_PARTS && Game.time%2==0) {
-            this.memory._haulersParts=global.heap.rooms[this.name].haulersParts
-            this.memory._needHaulersParts=C.HAULER_REQ_CARRY_PARTS
-            this.memory._haulersPartsTime=Game.time
+        if (global.heap.rooms[this.name].haulersParts < C.HAULER_REQ_CARRY_PARTS && Game.time % 2 == 0) {
+            this.memory._haulersParts = global.heap.rooms[this.name].haulersParts
+            this.memory._needHaulersParts = C.HAULER_REQ_CARRY_PARTS
+            this.memory._haulersPartsTime = Game.time
             console.log("Adding hauler: ", global.heap.rooms[this.name].haulersParts, " < ", C.HAULER_REQ_CARRY_PARTS)
             if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_HAULER) == undefined) {
                 global.heap.rooms[this.name].harvestingQueue.push(new generalRoomRequest(this.name, C.ROLE_HAULER))
@@ -192,13 +191,13 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
     // Workers below RCL4 - wthout storage
     if (this.storage == undefined || this.controller.level < 4) {
-        
-         global.heap.rooms[this.name].needWorkersParts = 1
-         
+
+        global.heap.rooms[this.name].needWorkersParts = 1
+
         if (this.memory.energyBalance > C.ENERGY_BALANCER_WORKER_SPAWN && Game.time % 2 == 0) {
             if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_WORKER) == undefined) {
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
-               
+
             }
 
         }
@@ -288,7 +287,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
     //Mineral Carriers
     if (Game.getObjectById(this.memory.mineralId) != null && Game.getObjectById(this.memory.mineralId).mineralAmount > 0 && global.heap.rooms[this.name].mineralCarryPower < global.heap.rooms[this.name].mineralMiningPower
-    && this.storage!=undefined && this.storage[RESOURCE_ENERGY]>C.STORAGE_ENERGY_BOTTOM) {//Add to civilian queue
+        && this.storage != undefined && this.storage[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {//Add to civilian queue
         //console.log("Adding mineralCarrier")
         if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_MINERAL_CARRIER) == undefined) {
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_MINERAL_CARRIER))
@@ -298,7 +297,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         //Miners
 
         if (Game.getObjectById(this.memory.mineralId) != null && Game.getObjectById(this.memory.mineralId).mineralAmount > 0 && global.heap.rooms[this.name].miners.length < this.memory.mineralOpenPositions.length
-            && this.memory.extractorId != undefined && this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>c>STORAGE_ENERGY_BOTTOM) {//Add to civilian queue
+            && this.memory.extractorId != undefined && this.storage != undefined && this.storage.store[RESOURCE_ENERGY] > c > STORAGE_ENERGY_BOTTOM) {//Add to civilian queue
             if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_MINER) == undefined) {
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_MINER))
             }
@@ -362,8 +361,12 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
     }
 
-
-
+    var soldierIndex = global.heap.rooms[this.name].defensiveQueue.findIndex(({ role }) => role === C.ROLE_SOLDIER)
+    if (soldierIndex != -1 && global.heap.rooms[global.heap.rooms[this.name].defensiveQueue[soldierIndex].roomName].hostiles.length == 0
+        && global.heap.rooms[global.heap.rooms[this.name].defensiveQueue[soldierIndex].roomName].hostileStructures.length == 0
+    ) {
+        global.heap.rooms[this.name].defensiveQueue.shift(soldierIndex)
+    }
 
 
 
