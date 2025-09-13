@@ -45,6 +45,24 @@ Room.prototype.roomManager = function roomManager() {
     if (Memory.mainRooms.includes(this.name)) {
         //If it is one of main rooms 
 
+
+        //debugging
+        console.log(this.name)
+        if(this.memory.finalBuildingList!=undefined)
+        {
+            for(b of this.memory.finalBuildingList)
+            {
+                if(b.structureType==STRUCTURE_CONTAINER)
+                {
+                    console.log("STRUCTURE_CONTAINER: ", b.x," ",b.y," ",b.roomName)
+                }
+            }
+        }
+
+
+        ///
+
+
         if (Memory.rooms[this.name].quads == undefined) {
             Memory.rooms[this.name].quads = []
         }

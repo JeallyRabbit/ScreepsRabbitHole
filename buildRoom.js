@@ -1499,6 +1499,13 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
                 this.memory.stage++;
             }
 
+            const uniqueArray = Array.from(
+                new Set(this.memory.buildingList.map(obj => JSON.stringify(obj)))
+            ).map(str => JSON.parse(str))
+
+
+            this.memory.finalBuildingList = uniqueArray
+            
             this.memory.roomCM = roomCM1.serialize();
 
         }
