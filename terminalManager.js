@@ -23,10 +23,19 @@ StructureTerminal.prototype.buyResource = function buyResource(res, amount) {
         //console.log("Profit: ",profit);
         var pricePerUnit = price * tradeAmount
         //console.log("profit per unit: ", profitPerUnit);
-        if (pricePerUnit < bestPrice) {
-            bestPrice = pricePerUnit
-            bestOrderId = resourceOrders[i].id
+        if (res == RESOURCE_ENERGY && tradeAmount > transferCost*2) {
+            if (pricePerUnit < bestPrice) {
+                bestPrice = pricePerUnit
+                bestOrderId = resourceOrders[i].id
+            }
         }
+        else {
+            if (pricePerUnit < bestPrice) {
+                bestPrice = pricePerUnit
+                bestOrderId = resourceOrders[i].id
+            }
+        }
+
     }
     if (bestOrderId != undefined) {
 
@@ -186,7 +195,9 @@ Room.prototype.terminalManager = function terminalManager() {
     }
 
     //Sharing energy to fastRclUpgrade
-    if (Memory.fastRclUpgrade != undefined && Memory.fastRclUpgrade != this.name) {
+    if (Memory.fastRclUpgrade != undefined && Memory.fastRclUpgrade != this.name
+        && this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>C.STORAGE_ENERGY_BOTTOM
+    ) {
         if (this.terminal.send(RESOURCE_ENERGY, C.RESOURCE_SHARE_AMOUNT, Memory.fastRclUpgrade) == OK) {
             return;
         }

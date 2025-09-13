@@ -645,7 +645,7 @@ Room.prototype.roomManager = function roomManager() {
 
         global.heap.rooms[this.name].rampartsEnergyNeedPerTick = (global.heap.rooms[this.name].rampartsAmount * (RAMPART_DECAY_AMOUNT / REPAIR_POWER)) / RAMPART_DECAY_TIME
 
-        global.heap.rooms[this.name].requiredRampartsRepairersPower = global.heap.rooms[this.name].rampartsEnergyNeedPerTick * 2
+        global.heap.rooms[this.name].requiredRampartsRepairersPower = global.heap.rooms[this.name].rampartsEnergyNeedPerTick * 3
 
     }
 
