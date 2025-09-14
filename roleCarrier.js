@@ -144,7 +144,8 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 }
                 else if (Game.getObjectById(this.memory.maxContainer) != null) {
                     if (Game.getObjectById(this.memory.maxContainer).store.getUsedCapacity() == 0) {
-                        this.memory.maxContainer = undefined;
+                        //turned of for debuggin - creep will go to container even if container is empty
+                        //this.memory.maxContainer = undefined;
                     }
                 }
                 else {
@@ -269,6 +270,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 this.sleep(20);
             }
 
+            
             /*
             var avoid = [];
             if (this.pos.inRangeTo(spawn, 3)) {
@@ -287,6 +289,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 this.fleeFrom(avoid, 3);
             }
                 */
+                
 
         }
         else {//creep is full - go home_room_container
