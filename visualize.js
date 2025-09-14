@@ -114,8 +114,8 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    var shortenedName=global.heap.rooms[this.name].spawn1Name.substring(0,  global.heap.rooms[this.name].spawn1Name.indexOf("_"))
-    this.visual.text("Spawn1: " +  shortenedName, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    var shortenedName = global.heap.rooms[this.name].spawn1Name.substring(0, global.heap.rooms[this.name].spawn1Name.indexOf("_"))
+    this.visual.text("Spawn1: " + shortenedName, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
     blockPos.y += blockPosHeight
@@ -125,8 +125,8 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    shortenedName=global.heap.rooms[this.name].spawn2Name.substring(0,  global.heap.rooms[this.name].spawn2Name.indexOf("_"))
-    this.visual.text("Spawn2: " + shortenedName , blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    shortenedName = global.heap.rooms[this.name].spawn2Name.substring(0, global.heap.rooms[this.name].spawn2Name.indexOf("_"))
+    this.visual.text("Spawn2: " + shortenedName, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
     blockPos.y += blockPosHeight
@@ -136,7 +136,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    shortenedName=global.heap.rooms[this.name].spawn3Name.substring(0,  global.heap.rooms[this.name].spawn3Name.indexOf("_"))
+    shortenedName = global.heap.rooms[this.name].spawn3Name.substring(0, global.heap.rooms[this.name].spawn3Name.indexOf("_"))
     this.visual.text("Spawn3: " + shortenedName, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
@@ -155,7 +155,7 @@ Room.prototype.visualize = function visualizeroomManager() {
 
     //GCL Data
     var progress = (Math.round((Game.gcl.progress / Game.gcl.progressTotal) * 100))
-    blockPos.y+=blockPosHeight
+    blockPos.y += blockPosHeight
     this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
@@ -165,7 +165,7 @@ Room.prototype.visualize = function visualizeroomManager() {
 
 
     //Construction sites
-    blockPos.y+=blockPosHeight
+    blockPos.y += blockPosHeight
     this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
@@ -173,7 +173,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.text("Construction Sites: " + Object.keys(Game.constructionSites).length, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
-    
+
 
     //building
     //global.heap.rooms[this.name].construction
@@ -236,8 +236,8 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    var task=(global.heap.rooms[this.name].doctorTask!=undefined) ? global.heap.rooms[this.name].doctorTask.slice(5): 'No task'
-    
+    var task = (global.heap.rooms[this.name].doctorTask != undefined) ? global.heap.rooms[this.name].doctorTask.slice(5) : 'No task'
+
     this.visual.text("Doc task: " + task, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
@@ -250,7 +250,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    this.visual.text("Harvesting data", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75,{color: 'pink', stroke: 'black'})
+    this.visual.text("Harvesting data", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75, { color: 'pink', stroke: 'black' })
 
 
 
@@ -324,7 +324,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    this.visual.text("Harvesting Queue:", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75,{color: 'pink', stroke: 'black'})
+    this.visual.text("Harvesting Queue:", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75, { color: 'pink', stroke: 'black' })
 
     for (req of global.heap.rooms[this.name].harvestingQueue) {
         blockPos.y += blockPosHeight
@@ -344,7 +344,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    this.visual.text("Civilian Queue:", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75,{color: 'pink', stroke: 'black'})
+    this.visual.text("Civilian Queue:", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75, { color: 'pink', stroke: 'black' })
 
     for (req of global.heap.rooms[this.name].civilianQueue) {
         blockPos.y += blockPosHeight
@@ -364,7 +364,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    this.visual.text("defensive Queue:", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75,{color: 'pink', stroke: 'black'})
+    this.visual.text("defensive Queue:", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75, { color: 'pink', stroke: 'black' })
 
     for (req of global.heap.rooms[this.name].defensiveQueue) {
         blockPos.y += blockPosHeight
@@ -384,7 +384,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    this.visual.text("offensive Queue:", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75,{color: 'pink', stroke: 'black'})
+    this.visual.text("offensive Queue:", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75, { color: 'pink', stroke: 'black' })
 
     for (req of global.heap.rooms[this.name].offensiveQueue) {
         blockPos.y += blockPosHeight
@@ -396,6 +396,18 @@ Room.prototype.visualize = function visualizeroomManager() {
         this.visual.text(req.role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
     }
+
+
+    //energyCap below queues
+    var blockPos = new RoomPosition(38, 9, this.name)
+    var blockPosWidth = 8
+    var blockPosHeight = 1
+    this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.text("Energy cap: "+this.energyAvailable, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
 

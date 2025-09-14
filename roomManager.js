@@ -47,6 +47,7 @@ Room.prototype.roomManager = function roomManager() {
 
 
         //debugging
+        /*
         console.log(this.name)
         if(this.memory.finalBuildingList!=undefined)
         {
@@ -58,7 +59,7 @@ Room.prototype.roomManager = function roomManager() {
                 }
             }
         }
-
+        */
 
         ///
 
