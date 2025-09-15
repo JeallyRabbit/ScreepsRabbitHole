@@ -327,9 +327,9 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
             //Debugging
             this.memory._repairersAddingTick=Game.time
-            this.memory.global_heap_rooms_this_name_myRamparts_length=global.heap.rooms[this.name].myRamparts.length
-            this.memory.global_heap.rooms_this_name_requiredRampartsRepairersPower=global.heap.rooms[this.name].requiredRampartsRepairersPower
-            this.memory.global_heap_rooms_this_name_rampartRepairersPower=global.heap.rooms[this.name].rampartRepairersPower
+            this.memory._global_heap_rooms_this_name_myRamparts_length=global.heap.rooms[this.name].myRamparts.length
+            this.memory._global_heap_rooms_this_name_requiredRampartsRepairersPower=global.heap.rooms[this.name].requiredRampartsRepairersPower
+            this.memory._global_heap_rooms_this_name_rampartRepairersPower=global.heap.rooms[this.name].rampartRepairersPower
             ////
         }
         else {//Add to civilian queue
@@ -338,9 +338,9 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             }
             //Debugging
             this.memory._repairersAddingTick=Game.time
-            this.memory.global_heap_rooms_this_name_myRamparts_length=global.heap.rooms[this.name].myRamparts.length
-            this.memory.global_heap.rooms_this_name_requiredRampartsRepairersPower=global.heap.rooms[this.name].requiredRampartsRepairersPower
-            this.memory.global_heap_rooms_this_name_rampartRepairersPower=global.heap.rooms[this.name].rampartRepairersPower
+            this.memory._global_heap_rooms_this_name_myRamparts_length=global.heap.rooms[this.name].myRamparts.length
+            this.memory._global_heap_rooms_this_name_requiredRampartsRepairersPower=global.heap.rooms[this.name].requiredRampartsRepairersPower
+            this.memory._global_heap_rooms_this_name_rampartRepairersPower=global.heap.rooms[this.name].rampartRepairersPower
             ////
         }
 
