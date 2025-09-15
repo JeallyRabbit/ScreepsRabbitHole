@@ -1534,8 +1534,8 @@ function operateQuad(quad) {
             topLeft.travelTo(new RoomPosition(quad.groupingPos.x, quad.groupingPos.y, quad.groupingPos.roomName), { stuckValue: 1 })
         }
         if (topRight != null && quad.groupingPos != undefined) {
-            if (topLeft != null) {
-                topRight.travelTo(new RoomPosition(topLeft.pos.x + 1, topLeft.pos.y, topLeft.pos.roomName))
+            if (topLeft != null ) {
+                topRight.travelTo(new RoomPosition(Math.min(49,topLeft.pos.x + 1), topLeft.pos.y, topLeft.pos.roomName))
             }
             else {
                 topRight.travelTo(new RoomPosition(quad.groupingPos.x + 1, quad.groupingPos.y, quad.groupingPos.roomName), { stuckValue: 1 })
@@ -1544,7 +1544,7 @@ function operateQuad(quad) {
 
         }
         if (bottomLeft != null && quad.groupingPos != undefined) {
-            if (topLeft != null) {
+            if (topLeft != null ) {
                 bottomLeft.travelTo(new RoomPosition(topLeft.pos.x, Math.min(topLeft.pos.y + 1, 49), topLeft.pos.roomName))
             }
             else {
@@ -1553,7 +1553,7 @@ function operateQuad(quad) {
         }
         if (bottomRight != null && quad.groupingPos != undefined) {
             if (topLeft != null) {
-                bottomRight.travelTo(new RoomPosition(topLeft.pos.x + 1, topLeft.pos.y + 1, topLeft.pos.roomName))
+                bottomRight.travelTo(new RoomPosition(Math.min(topLeft.pos.x + 1,49), Math.min(topLeft.pos.y + 1,49), topLeft.pos.roomName))
             }
             else {
                 bottomRight.travelTo(new RoomPosition(quad.groupingPos.x + 1, quad.groupingPos.y + 1, quad.groupingPos.roomName), { stuckValue: 1 })

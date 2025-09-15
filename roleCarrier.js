@@ -267,7 +267,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 this.move(Math.random() * (8 - 1) + 1)
             }
             else {
-                this.sleep(20);
+                this.sleep(5);
             }
 
             

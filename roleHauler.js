@@ -122,7 +122,8 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
 
     if(global.heap.rooms[this.room.name].haulerTask==C.TASK_FILL_MANAGER_LINK)
     {
-        if(Game.rooms[this.room.name].memory.resourceManagerId!=undefined)
+        if(Game.rooms[this.room.name].memory.resourceManagerId!=undefined
+        )
         {
             global.heap.rooms[this.room.name].haulerTask=undefined
             return;

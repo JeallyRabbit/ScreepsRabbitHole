@@ -255,6 +255,15 @@ Creep.prototype.taskClearCreep = function taskClearCreep() {
 }
 
 Creep.prototype.taskFillManagerLink = function taskFillManagerLink() {
+
+    if(Game.getObjectById(this.room.memory.managerLinkId)!=undefined && Game.getObjectById(this.room.memory.managerLinkId).store[RESOURCE_ENERGY]>=C.LINK_ENERGY_EDGE)
+    {
+        this.memory.task=undefined
+        if(this.memory.role==C.ROLE_HAULER)
+        {
+            global.heap.rooms[this.room.name].haulerTask=undefined
+        }
+    }
     if (this.room.memory.managerLinkId != undefined && Game.getObjectById(this.room.memory.managerLinkId) != null) {
         if (this.store[RESOURCE_ENERGY] > 0) {
             if (this.transfer(Game.getObjectById(this.room.memory.managerLinkId), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -263,6 +272,10 @@ Creep.prototype.taskFillManagerLink = function taskFillManagerLink() {
         }
     }
     else {
+         if(this.memory.role==C.ROLE_HAULER)
+        {
+            global.heap.rooms[this.room.name].haulerTask=undefined
+        }
         this.memory.task = undefined
     }
 }

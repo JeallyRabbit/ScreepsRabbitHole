@@ -328,7 +328,12 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_RESERVER:
                 {
-                    var result = spawn.spawnCreep([MOVE, CLAIM], C.ROLE_RESERVER + '_' + this.name + Game.time, { memory: { role: C.ROLE_RESERVER,directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
+                    var body=[MOVE,CLAIM]
+                    if(energyCap>=1300)
+                    {
+                        body=[MOVE,MOVE,CLAIM,CLAIM]
+                    }
+                    var result = spawn.spawnCreep(body, "ReservingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RESERVER,directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -383,7 +388,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_MINER:
                 {
-                    var result = spawn.spawnCreep(minerBody(energyCap), "OtherSlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_MINER,directions: myDirections, homeRoom: this.name } })
+                    var result = spawn.spawnCreep(minerBody(energyCap), "AnotherSlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_MINER,directions: myDirections, homeRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -431,7 +436,9 @@ Room.prototype.spawnManager = function spawnManager() {
         switch (role) {
             case C.ROLE_QUAD_MEMBER:
                 {
-                    if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
+                    if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM && 
+                        (this.memory.resourceManagerId!=undefined && Game.getObjectById(this.memory.resourceManagerId)!=null
+                    && Game.getObjectById(this.memory.resourceManagerId).ticksToLive>C.CREEP_TICKS_TO_LIVE_BUFFER)) {
                         console.log("entered spawning quad member")
                         console.log("request.quadId: ", request.quadId)
                         var name = "RabbitTail"
