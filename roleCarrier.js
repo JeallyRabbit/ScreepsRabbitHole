@@ -144,7 +144,8 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 }
                 else if (Game.getObjectById(this.memory.maxContainer) != null) {
                     if (Game.getObjectById(this.memory.maxContainer).store.getUsedCapacity() == 0) {
-                        this.memory.maxContainer = undefined;
+                        //turned of for debuggin - creep will go to container even if container is empty
+                        //this.memory.maxContainer = undefined;
                     }
                 }
                 else {
@@ -193,23 +194,23 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
                     var carrierCapacity = this.store.getCapacity()
                     var carrierUsedCapacity = this.store.getUsedCapacity()
-                    var dropped_resource = undefined
+                    var droppedResource = undefined
 
                     if (this.memory._findResources != undefined) { this.memory._findResources++ }
                     else { this.memory._findResources = 1 }
 
-                    var dropped_resource = Game.rooms[this.memory.targetRoom].find(FIND_DROPPED_RESOURCES, {
+                    var droppedResource = Game.rooms[this.memory.targetRoom].find(FIND_DROPPED_RESOURCES, {
                         filter: function (resource) {
-                            return resource.amount >= carrierCapacity - carrierUsedCapacity
+                            return resource.amount >= (carrierCapacity - carrierUsedCapacity)/4
                         }
                     });
 
 
-                    if (dropped_resource != undefined && dropped_resource != null && dropped_resource.length > 0) {
-                        // var closest_resource = this.pos.findClosestByPath(dropped_resource);
+                    if (droppedResource != undefined && droppedResource != null && droppedResource.length > 0) {
+                        // var closest_resource = this.pos.findClosestByPath(droppedResource);
                         var max_res_amount = 0;
                         var max_res_id = undefined;
-                        for (let a of dropped_resource) {
+                        for (let a of droppedResource) {
                             if (a.amount > max_res_amount) {
                                 max_res_amount = a.amount;
                                 max_res_id = a.id;
@@ -269,6 +270,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 this.sleep(20);
             }
 
+            
             /*
             var avoid = [];
             if (this.pos.inRangeTo(spawn, 3)) {
@@ -287,6 +289,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 this.fleeFrom(avoid, 3);
             }
                 */
+                
 
         }
         else {//creep is full - go home_room_container

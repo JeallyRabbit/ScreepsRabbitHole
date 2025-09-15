@@ -109,7 +109,7 @@ Room.prototype.spawnManager = function spawnManager() {
         console.log("spawning not first quad member")
         var request = global.heap.rooms[this.name].offensiveQueue[0]
 
-        var blockPos = new RoomPosition(38, 5, this.name)
+        var blockPos = new RoomPosition(38, 8, this.name)
         var blockPosWidth = 8
         var blockPosHeight = 1
         this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
@@ -164,7 +164,7 @@ Room.prototype.spawnManager = function spawnManager() {
         var role = request.role
         var energyCap = Game.rooms[this.name].energyAvailable
 
-        var blockPos = new RoomPosition(38, 6, this.name)
+        var blockPos = new RoomPosition(38, 8, this.name)
         var blockPosWidth = 8
         var blockPosHeight = 1
         this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
@@ -195,7 +195,7 @@ Room.prototype.spawnManager = function spawnManager() {
         var role = request.role
         var energyCap = Game.rooms[this.name].energyAvailable
 
-        var blockPos = new RoomPosition(38, 7, this.name)
+        var blockPos = new RoomPosition(38, 8, this.name)
         var blockPosWidth = 8
         var blockPosHeight = 1
         this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
@@ -333,9 +333,9 @@ Room.prototype.spawnManager = function spawnManager() {
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
                         global.heap.rooms[this.name].civilianQueue.shift()
-
+                        break;
                     }
-                    break;
+                    
                 }
             case C.ROLE_RAMPART_REPAIRER:
                 {

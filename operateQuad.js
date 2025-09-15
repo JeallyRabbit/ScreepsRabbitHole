@@ -808,17 +808,17 @@ function rotateToTarget(quad, target) {
     console.log("quad: ", quad.id, " needs to rotate into  into ", getTargetDirection(quad, target),
         " - ", getQuadDirection(quad), " = ", aux, " direction")
     if (Math.abs(aux) > 1) {
+        quadSpinLeft(quad)
+
+        /*
         if (aux == -3) {
             quadSpinLeft(quad)
         }
         else {
             quadSpinRight(quad)
         }
+        */
 
-        /*
-        rotate left when TOPRIGHT(2) - BOTTOM(5)=-3
-        BOTTOMRIGHT4 - LEFT7
-            */
     }
 }
 
@@ -1280,6 +1280,84 @@ function findTargetCreepInRange(quad, hostiles) {// finds creep in range of Rang
     return target;
 }
 
+function verifyPositionAssignment(quad) {
+
+    console.log("verifying quad positioning")
+    var arePositinedCorrectly = false;
+
+
+    var topLeft = Game.getObjectById(quad.topLeftId);
+    var topRight = Game.getObjectById(quad.topRightId);
+    var bottomLeft = Game.getObjectById(quad.bottomLeftId);
+    var bottomRight = Game.getObjectById(quad.bottomRightId);
+
+    if (topLeft != null && topRight != null && bottomRight != null && bottomLeft != null) {
+        if ((topLeft.pos.x == topRight.pos.x - 1 && topLeft.pos.y == topRight.pos.y)
+            && (topLeft.pos.x == bottomLeft.pos.x && topLeft.pos.y == bottomLeft.pos.y - 1)
+            && (topLeft.pos.x == bottomRight.pos.x - 1 && topLeft.pos.y == bottomRight.pos.y - 1)) {
+            arePositinedCorrectly = true
+            console.log("quad is positined good")
+        }
+    }
+
+
+    if (arePositinedCorrectly == false
+    ) {
+
+        console.log("quad is not positioned correctly")
+        var topLeftPosSum = Infinity
+        var realTopLeft = undefined
+        for (m of quad.members) {
+            var aux = Game.getObjectById(m)
+            if (aux != null) {
+                if (aux.pos.x + aux.pos.y < topLeftPosSum) {
+                    topLeftPosSum = aux.pos.x + aux.pos.y
+                    realTopLeft = aux
+                }
+            }
+        }
+
+
+
+
+        if (realTopLeft != undefined) {
+            topLeft = realTopLeft
+            quad.topLeftId = realTopLeft.id
+
+            for (m of quad.members) {
+                var aux = Game.getObjectById(m)
+                {
+                    if (aux != null) {
+                        //find topRight
+                        if (aux.pos.x == topLeft.pos.x + 1 && aux.pos.y == topLeft.pos.y) {
+                            topRight = aux;
+                            quad.topRightId = m
+                        }
+
+                        //find bottomLeft
+                        if (aux.pos.x == topLeft.pos.x && aux.pos.y == topLeft.pos.y + 1) {
+                            bottomLeft = aux;
+                            quad.bottomLeftId = m
+                        }
+
+                        //find bottomRight
+                        if (aux.pos.x == topLeft.pos.x + 1 && aux.pos.y == topLeft.pos.y + 1) {
+                            bottomLeft = aux;
+                            quad.bottomRightId = m
+                        }
+
+                    }
+                }
+            }
+
+
+        }
+    }
+
+
+}
+
+
 
 function operateQuad(quad) {
 
@@ -1489,13 +1567,15 @@ function operateQuad(quad) {
         quad.groupingPos = undefined
     }
 
+    
+    verifyPositionAssignment(quad)
 
     console.log("quad: ", quad.id, " targetRoom: ", quad.targetRoom)
     var currentRoom = topLeft.room.name
     console.log("currentRoom: ", currentRoom, global.heap.rooms[currentRoom].hostiles.length)
-    console.log((Game.rooms[currentRoom].controller!=undefined && Game.rooms[currentRoom].controller.safeMode==undefined))
+    console.log((Game.rooms[currentRoom].controller != undefined && Game.rooms[currentRoom].controller.safeMode == undefined))
     if (currentRoom == quad.targetRoom || (global.heap.rooms[currentRoom].hostiles != undefined && global.heap.rooms[currentRoom].hostiles.length > 0
-        && (Game.rooms[currentRoom].controller!=undefined && Game.rooms[currentRoom].controller.safeMode==undefined)
+        && (Game.rooms[currentRoom].controller != undefined && Game.rooms[currentRoom].controller.safeMode == undefined)
     )) {
 
         if (currentRoom == quad.targetRoom) {

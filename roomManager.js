@@ -45,6 +45,25 @@ Room.prototype.roomManager = function roomManager() {
     if (Memory.mainRooms.includes(this.name)) {
         //If it is one of main rooms 
 
+
+        //debugging
+        /*
+        console.log(this.name)
+        if(this.memory.finalBuildingList!=undefined)
+        {
+            for(b of this.memory.finalBuildingList)
+            {
+                if(b.structureType==STRUCTURE_CONTAINER)
+                {
+                    console.log("STRUCTURE_CONTAINER: ", b.x," ",b.y," ",b.roomName)
+                }
+            }
+        }
+        */
+
+        ///
+
+
         if (Memory.rooms[this.name].quads == undefined) {
             Memory.rooms[this.name].quads = []
         }
@@ -645,7 +664,7 @@ Room.prototype.roomManager = function roomManager() {
 
         global.heap.rooms[this.name].rampartsEnergyNeedPerTick = (global.heap.rooms[this.name].rampartsAmount * (RAMPART_DECAY_AMOUNT / REPAIR_POWER)) / RAMPART_DECAY_TIME
 
-        global.heap.rooms[this.name].requiredRampartsRepairersPower = global.heap.rooms[this.name].rampartsEnergyNeedPerTick * 2
+        global.heap.rooms[this.name].requiredRampartsRepairersPower = global.heap.rooms[this.name].rampartsEnergyNeedPerTick * 3
 
     }
 
