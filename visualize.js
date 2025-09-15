@@ -105,7 +105,8 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     var usedHeap = (Math.round((heapData.used_heap_size / 1024) / 1024) * 100) / 100
-    this.visual.text("Heap: " + usedHeap + " MB\\" + (heapData.heap_size_limit / 1024) / 1024 + " MB", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    this.visual.text("Heap: " + usedHeap + " MB\\" + (Math.round(((heapData.heap_size_limit / 1024) / 1024) * 100) / 100) + " MB", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    
 
     blockPos.y += blockPosHeight
     // What spawn1 is spawning
@@ -323,7 +324,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    this.visual.text("RampRep: Parts: " + global.heap.rooms[this.name].rampartRepairersPower + "/" + global.heap.rooms[this.name].requiredRampartsRepairersPower , blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    this.visual.text("RampRep: Parts: " + global.heap.rooms[this.name].rampartRepairersPower + "/" + (Math.round((global.heap.rooms[this.name].requiredRampartsRepairersPower) * 100) / 100) , blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
     //Mineral Carrier

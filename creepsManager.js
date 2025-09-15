@@ -126,6 +126,7 @@ Room.prototype.creepsManager = function creepsManager() {
                 global.heap.rooms[creep.memory.homeRoom].harvestingParts += creep.body.length
                 break;
             case C.ROLE_RAMPART_REPAIRER:
+                //creep.suicide()
                 creep.roleRampartRepairer()
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
                 global.heap.rooms[creep.memory.homeRoom].rampartRepairersPower += _.filter(creep.body, { type:  WORK }).length

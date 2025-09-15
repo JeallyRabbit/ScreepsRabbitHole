@@ -317,16 +317,31 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     // console.log("global.heap.rooms[this.name].mineralMiningPower: ", global.heap.rooms[this.name].mineralMiningPower, " / global.heap.rooms[this.name].mineralCarryPower: ", global.heap.rooms[this.name].mineralCarryPower)
 
     //Rampart Repairers - civilian queue
-    if (global.heap.rooms[this.name].requiredRampartsRepairersPower > global.heap.rooms[this.name].rampartRepairersPower) {
+    if (global.heap.rooms[this.name].requiredRampartsRepairersPower > global.heap.rooms[this.name].rampartRepairersPower
+        && global.heap.rooms[this.name].myRamparts.length>0
+    ) {
         if (global.heap.rooms[this.name].state.includes(C.STATE_UNDER_ATTACK)) {//Add to defensive queue
             if (global.heap.rooms[this.name].defensiveQueue.find(({ role }) => role === C.ROLE_RAMPART_REPAIRER) == undefined) {
                 global.heap.rooms[this.name].defensiveQueue.push(new generalRoomRequest(this.name, C.ROLE_RAMPART_REPAIRER))
             }
+
+            //Debugging
+            this.memory._repairersAddingTick=Game.time
+            this.memory.global_heap_rooms_this_name_myRamparts_length=global.heap.rooms[this.name].myRamparts.length
+            this.memory.global_heap.rooms_this_name_requiredRampartsRepairersPower=global.heap.rooms[this.name].requiredRampartsRepairersPower
+            this.memory.global_heap_rooms_this_name_rampartRepairersPower=global.heap.rooms[this.name].rampartRepairersPower
+            ////
         }
         else {//Add to civilian queue
             if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RAMPART_REPAIRER) == undefined) {
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_RAMPART_REPAIRER))
             }
+            //Debugging
+            this.memory._repairersAddingTick=Game.time
+            this.memory.global_heap_rooms_this_name_myRamparts_length=global.heap.rooms[this.name].myRamparts.length
+            this.memory.global_heap.rooms_this_name_requiredRampartsRepairersPower=global.heap.rooms[this.name].requiredRampartsRepairersPower
+            this.memory.global_heap_rooms_this_name_rampartRepairersPower=global.heap.rooms[this.name].rampartRepairersPower
+            ////
         }
 
     }
