@@ -481,7 +481,7 @@ Creep.prototype.taskUpgrade = function taskUpgrade(localHeap) {
     }
     var upgradeResult = this.upgradeController(this.room.controller);
     //this.travelTo(this.room.controller, { reusePath: 17,maxRooms:1 });
-    if (upgradeResult == ERR_NOT_IN_RANGE || upgradeResult == -9) {
+if (upgradeResult == ERR_NOT_IN_RANGE || true) {
         this.travelTo(this.room.controller, { reusePath: 17, maxRooms: 1 });
     }
 

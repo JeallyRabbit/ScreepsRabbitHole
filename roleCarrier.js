@@ -125,6 +125,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
             if ((Game.rooms[this.memory.targetRoom] == undefined || this.pos.inRangeTo(spawn, 4))
                 && global.heap.rooms[this.memory.homeRoom].defensiveQueue != undefined &&
                 !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER)
+                && this.memory.maxContainer != undefined  // this condition might be wrong
             ) {
                 const destination = new RoomPosition(25, 25, this.memory.targetRoom);
                 this.travelTo(destination,{stuckValue:2})
@@ -262,6 +263,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
             var spawn2 = Game.getObjectById(this.room.memory.spawn2Id)
             var spawn3 = Game.getObjectById(this.room.memory.spawn3Id)
 
+            /*
             if ((spawn1!=undefined && this.pos.inRangeTo(spawn1.pos.x, spawn1.pos.y, 4)) ||(spawn2!=undefined && this.pos.inRangeTo(spawn2.pos.x, spawn2.pos.y, 4))
                 || (spawn3!=undefined && this.pos.inRangeTo(spawn3.pos.x, spawn3.pos.y, 4))) {
                 this.move(Math.random() * (8 - 1) + 1)
@@ -269,6 +271,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
             else {
                 this.sleep(5);
             }
+                */
 
             
             
