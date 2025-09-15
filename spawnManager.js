@@ -181,14 +181,27 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_RAMPART_REPAIRER:
                 {
-                    var result = spawn.spawnCreep(workerBody(energyCap), "RampartLovingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RAMPART_REPAIRER, directions: myDirections, homeRoom: this.name } })
-                    global.heap.rooms[this.name].spawnResult = result
-                    global.heap.rooms[this.name].spawnRole = role
-                    if (result == OK) {
-                        global.heap.rooms[this.name].defensiveQueue.shift()
+                    //This condition should be unneccesary but it keeps still spawning rampartsRepairers so added it here
+                    if (global.heap.rooms[this.name].rampartRepairersPower < global.heap.rooms[this.name].requiredRampartsRepairersPower) {
+                        var result = spawn.spawnCreep(workerBody(energyCap), "RampartLovingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RAMPART_REPAIRER, directions: myDirections, homeRoom: this.name } })
+                        global.heap.rooms[this.name].spawnResult = result
+                        global.heap.rooms[this.name].spawnRole = role
+                        if (result == OK) {
+                            global.heap.rooms[this.name].defensiveQueue.shift()
 
+                            //Debugging
+                            this.memory._RepairersSpawningTick = Game.time
+                            this.memory._inSpawnManager_global_heap_rooms_this_name_myRamparts_length = global.heap.rooms[this.name].myRamparts.length
+                            this.memory._inSpawnManager_global_heap_rooms_this_name_requiredRampartsRepairersPower = global.heap.rooms[this.name].requiredRampartsRepairersPower
+                            this.memory._inSpawnManager_global_heap_rooms_this_name_rampartRepairersPower = global.heap.rooms[this.name].rampartRepairersPower
+                            //
+                        }
+                        break;
                     }
-                    break;
+                    else {
+                        global.heap.rooms[this.name].civilianQueue.shift()
+                    }
+
                 }
         }
     }
@@ -346,14 +359,26 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_RAMPART_REPAIRER:
                 {
-                    var result = spawn.spawnCreep(workerBody(energyCap), "RampartLovingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RAMPART_REPAIRER, directions: myDirections, homeRoom: this.name } })
-                    global.heap.rooms[this.name].spawnResult = result
-                    global.heap.rooms[this.name].spawnRole = role
-                    if (result == OK) {
-                        global.heap.rooms[this.name].civilianQueue.shift()
-
+                    //This condition should be unneccesary but it keeps still spawning rampartsRepairers so added it here
+                    if (global.heap.rooms[this.name].rampartRepairersPower < global.heap.rooms[this.name].requiredRampartsRepairersPower) {
+                        var result = spawn.spawnCreep(workerBody(energyCap), "RampartLovingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RAMPART_REPAIRER, directions: myDirections, homeRoom: this.name } })
+                        global.heap.rooms[this.name].spawnResult = result
+                        global.heap.rooms[this.name].spawnRole = role
+                        if (result == OK) {
+                            global.heap.rooms[this.name].civilianQueue.shift()
+                            //Debugging
+                            this.memory._RepairersSpawningTick = Game.time
+                            this.memory._inSpawnManager_global_heap_rooms_this_name_myRamparts_length = global.heap.rooms[this.name].myRamparts.length
+                            this.memory._inSpawnManager_global_heap_rooms_this_name_requiredRampartsRepairersPower = global.heap.rooms[this.name].requiredRampartsRepairersPower
+                            this.memory._inSpawnManager_global_heap_rooms_this_name_rampartRepairersPower = global.heap.rooms[this.name].rampartRepairersPower
+                            //
+                        }
+                        break;
                     }
-                    break;
+                    else {
+                        global.heap.rooms[this.name].civilianQueue.shift()
+                    }
+
                 }
             case C.ROLE_RESOURCE_MANAGER:
                 {
