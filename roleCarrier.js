@@ -271,7 +271,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
             }
 
             
-            /*
+            
             var avoid = [];
             if (this.pos.inRangeTo(spawn, 3)) {
                 avoid.push(spawn)
@@ -288,7 +288,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
                 this.fleeFrom(avoid, 3);
             }
-                */
+                
                 
 
         }

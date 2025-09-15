@@ -572,7 +572,7 @@ Creep.prototype.taskBuild = function taskBuild(localHeap) {
 
         if (toFocus != null) {
             if (this.build(toFocus) == ERR_NOT_IN_RANGE) {
-                this.travelTo(toFocus, { range: 1, maxRooms: 1 })
+                this.travelTo(toFocus, { range: 1, maxRooms: 1, ignoreCreeps: false })
             }
             else if (this.build(toFocus) == ERR_INVALID_TARGET) {
                 this.move(Math.floor(Math.random() * (8 - 1 + 1)) + 1)

@@ -23,8 +23,8 @@ StructureTerminal.prototype.buyResource = function buyResource(res, amount) {
         //console.log("Profit: ",profit);
         var pricePerUnit = price * tradeAmount
         //console.log("profit per unit: ", profitPerUnit);
-        if (res == RESOURCE_ENERGY && tradeAmount > transferCost*2) {
-            if (pricePerUnit < bestPrice) {
+        if (res == RESOURCE_ENERGY) {
+            if (pricePerUnit < bestPrice && tradeAmount > transferCost*2) {
                 bestPrice = pricePerUnit
                 bestOrderId = resourceOrders[i].id
             }
