@@ -59,10 +59,8 @@ Room.prototype.creepsManager = function creepsManager() {
             global.heap.rooms[creep.memory.homeRoom].creepsBodyParts += creep.body.length
         }
 
-
-
-
-        if (creep == undefined || creep.memory == undefined || creep.memory == {}) {
+       
+        if (creep == undefined || (creep!=undefined && _.isEmpty(creep.memory))) {
             creep.suicide()
             continue
         }
