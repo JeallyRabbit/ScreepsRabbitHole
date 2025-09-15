@@ -62,7 +62,7 @@ StructureTerminal.prototype.buyResource = function buyResource(res, amount) {
     return buyResult
 }
 
-StructureTerminal.prototype.sellResource = function sell_resource(res, amount) {
+StructureTerminal.prototype.sellResource = function sellResource(res, amount) {
 
     if (res == undefined) {
         return;

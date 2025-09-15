@@ -20,6 +20,6 @@ Creep.prototype.roleMineralCarrier = function roleMineralCarrier()
     }
     else if(localHeap.task==C.TASK_STORE_MINERAL)
     {
-        this.taskStoreMineral(localHeap.storage)
+        this.taskStoreMineral()
     }
 }

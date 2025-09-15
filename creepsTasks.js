@@ -7,27 +7,22 @@ const C = require('constants');
 
 
 
-Creep.prototype.taskFillLabEnergy = function taskFillLabEnergy(id)
-{
-    var lab=Game.getObjectById(id)
+Creep.prototype.taskFillLabEnergy = function taskFillLabEnergy(id) {
+    var lab = Game.getObjectById(id)
 
-    if(lab==null || (lab!=null && lab.store[RESOURCE_ENERGY]>LAB_ENERGY_CAPACITY/2))
-    {
-        global.heap.rooms[this.room.name].doctorTask=undefined
-        global.heap.rooms[this.room.name].labNeedEnergyId=undefined
+    if (lab == null || (lab != null && lab.store[RESOURCE_ENERGY] > LAB_ENERGY_CAPACITY / 2)) {
+        global.heap.rooms[this.room.name].doctorTask = undefined
+        global.heap.rooms[this.room.name].labNeedEnergyId = undefined
         return
     }
 
-    if(this.store[RESOURCE_ENERGY]==0)
-    {
-        if(this.withdraw(this.room.storage,RESOURCE_ENERGY)==ERR_NOT_IN_RANGE)
-        {
+    if (this.store[RESOURCE_ENERGY] == 0) {
+        if (this.withdraw(this.room.storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             this.travelTo(this.room.storage)
         }
     }
-    else{
-        if(this.transfer(lab,RESOURCE_ENERGY)==ERR_NOT_IN_RANGE)
-        {
+    else {
+        if (this.transfer(lab, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
             this.travelTo(lab)
         }
     }
@@ -35,7 +30,7 @@ Creep.prototype.taskFillLabEnergy = function taskFillLabEnergy(id)
 }
 
 Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
-    if (this.room.ifBothInputMineralEmpty(in1,in2)) {
+    if (this.room.ifBothInputMineralEmpty(in1, in2)) {
         global.heap.rooms[this.room.name].doctorTask = undefined
         return
     }
@@ -47,7 +42,7 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
                     var withdrawResult = this.withdraw(in1, res)
                     if (withdrawResult == ERR_NOT_IN_RANGE) {
                         this.travelTo(in1)
-                        
+
                     }
                     break
                 }
@@ -60,7 +55,7 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
                     var withdrawResult = this.withdraw(in2, res)
                     if (withdrawResult == ERR_NOT_IN_RANGE) {
                         this.travelTo(in2)
-                        
+
                     }
                     break
                 }
@@ -70,9 +65,8 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
     else {
         // transfer to storage
         for (res in this.store) {
-            var transferResult=this.transfer(this.room.storage,res)
-            if(transferResult==ERR_NOT_IN_RANGE)
-            {
+            var transferResult = this.transfer(this.room.storage, res)
+            if (transferResult == ERR_NOT_IN_RANGE) {
                 this.travelTo(this.room.storage)
             }
             break;
@@ -81,7 +75,7 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
 
 }
 
-Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1,in2) {
+Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1, in2) {
 
 
     var outputLabs = []
@@ -95,7 +89,7 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1,in2) {
         return
     }
 
-    if (this.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && this.ticksToLive>30) {
+    if (this.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && this.ticksToLive > 30) {
         var maxLab = undefined
         var auxAmount = LAB_MINERAL_CAPACITY
         for (l of outputLabs) {
@@ -118,7 +112,7 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1,in2) {
                 }
             }
         }
-        else if(maxLab==undefined && this.room.oneInputMineralEmpty(in1,in2)) {
+        else if (maxLab == undefined && this.room.oneInputMineralEmpty(in1, in2)) {
             global.heap.rooms[this.room.name].doctorTask = undefined
             return
         }
@@ -176,26 +170,23 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
                 this.travelTo(in2)
             }
         }*/
-       if(this.store[res1]>0 && this.transfer(in1,res1)==ERR_NOT_IN_RANGE)
-       {
-        this.travelTo(in1)
-       }
-       else if(this.store[res2]>0 && this.transfer(in2,res2)==ERR_NOT_IN_RANGE)
-       {
-        this.travelTo(in2)
-       }
+        if (this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) {
+            this.travelTo(in1)
+        }
+        else if (this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANGE) {
+            this.travelTo(in2)
+        }
         else {
 
             var res = res1
-            if (in1.store[res1]>0 && in2.store[res2] == 0) {
+            if (in1.store[res1] > 0 && in2.store[res2] == 0) {
                 res = res2
             }
 
             if (this.store[res] == 0) {
                 var storage = this.room.storage
-                if(storage.store[res]==0)
-                {
-                    storage=this.room.terminal
+                if (storage.store[res] == 0) {
+                    storage = this.room.terminal
                 }
                 /*
                 var rawResources = ["H", "O", "U", "L", "K", "Z", "X"]
@@ -256,12 +247,10 @@ Creep.prototype.taskClearCreep = function taskClearCreep() {
 
 Creep.prototype.taskFillManagerLink = function taskFillManagerLink() {
 
-    if(Game.getObjectById(this.room.memory.managerLinkId)!=undefined && Game.getObjectById(this.room.memory.managerLinkId).store[RESOURCE_ENERGY]>=C.LINK_ENERGY_EDGE)
-    {
-        this.memory.task=undefined
-        if(this.memory.role==C.ROLE_HAULER)
-        {
-            global.heap.rooms[this.room.name].haulerTask=undefined
+    if (Game.getObjectById(this.room.memory.managerLinkId) != undefined && Game.getObjectById(this.room.memory.managerLinkId).store[RESOURCE_ENERGY] >= C.LINK_ENERGY_EDGE) {
+        this.memory.task = undefined
+        if (this.memory.role == C.ROLE_HAULER) {
+            global.heap.rooms[this.room.name].haulerTask = undefined
         }
     }
     if (this.room.memory.managerLinkId != undefined && Game.getObjectById(this.room.memory.managerLinkId) != null) {
@@ -272,9 +261,8 @@ Creep.prototype.taskFillManagerLink = function taskFillManagerLink() {
         }
     }
     else {
-         if(this.memory.role==C.ROLE_HAULER)
-        {
-            global.heap.rooms[this.room.name].haulerTask=undefined
+        if (this.memory.role == C.ROLE_HAULER) {
+            global.heap.rooms[this.room.name].haulerTask = undefined
         }
         this.memory.task = undefined
     }
@@ -373,7 +361,7 @@ Creep.prototype.taskCollect = function taskCollect(localHeap) {// go to deposits
         this.memory.task = 'undefined_debugging_collect'
         return -1;
     }
-    if (localHeap.depposit!=undefined && Game.getObjectById(localHeap.deposit) != null && Game.getObjectById(localHeap.deposit).store[RESOURCE_ENERGY] == 0) {
+    if (localHeap.depposit != undefined && Game.getObjectById(localHeap.deposit) != null && Game.getObjectById(localHeap.deposit).store[RESOURCE_ENERGY] == 0) {
 
         localHeap.deposit = undefined
     }
@@ -427,7 +415,7 @@ Creep.prototype.taskCollect = function taskCollect(localHeap) {// go to deposits
     }
 
     if (Game.getObjectById(localHeap.deposit) != null) {
-        if ((this.room.controller!=undefined && this.room.controller.level >= 4 && this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_UPGRADE_LIMIT)
+        if ((this.room.controller != undefined && this.room.controller.level >= 4 && this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_UPGRADE_LIMIT)
 
             || (this.room.memory.energyBalance != undefined && this.room.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START)) {
             if (this.withdraw(Game.getObjectById(localHeap.deposit), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -660,16 +648,19 @@ Creep.prototype.taskStoreMineral = function taskStoreMineral() {
         storage = this.room.terminal
     }
 
-    if (this.pos.isNearTo(storage)) {
-        for (res in this.store) {
-            if (this.transfer(storage, res) == OK) {
-                break;
+    if (storage != undefined) {
+        if (this.pos.isNearTo(storage)) {
+            for (res in this.store) {
+                if (this.transfer(storage, res) == OK) {
+                    break;
+                }
             }
         }
+        else {
+            this.travelTo(storage)
+        }
     }
-    else {
-        this.travelTo(storage)
-    }
+
 
 }
 

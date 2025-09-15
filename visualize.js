@@ -326,6 +326,19 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.text("RampRep: Parts: " + global.heap.rooms[this.name].rampartRepairersPower + "/" + global.heap.rooms[this.name].requiredRampartsRepairersPower , blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
+    //Mineral Carrier
+    blockPos.y += blockPosHeight
+    this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.text("Mineral carry/harvest: " + (Math.round((global.heap.rooms[this.name].mineralCarryPower) * 100) / 100) + "/" + global.heap.rooms[this.name].mineralMiningPower , blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+
+
+    
+
+
     //harvesting queue
     blockPos.y += blockPosHeight
     this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
