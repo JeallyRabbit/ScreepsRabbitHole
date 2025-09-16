@@ -29,6 +29,7 @@ Room.prototype.creepsManager = function creepsManager() {
     if(this.memory.resourceManagerId!=undefined && Game.getObjectById(this.memory.resourceManagerId)==null)
     {
         this.memory.resourceManagerId=undefined
+        console.log("resourACeManager have died")
     }
     global.heap.rooms[this.name].mineralMiningPower = 0;//how much of mineral is extracted per tick
     if (global.heap.rooms[this.name].miners == undefined) {

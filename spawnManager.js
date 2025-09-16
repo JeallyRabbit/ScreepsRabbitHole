@@ -382,14 +382,20 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_RESOURCE_MANAGER:
                 {
-                    var result = spawn.spawnCreep(carrierBody(energyCap), "GreedyRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RESOURCE_MANAGER, directions: myDirections, homeRoom: this.name } })
-                    global.heap.rooms[this.name].spawnResult = result
-                    global.heap.rooms[this.name].spawnRole = role
-                    if (result == OK) {
-                        global.heap.rooms[this.name].civilianQueue.shift()
+                    if (this.storage != undefined) {
+                        var result = spawn.spawnCreep(carrierBody(energyCap), "GreedyRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RESOURCE_MANAGER, directions: myDirections, homeRoom: this.name } })
+                        global.heap.rooms[this.name].spawnResult = result
+                        global.heap.rooms[this.name].spawnRole = role
+                        if (result == OK) {
+                            global.heap.rooms[this.name].civilianQueue.shift()
 
+                        }
+                        break;
                     }
-                    break;
+                    else {
+                        global.heap.rooms[this.name].civilianQueue.shift()
+                    }
+
                 }
             case C.ROLE_CLAIMER:
                 {
