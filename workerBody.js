@@ -10,7 +10,6 @@ function workerBody(cap,bodyScheme=[MOVE,CARRY,WORK,WORK])// return array with m
         segmentCost+=BODYPART_COST[part]
     }
     var parts=[];
-
     while(cap>segmentCost && bodyLength+bodyScheme.length<C.CREEP_MAX_BODYPARTS)
     {
         bodyLength+=bodyScheme.length
