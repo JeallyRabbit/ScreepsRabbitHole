@@ -29,47 +29,46 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 
 
             if (global.heap.rooms[this.room.name].managerTask == undefined) {
-      
-                if(this.store.getCapacity(RESOURCE_ENERGY)>this.store.getFreeCapacity(RESOURCE_ENERGY))
-                {
-                    global.heap.rooms[this.room.name].managerTask=C.TASK_CLEAR_CREEP
+
+                if (this.store.getCapacity(RESOURCE_ENERGY) > this.store.getFreeCapacity(RESOURCE_ENERGY)) {
+                    global.heap.rooms[this.room.name].managerTask = C.TASK_CLEAR_CREEP
                 }
                 else if (managerLink != undefined && managerLink.store[RESOURCE_ENERGY] < C.LINK_ENERGY_EDGE) {
-               
+
 
                     global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_LINK
                 }
-                else if (managerLink != undefined && managerLink.store[RESOURCE_ENERGY] > C.LINK_ENERGY_EDGE) {
-               
+                else if (managerLink != undefined && managerLink.store[RESOURCE_ENERGY] ==LINK_CAPACITY) {
+
                     this.say("L->")
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TAKE_FROM_LINK;
                 }
                 else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_ENERGY_BOTTOM) {
-             
+
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[RESOURCE_ENERGY]
                 }
                 else if (terminal.store[RESOURCE_ENERGY] < C.TERMINAL_BOTTOM_ENERGY && storage.store[RESOURCE_ENERGY] > C.STORAGE_TOP_ENERGY) {
-           
+
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[RESOURCE_ENERGY]
                     //this.say(C.TASK_TRANSFER_TO_TERMINAL[RESOURCE_ENERGY])
                 }
                 else if (isT3BoostInStore(terminal.store) != false)//T3 boosts should be only in storage
                 {
-              
+
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[isT3BoostInStore(terminal.store)]
                 }
                 else if (isRawResInStore(storage.store) != false)//Raw Resources should be in terminal
                 {
-             
+
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isRawResInStore(storage.store)]
                 }
                 else if (isT1orT2InStore(storage.store) != false)//T1/T2 should be only in storage
                 {
-            
+
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isT1orT2InStore(terminal.store)]
                 }
                 else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_TOP_ENERGY) {
-           
+
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[RESOURCE_ENERGY]
                 }
                 else if (Game.getObjectById(global.heap.rooms[this.room.name].myNuker) != null) {
@@ -87,37 +86,49 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
             }
 
 
-            if(global.heap.rooms[this.room.name].managerTask==C.TASK_CLEAR_CREEP)
-            {
-                if(this.store.getCapacity()==this.store.getFreeCapacity())
-                {
-                    global.heap.rooms[this.room.name].managerTask=undefined;
+            if (global.heap.rooms[this.room.name].managerTask == C.TASK_CLEAR_CREEP) {
+                if (this.store.getCapacity() == this.store.getFreeCapacity()) {
+                    global.heap.rooms[this.room.name].managerTask = undefined;
                 }
                 this.taskClearCreep()
             }
             if (global.heap.rooms[this.room.name].managerTask == C.TASK_FILL_LINK) {
-                this.withdraw(storage, RESOURCE_ENERGY)
-                this.withdraw(terminal, RESOURCE_ENERGY)
+
+                var amount =(C.LINK_ENERGY_EDGE-managerLink.store[RESOURCE_ENERGY])+1
+                this.withdraw(storage, RESOURCE_ENERGY,amount)
+                if (this.room.terminal != undefined && this.room.terminal.store[RESOURCE_ENERGY] > C.TERMINAL_BOTTOM_ENERGY) {
+                    this.withdraw(terminal, RESOURCE_ENERGY,amount)
+                }
+
                 this.transfer(managerLink, RESOURCE_ENERGY)
                 if (managerLink.store[RESOURCE_ENERGY] > C.LINK_ENERGY_EDGE) {
                     global.heap.rooms[this.room.name].managerTask = undefined
                 }
             }
 
-            if(global.heap.rooms[this.room.name].managerTask ==C.TASK_TAKE_FROM_LINK)
-            {
-                this.withdraw(managerLink, RESOURCE_ENERGY)
-                if(terminal.store[RESOURCE_ENERGY]<C.TERMINAL_BOTTOM_ENERGY)
-                {//change that to firstly put into terminal
-                    this.transfer(terminal,RESOURCE_ENERGY)
+            if (global.heap.rooms[this.room.name].managerTask == C.TASK_TAKE_FROM_LINK) {
+                if (managerLink.store[RESOURCE_ENERGY] == 0) {
+                    global.heap.rooms[this.room.name].managerTask = undefined
                 }
-                else{
-                    this.transfer(storage,RESOURCE_ENERGY)
+                this.withdraw(managerLink, RESOURCE_ENERGY)
+                if (terminal.store[RESOURCE_ENERGY] < C.TERMINAL_BOTTOM_ENERGY) {//change that to firstly put into terminal
+                    this.transfer(terminal, RESOURCE_ENERGY)
+                }
+                else {
+                    this.transfer(storage, RESOURCE_ENERGY)
                 }
 
             }
             if (global.heap.rooms[this.room.name].managerTask != undefined && global.heap.rooms[this.room.name].managerTask.startsWith("transfer_to_storage")) {
                 var resToTransfer = global.heap.rooms[this.room.name].managerTask.replace("transfer_to_storage_", "")
+
+                //exit condition for resourceManager transfering from terminal to storage
+                if (resToTransfer == RESOURCE_ENERGY) {
+                    if (!(terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_TOP_ENERGY)) {
+                        global.heap.rooms[this.room.name].managerTask = undefined
+                    }
+                }
+
                 if (terminal.store[resToTransfer] == 0) { global.heap.rooms[this.room.name].managerTask = undefined }
                 else {
                     this.withdraw(terminal, resToTransfer)
@@ -129,9 +140,9 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
             }
             else if (global.heap.rooms[this.room.name].managerTask != undefined && global.heap.rooms[this.room.name].managerTask.startsWith("transfer_to_terminal_")) {
                 var resToTransfer = global.heap.rooms[this.room.name].managerTask.replace("transfer_to_terminal_", "");
-                if (storage.store[resToTransfer] == 0 && this.store[resToTransfer]==0) {
+                if (storage.store[resToTransfer] == 0 && this.store[resToTransfer] == 0) {
                     global.heap.rooms[this.room.name].managerTask = undefined
-                   
+
                     return
                 }
                 else {

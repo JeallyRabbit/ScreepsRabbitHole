@@ -231,18 +231,36 @@ Creep.prototype.taskClearCreep = function taskClearCreep() {
         global.heap.rooms[this.room.name].doctorTask = undefined
         return
     }
-    if (this.room.storage != undefined) {
-        if (this.pos.isNearTo(this.room.storage.pos.x, this.room.storage.pos.y)) {
-            for (res in this.store) {
-                if (this.transfer(this.room.storage, res) == OK) {
-                    break;
-                }
-            }
+    var targetStorage = undefined
+    if (this.room.storage != undefined && this.room.terminal != undefined && this.store[RESOURCE_ENERGY] > 0) {
+        if (this.room.terminal.store[RESOURCE_ENERGY] < C.TERMINAL_BOTTOM_ENERGY) {
+
+            targetStorage = this.room.terminal
         }
         else {
-            this.travelTo(this.room.storage)
+            targetStorage = this.room.storage
         }
     }
+    if (targetStorage != undefined) {
+        if (this.transfer(targetStorage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            this.travelTo(targetStorage)
+        }
+    }
+    else {
+        if (this.room.storage != undefined) {
+            if (this.pos.isNearTo(this.room.storage.pos.x, this.room.storage.pos.y)) {
+                for (res in this.store) {
+                    if (this.transfer(this.room.storage, res) == OK) {
+                        break;
+                    }
+                }
+            }
+            else {
+                this.travelTo(this.room.storage)
+            }
+        }
+    }
+
 }
 
 Creep.prototype.taskFillManagerLink = function taskFillManagerLink() {
@@ -481,7 +499,7 @@ Creep.prototype.taskUpgrade = function taskUpgrade(localHeap) {
     }
     var upgradeResult = this.upgradeController(this.room.controller);
     //this.travelTo(this.room.controller, { reusePath: 17,maxRooms:1 });
-if (upgradeResult == ERR_NOT_IN_RANGE || true) {
+    if (upgradeResult == ERR_NOT_IN_RANGE || true) {
         this.travelTo(this.room.controller, { reusePath: 17, maxRooms: 1 });
     }
 

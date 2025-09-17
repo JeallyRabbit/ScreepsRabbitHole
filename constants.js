@@ -12,6 +12,12 @@ const SIGN_TEXT = 'What are you ? To define is to limit'
 //CPU/Benchmarking 
 const AVG_STEP = 5000
 
+
+//Room states
+const STATE_UNDER_ATTACK='under_attack'
+const STATE_NEED_ENERGY='need_energy'
+
+
 //Creep Roles
 const ROLE_HARVESTER = 'harvester'
 const ROLE_CARRIER = 'carrier'
@@ -416,7 +422,7 @@ const TERMINAL_BOTTOM_ENERGY = 30000
 const TERMINAL_TOP_ENERGY = 40000
 const TERMINAL_FREE_BUFFER = 10000
 const TERMINAL_FASTRCL_FREE_BUFFER = 1000
-const STORAGE_TOP_ENERGY = 750000
+const STORAGE_TOP_ENERGY = 150000
 const STORAGE_FASTRCL_BOTTOM_ENERGY = 40000
 const STORAGE_ENERGY_BOTTOM = 50000
 const LINK_ENERGY_EDGE = LINK_CAPACITY * (7 / 8)
@@ -482,6 +488,8 @@ module.exports = {
   AVG_STEP,
   SIGN_TEXT,
   USERNAME,
+  STATE_UNDER_ATTACK,
+  STATE_NEED_ENERGY,
   ROLE_HARVESTER,
   ROLE_CARRIER,
   ROLE_FILLER,

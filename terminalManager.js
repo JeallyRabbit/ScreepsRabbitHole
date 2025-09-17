@@ -1,4 +1,5 @@
 const C = require('constants');
+const { RESOURCE_SHARE_AMOUNT } = require('./constants');
 
 
 
@@ -106,7 +107,7 @@ StructureTerminal.prototype.sellResource = function sellResource(res, amount) {
 
 
 Room.prototype.terminalManager = function terminalManager() {
-    if (this.terminal == undefined || (this.terminal != undefined && this.terminal.cooldown != 0)
+    if (this.storage==undefined || this.terminal == undefined || (this.terminal != undefined && this.terminal.cooldown != 0)
         || Game.time % 5 != 0) {
         return
     }
@@ -193,6 +194,32 @@ Room.prototype.terminalManager = function terminalManager() {
             return;
         }
     }
+
+
+    //Sharing energy to STATE_NEED_ENERGY
+    var closestNeedingEnergy=undefined
+    var distance=Infinity
+    for(m of Memory.mainRooms)
+    {
+        if(m==this.name){continue}
+        if(this.storage.store[RESOURCE_ENERGY]<C.STORAGE_ENERGY_BOTTOM || this.terminal.store[RESOURCE_ENERGY]<C.RESOURCE_SHARE_AMOUNT)
+        {
+            break;
+        }
+        if(global.heap.rooms[m].state.includes(C.STATE_NEED_ENERGY) && Game.map.getRoomLinearDistance(m,this.name)<distance)
+        {
+            closestNeedingEnergy=m;
+            distance=Game.map.getRoomLinearDistance(m,this.name)
+        }
+
+    }
+    if(closestNeedingEnergy!=undefined)
+    {
+        var result=this.terminal.send(RESOURCE_ENERGY, C.RESOURCE_SHARE_AMOUNT, closestNeedingEnergy)
+        console.log("Result of sharing energy (not fastRCLUpgrade): ",result)
+    }
+
+
 
     //Sharing energy to fastRclUpgrade
     if (Memory.fastRclUpgrade != undefined && Memory.fastRclUpgrade != this.name

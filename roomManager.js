@@ -227,6 +227,7 @@ Room.prototype.roomManager = function roomManager() {
         }
 
 
+
         if (this.memory.energyBalance == undefined && (this.storage == undefined
             || this.controller.level < 4)
         ) {
@@ -502,7 +503,15 @@ Room.prototype.roomManager = function roomManager() {
         }
     }
 
-
+    if(global.heap.rooms[this.name].building==true && (this.storage!=undefined && this.terminal!=undefined
+        && this.storage.store[RESOURCE_ENERGY]+this.terminal.store[RESOURCE_ENERGY]<C.STORAGE_ENERGY_BOTTOM
+    ))
+    {
+        if(!global.heap.rooms[this.name].state.includes(C.STATE_NEED_ENERGY))
+        {
+            global.heap.rooms[this.name].state.push(C.STATE_NEED_ENERGY)
+        }
+    }
 
 
     //Finding hostile Creeps
