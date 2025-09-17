@@ -129,7 +129,14 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
         //Carriers and Harvesters for sure won't be mixed on queue
         if (this.storage != undefined) {
-            if (harvestingSource.carryPower < harvestingSource.harvestingPower) {
+
+            //skipping sources in mainRooms with sourcesLinks
+            var haveSourcesLinks=(harvestingSource.roomName==this.name && this.memory.sourcesLinksId!=undefined && this.memory.sourcesLinksId.length>1)
+            if(haveSourcesLinks)
+            {
+                harvestingSource.carryPower=9999999
+            }
+            if (harvestingSource.carryPower < harvestingSource.harvestingPower && haveSourcesLinks!=true) {
                 //Carriers
                 if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
                     if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_CARRIER) == undefined) {

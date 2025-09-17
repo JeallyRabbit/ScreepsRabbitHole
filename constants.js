@@ -475,7 +475,7 @@ const ATTACK_TYPE_PLUNDER = 'attack_type_plunder'// collecting resources from st
 const MAX_ROOM_INVISIBILITY_TIME=3000
 
 const QUAD_BODY_PARTS_AMOUNT = 200
-const MIN_QUAD_MEMBER_BODY_LENGTH=25
+const MIN_QUAD_MEMBER_BODY_LENGTH=50
 
 module.exports = {
   TEST_CONST,

@@ -484,7 +484,7 @@ Room.prototype.spawnManager = function spawnManager() {
                             body = quadHealerBody(energyCap)
                         }
                         if (body.length < C.MIN_QUAD_MEMBER_BODY_LENGTH
-                            && this.controller.level >= 7
+                            && this.controller.level ==8
                         ) {
                             body = []
                         }

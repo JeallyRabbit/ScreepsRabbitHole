@@ -1683,7 +1683,7 @@ function operateQuad(quad) {
 
                 //if Quad will for sure not retreat
                 if (!quadNeedToRetreat && localHeap.isBlocked == false) {
-                    rotateToTarget(quad, target)
+                    //rotateToTarget(quad, target)
                 }
 
             }
