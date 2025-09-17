@@ -503,6 +503,9 @@ Room.prototype.roomManager = function roomManager() {
         }
     }
 
+
+
+    // Adding state need energy if room is building and have little resources
     if(global.heap.rooms[this.name].building==true && (this.storage!=undefined && this.terminal!=undefined
         && this.storage.store[RESOURCE_ENERGY]+this.terminal.store[RESOURCE_ENERGY]<C.STORAGE_ENERGY_BOTTOM
     ))
@@ -510,6 +513,18 @@ Room.prototype.roomManager = function roomManager() {
         if(!global.heap.rooms[this.name].state.includes(C.STATE_NEED_ENERGY))
         {
             global.heap.rooms[this.name].state.push(C.STATE_NEED_ENERGY)
+        }
+    }
+    else{
+        //removing state if not building or enough resources
+        if(global.heap.rooms[this.name].state!=undefined && global.heap.rooms[this.name].state.includes(C.STATE_NEED_ENERGY))
+        {
+            var index=global.heap.rooms[this.name].state.indexOf(C.STATE_NEED_ENERGY)
+            if(index!=-1)
+            {
+                global.heap.rooms[this.name].state.splice(index,-1)
+            }
+            
         }
     }
 
