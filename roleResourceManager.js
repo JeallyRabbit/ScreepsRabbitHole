@@ -38,7 +38,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 
                     global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_LINK
                 }
-                else if (managerLink != undefined && managerLink.store[RESOURCE_ENERGY] ==LINK_CAPACITY) {
+                else if (managerLink != undefined && managerLink.store[RESOURCE_ENERGY] == LINK_CAPACITY) {
 
                     this.say("L->")
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TAKE_FROM_LINK;
@@ -94,16 +94,23 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
             }
             if (global.heap.rooms[this.room.name].managerTask == C.TASK_FILL_LINK) {
 
-                var amount =(C.LINK_ENERGY_EDGE-managerLink.store[RESOURCE_ENERGY])+1
-                this.withdraw(storage, RESOURCE_ENERGY,amount)
-                if (this.room.terminal != undefined && this.room.terminal.store[RESOURCE_ENERGY] > C.TERMINAL_BOTTOM_ENERGY) {
-                    this.withdraw(terminal, RESOURCE_ENERGY,amount)
+
+                var amount = (C.LINK_ENERGY_EDGE - managerLink.store[RESOURCE_ENERGY]) + 1
+                if (this.store[RESOURCE_ENERGY] == 0) {
+                    this.withdraw(storage, RESOURCE_ENERGY, amount)
+                    if (this.room.terminal != undefined && this.room.terminal.store[RESOURCE_ENERGY] > C.TERMINAL_BOTTOM_ENERGY) {
+                        this.withdraw(terminal, RESOURCE_ENERGY, amount)
+                    }
+                }
+                else {
+                    var result=this.transfer(managerLink, RESOURCE_ENERGY)
+                    if (result==OK) {
+                        global.heap.rooms[this.room.name].managerTask = undefined
+                    }
                 }
 
-                this.transfer(managerLink, RESOURCE_ENERGY)
-                if (managerLink.store[RESOURCE_ENERGY] > C.LINK_ENERGY_EDGE) {
-                    global.heap.rooms[this.room.name].managerTask = undefined
-                }
+
+
             }
 
             if (global.heap.rooms[this.room.name].managerTask == C.TASK_TAKE_FROM_LINK) {
