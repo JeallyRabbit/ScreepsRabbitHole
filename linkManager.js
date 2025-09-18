@@ -144,7 +144,7 @@ Room.prototype.linkManager = function linkManager() {
                         transfered = true
                     }
                 }
-                if (managerLink != null && managerLink.store.getFreeCapacity([RESOURCE_ENERGY]) > 150 && transfered == false) {
+                if (managerLink != null && managerLink.store.getFreeCapacity([RESOURCE_ENERGY]) > 0 && transfered == false) {
                     if (src_link.transferEnergy(managerLink) == 0) {
                         transfered = true
                     }
