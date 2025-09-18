@@ -19,7 +19,7 @@ Room.prototype.roomManager = function roomManager() {
 
 
 
-    global.heap.rooms[this.name].myCreeps=[]
+    global.heap.rooms[this.name].myCreeps = []
     global.heap.rooms[this.name].hostiles = []
     global.heap.rooms[this.name].hostileHealPower = 0;
     global.heap.rooms[this.name].hostileAttackPower = 0;
@@ -37,6 +37,18 @@ Room.prototype.roomManager = function roomManager() {
 
 
     this.memory.repairerId = undefined
+
+
+
+
+    var myCreeps = this.find(FIND_MY_CREEPS)
+
+    for (cr of myCreeps) {
+        if (cr.memory.role == C.ROLE_WORKER) {
+            global.heap.rooms[this.name].myWorkers.push(cr.id)
+        }
+        global.heap.rooms[this.name].myCreeps.push(cr.id)
+    }
 
 
 
@@ -189,7 +201,7 @@ Room.prototype.roomManager = function roomManager() {
         }
 
 
-        
+
         if (this.storage != undefined) {
             for (res in this.storage.store) {
                 global.heap.rooms[this.name].myStorage[res] += this.storage.store[res]
@@ -470,6 +482,9 @@ Room.prototype.roomManager = function roomManager() {
         }
 
 
+
+
+
     }
 
     //creating Spawn construction site
@@ -506,25 +521,21 @@ Room.prototype.roomManager = function roomManager() {
 
 
     // Adding state need energy if room is building and have little resources
-    if(global.heap.rooms[this.name].building==true && (this.storage!=undefined && this.terminal!=undefined
-        && this.storage.store[RESOURCE_ENERGY]+this.terminal.store[RESOURCE_ENERGY]<C.STORAGE_ENERGY_BOTTOM
-    ))
-    {
-        if(!global.heap.rooms[this.name].state.includes(C.STATE_NEED_ENERGY))
-        {
+    if (global.heap.rooms[this.name].building == true && (this.storage != undefined && this.terminal != undefined
+        && this.storage.store[RESOURCE_ENERGY] + this.terminal.store[RESOURCE_ENERGY] < C.STORAGE_ENERGY_BOTTOM
+    )) {
+        if (!global.heap.rooms[this.name].state.includes(C.STATE_NEED_ENERGY)) {
             global.heap.rooms[this.name].state.push(C.STATE_NEED_ENERGY)
         }
     }
-    else{
+    else {
         //removing state if not building or enough resources
-        if(global.heap.rooms[this.name].state!=undefined && global.heap.rooms[this.name].state.includes(C.STATE_NEED_ENERGY))
-        {
-            var index=global.heap.rooms[this.name].state.indexOf(C.STATE_NEED_ENERGY)
-            if(index!=-1)
-            {
-                global.heap.rooms[this.name].state.splice(index,-1)
+        if (global.heap.rooms[this.name].state != undefined && global.heap.rooms[this.name].state.includes(C.STATE_NEED_ENERGY)) {
+            var index = global.heap.rooms[this.name].state.indexOf(C.STATE_NEED_ENERGY)
+            if (index != -1) {
+                global.heap.rooms[this.name].state.splice(index, -1)
             }
-            
+
         }
     }
 
@@ -533,7 +544,7 @@ Room.prototype.roomManager = function roomManager() {
     var hostiles = this.find(FIND_HOSTILE_CREEPS, {
         filter:
             function (enemy) {
-                return !Memory.allies.includes(enemy.owner.username)
+                return Memory.allies.includes(enemy.owner.username) == false
             }
     })
 
@@ -605,13 +616,13 @@ Room.prototype.roomManager = function roomManager() {
                     break;
                 case STRUCTURE_LAB:
                     global.heap.rooms[this.name].myLabs.push(str.id);
-                    if (this.memory.inputLab1Pos!=undefined && str.pos.x == this.memory.inputLab1Pos.x && str.pos.y == this.memory.inputLab1Pos.y) {
+                    if (this.memory.inputLab1Pos != undefined && str.pos.x == this.memory.inputLab1Pos.x && str.pos.y == this.memory.inputLab1Pos.y) {
                         global.heap.rooms[this.name].inLab1Id = str.id
                         if (Game.rooms[this.name].memory.inLab1Id == undefined) {
                             Game.rooms[this.name].memory.inLab1Id = str.id
                         }
                     }
-                    else if (this.memory.inputLab2Pos!=undefined && str.pos.x == this.memory.inputLab2Pos.x && str.pos.y == this.memory.inputLab2Pos.y) {
+                    else if (this.memory.inputLab2Pos != undefined && str.pos.x == this.memory.inputLab2Pos.x && str.pos.y == this.memory.inputLab2Pos.y) {
                         global.heap.rooms[this.name].inLab2Id = str.id
                         if (Game.rooms[this.name].memory.inLab2Id == undefined) {
                             Game.rooms[this.name].memory.inLab2Id = str.id
@@ -683,87 +694,84 @@ Room.prototype.roomManager = function roomManager() {
         }
     }
 
-    if (Memory.mainRooms.includes(this.name)) {
+
+
+
+
+
+
+    if (Memory.mainRooms.includes(this.name))//again checking if room is main room
+    {
+
+        //calculating ramparts amount
         global.heap.rooms[this.name].rampartsAmount = global.heap.rooms[this.name].myRamparts.length
 
         global.heap.rooms[this.name].rampartsEnergyNeedPerTick = (global.heap.rooms[this.name].rampartsAmount * (RAMPART_DECAY_AMOUNT / REPAIR_POWER)) / RAMPART_DECAY_TIME
 
-        if(global.heap.rooms[this.name].myRamparts.length>0)
-        {
+        if (global.heap.rooms[this.name].myRamparts.length > 0) {
             global.heap.rooms[this.name].requiredRampartsRepairersPower = global.heap.rooms[this.name].rampartsEnergyNeedPerTick * 3
         }
-        else{
-            global.heap.rooms[this.name].requiredRampartsRepairersPower=0
+        else {
+            global.heap.rooms[this.name].requiredRampartsRepairersPower = 0
         }
 
-    }
 
-    // Upgraders container
-    if (this.memory.upgradersContainerId != undefined && Game.getObjectById(this.memory.upgradersContainerId) == null) {
-        this.memory.upgradersContainerId = undefined
-    }
 
-    if (this.memory.upgradersContainerId == undefined) {
-        if (this.memory.controllerContainerPos != undefined) {
-            auxPos = this.memory.controllerContainerPos
-            var cont = this.find(FIND_STRUCTURES, {
-                filter:
-                    function (str) {
-                        return str.structureType === STRUCTURE_CONTAINER && str.pos.x == auxPos.x
-                            && str.pos.y == auxPos.y
-                    }
-            });
-            if (cont.length > 0) {
-                this.memory.upgradersContainerId = cont[0].id
-            }
+        // Upgraders container
+        if (this.memory.upgradersContainerId != undefined && Game.getObjectById(this.memory.upgradersContainerId) == null) {
+            this.memory.upgradersContainerId = undefined
         }
-    }
 
-    // Defining fillers containers
-    var spawnPos = this.memory.spawnPos
-    if (this.memory.fillerContainers == undefined && spawnPos != undefined) {
-        var fillerContainers = this.find(FIND_STRUCTURES, {
-            filter: function (structure) {
-                return structure.structureType == STRUCTURE_CONTAINER &&
-                    ((structure.pos.x == spawnPos.x + 2 && structure.pos.y == spawnPos.y - 2) ||
-                        (structure.pos.x == spawnPos.x - 2 && structure.pos.y == spawnPos.y - 2));
-            }
-        });
-
-        if (fillerContainers.length > 0) {
-            this.memory.fillerContainers = [];
-            for (let i = 0; i < fillerContainers.length; i++) {
-                this.memory.fillerContainers.push(fillerContainers[i].id)
-            }
-            if (this.storage != undefined && this.memory.fillerContainers.length > 1) {
-                var closerContainer = this.storage.pos.findClosestByPath(fillerContainers)
-                if (closerContainer.id != this.memory.fillerContainers[0]) {
-                    var aux = this.memory.fillerContainers[0]
-                    this.memory.fillerContainers[0] = this.memory.fillerContainers[1]
-                    this.memory.fillerContainers[1] = aux;
+        if (this.memory.upgradersContainerId == undefined) {
+            if (this.memory.controllerContainerPos != undefined) {
+                auxPos = this.memory.controllerContainerPos
+                var cont = this.find(FIND_STRUCTURES, {
+                    filter:
+                        function (str) {
+                            return str.structureType === STRUCTURE_CONTAINER && str.pos.x == auxPos.x
+                                && str.pos.y == auxPos.y
+                        }
+                });
+                if (cont.length > 0) {
+                    this.memory.upgradersContainerId = cont[0].id
                 }
             }
         }
-    }
 
-    var myCreeps=this.find(FIND_MY_CREEPS)
+        // Defining fillers containers
+        var spawnPos = this.memory.spawnPos
+        if (this.memory.fillerContainers == undefined && spawnPos != undefined) {
+            var fillerContainers = this.find(FIND_STRUCTURES, {
+                filter: function (structure) {
+                    return structure.structureType == STRUCTURE_CONTAINER &&
+                        ((structure.pos.x == spawnPos.x + 2 && structure.pos.y == spawnPos.y - 2) ||
+                            (structure.pos.x == spawnPos.x - 2 && structure.pos.y == spawnPos.y - 2));
+                }
+            });
 
-    for(cr of myCreeps)
-    {
-        if(cr.memory.role==C.ROLE_WORKER)
-        {
-            global.heap.rooms[this.name].myWorkers.push(cr.id)
+            if (fillerContainers.length > 0) {
+                this.memory.fillerContainers = [];
+                for (let i = 0; i < fillerContainers.length; i++) {
+                    this.memory.fillerContainers.push(fillerContainers[i].id)
+                }
+                if (this.storage != undefined && this.memory.fillerContainers.length > 1) {
+                    var closerContainer = this.storage.pos.findClosestByPath(fillerContainers)
+                    if (closerContainer.id != this.memory.fillerContainers[0]) {
+                        var aux = this.memory.fillerContainers[0]
+                        this.memory.fillerContainers[0] = this.memory.fillerContainers[1]
+                        this.memory.fillerContainers[1] = aux;
+                    }
+                }
+            }
         }
-        global.heap.rooms[this.name].myCreeps.push(cr.id)
+
+        this.operateTowers()
+
+
+
+
+
     }
-
-
-
-
-
-
-
-    this.operateTowers()
 
 
 }

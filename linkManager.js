@@ -133,16 +133,11 @@ Room.prototype.linkManager = function linkManager() {
         for (let src_link of sourcesLinks) {
             if (src_link.cooldown == 0 && src_link.store[RESOURCE_ENERGY] > 400) {
                 var transfered = false;
-                if (fillerLink != null && fillerLink.store.getFreeCapacity([RESOURCE_ENERGY]) > 0) {
+                if (fillerLink != null && fillerLink.store.getFreeCapacity([RESOURCE_ENERGY]) > 150) {
                     if (src_link.transferEnergy(fillerLink) == 0) {
                         transfered = true;
                     }
 
-                }
-                if (managerLink != null && managerLink.store.getFreeCapacity([RESOURCE_ENERGY]) > 0 && transfered == false) {
-                    if (src_link.transferEnergy(managerLink) == 0) {
-                        transfered = true
-                    }
                 }
                 if (managerLink != null && managerLink.store.getFreeCapacity([RESOURCE_ENERGY]) > 0 && transfered == false) {
                     if (src_link.transferEnergy(managerLink) == 0) {
