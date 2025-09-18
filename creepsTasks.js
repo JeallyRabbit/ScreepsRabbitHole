@@ -265,7 +265,7 @@ Creep.prototype.taskClearCreep = function taskClearCreep() {
 
 Creep.prototype.taskFillManagerLink = function taskFillManagerLink() {
 
-    if (Game.getObjectById(this.room.memory.managerLinkId) != undefined && Game.getObjectById(this.room.memory.managerLinkId).store[RESOURCE_ENERGY] >= C.LINK_ENERGY_EDGE) {
+    if (Game.getObjectById(this.room.memory.managerLinkId) != undefined && Game.getObjectById(this.room.memory.managerLinkId).store[RESOURCE_ENERGY] >= C.LINK_BOTTOM_ENERGY) {
         this.memory.task = undefined
         if (this.memory.role == C.ROLE_HAULER) {
             global.heap.rooms[this.room.name].haulerTask = undefined
