@@ -188,7 +188,7 @@ Room.prototype.roomManager = function roomManager() {
         global.heap.rooms[this.name].myObserver = undefined
         global.heap.rooms[this.name].myStorage = {}
 
-        if (this.name == 'W9N6') {
+        
             for (res in C.RESOURCES) {
                 //console.log("adding ", res, " to myStorage")
                 global.heap.rooms[this.name].myStorage[C.RESOURCES[res]] = 0
@@ -198,7 +198,7 @@ Room.prototype.roomManager = function roomManager() {
             //console.log("global.heap.rooms[this.name].myStorage[RESOURCE_ENERGY]: ",
             //global.heap.rooms[this.name].myStorage['energy'])
 
-        }
+        
 
 
 

@@ -372,7 +372,7 @@ Creep.prototype.decreaseBalancer = function decreaseBalancer() {
 }
 
 //TASK_COLLECT
-Creep.prototype.taskCollect = function taskCollect(localHeap) {// go to deposits
+Creep.prototype.taskCollect = function taskCollect(localHeap={}) {// go to deposits
 
     if (this.store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
         localHeap.task = undefined

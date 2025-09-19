@@ -439,6 +439,7 @@ const REACTION_STEP = 500
 const MIN_NUKER_RES_AMOUNT = 100 // minimum amount of energy or ghodium in storage/temrinal to consider transfering it to nuker
 const ROOM_DISTANCE_CALC_STEP = 1
 const DOCTOR_MIN_REMAINING_TIME=20
+const STRUCTURE_ONLY_ATTACK_POWER=1000
 
 
 // Room attack
@@ -593,6 +594,7 @@ module.exports = {
   MIN_NUKER_RES_AMOUNT,
   ROOM_DISTANCE_CALC_STEP,
   DOCTOR_MIN_REMAINING_TIME,
+  STRUCTURE_ONLY_ATTACK_POWER,
 
   ROOM_ATTACK_HISTORY_RANGE,
 
