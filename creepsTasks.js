@@ -89,6 +89,24 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1, in2) {
         return
     }
 
+    var areOutputsMineralEmpty=true
+    for(out of outputLabs)
+    {
+        for(res in out.store)
+        {
+            if(res==RESOURCE_ENERGY){continue}
+            else{
+                areOutputsMineralEmpty=false;
+                break
+            }
+        }
+    }
+    if(areOutputsMineralEmpty==true)
+    {
+        global.heap.rooms[this.room.name].managerTask=undefined
+        return
+    }
+
     if (this.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && this.ticksToLive > 30) {
         var maxLab = undefined
         var auxAmount = LAB_MINERAL_CAPACITY
