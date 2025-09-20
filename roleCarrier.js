@@ -134,6 +134,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
                 //finding max_container
                 if (this.memory.maxContainer == undefined) {
+                    //setting biggest_resource to 0 by default will result in not chosing containers with RESOURCE_ENERGY=0
                     var biggest_resource = -1;
                     for (let i = 0; i < this.memory.targetRoomContainers.length; i++) {
                         var container = Game.getObjectById(this.memory.targetRoomContainers[i]);
@@ -185,6 +186,9 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
                         }
                     }
+                }
+                else{
+                    //here creep can wait at spawn blocking it
                 }
 
 

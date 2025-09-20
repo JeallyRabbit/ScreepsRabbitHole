@@ -67,14 +67,14 @@ const TASK_TAKE_FROM_LINK = 'take_from_link'
 const TASK_FILL_MANAGER_LINK = 'fill_manager_link'
 const TASK_FILL_NUKER_GHODIUM = 'fill_nuker_ghodium'
 const TASK_FILL_NUKER_ENERGY = 'fill_nuker_energy'
-const TASK_CLEAR_CREEP = 'task_clear_creep'
-const TASK_FILL_LAB_ENERGY = 'task_fill_lab_energy'
-const TASK_FILL_INPUT_LAB_1_ENERGY = 'task_fill_input_lab_1_energy'
-const TASK_FILL_INPUT_LAB_2_ENERGY = 'task_fill_input_lab_2_energy'
+const TASK_CLEAR_CREEP = 'clear_creep'
+const TASK_FILL_LAB_ENERGY = 'fill_lab_energy'
+const TASK_FILL_INPUT_LAB_1_ENERGY = 'fill_input_lab_1_energy'
+const TASK_FILL_INPUT_LAB_2_ENERGY = 'fill_input_lab_2_energy'
 const TASK_BOOST_CREEP = 'task_boost_creep'
-const TASK_FILL_INPUT_LABS_MINERAL = 'task_fill_input_labs_mineral'
-const TASK_CLEAR_INPUT_LABS = 'task_clear_input_labs'
-const TASK_CLEAR_OUTPUT_LABS = 'task_clear_output_labs'
+const TASK_FILL_INPUT_LABS_MINERAL = 'fill_input_labs_mineral'
+const TASK_CLEAR_INPUT_LABS = 'cl_input_labs'
+const TASK_CLEAR_OUTPUT_LABS = 'cl_output_labs'
 
 
 
@@ -425,6 +425,7 @@ const TERMINAL_FASTRCL_FREE_BUFFER = 1000
 const STORAGE_TOP_ENERGY = 150000
 const STORAGE_FASTRCL_BOTTOM_ENERGY = 40000
 const STORAGE_ENERGY_BOTTOM = 50000
+const STORAGE_ENERGY_BUY_BOTTOM=20000
 const LINK_BOTTOM_ENERGY = LINK_CAPACITY * (2 / 8)
 const LINK_TOP_ENERGY = LINK_CAPACITY * (7 / 8)
 const COLONIZE_ENERGY_LIMIT = 40000
@@ -580,6 +581,7 @@ module.exports = {
   STORAGE_TOP_ENERGY,
   STORAGE_FASTRCL_BOTTOM_ENERGY,
   STORAGE_ENERGY_BOTTOM,
+  STORAGE_ENERGY_BUY_BOTTOM,
   LINK_TOP_ENERGY,
   LINK_BOTTOM_ENERGY,
   COLONIZE_ENERGY_LIMIT,

@@ -230,7 +230,9 @@ Room.prototype.terminalManager = function terminalManager() {
         }
     }
 
-    if (this.terminal.store[RESOURCE_ENERGY] < C.TERMINAL_BOTTOM_ENERGY) {
+    if (this.terminal.store[RESOURCE_ENERGY] < C.TERMINAL_BOTTOM_ENERGY
+        && this.storage.store[RESOURCE_ENERGY]<C.STORAGE_ENERGY_BUY_BOTTOM
+    ) {
         let result = this.terminal.buyResource(RESOURCE_ENERGY, C.RAW_RES_BUY_AMOUNT)
         console.log("trying to buy energy: ", result)
         if (result == OK) {

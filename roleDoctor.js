@@ -2,7 +2,7 @@ const C = require('constants')
 
 Creep.prototype.roleDoctor = function roleDoctor() {
 
-    this.say("D")
+    this.say(global.heap.rooms[this.room.name].doctorTask,true )
     var storage = this.room.storage
     var terminal = this.room.terminal
     var inputLab1 = Game.getObjectById(Game.rooms[this.room.name].memory.inLab1Id)
