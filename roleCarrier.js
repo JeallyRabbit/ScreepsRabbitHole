@@ -135,7 +135,8 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 //finding max_container
                 if (this.memory.maxContainer == undefined) {
                     //setting biggest_resource to 0 by default will result in not chosing containers with RESOURCE_ENERGY=0
-                    var biggest_resource = -1;
+                    var biggest_resource = 0;
+
                     for (let i = 0; i < this.memory.targetRoomContainers.length; i++) {
                         var container = Game.getObjectById(this.memory.targetRoomContainers[i]);
                         if (container.store.getUsedCapacity() > biggest_resource) {
