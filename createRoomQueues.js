@@ -354,9 +354,9 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
     }
 
-    console.log("this.memory.resourceManagerId: ",this.memory.resourceManagerId )
+    console.log("global.heap.rooms[this.name].resourceManagerId: ",global.heap.rooms[this.name].resourceManagerId )
     console.log("this.storage: ",this.storage)
-    if (this.storage != undefined && this.memory.resourceManagerId == undefined && Game.time%3==0) {
+    if (this.storage != undefined && global.heap.rooms[this.name].resourceManagerId == undefined && Game.time%3==0) {
         if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RESOURCE_MANAGER) == undefined) {
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_RESOURCE_MANAGER))
         }

@@ -316,17 +316,20 @@ Room.prototype.spawnManager = function spawnManager() {
                 {
                     var body = []
                     if (this.energyAvailable <= SPAWN_ENERGY_CAPACITY) { body = [WORK, CARRY, MOVE] }
-                    var scheme = [MOVE, CARRY, WORK, WORK]
-                    if (global.heap.rooms[this.name].construction.length > 0) {
-                        body = workerBody(energyCap, [MOVE, MOVE, CARRY, WORK])
-                    }
                     else {
-                        body = workerBody(energyCap, scheme)
+                        var scheme = [MOVE, CARRY, WORK, WORK]
+                        if (global.heap.rooms[this.name].construction.length > 0) {
+                            body = workerBody(energyCap, [MOVE, MOVE, CARRY, WORK])
+                        }
+                        else {
+                            body = workerBody(energyCap, scheme)
+                        }
+
+                        if (this.controller.level == 8 && global.heap.rooms[this.name].needWorkersParts == 1) {
+                            body = [MOVE, CARRY, WORK]
+                        }
                     }
 
-                    if (this.controller.level == 8 && global.heap.rooms[this.name].needWorkersParts == 1) {
-                        body = [MOVE, CARRY, WORK]
-                    }
 
 
                     var result = spawn.spawnCreep(body, "SlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_WORKER, directions: myDirections, homeRoom: this.name } })
@@ -385,6 +388,7 @@ Room.prototype.spawnManager = function spawnManager() {
                     else {
                         global.heap.rooms[this.name].civilianQueue.shift()
                     }
+                    break
 
                 }
             case C.ROLE_RESOURCE_MANAGER:
@@ -477,8 +481,8 @@ Room.prototype.spawnManager = function spawnManager() {
             case C.ROLE_QUAD_MEMBER:
                 {
                     if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM &&
-                        (this.memory.resourceManagerId != undefined && Game.getObjectById(this.memory.resourceManagerId) != null
-                            && Game.getObjectById(this.memory.resourceManagerId).ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER)) {
+                        (global.heap.rooms[this.name].resourceManagerId != undefined && Game.getObjectById(global.heap.rooms[this.name].resourceManagerId) != null
+                            && Game.getObjectById(global.heap.rooms[this.name].resourceManagerId).ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER)) {
                         console.log("entered spawning quad member")
                         console.log("request.quadId: ", request.quadId)
                         var name = "RabbitTail"
