@@ -32,10 +32,12 @@ Creep.prototype.taskFillLabEnergy = function taskFillLabEnergy(id) {
 Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
     if (this.room.ifBothInputMineralEmpty(in1, in2)) {
         global.heap.rooms[this.room.name].doctorTask = undefined
+        this.say("IN_EMPT",true)
         return
     }
+
     if (this.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
-        if (in1.store.getFreeCapacity(RESOURCE_OXYGEN) < LAB_MINERAL_CAPACITY) {
+        //if (in1.store.getFreeCapacity(RESOURCE_OXYGEN) < LAB_MINERAL_CAPACITY) {
 
             for (res in in1.store) {
                 if (res != RESOURCE_ENERGY) {
@@ -47,8 +49,8 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
                     break
                 }
             }
-        }
-        else if (in2.store.getFreeCapacity(RESOURCE_OXYGEN) < LAB_MINERAL_CAPACITY) {
+        //}
+       // else if (in2.store.getFreeCapacity(RESOURCE_OXYGEN) < LAB_MINERAL_CAPACITY) {
 
             for (res in in2.store) {
                 if (res != RESOURCE_ENERGY) {
@@ -60,7 +62,7 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
                     break
                 }
             }
-        }
+        //}
     }
     else {
         // transfer to storage

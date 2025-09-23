@@ -2,23 +2,25 @@ const C = require('constants')
 
 Creep.prototype.roleDoctor = function roleDoctor() {
 
-    this.say(global.heap.rooms[this.room.name].doctorTask,true )
+    this.say(global.heap.rooms[this.room.name].doctorTask, true)
     var storage = this.room.storage
     var terminal = this.room.terminal
     var inputLab1 = Game.getObjectById(Game.rooms[this.room.name].memory.inLab1Id)
     var inputLab2 = Game.getObjectById(Game.rooms[this.room.name].memory.inLab2Id)
     var outputLabs = []
-    for (outputId of global.heap.rooms[this.room.name].outLabsId) {
-        var outputLab = Game.getObjectById(outputId)
-        if (outputLab != null) {
-            outputLabs.push(outputLab)
+    if (global.heap.rooms[this.room.name].outLabsId != undefined) {
+        for (outputId of global.heap.rooms[this.room.name].outLabsId) {
+            var outputLab = Game.getObjectById(outputId)
+            if (outputLab != null) {
+                outputLabs.push(outputLab)
+            }
         }
     }
 
+
     var boostingLab = Game.getObjectById(Game.rooms[this.room.name].memory.boostingLabId)
 
-    if(this.ticksToLive<C.DOCTOR_MIN_REMAINING_TIME)
-    {
+    if (this.ticksToLive < C.DOCTOR_MIN_REMAINING_TIME) {
         this.taskClearCreep()
         return;
     }
@@ -54,17 +56,16 @@ Creep.prototype.roleDoctor = function roleDoctor() {
     // taking stuff from output labs -- 
     if (global.heap.rooms[this.room.name].doctorTask == undefined) {
 
-        var res1=undefined
-        var res2=undefined
-        if(global.heap.rooms[this.room.name].reaction!=undefined)
-        {
-            res1= (global.heap.rooms[this.room.name].reaction[0]!=undefined)? global.heap.rooms[this.room.name].reaction[0] : undefined;
-            res2= (global.heap.rooms[this.room.name].reaction[0]!=undefined)? global.heap.rooms[this.room.name].reaction[1] : undefined;
+        var res1 = undefined
+        var res2 = undefined
+        if (global.heap.rooms[this.room.name].reaction != undefined) {
+            res1 = (global.heap.rooms[this.room.name].reaction[0] != undefined) ? global.heap.rooms[this.room.name].reaction[0] : undefined;
+            res2 = (global.heap.rooms[this.room.name].reaction[0] != undefined) ? global.heap.rooms[this.room.name].reaction[1] : undefined;
         }
-        
+
         if (this.store.getCapacity() != this.store.getFreeCapacity(RESOURCE_ENERGY)
-        &&  (res1!=undefined && this.store[res1]==0 && res2!=undefined && this.store[res2]==0) // this line might be wrong
-    ) {
+            && (res1 != undefined && this.store[res1] == 0 && res2 != undefined && this.store[res2] == 0) // this line might be wrong
+        ) {
             this.say("1")
             global.heap.rooms[this.room.name].doctorTask = C.TASK_CLEAR_CREEP
         }
