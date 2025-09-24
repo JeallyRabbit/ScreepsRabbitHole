@@ -120,7 +120,10 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
 
         // Fillers
-        if (this.controller.level > 1 && global.heap.rooms[this.name].fillers < 4) {
+        if (this.controller.level > 1 && global.heap.rooms[this.name].fillers < 4
+            && ((global.heap.rooms[this.name].myExtensions!=undefined && global.heap.rooms[this.name].myExtensions.length>0)
+            || (this.memory.fillerContainers!=undefined && this.memory.fillerContainers.length>0))
+        ) {
             if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_FILLER) == undefined) {
                 global.heap.rooms[this.name].harvestingQueue.push(new generalRoomRequest(this.name, C.ROLE_FILLER))
             }

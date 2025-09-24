@@ -32,36 +32,36 @@ Creep.prototype.taskFillLabEnergy = function taskFillLabEnergy(id) {
 Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
     if (this.room.ifBothInputMineralEmpty(in1, in2)) {
         global.heap.rooms[this.room.name].doctorTask = undefined
-        this.say("IN_EMPT",true)
+        this.say("IN_EMPT", true)
         return
     }
 
     if (this.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
         //if (in1.store.getFreeCapacity(RESOURCE_OXYGEN) < LAB_MINERAL_CAPACITY) {
 
-            for (res in in1.store) {
-                if (res != RESOURCE_ENERGY) {
-                    var withdrawResult = this.withdraw(in1, res)
-                    if (withdrawResult == ERR_NOT_IN_RANGE) {
-                        this.travelTo(in1)
+        for (res in in1.store) {
+            if (res != RESOURCE_ENERGY) {
+                var withdrawResult = this.withdraw(in1, res)
+                if (withdrawResult == ERR_NOT_IN_RANGE) {
+                    this.travelTo(in1)
 
-                    }
-                    break
                 }
+                break
             }
+        }
         //}
-       // else if (in2.store.getFreeCapacity(RESOURCE_OXYGEN) < LAB_MINERAL_CAPACITY) {
+        // else if (in2.store.getFreeCapacity(RESOURCE_OXYGEN) < LAB_MINERAL_CAPACITY) {
 
-            for (res in in2.store) {
-                if (res != RESOURCE_ENERGY) {
-                    var withdrawResult = this.withdraw(in2, res)
-                    if (withdrawResult == ERR_NOT_IN_RANGE) {
-                        this.travelTo(in2)
+        for (res in in2.store) {
+            if (res != RESOURCE_ENERGY) {
+                var withdrawResult = this.withdraw(in2, res)
+                if (withdrawResult == ERR_NOT_IN_RANGE) {
+                    this.travelTo(in2)
 
-                    }
-                    break
                 }
+                break
             }
+        }
         //}
     }
     else {
@@ -91,21 +91,18 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1, in2) {
         return
     }
 
-    var areOutputsMineralEmpty=true
-    for(out of outputLabs)
-    {
-        for(res in out.store)
-        {
-            if(res==RESOURCE_ENERGY){continue}
-            else{
-                areOutputsMineralEmpty=false;
+    var areOutputsMineralEmpty = true
+    for (out of outputLabs) {
+        for (res in out.store) {
+            if (res == RESOURCE_ENERGY) { continue }
+            else {
+                areOutputsMineralEmpty = false;
                 break
             }
         }
     }
-    if(areOutputsMineralEmpty==true)
-    {
-        global.heap.rooms[this.room.name].managerTask=undefined
+    if (areOutputsMineralEmpty == true) {
+        global.heap.rooms[this.room.name].managerTask = undefined
         return
     }
 
@@ -392,7 +389,7 @@ Creep.prototype.decreaseBalancer = function decreaseBalancer() {
 }
 
 //TASK_COLLECT
-Creep.prototype.taskCollect = function taskCollect(localHeap={}) {// go to deposits
+Creep.prototype.taskCollect = function taskCollect(localHeap = {}) {// go to deposits
 
     if (this.store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
         localHeap.task = undefined
@@ -568,31 +565,59 @@ Creep.prototype.taskBuild = function taskBuild(localHeap) {
             for (c of global.heap.rooms[this.room.name].construction) {
                 if (Game.getObjectById(c) != null && Game.getObjectById(c).pos !== this.pos) {
                     aux.push(Game.getObjectById(c))
+                    if (toFocus == null) {
+                        if (Game.getObjectById(c).structureType == STRUCTURE_STORAGE) {
+                            toFocus = Game.getObjectById(c)
+                        }
+                        else if (Game.getObjectById(c).structureType == STRUCTURE_CONTAINER) {
+                            toFocus = Game.getObjectById(c)
+                        }
+                        else if (Game.getObjectById(c).structureType == STRUCTURE_ROAD) {
+                            toFocus = Game.getObjectById(c)
+                        }
+                        else if (Game.getObjectById(c).structureType == STRUCTURE_EXTENSION) {
+                            toFocus = Game.getObjectById(c)
+                        }
+                    }
+
                 }
             }
-            toFocus = this.pos.findClosestByRange(aux)
+            if (toFocus == null) {
+                toFocus = this.pos.findClosestByRange(aux)
+            }
+
         }
-        else { // workers should prioritize by role
+        else { 
+            var toFocus = null
+            var aux = []
             for (c of global.heap.rooms[this.room.name].construction) {
                 if (Game.getObjectById(c) != null && (Game.getObjectById(c).pos.x !== this.pos.x || Game.getObjectById(c).pos.y != this.pos.y)
                     && Game.getObjectById(c).pos.roomName == this.pos.roomName) {
-                    sites.push(Game.getObjectById(c))
-                    var role = Game.getObjectById(c).structureType
-                    if (role == STRUCTURE_SPAWN) {
-                        toFocus = Game.getObjectById(c)
-                        break
+
+                    if (Game.getObjectById(c) != null && Game.getObjectById(c).pos !== this.pos) {
+                        aux.push(Game.getObjectById(c))
+                        if (toFocus == null) {
+                            if (Game.getObjectById(c).structureType == STRUCTURE_STORAGE) {
+                                toFocus = Game.getObjectById(c)
+                            }
+                            else if (Game.getObjectById(c).structureType == STRUCTURE_CONTAINER) {
+                                toFocus = Game.getObjectById(c)
+                            }
+                            else if (Game.getObjectById(c).structureType == STRUCTURE_ROAD) {
+                                toFocus = Game.getObjectById(c)
+                            }
+                            else if (Game.getObjectById(c).structureType == STRUCTURE_EXTENSION) {
+                                toFocus = Game.getObjectById(c)
+                            }
+                        }
+
                     }
-                    else if (toFocus == null && role == STRUCTURE_CONTAINER) {
-                        toFocus = Game.getObjectById(c)
-                        break
-                    }
-                    /*
-                    else if (toFocus == null && role === STRUCTURE_EXTENSION) {
-                        toFocus = Game.getObjectById(c)
-                        break;
-                    }
-                        */
+
+
                 }
+            }
+            if (toFocus == null) {
+                toFocus = this.pos.findClosestByRange(aux)
             }
         }
 

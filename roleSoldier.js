@@ -42,7 +42,7 @@ Creep.prototype.roleSoldier = function roleSoldier(ceep) {
         });
 
         if (targetStructure == null) {
-            targetStructure = this.pos.findClosestByRange(global.heap.rooms[this.room.name].hostileStructures);
+            targetStructure = this.pos.findClosestByPath(global.heap.rooms[this.room.name].hostileStructures);
         }
 
         if (targetCreep) {
