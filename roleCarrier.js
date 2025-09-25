@@ -81,15 +81,21 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
                 if (this.memory._findHomeContainers != undefined) { this.memory._findHomeContainers++ }
                 else { this.memory._findHomeContainers = 1 }
+                var containers = []
+                if (spawnPos != undefined) {
+                    var containers = this.room.find(FIND_STRUCTURES, {
+                        filter: (structure) => {
+                            return structure.structureType === STRUCTURE_CONTAINER
+                                && ((structure.pos.x != spawnPos.x - 2 || structure.pos.y != spawnPos.y - 2) &&
+                                    (structure.pos.x != spawnPos.x + 2 || structure.pos.y != spawnPos.y - 2))
+                                && (structure.pos.inRangeTo(Game.rooms[this.memory.homeRoom].controller.pos, 4) == false);
+                        }
+                    });
+                }
+                else {
+                    containers = []
+                }
 
-                var containers = this.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return structure.structureType === STRUCTURE_CONTAINER
-                            && ((structure.pos.x != spawnPos.x - 2 || structure.pos.y != spawnPos.y - 2) &&
-                                (structure.pos.x != spawnPos.x + 2 || structure.pos.y != spawnPos.y - 2))
-                            && (structure.pos.inRangeTo(Game.rooms[this.memory.homeRoom].controller.pos, 4) == false);
-                    }
-                });
                 this.memory.targetRoomContainers = [];
                 for (let i = 0; i < containers.length; i++) {
                     this.memory.targetRoomContainers.push(containers[i].id);
@@ -307,7 +313,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
 
             //Passing energy to workers
-            if (Game.rooms[this.memory.homeRoom].memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START || Game.time%3==0) {
+            if (Game.rooms[this.memory.homeRoom].memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START || Game.time % 3 == 0) {
                 for (w of global.heap.rooms[this.memory.homeRoom].myWorkers) {
                     var worker = Game.getObjectById(w)
                     if (worker == null) { continue; }

@@ -180,9 +180,13 @@ Room.prototype.terminalManager = function terminalManager() {
 
     //Selling Raw Resources
     for (res of global.heap.rooms[this.name].excessRawResources) {
-        if (this.terminal.sellResource(res, C.RAW_RES_SELL_AMOUNT) == OK) {
+        
+        var result=this.terminal.sellResource(res, C.RAW_RES_SELL_AMOUNT) 
+        console.log("Trying to sell: ",res," result: ",result)
+        if (result== OK) {
             return
         }
+        
     }
 
     //

@@ -73,6 +73,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_SCOUT) == undefined) {
             console.log("adding socut because of roomsToScan=undefined")
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_SCOUT))
+            return
         }
 
     }
