@@ -7,10 +7,10 @@ const C=require('constants')
 //TODO
 // add finding (in roomManager) myDamagedCreeps (and allied damaged creeps) and healing them
 
+const localHeap={}
 
 
-
-Creep.prototype.roleSoldier = function roleSoldier(ceep) {
+Creep.prototype.roleSoldier = function roleSoldier() {
 
     if (this.memory.isMelee == undefined) {
         for (let part of this.body) {
@@ -35,14 +35,14 @@ Creep.prototype.roleSoldier = function roleSoldier(ceep) {
 
         var targetCreep = this.pos.findClosestByRange(global.heap.rooms[this.room.name].hostiles);
 
-        var targetStructure = this.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {
+        localHeap.targetStructure = this.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {
             filter: function (structure) {
                 return structure.structureType == STRUCTURE_INVADER_CORE
             }
         });
 
-        if (targetStructure == null) {
-            targetStructure = this.pos.findClosestByPath(global.heap.rooms[this.room.name].hostileStructures);
+        if (localHeap.targetStructure == null) {
+            localHeap.targetStructure = this.pos.findClosestByPath(global.heap.rooms[this.room.name].hostileStructures);
         }
 
         if (targetCreep) {
@@ -71,22 +71,26 @@ Creep.prototype.roleSoldier = function roleSoldier(ceep) {
 
 
         }
-        else if (targetStructure) {
+        else if (localHeap.targetStructure) {
 
             if (this.memory.isMelee == true) {
-                if (this.attack(targetStructure) == ERR_NOT_IN_RANGE) {
-                    this.moveTo(targetStructure, { maxRooms: 1, avoidCreeps: true, reusePath: 11, range: 1 });
+                if (this.attack(localHeap.targetStructure) == ERR_NOT_IN_RANGE) {
+                    this.moveTo(localHeap.targetStructure, { maxRooms: 1, avoidCreeps: true, reusePath: 11, range: 1 });
                 }
 
             }
             else {
-                this.moveTo(targetStructure, { maxRooms: 1, avoidCreeps: true });
+                this.moveTo(localHeap.targetStructure, { maxRooms: 1, avoidCreeps: true });
                 this.rangedMassAttack()
             }
 
             if (this.hits < this.hitsMax) {
                 this.heal(this);
             }
+        }
+        else if(!localHeap.targetStructure)
+        {
+            localHeap.targetStructure=undefined
         }
         /*
         if (Game.rooms[this.memory.targetRoom] != undefined && Game.rooms[this.memory.targetRoom].memory.damagedCreeps.length > 0) {

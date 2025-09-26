@@ -22,6 +22,8 @@ Creep.prototype.increaseBalancer = function increaseBalancer() {
     }
 }
 
+const localHeap = {}
+
 Creep.prototype.roleCarrier = function roleCarrier() {
 
 
@@ -51,10 +53,10 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
 
 
-        if (this.memory.targetRoomContainers != undefined && this.memory.targetRoomContainers.length > 0) {
-            for (let i = 0; i < this.memory.targetRoomContainers.length; i++) {
-                if (Game.getObjectById(this.memory.targetRoomContainers[i]) == null) {
-                    this.memory.targetRoomContainers = undefined;
+        if (localHeap.targetRoomContainers != undefined && localHeap.targetRoomContainers.length > 0) {
+            for (let i = 0; i < localHeap.targetRoomContainers.length; i++) {
+                if (Game.getObjectById(localHeap.targetRoomContainers[i]) == null) {
+                    localHeap.targetRoomContainers = undefined;
                     break;
                 }
             }
@@ -72,8 +74,8 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
 
         // define containers from which creep should withdraw resources
-        if (this.memory.targetRoomContainers == undefined ||
-            (this.memory.targetRoomContainers != undefined && this.memory.targetRoomContainers.length == 0)) {
+        if (localHeap.targetRoomContainers == undefined ||
+            (localHeap.targetRoomContainers != undefined && localHeap.targetRoomContainers.length == 0)) {
 
             if (this.memory.targetRoom == this.memory.homeRoom) {
                 //if creep.target_room is creep.home_room
@@ -90,9 +92,9 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                             && (structure.pos.inRangeTo(Game.rooms[this.memory.homeRoom].controller.pos, 4) == false);
                     }
                 });
-                this.memory.targetRoomContainers = [];
+                localHeap.targetRoomContainers = [];
                 for (let i = 0; i < containers.length; i++) {
-                    this.memory.targetRoomContainers.push(containers[i].id);
+                    localHeap.targetRoomContainers.push(containers[i].id);
                 }
 
             }
@@ -108,9 +110,9 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                             return structure.structureType === STRUCTURE_CONTAINER;
                         }
                     });
-                    this.memory.targetRoomContainers = [];
+                    localHeap.targetRoomContainers = [];
                     for (let i = 0; i < containers.length; i++) {
-                        this.memory.targetRoomContainers.push(containers[i].id);
+                        localHeap.targetRoomContainers.push(containers[i].id);
                     }
                 }
 
@@ -125,48 +127,57 @@ Creep.prototype.roleCarrier = function roleCarrier() {
             if ((Game.rooms[this.memory.targetRoom] == undefined || this.pos.inRangeTo(spawn, 4))
                 && global.heap.rooms[this.memory.homeRoom].defensiveQueue != undefined &&
                 !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER)
-                //&& this.memory.maxContainer != undefined  // this condition might be wrong
+                //&& localHeap.maxContainer != undefined  // this condition might be wrong
             ) {
                 const destination = new RoomPosition(25, 25, this.memory.targetRoom);
                 this.travelTo(destination, { stuckValue: 2 })
             }
-            if (this.memory.targetRoomContainers != undefined && this.memory.targetRoomContainers.length > 0) {// find max_container and take resources from it or go sleep
+            if (localHeap.targetRoomContainers != undefined && localHeap.targetRoomContainers.length > 0) {// find max_container and take resources from it or go sleep
 
                 //finding max_container
-                if (this.memory.maxContainer == undefined) {
+                if (localHeap.maxContainer == undefined) {
                     //setting biggest_resource to 0 by default will result in not chosing containers with RESOURCE_ENERGY=0
                     var biggest_resource = 0;
 
-                    for (let i = 0; i < this.memory.targetRoomContainers.length; i++) {
-                        var container = Game.getObjectById(this.memory.targetRoomContainers[i]);
+                    for (let i = 0; i < localHeap.targetRoomContainers.length; i++) {
+                        var container = Game.getObjectById(localHeap.targetRoomContainers[i]);
                         if (container.store.getUsedCapacity() > biggest_resource) {
-                            this.memory.maxContainer = container.id;
+                            localHeap.maxContainer = container.id;
                             biggest_resource = container.store.getUsedCapacity();
                         }
                     }
                 }
-                else if (Game.getObjectById(this.memory.maxContainer) != null) {
-                    if (Game.getObjectById(this.memory.maxContainer).store.getUsedCapacity() == 0) {
+                else if (Game.getObjectById(localHeap.maxContainer) != null) {
+                    if (Game.getObjectById(localHeap.maxContainer).store.getUsedCapacity() == 0) {
                         //turned of for debuggin - creep will go to container even if container is empty
-                        //this.memory.maxContainer = undefined;
+                        //localHeap.maxContainer = undefined;
                     }
                 }
                 else {
-                    this.memory.maxContainer = undefined;
+                    localHeap.maxContainer = undefined;
                 }
 
 
-                if (this.memory.maxContainer != undefined && Game.getObjectById(this.memory.maxContainer) != null) {
+                if (localHeap.maxContainer != undefined && Game.getObjectById(localHeap.maxContainer) != null) {
                     // take all resources from container
-                    for (let resource in Game.getObjectById(this.memory.maxContainer).store) {
-                        if (this.withdraw(Game.getObjectById(this.memory.maxContainer), resource) == ERR_NOT_IN_RANGE
-                            || this.pos.inRangeTo(spawn, 4)) {
-                            this.travelTo(Game.getObjectById(this.memory.maxContainer).pos, { stuckValue: 2 })
-                            break;
-                        }
-                    }
 
-                    if (Game.getObjectById(this.memory.maxContainer).store.getUsedCapacity() < (this.store.getCapacity() - this.store.getUsedCapacity()) * 0.8 && Game.getObjectById(this.memory.maxContainer).store.getUsedCapacity() < 2000) {
+                    //if (Game.getObjectById(localHeap.maxContainer).store.getUsedCapacity(RESOURCE_ENERGY) == 0 && this.isNearTo(Game.getObjectById(localHeap.maxContainer).pos.x,Game.getObjectById(localHeap.maxContainer).pos.y)) {
+                   //     this.fleeFrom(Game.getObjectById(localHeap.maxContainer), { maxRooms: 1, range: 2 })
+                   // }
+                   // else {
+                        for (let resource in Game.getObjectById(localHeap.maxContainer).store) {
+                            if (this.withdraw(Game.getObjectById(localHeap.maxContainer), resource) == ERR_NOT_IN_RANGE
+                                || this.pos.inRangeTo(spawn, 4)) {
+                                this.travelTo(Game.getObjectById(localHeap.maxContainer).pos, { stuckValue: 2 })
+                                break;
+                            }
+                        }
+                    //}
+
+
+
+                    /*
+                    if (Game.getObjectById(localHeap.maxContainer).store.getUsedCapacity() < (this.store.getCapacity() - this.store.getUsedCapacity()) * 0.8 && Game.getObjectById(localHeap.maxContainer).store.getUsedCapacity() < 2000) {
                         if (this.store[RESOURCE_ENERGY] == 0) {
                             var avoid = [];
                             if (this.pos.inRangeTo(spawn, 3)) {
@@ -180,13 +191,16 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                                 avoid.push(Game.getObjectById(this.memory.homeContainer));
                             }
 
-                            if (avoid.length == 0 && this.pos.inRangeTo(Game.getObjectById(this.memory.maxContainer).pos.x, Game.getObjectById(this.memory.maxContainer).pos.y, 3)) {
-                                this.sleep(((this.store.getCapacity() - this.store.getUsedCapacity()) - Game.getObjectById(this.memory.maxContainer).store.getUsedCapacity()) / 25);
+                            if (avoid.length == 0 && this.pos.inRangeTo(Game.getObjectById(localHeap.maxContainer).pos.x, Game.getObjectById(localHeap.maxContainer).pos.y, 3)) {
+                                this.sleep(((this.store.getCapacity() - this.store.getUsedCapacity()) - Game.getObjectById(localHeap.maxContainer).store.getUsedCapacity()) / 25);
 
                             }
 
                         }
                     }
+                    */
+
+
                 }
                 else {
                     //here creep can wait at spawn blocking it
@@ -214,7 +228,6 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
 
                     if (droppedResource != undefined && droppedResource != null && droppedResource.length > 0) {
-                        // var closest_resource = this.pos.findClosestByPath(droppedResource);
                         var max_res_amount = 0;
                         var max_res_id = undefined;
                         for (let a of droppedResource) {
@@ -251,7 +264,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
                 if (this.memory.resourceToCollect != undefined) {
                     if (Game.getObjectById(this.memory.resourceToCollect) != null) {
-                        this.memory.maxContainer = undefined;
+                        localHeap.maxContainer = undefined;
                         if (this.pickup(Game.getObjectById(this.memory.resourceToCollect)) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
                             this.travelTo(Game.getObjectById(this.memory.resourceToCollect), { stuckValue: 2, range: 1 })
@@ -282,7 +295,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 */
 
 
-
+            /*
             var avoid = [];
             if (this.pos.inRangeTo(spawn, 3)) {
                 avoid.push(spawn)
@@ -295,11 +308,11 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 avoid.push(Game.getObjectById(this.memory.homeContainer));
             }
 
-            if (avoid.length > 0 && (Game.getObjectById(this.memory.maxContainer) != null && Game.getObjectById(this.memory.maxContainer).store.getUsedCapacity() < (this.store.getCapacity() - this.store.getUsedCapacity()) * 0.8 && Game.getObjectById(this.memory.maxContainer).store.getUsedCapacity() < 2000) == true) {
+            if (avoid.length > 0 && (Game.getObjectById(localHeap.maxContainer) != null && Game.getObjectById(localHeap.maxContainer).store.getUsedCapacity() < (this.store.getCapacity() - this.store.getUsedCapacity()) * 0.8 && Game.getObjectById(localHeap.maxContainer).store.getUsedCapacity() < 2000) == true) {
 
                 this.fleeFrom(avoid, 3);
             }
-
+            */
 
 
         }
@@ -307,7 +320,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
 
             //Passing energy to workers
-            if (Game.rooms[this.memory.homeRoom].memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START || Game.time%3==0) {
+            if (Game.rooms[this.memory.homeRoom].memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START || Game.time % 3 == 0) {
                 for (w of global.heap.rooms[this.memory.homeRoom].myWorkers) {
                     var worker = Game.getObjectById(w)
                     if (worker == null) { continue; }
@@ -415,7 +428,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         else if (transferResut == ERR_FULL) {
 
                             this.increaseBalancer()
-                            this.memory.maxContainer = undefined;
+                            localHeap.maxContainer = undefined;
 
                             break;
 
@@ -425,7 +438,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         else if (transferResut == OK) {
 
                             this.increaseBalancer()
-                            this.memory.maxContainer = undefined;
+                            localHeap.maxContainer = undefined;
                         }
                         /*
                         if (this.pos.inRangeTo(Game.getObjectById(this.memory.homeContainer), 3)

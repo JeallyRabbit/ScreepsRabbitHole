@@ -5,7 +5,7 @@ localHeap={}
 Creep.prototype.roleMineralCarrier = function roleMineralCarrier()
 {
     //localHeap.task=undefined
-    if(this.store.getFreeCapacity(RESOURCE_ENERGY)>0 && this.ticksToLive>30)
+    if(this.store.getFreeCapacity(RESOURCE_ENERGY)>0 && this.ticksToLive>C.CREEP_TICKS_TO_LIVE_BUFFER)
     {//is full
         localHeap.task=C.TASK_COLLECT_MINERAL
     }

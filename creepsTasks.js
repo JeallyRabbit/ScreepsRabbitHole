@@ -244,7 +244,7 @@ Creep.prototype.taskClearCreep = function taskClearCreep() {
 
 
     //exit point of task
-    if (this.store.getFreeCapacity(RESOURCE_ENERGY) == this.store.getCapacity()) {
+    if (this.store.getFreeCapacity(RESOURCE_ENERGY) == this.store.getCapacity(RESOURCE_ENERGY)) {
         global.heap.rooms[this.room.name].doctorTask = undefined
         return
     }
