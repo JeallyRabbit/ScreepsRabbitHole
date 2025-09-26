@@ -27,10 +27,6 @@ const localHeap = {}
 
 Creep.prototype.roleCarrier = function roleCarrier() {
 
-    if(this.memory.homeRoom==this.memory.targetRoom)
-    {
-        this.say("home")
-    }
 
     if (this.memory.boostingList == undefined) {
         //this.memory.boostingList = ["KH", "KH2O", "XKH2O"];//boost types that creep accepts
@@ -132,7 +128,6 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 //&& localHeap.maxContainer != undefined  // this condition might be wrong
             ) {
                 const destination = new RoomPosition(25, 25, this.memory.targetRoom);
-                this.say("TR")
                 this.travelTo(destination, { stuckValue: 2 })
             }
             if (localHeap.targetRoomContainers != undefined && localHeap.targetRoomContainers.length > 0) {// find max_container and take resources from it or go sleep
@@ -170,8 +165,6 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         for (let resource in localHeap.maxContainer.store) {
                             if (this.withdraw(localHeap.maxContainer, resource) == ERR_NOT_IN_RANGE
                                 || this.pos.inRangeTo(spawn, 4)) {
-                                    this.say("mC")
-                                    this.say(localHeap.maxContainer.room.name)
                                 this.travelTo(localHeap.maxContainer.pos, { stuckValue: 2 })
                                 break;
                             }
@@ -271,7 +264,6 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         localHeap.maxContainer = undefined;
                         if (this.pickup(Game.getObjectById(this.memory.resourceToCollect)) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
-                                this.say("rC")
                             this.travelTo(Game.getObjectById(this.memory.resourceToCollect), { stuckValue: 2, range: 1 })
                         }
                         else if (Game.getObjectById(this.memory.resourceToCollect) == null) {
@@ -324,7 +316,6 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         if(this.pos.isNearTo(fc.pos))
                         {
                             var result=this.transfer(fc,RESOURCE_ENERGY)
-                            this.say(result)
                             if(result==OK)
                             {
                                 this.increaseBalancer()
@@ -394,13 +385,11 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     else {
                         a = Math.floor(Math.random() * (8 - 1 + 1)) + 1
                         //this.increaseBalancer()
-                        this.say(a)
                         this.move(a)//Random number in range <1:8>
 
                     }
                 }
                 else {
-                    this.say("hR")
                     this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom), { stuckValue: 2 })
                 }
 
@@ -414,7 +403,6 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     for (let res in this.store) {
                         var transferResut = this.transfer(Game.getObjectById(this.memory.homeContainer), res);
                         if (transferResut == ERR_NOT_IN_RANGE) {
-                            this.say("hC")
                             this.travelTo(Game.getObjectById(this.memory.homeContainer), { stuckValue: 2 })
                             break;
                         }
