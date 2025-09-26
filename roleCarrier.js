@@ -83,16 +83,22 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
                 if (this.memory._findHomeContainers != undefined) { this.memory._findHomeContainers++ }
                 else { this.memory._findHomeContainers = 1 }
+                var containers = []
+                if (spawnPos != undefined) {
+                    var containers = this.room.find(FIND_STRUCTURES, {
+                        filter: (structure) => {
+                            return structure.structureType === STRUCTURE_CONTAINER
+                                && ((structure.pos.x != spawnPos.x - 2 || structure.pos.y != spawnPos.y - 2) &&
+                                    (structure.pos.x != spawnPos.x + 2 || structure.pos.y != spawnPos.y - 2))
+                                && (structure.pos.inRangeTo(Game.rooms[this.memory.homeRoom].controller.pos, 4) == false);
+                        }
+                    });
+                }
+                else {
+                    containers = []
+                }
 
-                var containers = this.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return structure.structureType === STRUCTURE_CONTAINER
-                            && ((structure.pos.x != spawnPos.x - 2 || structure.pos.y != spawnPos.y - 2) &&
-                                (structure.pos.x != spawnPos.x + 2 || structure.pos.y != spawnPos.y - 2))
-                            && (structure.pos.inRangeTo(Game.rooms[this.memory.homeRoom].controller.pos, 4) == false);
-                    }
-                });
-                localHeap.targetRoomContainers = [];
+                this.memory.targetRoomContainers = [];
                 for (let i = 0; i < containers.length; i++) {
                     localHeap.targetRoomContainers.push(containers[i].id);
                 }
