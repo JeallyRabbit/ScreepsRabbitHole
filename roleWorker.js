@@ -19,11 +19,11 @@ const creepsTasks = require('creepsTasks')
 
    */
 
-localHeap = {}
+const localHeap = {}
 
 Creep.prototype.roleWorker = function roleWorker() {
 
-    
+
 
     if (this.memory.workPartsNum == undefined) {
         this.memory.workPartsNum = _.filter(this.body, { type: WORK }).length
@@ -40,32 +40,35 @@ Creep.prototype.roleWorker = function roleWorker() {
 
         if (this.room.name != this.memory.homeRoom) {
             //this condition allows sending workers to remote rooms
-            this.moveTo(new RoomPosition(25, 25, this.memory.homeRoom))
+            this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom))
+            this.say("go home")
             return
         }
 
-
-        if (this.store.getUsedCapacity(RESOURCE_ENERGY) == 0
-        ) {
-            localHeap.task = C.TASK_COLLECT
-            this.memory.task = C.TASK_COLLECT
-        }
-        else {
-            if (this.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && global.heap.rooms[this.memory.homeRoom].building == true
-                && this.room.controller.ticksToDowngrade > (CONTROLLER_DOWNGRADE[this.room.controller.level]*C.CONTROLLER_DOWNGRADE_BOTTOM_LIMIT
-                )
+        if (localHeap.task == undefined) {
+            if (this.store.getUsedCapacity(RESOURCE_ENERGY) == 0
             ) {
-                
-                localHeap.task = C.TASK_BUILD
-                this.memory.task = C.TASK_BUILD
-
-
+                localHeap.task = C.TASK_COLLECT
+                this.memory.task = C.TASK_COLLECT
             }
             else {
-                global.heap.rooms[this.room.name].restoringDowngrade=this.id
-                localHeap.task = C.TASK_UPGRADE
-                this.memory.task = C.TASK_UPGRADE
+                if (this.store.getUsedCapacity(RESOURCE_ENERGY) > 0 && global.heap.rooms[this.memory.homeRoom].building == true
+                    && this.room.controller.ticksToDowngrade > (CONTROLLER_DOWNGRADE[this.room.controller.level] * C.CONTROLLER_DOWNGRADE_BOTTOM_LIMIT
+                    )
+                ) {
+
+                    localHeap.task = C.TASK_BUILD
+                    this.memory.task = C.TASK_BUILD
+
+
+                }
+                else {
+                    global.heap.rooms[this.room.name].restoringDowngrade = this.id
+                    localHeap.task = C.TASK_UPGRADE
+                    this.memory.task = C.TASK_UPGRADE
+                }
             }
+
         }
 
 
@@ -85,7 +88,7 @@ Creep.prototype.roleWorker = function roleWorker() {
         else if (localHeap.task == C.TASK_COLLECT) {// go to deposits
 
             if (this.taskCollect(localHeap) == -1) {
-                localHeap.task = undefined
+                //localHeap.task = undefined
             }
             return
         }
