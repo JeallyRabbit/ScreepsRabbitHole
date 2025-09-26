@@ -100,6 +100,11 @@ module.exports.loop = function () {
       console.log("setting global heap")
     }
 
+    if(global.heap.creeps==undefined)
+    {
+      global.heap.creeps=[]
+    }
+
     //vision requests (observer)
     if (global.heap.visionRequests == undefined) {
       global.heap.visionRequests = []

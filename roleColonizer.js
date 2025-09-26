@@ -8,7 +8,6 @@ const C=require('constants');
 // add finding (in roomManager) myDamagedCreeps (and allied damaged creeps) and healing them
 
 
-localheap={}
 
 Creep.prototype.roleColonizer = function roleColonizer() {
 
@@ -21,15 +20,15 @@ Creep.prototype.roleColonizer = function roleColonizer() {
         this.colonizerGetTask()
         if(this.memory.task==C.TASK_HARVEST)
         {
-            this.taskHarvest(localheap)
+            this.taskHarvest()
         }
         else if(this.memory.task==C.TASK_BUILD)
         {
-            this.taskBuild(localheap)
+            this.taskBuild()
         }
         else if(this.memory.task==C.TASK_UPGRADE)
         {
-            this.taskUpgrade(localheap) 
+            this.taskUpgrade() 
         }
 
     }

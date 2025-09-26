@@ -17,18 +17,17 @@ const roleColonizer = require('roleColonizer')
 const roleMiner = require('roleMiner')
 const roleMineralCarrier = require('roleMineralCarrier')
 const roleDoctor = require('roleDoctor')
-const roleDrainer=require('roleDrainer')
+const roleDrainer = require('roleDrainer')
 const operateQuad = require('operateQuad')
-const _=require('lodash')
+const _ = require('lodash')
 
 Room.prototype.creepsManager = function creepsManager() {
 
     global.heap.rooms[this.name].haveScout = false;
     global.heap.rooms[this.name].haulersParts = 0;
     global.heap.rooms[this.name].doctorId = undefined;
-    if(global.heap.rooms[this.name].resourceManagerId!=undefined && Game.getObjectById(global.heap.rooms[this.name].resourceManagerId)==null)
-    {
-        global.heap.rooms[this.name].resourceManagerId=undefined
+    if (global.heap.rooms[this.name].resourceManagerId != undefined && Game.getObjectById(global.heap.rooms[this.name].resourceManagerId) == null) {
+        global.heap.rooms[this.name].resourceManagerId = undefined
         console.log("resourACeManager have died")
     }
     global.heap.rooms[this.name].mineralMiningPower = 0;//how much of mineral is extracted per tick
@@ -51,17 +50,26 @@ Room.prototype.creepsManager = function creepsManager() {
         if (!Game.creeps[cr]) {
             delete Memory.creeps[cr];
         }
+
+        if(!global.heap.creeps[cr]){
+            delete global.heap.creeps[cr];
+        }
     }
 
     for (cr in Game.creeps) {
+
+        if (global.heap.creeps[cr] == undefined) {
+            global.heap.creeps[cr] = {}
+            console.log("Setting heap for ", cr)
+        }
 
         var creep = Game.creeps[cr];
         if (global.heap.rooms[creep.memory.homeRoom] != undefined) {
             global.heap.rooms[creep.memory.homeRoom].creepsBodyParts += creep.body.length
         }
 
-       
-        if (creep == undefined || (creep!=undefined && _.isEmpty(creep.memory))) {
+
+        if (creep == undefined || (creep != undefined && _.isEmpty(creep.memory))) {
             creep.suicide()
             continue
         }
@@ -79,18 +87,16 @@ Room.prototype.creepsManager = function creepsManager() {
                 creep.roleScout()
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
                 global.heap.rooms[creep.memory.homeRoom].haveScout = true
-                for(a of Memory.roomsToAttack)
-                {
-                    if(a.name==creep.memory.targetRoom)
-                    {
+                for (a of Memory.roomsToAttack) {
+                    if (a.name == creep.memory.targetRoom) {
                         creep.say(a.name)
-                        a.scoutId=creep.id
+                        a.scoutId = creep.id
                         break;
                     }
                 }
                 break;
             case C.ROLE_HARVESTER:
-                global.heap.rooms[creep.memory.homeRoom].harvestingParts += _.filter(creep.body, { type:  WORK }).length
+                global.heap.rooms[creep.memory.homeRoom].harvestingParts += _.filter(creep.body, { type: WORK }).length
                 creep.roleHarvester()
                 break;
             case C.ROLE_CARRIER:
@@ -100,7 +106,7 @@ Room.prototype.creepsManager = function creepsManager() {
             case C.ROLE_WORKER:
                 creep.roleWorker()
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
-                global.heap.rooms[creep.memory.homeRoom].workersParts += _.filter(creep.body, { type:  WORK }).length
+                global.heap.rooms[creep.memory.homeRoom].workersParts += _.filter(creep.body, { type: WORK }).length
                 break;
             case C.ROLE_FILLER:
                 creep.roleFiller()
@@ -112,11 +118,10 @@ Room.prototype.creepsManager = function creepsManager() {
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
                 break;
             case C.ROLE_HAULER:
-                if(creep.ticksToLive>C.CREEP_TICKS_TO_LIVE_BUFFER || creep.spawning)
-                {
+                if (creep.ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER || creep.spawning) {
                     global.heap.rooms[creep.memory.homeRoom].haulersParts += _.filter(creep.body, { type: CARRY }).length
-                global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
-                
+                    global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
+
                 }
                 creep.roleHauler()
                 break;
@@ -128,7 +133,7 @@ Room.prototype.creepsManager = function creepsManager() {
                 //creep.suicide()
                 creep.roleRampartRepairer()
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
-                global.heap.rooms[creep.memory.homeRoom].rampartRepairersPower += _.filter(creep.body, { type:  WORK }).length
+                global.heap.rooms[creep.memory.homeRoom].rampartRepairersPower += _.filter(creep.body, { type: WORK }).length
                 break;
             case C.ROLE_RESOURCE_MANAGER:
 
@@ -140,9 +145,9 @@ Room.prototype.creepsManager = function creepsManager() {
                 creep.roleSoldier()
                 global.heap.rooms[creep.memory.homeRoom].militaryParts += creep.body.length
                 if (global.heap.rooms[creep.memory.targetRoom] != undefined) {
-                    global.heap.rooms[creep.memory.targetRoom].myHealPower += _.filter(creep.body, { type:  HEAL }).length * HEAL_POWER;
-                    global.heap.rooms[creep.memory.targetRoom].myAttackPower += _.filter(creep.body, { type:  ATTACK }).length * ATTACK_POWER;
-                    global.heap.rooms[creep.memory.targetRoom].myRangedAttackPower += _.filter(creep.body, { type:  RANGED_ATTACK }).length * RANGED_ATTACK_POWER;
+                    global.heap.rooms[creep.memory.targetRoom].myHealPower += _.filter(creep.body, { type: HEAL }).length * HEAL_POWER;
+                    global.heap.rooms[creep.memory.targetRoom].myAttackPower += _.filter(creep.body, { type: ATTACK }).length * ATTACK_POWER;
+                    global.heap.rooms[creep.memory.targetRoom].myRangedAttackPower += _.filter(creep.body, { type: RANGED_ATTACK }).length * RANGED_ATTACK_POWER;
                 }
 
                 break;
@@ -160,7 +165,7 @@ Room.prototype.creepsManager = function creepsManager() {
                 break;
             case C.ROLE_MINER:
                 creep.roleMiner()
-                global.heap.rooms[creep.memory.homeRoom].mineralMiningPower += (_.filter(creep.body, { type:  WORK }).length * HARVEST_MINERAL_POWER) / EXTRACTOR_COOLDOWN
+                global.heap.rooms[creep.memory.homeRoom].mineralMiningPower += (_.filter(creep.body, { type: WORK }).length * HARVEST_MINERAL_POWER) / EXTRACTOR_COOLDOWN
                 if (!global.heap.rooms[creep.memory.homeRoom].miners.includes(creep.id)) {
                     global.heap.rooms[creep.memory.homeRoom].miners.push(creep.id);
                 }
@@ -183,12 +188,12 @@ Room.prototype.creepsManager = function creepsManager() {
                         //console.log("q.id: ", q.id)
 
                         if (q.id == creep.memory.quadId && !q.members.includes(creep.id)) {
-                            
+
                             q.members.push(creep.id)
 
 
                             if (q.topLeftId == undefined || q.topLeftId == creep.id) {
-                                
+
                                 q.topLeftId = creep.id
                                 break;
                             }
@@ -198,13 +203,13 @@ Room.prototype.creepsManager = function creepsManager() {
                             }
                             else if (q.bottomLeftId == undefined || q.bottomLeftId == creep.id) {
                                 q.bottomLeftId = creep.id
-                                
+
                                 break;
                             }
                             else if (q.bottomRightId == undefined || q.bottomRightId == creep.id) {
-                                q.isCompleted=true
+                                q.isCompleted = true
                                 q.bottomRightId = creep.id
-                                
+
                                 break;
                             }
                         }
@@ -214,17 +219,15 @@ Room.prototype.creepsManager = function creepsManager() {
                 break;
             case C.ROLE_ENERGY_DRAINER:
                 creep.roleDrainer();
-                for(a of Memory.roomsToAttack)
-                {
-                    if(a.name==creep.memory.targetRoom
-                        && a.drainersId.find((id)=> id==creep.id)==undefined
-                    )
-                    {
+                for (a of Memory.roomsToAttack) {
+                    if (a.name == creep.memory.targetRoom
+                        && a.drainersId.find((id) => id == creep.id) == undefined
+                    ) {
                         a.drainersId.push(creep.id)
                     }
                 }
                 break;
-            
+
         }
     }
     this.memory.creepsBodyParts = global.heap.rooms[this.name].creepsBodyParts

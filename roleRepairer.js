@@ -3,7 +3,6 @@ const Movement = require('screeps-movement');
 const C = require('constants')
 //const getMaxEnergyDeposit = require("getMaxEnergyDeposit");
 
-localHeap = {}
 
 Creep.prototype.roleRepairer = function roleRepairer() {
 
@@ -20,10 +19,10 @@ Creep.prototype.roleRepairer = function roleRepairer() {
     if (this.room.name == this.memory.targetRoom && this.pos.x>0 && this.pos.x<49 && this.pos.y>0 && this.pos.y<49) {
 
         if (this.store[RESOURCE_ENERGY] == 0) {
-            this.taskCollect(localHeap)
+            this.taskCollect()
         }
         else if (((global.heap.rooms[this.memory.targetRoom].damagedStructuresId != undefined && global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length < 1) || global.heap.rooms[this.memory.targetRoom].damagedStructuresId == undefined)) {
-            this.taskBuild(localHeap)
+            this.taskBuild()
         }
         else {
 
@@ -31,17 +30,17 @@ Creep.prototype.roleRepairer = function roleRepairer() {
             if (global.heap.rooms[this.memory.targetRoom].damagedStructuresId != undefined && global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length > 0) {
 
                
-                if (localHeap.targetStructureId != undefined && Game.getObjectById(localHeap.targetStructureId) == null) {
-                    localHeap.targetStructureId = undefined
+                if (global.heap.creeps[this.name].targetStructureId != undefined && Game.getObjectById(global.heap.creeps[this.name].targetStructureId) == null) {
+                    global.heap.creeps[this.name].targetStructureId = undefined
                 }
 
-                if (localHeap.targetStructureId != undefined && Game.getObjectById(localHeap.targetStructureId) != null
-                    && (Game.getObjectById(localHeap.targetStructureId).hits == Game.getObjectById(localHeap.targetStructureId).hitsMax
-                || Game.getObjectById(localHeap.targetStructureId).room.name!=this.memory.targetRoom)) {
-                    localHeap.targetStructureId = undefined
+                if (global.heap.creeps[this.name].targetStructureId != undefined && Game.getObjectById(global.heap.creeps[this.name].targetStructureId) != null
+                    && (Game.getObjectById(global.heap.creeps[this.name].targetStructureId).hits == Game.getObjectById(global.heap.creeps[this.name].targetStructureId).hitsMax
+                || Game.getObjectById(global.heap.creeps[this.name].targetStructureId).room.name!=this.memory.targetRoom)) {
+                    global.heap.creeps[this.name].targetStructureId = undefined
                 }
 
-                if (localHeap.targetStructureId == undefined) {
+                if (global.heap.creeps[this.name].targetStructureId == undefined) {
                     var aux = [];
                     for (id of global.heap.rooms[this.memory.targetRoom].damagedStructuresId) {
                         if (Game.getObjectById(id) != null && Game.getObjectById(id).room.name==this.memory.targetRoom
@@ -51,12 +50,12 @@ Creep.prototype.roleRepairer = function roleRepairer() {
                     }
                     var target = this.pos.findClosestByPath(aux)
                     if (target != null) {
-                        localHeap.targetStructureId = target.id
+                        global.heap.creeps[this.name].targetStructureId = target.id
                     }
                 }
 
-                if (localHeap.targetStructureId != undefined) {
-                    var targetStructure = Game.getObjectById(localHeap.targetStructureId)
+                if (global.heap.creeps[this.name].targetStructureId != undefined) {
+                    var targetStructure = Game.getObjectById(global.heap.creeps[this.name].targetStructureId)
                     if (targetStructure != null) {
                         if (this.repair(targetStructure) == ERR_NOT_IN_RANGE) {
                             this.travelTo(targetStructure, {  reusePath: 17, maxRooms: 1 });
@@ -64,7 +63,7 @@ Creep.prototype.roleRepairer = function roleRepairer() {
                         }
                     }
                     else {
-                        localHeap.targetStructureId = undefined;
+                        global.heap.creeps[this.name].targetStructureId = undefined;
 
                     }
                 }

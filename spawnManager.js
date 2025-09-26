@@ -12,7 +12,6 @@ const quadRangedBody = require('quadRangedBody')
 const drainerBody = require('drainerBody');
 
 //defining local heap
-const localHeap = {}
 
 function getBodyCost(body) {
     var cost = 0;

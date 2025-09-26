@@ -15,15 +15,14 @@ const creepsTasks = require('creepsTasks')
     Will Calculate in its own:
     this.memory.workPartsNum - 
     this.memory.boosters - acceptable boosters - putting only upgrade controller for now
-    localHeap.task - currently done task -> colelct/upgrade/build 
+    global.heap.creeps[this.name].task - currently done task -> colelct/upgrade/build 
 
    */
 
-const localHeap = {}
 
 Creep.prototype.roleWorker = function roleWorker() {
 
-
+    
 
     if (this.memory.workPartsNum == undefined) {
         this.memory.workPartsNum = _.filter(this.body, { type: WORK }).length
@@ -45,10 +44,10 @@ Creep.prototype.roleWorker = function roleWorker() {
             return
         }
 
-        if (localHeap.task == undefined) {
+        if (global.heap.creeps[this.name].task == undefined) {
             if (this.store.getUsedCapacity(RESOURCE_ENERGY) == 0
             ) {
-                localHeap.task = C.TASK_COLLECT
+                global.heap.creeps[this.name].task = C.TASK_COLLECT
                 this.memory.task = C.TASK_COLLECT
             }
             else {
@@ -57,14 +56,14 @@ Creep.prototype.roleWorker = function roleWorker() {
                     )
                 ) {
 
-                    localHeap.task = C.TASK_BUILD
+                    global.heap.creeps[this.name].task = C.TASK_BUILD
                     this.memory.task = C.TASK_BUILD
 
 
                 }
                 else {
                     global.heap.rooms[this.room.name].restoringDowngrade = this.id
-                    localHeap.task = C.TASK_UPGRADE
+                    global.heap.creeps[this.name].task = C.TASK_UPGRADE
                     this.memory.task = C.TASK_UPGRADE
                 }
             }
@@ -74,27 +73,23 @@ Creep.prototype.roleWorker = function roleWorker() {
 
 
 
-
-        if (localHeap.task == C.TASK_UPGRADE) // if upgrading go upgrade
+        this.memory.task=global.heap.creeps[this.name].task
+        if (global.heap.creeps[this.name].task == C.TASK_UPGRADE) // if upgrading go upgrade
         {
-            if (this.taskUpgrade(localHeap) == -1) {
-                localHeap.task = undefined
-            }
-            return;
+            this.taskUpgrade(global.heap.creeps[this.name])
+            return
 
 
 
         }
-        else if (localHeap.task == C.TASK_COLLECT) {// go to deposits
+        else if (global.heap.creeps[this.name].task == C.TASK_COLLECT) {// go to deposits
 
-            if (this.taskCollect(localHeap) == -1) {
-                //localHeap.task = undefined
-            }
+            this.taskCollect(global.heap.creeps[this.name])
             return
         }
-        else if (localHeap.task == C.TASK_BUILD) {
+        else if (global.heap.creeps[this.name].task == C.TASK_BUILD) {
 
-            this.taskBuild(localHeap)
+            this.taskBuild(global.heap.creeps[this.name])
             return;
 
         }

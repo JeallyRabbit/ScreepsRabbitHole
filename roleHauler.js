@@ -5,7 +5,6 @@
 var sleep = require('creepSleep');
 const C = require('constants')
 
-localHeap={}
 
 Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom containers (and storage) to extensions and spawn (if they are full equalize energy at containers)
 

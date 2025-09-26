@@ -4,7 +4,6 @@ const C = require('./constants');
 const { rest } = require('lodash');
 
 
-localHeap = {}
 
 Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer energy grom containers to storage
 

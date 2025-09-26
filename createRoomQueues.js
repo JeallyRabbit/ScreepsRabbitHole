@@ -1,8 +1,7 @@
 // Every constant definied in separate file
 const C = require('constants');
 const { ROLE_RESERVER, STORAGE_ENERGY_BOTTOM } = require('./constants');
-//defining local heap
-const localHeap = {}
+
 
 
 
