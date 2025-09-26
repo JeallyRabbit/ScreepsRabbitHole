@@ -122,8 +122,8 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
         // Fillers
         if (this.controller.level > 1 && global.heap.rooms[this.name].fillers < 4
-            && ((global.heap.rooms[this.name].myExtensions!=undefined && global.heap.rooms[this.name].myExtensions.length>0)
-            || (this.memory.fillerContainers!=undefined && this.memory.fillerContainers.length>0))
+            && ((global.heap.rooms[this.name].myExtensions != undefined && global.heap.rooms[this.name].myExtensions.length > 0)
+                || (this.memory.fillerContainers != undefined && this.memory.fillerContainers.length > 0))
         ) {
             if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_FILLER) == undefined) {
                 global.heap.rooms[this.name].harvestingQueue.push(new generalRoomRequest(this.name, C.ROLE_FILLER))
@@ -135,12 +135,11 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         if (this.storage != undefined) {
 
             //skipping sources in mainRooms with sourcesLinks
-            var haveSourcesLinks=(harvestingSource.roomName==this.name && this.memory.sourcesLinksId!=undefined && this.memory.sourcesLinksId.length>1)
-            if(haveSourcesLinks)
-            {
-                harvestingSource.carryPower=9999999
+            var haveSourcesLinks = (harvestingSource.roomName == this.name && this.memory.sourcesLinksId != undefined && this.memory.sourcesLinksId.length > 1)
+            if (haveSourcesLinks) {
+                harvestingSource.carryPower = 9999999
             }
-            if (harvestingSource.carryPower < harvestingSource.harvestingPower && haveSourcesLinks!=true) {
+            if (harvestingSource.carryPower < harvestingSource.harvestingPower && haveSourcesLinks != true) {
                 //Carriers
                 if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
                     if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_CARRIER) == undefined) {
@@ -187,7 +186,12 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     if (this.memory.harvestingRooms != undefined) {
         for (harvestingRoom of this.memory.harvestingRooms) {
             if (harvestingRoom.repairerId == undefined && this.memory.roomsToScan.length == 0) {
-                if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_REPAIRER) == undefined) {
+                if (harvestingRoom.name == this.name) {
+                    if (this.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_REPAIRER) == undefined) {
+                        global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(harvestingRoom.name, C.ROLE_REPAIRER))
+                    }
+                }
+                else if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_REPAIRER) == undefined) {
                     global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(harvestingRoom.name, C.ROLE_REPAIRER))
                 }
 
@@ -298,7 +302,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
     //Mineral Carriers
     if (Game.getObjectById(this.memory.mineralId) != null && Game.getObjectById(this.memory.mineralId).mineralAmount > 0 && global.heap.rooms[this.name].mineralCarryPower < global.heap.rooms[this.name].mineralMiningPower
-       // && this.storage != undefined && this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM
+        // && this.storage != undefined && this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM
     ) {//Add to civilian queue
         //console.log("Adding mineralCarrier")
         if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_MINERAL_CARRIER) == undefined) {
@@ -330,37 +334,28 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
     //Rampart Repairers - civilian queue
     if (global.heap.rooms[this.name].requiredRampartsRepairersPower > global.heap.rooms[this.name].rampartRepairersPower
-        && global.heap.rooms[this.name].myRamparts.length>0
+        && global.heap.rooms[this.name].myRamparts.length > 0
     ) {
         if (global.heap.rooms[this.name].state.includes(C.STATE_UNDER_ATTACK)) {//Add to defensive queue
             if (global.heap.rooms[this.name].defensiveQueue.find(({ role }) => role === C.ROLE_RAMPART_REPAIRER) == undefined) {
                 global.heap.rooms[this.name].defensiveQueue.push(new generalRoomRequest(this.name, C.ROLE_RAMPART_REPAIRER))
             }
 
-            //Debugging
-            this.memory._repairersAddingTick=Game.time
-            this.memory._global_heap_rooms_this_name_myRamparts_length=global.heap.rooms[this.name].myRamparts.length
-            this.memory._global_heap_rooms_this_name_requiredRampartsRepairersPower=global.heap.rooms[this.name].requiredRampartsRepairersPower
-            this.memory._global_heap_rooms_this_name_rampartRepairersPower=global.heap.rooms[this.name].rampartRepairersPower
-            ////
+           
         }
         else {//Add to civilian queue
-            if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RAMPART_REPAIRER) == undefined) {
+            
+            if (this.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RAMPART_REPAIRER) == undefined) {
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_RAMPART_REPAIRER))
             }
-            //Debugging
-            this.memory._repairersAddingTick=Game.time
-            this.memory._global_heap_rooms_this_name_myRamparts_length=global.heap.rooms[this.name].myRamparts.length
-            this.memory._global_heap_rooms_this_name_requiredRampartsRepairersPower=global.heap.rooms[this.name].requiredRampartsRepairersPower
-            this.memory._global_heap_rooms_this_name_rampartRepairersPower=global.heap.rooms[this.name].rampartRepairersPower
-            ////
+           
         }
 
     }
 
-    console.log("global.heap.rooms[this.name].resourceManagerId: ",global.heap.rooms[this.name].resourceManagerId )
-    console.log("this.storage: ",this.storage)
-    if (this.storage != undefined && global.heap.rooms[this.name].resourceManagerId == undefined && Game.time%3==0) {
+    console.log("global.heap.rooms[this.name].resourceManagerId: ", global.heap.rooms[this.name].resourceManagerId)
+    console.log("this.storage: ", this.storage)
+    if (this.storage != undefined && global.heap.rooms[this.name].resourceManagerId == undefined && Game.time % 3 == 0) {
         if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RESOURCE_MANAGER) == undefined) {
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_RESOURCE_MANAGER))
         }

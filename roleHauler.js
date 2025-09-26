@@ -19,7 +19,7 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
     //this.memory.cIdMax=undefined;
     if ((this.room.controller!=undefined && this.room.controller.level <= 2) || (this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] == 0)) {
         this.memory.targetRoom = this.room.name;
-        this.roleCarrier();
+        //this.roleCarrier();
         return;
     }
 
