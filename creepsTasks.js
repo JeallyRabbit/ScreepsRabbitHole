@@ -398,6 +398,7 @@ Creep.prototype.taskCollect = function taskCollect(localHeap) {// go to deposits
     }
     if (localHeap.depposit != undefined && localHeap.deposit != null && localHeap.deposit.store[RESOURCE_ENERGY] == 0) {
 
+        this.say("0")
         localHeap.deposit = undefined
     }
 
@@ -406,30 +407,38 @@ Creep.prototype.taskCollect = function taskCollect(localHeap) {// go to deposits
     //|| (Game.getObjectById(this.room.memory.controllerLinkId) != null && this.room.memory.controllerLinkId != localHeap.deposit && Game.getObjectById(this.room.memory.controllerLinkId).store[RESOURCE_ENERGY] > 0)
     //|| (this.room.memory.controllerContainerId != undefined && Game.getObjectById(this.room.memory.controllerContainerId) != null && this.room.memory.controllerContainerId != localHeap.deposit.id && Game.getObjectById(this.room.memory.controllerContainerId).store[RESOURCE_ENERGY] > 0)) 
     {
-
-        localHeap.deposit = undefined;
+        this.say("1")
+       // localHeap.deposit = undefined;
 
     }
 
     if (localHeap.deposit == null) {
+        this.say("2")
         localHeap.deposit = undefined
     }
 
     if (localHeap.deposit == undefined) {
 
-        this.say("FinDe")
-        if (this.memory.role == C.ROLE_WORKER && Game.rooms[this.memory.homeRoom].storage != undefined) {
+        //this.say("FinDe")
+        if (this.memory.role == C.ROLE_WORKER && this.room.storage != undefined
+            && this.room.storage.store[RESOURCE_ENERGY]>C.STORAGE_ENERGY_UPGRADE_LIMIT
+        ) {
+            //this.say("FinDe2")
             var auxDeposits = []
-            auxDeposits.push(Game.rooms[this.memory.homeRoom].storage)
+            auxDeposits.push(this.room.storage)
             if (this.room.memory.controllerLinkId != undefined && Game.getObjectById(this.room.memory.controllerLinkId) != null
                 && Game.getObjectById(this.room.memory.controllerLinkId).store[RESOURCE_ENERGY] > 0) {
-
-
                 auxDeposits.push(Game.getObjectById(this.room.memory.controllerLinkId))
-                this.memory._auxDeposits = auxDeposits
-                
             }
-            localHeap.deposit = this.pos.findClosestByPath(auxDeposits)
+            this.memory._auxDeposits = auxDeposits
+            aux= this.pos.findClosestByPath(auxDeposits)
+            if(aux!=null)
+            {
+                localHeap.deposit =aux
+                this.memory._deposit=aux
+               // this.say("find")
+            }
+            
         }
         else {
 
@@ -469,7 +478,7 @@ Creep.prototype.taskCollect = function taskCollect(localHeap) {// go to deposits
 
     }
 
-    if (localHeap.deposit != null) {
+    if (localHeap.deposit != undefined) {
         this.say("depo")
         if ((this.room.controller != undefined && this.room.controller.level >= 4 && this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_UPGRADE_LIMIT)
 
