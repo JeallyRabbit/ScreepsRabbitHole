@@ -45,6 +45,7 @@ Creep.prototype.roleWorker = function roleWorker() {
         }
 
         if (global.heap.creeps[this.name].task == undefined) {
+            global.heap.creeps[this.name].deposit=undefined
             if (this.store.getUsedCapacity(RESOURCE_ENERGY) == 0
             ) {
                 global.heap.creeps[this.name].task = C.TASK_COLLECT

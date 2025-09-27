@@ -498,6 +498,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
 
             var targetDeposit = global.heap.creeps[this.name].deposit
             this.memory._targetDeposit = targetDeposit
+            this.say(this.withdraw(targetDeposit, RESOURCE_ENERGY) )
             if (this.withdraw(targetDeposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 this.travelTo(targetDeposit, { maxRooms: 1 });
                 this.memory._targetDeposit = targetDeposit
@@ -599,6 +600,11 @@ Creep.prototype.taskUpgrade = function taskUpgrade() {
 //TASK BUILD
 Creep.prototype.taskBuild = function taskBuild() {
 
+
+    if(this.store[RESOURCE_ENERGY]==0)
+    {
+        global.heap.creeps[this.name].task=undefined
+    }
 
     if (global.heap.rooms[this.room.name].building != true) {
         global.heap.creeps[this.name].task = undefined
