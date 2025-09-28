@@ -120,7 +120,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
 
         // Fillers
-        if (this.controller.level > 1 && global.heap.rooms[this.name].fillers < 4
+        if (this.controller.level > 1 && global.heap.rooms[this.name].fillers.length < 4
             && ((global.heap.rooms[this.name].myExtensions != undefined && global.heap.rooms[this.name].myExtensions.length > 0)
                 || (this.memory.fillerContainers != undefined && this.memory.fillerContainers.length > 0))
         ) {
@@ -186,9 +186,17 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         for (harvestingRoom of this.memory.harvestingRooms) {
             if (harvestingRoom.repairerId == undefined && this.memory.roomsToScan.length == 0) {
                 if (harvestingRoom.name == this.name) {
-                    if (this.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_REPAIRER) == undefined) {
-                        global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(harvestingRoom.name, C.ROLE_REPAIRER))
+                    if (this.storage == undefined) {
+                        if (this.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_REPAIRER) == undefined) {
+                            global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(harvestingRoom.name, C.ROLE_REPAIRER))
+                        }
                     }
+                    else if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
+                        if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_REPAIRER) == undefined) {
+                            global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(harvestingRoom.name, C.ROLE_REPAIRER))
+                        }
+                    }
+
                 }
                 else if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_REPAIRER) == undefined) {
                     global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(harvestingRoom.name, C.ROLE_REPAIRER))
@@ -340,14 +348,14 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
                 global.heap.rooms[this.name].defensiveQueue.push(new generalRoomRequest(this.name, C.ROLE_RAMPART_REPAIRER))
             }
 
-           
+
         }
         else {//Add to civilian queue
-            
+
             if (this.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RAMPART_REPAIRER) == undefined) {
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_RAMPART_REPAIRER))
             }
-           
+
         }
 
     }

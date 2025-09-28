@@ -6,6 +6,8 @@ const C = require('constants')
 
 Creep.prototype.roleRepairer = function roleRepairer() {
 
+
+    this.say("Rep")
     if (Game.rooms[this.memory.homeRoom].memory.harvestingRooms != undefined) {
         for (harvestingRoom of Game.rooms[this.memory.homeRoom].memory.harvestingRooms) {
             if (harvestingRoom.name == this.memory.targetRoom) {

@@ -38,6 +38,10 @@ Room.prototype.creepsManager = function creepsManager() {
         global.heap.rooms[this.name].mineralCarriers = []
     }
 
+    if (global.heap.rooms[this.name].fillers == undefined) {
+        global.heap.rooms[this.name].fillers = []
+    }
+
     global.heap.rooms[this.name].mineralCarryPower = 0
 
 
@@ -51,7 +55,7 @@ Room.prototype.creepsManager = function creepsManager() {
             delete Memory.creeps[cr];
         }
 
-        if(!global.heap.creeps[cr]){
+        if (!global.heap.creeps[cr]) {
             delete global.heap.creeps[cr];
         }
     }
@@ -111,7 +115,11 @@ Room.prototype.creepsManager = function creepsManager() {
             case C.ROLE_FILLER:
                 creep.roleFiller()
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
-                global.heap.rooms[creep.memory.homeRoom].fillers++;
+                if (global.heap.rooms[creep.memory.homeRoom].fillers.find(({id}) => id === creep.id) == undefined) {
+                    console.log("no creep with: ",creep.id," in array")
+                    global.heap.rooms[creep.memory.homeRoom].fillers.push(creep);
+                }
+
                 break;
             case C.ROLE_REPAIRER:
                 creep.roleRepairer()

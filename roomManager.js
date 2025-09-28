@@ -102,6 +102,8 @@ Room.prototype.roomManager = function roomManager() {
             }
         }
 
+
+
         //second spawn ID
         if ((this.memory.spawn2Id != undefined && Game.getObjectById(this.memory.spawn2Id) == null) || this.memory.spawn2Id == undefined) {
             var sp = this.find(FIND_MY_SPAWNS, {
@@ -167,7 +169,6 @@ Room.prototype.roomManager = function roomManager() {
 
 
         //Tracking creeps
-        global.heap.rooms[this.name].fillers = 0
         global.heap.rooms[this.name].rampartRepairersPower = 0;
 
 
