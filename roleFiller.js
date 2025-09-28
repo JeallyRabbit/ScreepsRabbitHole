@@ -47,6 +47,7 @@ Creep.prototype.roleFiller = function (spawn) {
     }
     if (this.memory.workingPos != undefined && (this.pos.x != this.memory.workingPos.x || this.pos.y != this.memory.workingPos.y)) {
 
+        global.heap.creeps[this.name].fillerAtPos=false
         var atPos = this.room.lookForAt(LOOK_CREEPS, this.memory.workingPos.x, this.memory.workingPos.y, this.room.name);
         this.memory.atPos = atPos;
         if (atPos.length > 0 && atPos[0].id != this.id) {
@@ -57,6 +58,10 @@ Creep.prototype.roleFiller = function (spawn) {
             this.moveTo(new RoomPosition(this.memory.workingPos.x, this.memory.workingPos.y, this.room.name), { range: 0 });
         }
 
+    }
+    else
+    {
+        global.heap.creeps[this.name].fillerAtPos=true
     }
     if ((this.memory.workingPos != undefined) && this.memory.workingPos.x == this.pos.x && this.memory.workingPos.y == this.pos.y) {
         this.memory.isWorking = true;

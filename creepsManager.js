@@ -115,7 +115,8 @@ Room.prototype.creepsManager = function creepsManager() {
             case C.ROLE_FILLER:
                 creep.roleFiller()
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
-                if (global.heap.rooms[creep.memory.homeRoom].fillers.find(({id}) => id === creep.id) == undefined) {
+                if (global.heap.rooms[creep.memory.homeRoom].fillers.find(({id}) => id === creep.id) == undefined
+            && global.heap.creeps[creep.name].fillerAtPos==true) {
                     console.log("no creep with: ",creep.id," in array")
                     global.heap.rooms[creep.memory.homeRoom].fillers.push(creep);
                 }
