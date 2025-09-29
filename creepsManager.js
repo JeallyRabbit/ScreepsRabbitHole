@@ -270,5 +270,18 @@ Room.prototype.creepsManager = function creepsManager() {
     }
 
 
+    //removin dead fillers
+    if (global.heap.rooms[this.name].fillers.length > 0) {
+        for (filler of global.heap.rooms[this.name].fillers) {
+            if (Game.getObjectById(filler.id) == null) {
+                const index = global.heap.rooms[this.name].fillers.indexOf(filler);
+                if (index > -1) { // only splice array when item is found
+                    global.heap.rooms[this.name].fillers.splice(index, 1); // 2nd parameter means remove one item only
+                }
+            }
+        }
+    }
+
+
 
 }

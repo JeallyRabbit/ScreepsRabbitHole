@@ -409,7 +409,15 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_CLAIMER:
                 {
-                    var result = spawn.spawnCreep([MOVE, MOVE, CLAIM], C.ROLE_CLAIMER + '_' + this.name + Game.time, { memory: { role: C.ROLE_CLAIMER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
+                    var segmentCost=(BODYPART_COST[MOVE]*2)+BODYPART_COST[CLAIM]
+                    var body=[]
+                    for(var i=0;i<energyCap/segmentCost;i++)
+                    {
+                        body.push(MOVE)
+                        body.push(MOVE)
+                        body.push(CLAIM)
+                    }
+                    var result = spawn.spawnCreep(body, C.ROLE_CLAIMER + '_' + this.name + Game.time, { memory: { role: C.ROLE_CLAIMER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
