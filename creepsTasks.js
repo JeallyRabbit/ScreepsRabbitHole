@@ -453,7 +453,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
             }
             else {
 
-                if (Game.rooms[this.memory.homeRoom].storage != undefined) {
+                if (this.memory.targetRoom == this.memory.homeRoom && Game.rooms[this.memory.homeRoom].storage != undefined) {
                     global.heap.creeps[this.name].deposit = Game.rooms[this.memory.homeRoom].storage
                     this.memory._testDeposit = 2
                 }
@@ -498,7 +498,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
 
             var targetDeposit = global.heap.creeps[this.name].deposit
             this.memory._targetDeposit = targetDeposit
-            this.say(this.withdraw(targetDeposit, RESOURCE_ENERGY) )
+            this.say(this.withdraw(targetDeposit, RESOURCE_ENERGY))
             if (this.withdraw(targetDeposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 this.travelTo(targetDeposit, { maxRooms: 1 });
                 this.memory._targetDeposit = targetDeposit
@@ -522,17 +522,34 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
     }
     else { // collect dropped energy
         this.memory._targetDeposit = undefined
-        const droppedEnergy = this.room.find(FIND_DROPPED_RESOURCES, {
-            filter: resource => resource.resourceType == RESOURCE_ENERGY
-        })
-        const closestDroppedEnergy = this.pos.findClosestByRange(droppedEnergy)
-        if (droppedEnergy.length > 0) {
-            if (this.pickup(closestDroppedEnergy) == ERR_NOT_IN_RANGE) {
+
+        if (global.heap.creeps[this.name].closestDroppedEnergy != undefined) 
+        {
+            if(Game.getObjectById(global.heap.creeps[this.name].closestDroppedEnergy.id)==null)
+            {
+                global.heap.creeps[this.name].closestDroppedEnergy=undefined
+            }
+        }   
+
+
+        if (global.heap.creeps[this.name].closestDroppedEnergy == undefined) {
+            const droppedEnergy = this.room.find(FIND_DROPPED_RESOURCES, {
+                filter: resource => resource.resourceType == RESOURCE_ENERGY
+            })
+            const closestDroppedEnergy = this.pos.findClosestByRange(droppedEnergy)
+            if (closestDroppedEnergy != null) {
+                global.heap.creeps[this.name].closestDroppedEnergy=closestDroppedEnergy
+            }
+        }
+
+        if (global.heap.creeps[this.name].closestDroppedEnergy != undefined) {
+
+            if (this.pickup(global.heap.creeps[this.name].closestDroppedEnergy) == ERR_NOT_IN_RANGE) {
                 // Move to it
-                this.travelTo(closestDroppedEnergy, { maxRooms: 1 });
+                this.travelTo(global.heap.creeps[this.name].closestDroppedEnergy, { maxRooms: 1 });
                 //move_avoid_hostile(creep,closestDroppedEnergy.pos);
             }
-            else if (this.pickup(closestDroppedEnergy) == OK) {
+            else if (this.pickup(global.heap.creeps[this.name].closestDroppedEnergy) == OK) {
                 this.decreaseBalancer();
             }
         }
@@ -601,9 +618,8 @@ Creep.prototype.taskUpgrade = function taskUpgrade() {
 Creep.prototype.taskBuild = function taskBuild() {
 
 
-    if(this.store[RESOURCE_ENERGY]==0)
-    {
-        global.heap.creeps[this.name].task=undefined
+    if (this.store[RESOURCE_ENERGY] == 0) {
+        global.heap.creeps[this.name].task = undefined
     }
 
     if (global.heap.rooms[this.room.name].building != true) {

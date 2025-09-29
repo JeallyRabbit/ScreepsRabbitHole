@@ -352,7 +352,16 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
         else {//Add to civilian queue
 
-            if (this.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RAMPART_REPAIRER) == undefined) {
+            var energyStartCondition=false;
+            if(this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>C.STORAGE_ENERGY_BOTTOM)
+            {
+                energyStartCondition=true
+            }
+            else if(this.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START)
+            {
+                energyStartCondition=true
+            }
+            if (energyStartCondition==true && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RAMPART_REPAIRER) == undefined) {
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_RAMPART_REPAIRER))
             }
 

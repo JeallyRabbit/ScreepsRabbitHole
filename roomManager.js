@@ -291,6 +291,17 @@ Room.prototype.roomManager = function roomManager() {
                 }
             }
 
+            if(this.memory.harvestingRooms!=undefined)
+            {
+                for(hr of this.memory.harvestingRooms)
+                {
+                    if(hr.repairerId!=undefined && Game.getObjectById(hr.repairerId)==null)
+                    {
+                        hr.repairerId=undefined
+                    }
+                }
+            }
+
             if (this.memory.isMinimalRoom == true) {//limiting some rooms to only 2 sources - those should be perfect rooms for attacks
                 counter = 2;
             }
