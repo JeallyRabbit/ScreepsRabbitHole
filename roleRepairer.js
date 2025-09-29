@@ -19,6 +19,11 @@ Creep.prototype.roleRepairer = function roleRepairer() {
 
     if (this.room.name == this.memory.targetRoom) {
 
+        if(this.pos.x==0 || this.pos.x==49 || this.pos.y==0 || this.pos.y==49)
+        {
+            this.travelTo(new RoomPosition(25,25,this.memory.targetRoom))
+            return;
+        }
         if (this.store[RESOURCE_ENERGY] == 0) {
             this.say("collect")
             this.taskCollect()
