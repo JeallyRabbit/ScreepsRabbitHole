@@ -120,7 +120,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
 
         // Fillers
-        if (this.controller.level > 1 && global.heap.rooms[this.name].fillers.length < 4 ** Game.time%3==0
+        if (this.controller.level > 1 && global.heap.rooms[this.name].fillers.length < 4
             && ((global.heap.rooms[this.name].myExtensions != undefined && global.heap.rooms[this.name].myExtensions.length > 0)
                 || (this.memory.fillerContainers != undefined && this.memory.fillerContainers.length > 0))
         ) {

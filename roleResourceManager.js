@@ -8,9 +8,13 @@ const { rest } = require('lodash');
 Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer energy grom containers to storage
 
 
+    
     var terminal = this.room.terminal;
     var storage = this.room.storage;
     var managerLink = undefined
+
+
+
     //global.heap.rooms[this.room.name].managerTask = undefined;
     if (global.heap.rooms[this.memory.homeRoom].managerLinkId != undefined) {
         managerLink = Game.getObjectById(global.heap.rooms[this.memory.homeRoom].managerLinkId);
@@ -39,7 +43,6 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                 }
                 else if (managerLink != undefined && managerLink.store[RESOURCE_ENERGY] > C.LINK_TOP_ENERGY) {
 
-                    this.say("L->")
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TAKE_FROM_LINK;
                 }
                 else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_ENERGY_BOTTOM) {
@@ -49,7 +52,6 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                 else if (terminal.store[RESOURCE_ENERGY] < C.TERMINAL_BOTTOM_ENERGY && storage.store[RESOURCE_ENERGY] > C.STORAGE_TOP_ENERGY) {
 
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[RESOURCE_ENERGY]
-                    //this.say(C.TASK_TRANSFER_TO_TERMINAL[RESOURCE_ENERGY])
                 }
                 else if (isT3BoostInStore(terminal.store) != false)//T3 boosts should be only in storage
                 {
@@ -61,10 +63,10 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isRawResInStore(storage.store)]
                 }
-                else if (isT1orT2InStore(storage.store) != false)//T1/T2 should be only in storage
+                else if (isT1orT2InStore(terminal.store) != false)//T1/T2 should be only in storage
                 {
 
-                    global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isT1orT2InStore(terminal.store)]
+                    global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[isT1orT2InStore(terminal.store)]
                 }
                 else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_TOP_ENERGY) {
 
@@ -85,9 +87,11 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
             }
 
 
+
             if (global.heap.rooms[this.room.name].managerTask == C.TASK_CLEAR_CREEP) {
                 if (this.store.getCapacity() == this.store.getFreeCapacity()) {
                     global.heap.rooms[this.room.name].managerTask = undefined;
+                    return;
                 }
                 this.taskClearCreep()
             }
@@ -152,7 +156,6 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                     return
                 }
                 else {
-                    //this.say(resToTransfer)
                     this.withdraw(storage, resToTransfer)
                     if (this.transfer(terminal, resToTransfer, this.store.getCapacity(resToTransfer)) != OK) {
                         this.transfer(terminal, resToTransfer, this.store[resToTransfer])
@@ -177,6 +180,8 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 function isT3BoostInStore(store) {
 
     for (res in store) {
+        if(res==RESOURCE_ENERGY){continue;}
+
         if (C.REVERSED_RESOURCE[res].startsWith("CATALYZED")) {
             return res
         }
@@ -186,10 +191,11 @@ function isT3BoostInStore(store) {
 
 function isT1orT2InStore(store) {
 
+    
     for (res in store) {
-        //Base compounds are included here
-        if ((C.REVERSED_RESOURCE[res].endsWith("OXIDE") || C.REVERSED_RESOURCE[res].endsWith("HYDRITE") || C.REVERSED_RESOURCE[res].endsWith("ACID") || C.REVERSED_RESOURCE[res].endsWith("ALKAIDE"))
-            && !C.REVERSED_RESOURCE[res].replace("RESOURCE__", "").startsWith("CATALYZED")) {
+        if(res==RESOURCE_ENERGY){continue;}
+        if ((C.REVERSED_RESOURCE[res].endsWith("OXIDE") || C.REVERSED_RESOURCE[res].endsWith("HYDRIDE") || C.REVERSED_RESOURCE[res].endsWith("ACID") || C.REVERSED_RESOURCE[res].endsWith("ALKALIDE"))
+            && !((C.REVERSED_RESOURCE[res].replace("RESOURCE_", "")).startsWith("CATALYZED"))) {
 
             return res
         }
@@ -200,6 +206,7 @@ function isT1orT2InStore(store) {
 function isRawResInStore(store) {
     var rawResources = ["H", "O", "U", "L", "K", "Z", "X"]
     for (res in store) {
+        if(res==RESOURCE_ENERGY){continue;}
         if (rawResources.includes(res)) {
             return res
         }
@@ -208,7 +215,6 @@ function isRawResInStore(store) {
 }
 
 Creep.prototype.clearCreepStore = function clearCreepStore(storage, res) {
-    //this.say("clearing")
     for (r in this.store) {
         if (r != res && this.transfer(storage, r) == OK) {
             return;

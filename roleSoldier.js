@@ -39,9 +39,14 @@ Creep.prototype.roleSoldier = function roleSoldier() {
                 return structure.structureType == STRUCTURE_INVADER_CORE
             }
         });
+        if(!global.heap.creeps[this.name].targetStructure)
+        {
+            global.heap.creeps[this.name].targetStructure=undefined
+        }
+        
 
-        if (global.heap.creeps[this.name].targetStructure == null) {
-            global.heap.creeps[this.name].targetStructure = this.pos.findClosestByPath(global.heap.rooms[this.room.name].hostileStructures);
+        if (global.heap.creeps[this.name].targetStructure == undefined) {
+            global.heap.creeps[this.name].targetStructure = this.room.controller.pos.findClosestByPath(global.heap.rooms[this.room.name].hostileStructures);
         }
 
         if (targetCreep) {
@@ -86,10 +91,6 @@ Creep.prototype.roleSoldier = function roleSoldier() {
             if (this.hits < this.hitsMax) {
                 this.heal(this);
             }
-        }
-        else if(!global.heap.creeps[this.name].targetStructure)
-        {
-            global.heap.creeps[this.name].targetStructure=undefined
         }
         /*
         if (Game.rooms[this.memory.targetRoom] != undefined && Game.rooms[this.memory.targetRoom].memory.damagedCreeps.length > 0) {

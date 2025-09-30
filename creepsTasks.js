@@ -102,7 +102,7 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1, in2) {
         }
     }
     if (areOutputsMineralEmpty == true) {
-        global.heap.rooms[this.room.name].managerTask = undefined
+        global.heap.rooms[this.room.name].doctorTask = undefined
         return
     }
 
@@ -823,17 +823,21 @@ Creep.prototype.taskFillNukerGhodium = function taskFillNukerGhodium() {
     var terminal = this.room.terminal;
 
     if (nuker == null || storage == undefined || terminal == undefined) {
+        this.say("error")
         return
     }
-    var targetStore = undefined
     if (storage.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT) {
-        this.withdraw(storage, RESOURCE_GHODIUM, Math.min(nuker.store.getFreeCapacity(RESOURCE_GHODIUM), this.store.getCapacity(RESOURCE_GHODIUM)))
+        this.withdraw(storage, RESOURCE_GHODIUM)
     }
     else if (terminal.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT) {
-        this.withdraw(terminal, RESOURCE_GHODIUM, Math.min(nuker.store.getFreeCapacity(RESOURCE_GHODIUM), this.store.getCapacity(RESOURCE_GHODIUM)))
+        this.withdraw(terminal, RESOURCE_GHODIUM)
     }
-
+    else{
+        this.transfer(nuker, RESOURCE_GHODIUM)
+        global.heap.rooms[this.room.name].managerTask=undefined
+    }
     this.transfer(nuker, RESOURCE_GHODIUM)
+    
 
 }
 

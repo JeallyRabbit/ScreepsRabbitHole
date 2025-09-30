@@ -75,17 +75,6 @@ Creep.prototype.roleDoctor = function roleDoctor() {
             global.heap.rooms[this.room.name].doctorTask = C.TASK_FILL_LAB_ENERGY
             global.heap.rooms[this.room.name].labNeedEnergyId = anyLabNeedEnergy(this.room.name)
         }
-        //changed to any need energy (above)
-        /*
-        else if(inputsNeedEnergy(inputLab1,inputLab2)==1)
-        {
-            global.heap.rooms[this.room.name].doctorTask=C.TASK_FILL_INPUT_LAB_1_ENERGY
-        }
-        else if(inputsNeedEnergy(inputLab1,inputLab2)==2)
-        {
-            global.heap.rooms[this.room.name].doctorTask=C.TASK_FILL_INPUT_LAB_2_ENERGY
-        }
-            */
         else if (global.heap.rooms[this.room.name].boostingRequests.length > 0) {
             this.say("3")
             global.heap.rooms[this.room.name].doctorTask = C.TASK_BOOST_CREEP
@@ -113,20 +102,6 @@ Creep.prototype.roleDoctor = function roleDoctor() {
         else if (global.heap.rooms[this.room.name].doctorTask == C.TASK_FILL_LAB_ENERGY) {
             this.taskFillLabEnergy(global.heap.rooms[this.room.name].labNeedEnergyId)
         }
-        /*
-        else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_FILL_INPUT_LAB_1_ENERGY)
-        {
-            this.taskFillInputLabEnergy(inputLab1)
-        }
-        else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_FILL_INPUT_LAB_2_ENERGY)
-        {
-            this.taskFillInputLabEnergy(inputLab2)
-        }*/
-        /*
-         else if(global.heap.rooms[this.room.name].doctorTask==C.TASK_BOOST_CREEP)
-         {
- 
-         }*/
         else if (global.heap.rooms[this.room.name].doctorTask == C.TASK_FILL_INPUT_LABS_MINERAL) {
             this.say("fill in")
             this.taskFillInputLabsMineral(inputLab1, inputLab2)
@@ -147,7 +122,7 @@ Room.prototype.oneInputMineralEmpty = function oneInputMineralEmpty(in1, in2) {
     var res1 = 1
     var res2 = 0
     for (res in in1.store) {
-        if (res != RESOURCE_ENERGY && in1.store[res] > LAB_REACTION_AMOUNT
+        if (res != RESOURCE_ENERGY && in1.store[res] > 0
             // && res!=global.heap.rooms[this.name].reaction[0]
         ) {
             res1 = res
@@ -156,7 +131,7 @@ Room.prototype.oneInputMineralEmpty = function oneInputMineralEmpty(in1, in2) {
         }
     }
     for (res in in2.store) {
-        if (res != RESOURCE_ENERGY && in2.store[res] > LAB_REACTION_AMOUNT
+        if (res != RESOURCE_ENERGY && in2.store[res] > 0
             //&& res!=global.heap.rooms[this.name].reaction[1]
         ) {
             res2 = res
