@@ -34,9 +34,13 @@ Room.prototype.roomManager = function roomManager() {
     global.heap.rooms[this.name].containersId = []
     global.heap.rooms[this.name].construction = []
 
+    if(global.heap.rooms[this.name].repairerId!=undefined && Game.getObjectById(global.heap.rooms[this.name].repairerId)==null)
+    {
+        global.heap.rooms[this.name].repairerId = undefined
+    }
+    
 
 
-    this.memory.repairerId = undefined
 
 
 
@@ -189,17 +193,17 @@ Room.prototype.roomManager = function roomManager() {
         global.heap.rooms[this.name].myObserver = undefined
         global.heap.rooms[this.name].myStorage = {}
 
-        
-            for (res in C.RESOURCES) {
-                //console.log("adding ", res, " to myStorage")
-                global.heap.rooms[this.name].myStorage[C.RESOURCES[res]] = 0
-            }
-            //global.heap.rooms[this.name].myStorage[RESOURCE_ENERGY]=123
 
-            //console.log("global.heap.rooms[this.name].myStorage[RESOURCE_ENERGY]: ",
-            //global.heap.rooms[this.name].myStorage['energy'])
+        for (res in C.RESOURCES) {
+            //console.log("adding ", res, " to myStorage")
+            global.heap.rooms[this.name].myStorage[C.RESOURCES[res]] = 0
+        }
+        //global.heap.rooms[this.name].myStorage[RESOURCE_ENERGY]=123
 
-        
+        //console.log("global.heap.rooms[this.name].myStorage[RESOURCE_ENERGY]: ",
+        //global.heap.rooms[this.name].myStorage['energy'])
+
+
 
 
 
@@ -291,13 +295,10 @@ Room.prototype.roomManager = function roomManager() {
                 }
             }
 
-            if(this.memory.harvestingRooms!=undefined)
-            {
-                for(hr of this.memory.harvestingRooms)
-                {
-                    if(hr.repairerId!=undefined && Game.getObjectById(hr.repairerId)==null)
-                    {
-                        hr.repairerId=undefined
+            if (this.memory.harvestingRooms != undefined) {
+                for (hr of this.memory.harvestingRooms) {
+                    if (hr.repairerId != undefined && Game.getObjectById(hr.repairerId) == null) {
+                        hr.repairerId = undefined
                     }
                 }
             }
@@ -444,11 +445,10 @@ Room.prototype.roomManager = function roomManager() {
                 if (Game.time % 5 == 0 || true) {
                     //console.log("room: ",this.name," is building from list")
                     //debugging condition
-                    if(this.controller.level!=8)
-                    {
+                    if (this.controller.level != 8) {
                         this.buildRoom(this.memory.variationToBuild)
                     }
-                    
+
                     //global.heap.isSomeRoomPlanning = true
                 }
             }

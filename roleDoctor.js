@@ -26,7 +26,7 @@ Creep.prototype.roleDoctor = function roleDoctor() {
     }
 
     /*
-    console.log("storage: ",storage)
+    console.log("stofage: ",storage)
     console.log("terminal: ",terminal)
     console.log("inputLab1: ",inputLab1)
     console.log("inputLab2: ",inputLab2)

@@ -34,6 +34,23 @@ Creep.prototype.roleHarvester = function roleHarvester() {
     if (this.room.name == this.memory.targetRoom /* && this.store.getFreeCapacity(RESOURCE_ENERGY) > 0*/) {
         // if have some free space and at destination room - go harvest
 
+
+
+        //passing energy to repairer
+        if(this.memory.targetRoom!= this.memory.homeRoom)
+        {
+            if(Game.time%3==0 && global.heap.rooms[this.room.name].repairerId!=undefined)
+            {
+                var repairer=Game.getObjectById(global.heap.rooms[this.room.name].repairerId)
+                if(repairer!=null && repairer.pos.isNearTo(this.pos.x,this.pos.y))
+                {
+                    this.transfer(repairer,RESOURCE_ENERGY)
+                }
+            }
+        }
+
+
+
         if (this.memory.closestContainerId != undefined && Game.getObjectById(this.memory.closestContainerId) == null) {
             this.memory.closestContainerId = undefined;
         }

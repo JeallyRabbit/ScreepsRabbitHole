@@ -147,28 +147,6 @@ module.exports.loop = function () {
           s.harvesters = [];
         }
 
-        /*
-        if (Game.rooms[colonizeRoom.name].memory.buildingList != undefined && Game.rooms[colonizeRoom.name].memory.buildingList.length > 0) {
-          console.log("Entering building spawn at: ", colonizeRoom.name)
-
-          for (building of Game.rooms[colonizeRoom.name].memory.buildingList) {
-            if (building.structureType == STRUCTURE_SPAWN) {
-
-              if (Game.rooms[colonizeRoom.name].createConstructionSite(building.x, building.y, building.structureType, colonizeRoom.name + '_1') == ERR_FULL) {//reached limit of 100 construction sites
-                for (c in Game.constructionSites) {
-                  console.log(c)
-                  if (Game.getObjectById(c).structureType == STRUCTURE_EXTENSION || Game.getObjectById(c).structureType == STRUCTURE_ROAD) { // remove any road or extension construction site
-                    Game.getObjectById(c).remove()
-                    break;
-                  }
-
-                }
-              }
-              break;
-            }
-          }
-        }
-          */
       }
 
     }
@@ -249,7 +227,7 @@ module.exports.loop = function () {
           for (m of Memory.mainRooms) {
             if (Game.map.getRoomLinearDistance(m, r.name) < minDistance
               && Game.rooms[m].storage != undefined && Game.rooms[m].storage.store[RESOURCE_ENERGY] > C.COLONIZE_ENERGY_LIMIT
-              && r.name != m) {
+              && r.name != m && Game.map.getRoomLinearDistance(m, r.name)<11) {
 
               minDistance = Game.map.getRoomLinearDistance(m, r.name)
               r.colonizer = m;
