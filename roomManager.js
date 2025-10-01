@@ -195,16 +195,8 @@ Room.prototype.roomManager = function roomManager() {
 
 
         for (res in C.RESOURCES) {
-            //console.log("adding ", res, " to myStorage")
             global.heap.rooms[this.name].myStorage[C.RESOURCES[res]] = 0
         }
-        //global.heap.rooms[this.name].myStorage[RESOURCE_ENERGY]=123
-
-        //console.log("global.heap.rooms[this.name].myStorage[RESOURCE_ENERGY]: ",
-        //global.heap.rooms[this.name].myStorage['energy'])
-
-
-
 
 
         if (this.storage != undefined) {
@@ -219,17 +211,16 @@ Room.prototype.roomManager = function roomManager() {
             }
         }
 
-        /*
-        if (this.name == 'W9N6') {
-            for (res in global.heap.rooms[this.name].myStorage) {
-                if (global.heap.rooms[this.name].myStorage[res] > 0) {
-                    console.log(res, " ", global.heap.rooms[this.name].myStorage[res])
-                }
+
+        //considering doctor store in myStorage - my Storage is used to determine reaction to run
+        var doctor=Game.getObjectById(global.heap.rooms[this.name].doctorId)
+        if(doctor!=null)
+        {
+            for(res in doctor.store)
+            {
+                 global.heap.rooms[this.name].myStorage[res] += doctor.store[res]
             }
         }
-            */
-
-
 
 
         global.heap.rooms[this.name].state = []

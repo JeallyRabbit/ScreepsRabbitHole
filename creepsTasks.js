@@ -86,6 +86,12 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1, in2) {
         if (outLab != null) {
             outputLabs.push(outLab)
         }
+        else {
+            global.heap.rooms[this.room.name].outLabsId = undefined;
+            global.heap.rooms[this.room.name].doctorTask = undefined;
+            this.say("clOutExit1", true)
+            return
+        }
     }
     if (outputLabs.length == 0) {
         return
@@ -94,14 +100,25 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1, in2) {
     var areOutputsMineralEmpty = true
     for (out of outputLabs) {
         for (res in out.store) {
-            if (res == RESOURCE_ENERGY) { continue }
-            else {
+            if (res != RESOURCE_ENERGY) {
                 areOutputsMineralEmpty = false;
                 break
             }
         }
     }
+
     if (areOutputsMineralEmpty == true) {
+
+        //debugging
+        //for (out of outputLabs) {
+        //    console.log(out.structureType, " ", out.pos, " ", out.id)
+        //    for (res in out.store) {
+        //        console.log(res)
+
+        //    }
+        //}
+        ////
+        this.say("clOutExit2", true)
         global.heap.rooms[this.room.name].doctorTask = undefined
         return
     }
@@ -154,19 +171,22 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
 
     // just error controll
     if (in1 == undefined || in2 == undefined) {
+        this.say("FilLInError",true)
         global.heap.rooms[this.room.name].doctorTask = undefined
         return
     }
 
 
-
+    this.say("Test1")
 
     if (global.heap.rooms[this.room.name].reaction != undefined && global.heap.rooms[this.room.name].reaction.length > 0) {
+        this.say("Test2")
         var res1 = global.heap.rooms[this.room.name].reaction[0]
         var res2 = global.heap.rooms[this.room.name].reaction[1]
 
         // Minerals are already in labs
         if (in1.store[res1] > LAB_REACTION_AMOUNT && in2.store[res2] > LAB_REACTION_AMOUNT) {
+            this.say("FIlINExit",true)
             global.heap.rooms[this.room.name].doctorTask = undefined
             global.heap.rooms[this.room.name].reactionAmount = undefined
             return
@@ -187,11 +207,14 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
                 this.travelTo(in2)
             }
         }*/
+       this.say(this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANG)
         if (this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) {
             this.travelTo(in1)
+            this.say("FillIn1_"+this.transfer(in1, res1),true)
         }
         else if (this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANGE) {
             this.travelTo(in2)
+            this.say("FillIn1",true)
         }
         else {
 
@@ -523,13 +546,11 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
     else { // collect dropped energy
         this.memory._targetDeposit = undefined
 
-        if (global.heap.creeps[this.name].closestDroppedEnergy != undefined) 
-        {
-            if(Game.getObjectById(global.heap.creeps[this.name].closestDroppedEnergy.id)==null)
-            {
-                global.heap.creeps[this.name].closestDroppedEnergy=undefined
+        if (global.heap.creeps[this.name].closestDroppedEnergy != undefined) {
+            if (Game.getObjectById(global.heap.creeps[this.name].closestDroppedEnergy.id) == null) {
+                global.heap.creeps[this.name].closestDroppedEnergy = undefined
             }
-        }   
+        }
 
 
         if (global.heap.creeps[this.name].closestDroppedEnergy == undefined) {
@@ -538,7 +559,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
             })
             const closestDroppedEnergy = this.pos.findClosestByRange(droppedEnergy)
             if (closestDroppedEnergy != null) {
-                global.heap.creeps[this.name].closestDroppedEnergy=closestDroppedEnergy
+                global.heap.creeps[this.name].closestDroppedEnergy = closestDroppedEnergy
             }
         }
 
@@ -832,12 +853,12 @@ Creep.prototype.taskFillNukerGhodium = function taskFillNukerGhodium() {
     else if (terminal.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT) {
         this.withdraw(terminal, RESOURCE_GHODIUM)
     }
-    else{
+    else {
         this.transfer(nuker, RESOURCE_GHODIUM)
-        global.heap.rooms[this.room.name].managerTask=undefined
+        global.heap.rooms[this.room.name].managerTask = undefined
     }
     this.transfer(nuker, RESOURCE_GHODIUM)
-    
+
 
 }
 

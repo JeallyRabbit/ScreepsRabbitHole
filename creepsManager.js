@@ -25,7 +25,11 @@ Room.prototype.creepsManager = function creepsManager() {
 
     global.heap.rooms[this.name].haveScout = false;
     global.heap.rooms[this.name].haulersParts = 0;
-    global.heap.rooms[this.name].doctorId = undefined;
+
+
+    if (global.heap.rooms[this.name].doctorId != undefined && Game.getObjectById(global.heap.rooms[this.name].doctorId) == null) {
+        global.heap.rooms[this.name].doctorId = undefined;
+    }
     if (global.heap.rooms[this.name].resourceManagerId != undefined && Game.getObjectById(global.heap.rooms[this.name].resourceManagerId) == null) {
         global.heap.rooms[this.name].resourceManagerId = undefined
         console.log("resourACeManager have died")
@@ -115,8 +119,8 @@ Room.prototype.creepsManager = function creepsManager() {
             case C.ROLE_FILLER:
                 creep.roleFiller()
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
-                if (global.heap.rooms[creep.memory.homeRoom].fillers.find(({id}) => id === creep.id) == undefined) {
-                    console.log("no creep with: ",creep.id," in array")
+                if (global.heap.rooms[creep.memory.homeRoom].fillers.find(({ id }) => id === creep.id) == undefined) {
+                    console.log("no creep with: ", creep.id, " in array")
                     global.heap.rooms[creep.memory.homeRoom].fillers.push(creep);
                 }
 

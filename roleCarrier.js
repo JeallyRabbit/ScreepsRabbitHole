@@ -154,8 +154,8 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 }
                 else if (global.heap.creeps[this.name].maxContainer != null) {
                     if (global.heap.creeps[this.name].maxContainer.store.getUsedCapacity() == 0) {
-                        //turned off for debuggin - creep will go to container even if container is empty - turned on again
-                        global.heap.creeps[this.name].maxContainer = undefined;
+                        //turned off for debuggin - creep will go to container even if container is empty 
+                        //global.heap.creeps[this.name].maxContainer = undefined;
                     }
                 }
                 else {
