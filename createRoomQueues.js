@@ -191,7 +191,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
                             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(harvestingRoom.name, C.ROLE_REPAIRER))
                         }
                     }
-                    else if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
+                    else if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM || true) {
                         if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_REPAIRER) == undefined) {
                             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(harvestingRoom.name, C.ROLE_REPAIRER))
                         }

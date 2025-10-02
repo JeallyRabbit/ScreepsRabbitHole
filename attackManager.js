@@ -367,6 +367,7 @@ function quadAttack(attackRoom) {
     }
 
     for (q of attackRoom.quads) {
+        
         if (q.isCompleted != true) {
 
             if (q.homeRoom == undefined) {

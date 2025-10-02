@@ -130,13 +130,14 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
 
 
-            if ((Game.rooms[this.memory.targetRoom] == undefined || this.pos.inRangeTo(spawn, 4))
-                && global.heap.rooms[this.memory.homeRoom].defensiveQueue != undefined &&
-                !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER)
+            if (((this.room.name!=this.memory.targetRoom ) || this.pos.inRangeTo(spawn, 4))
+                && 
+            (global.heap.rooms[this.memory.homeRoom].defensiveQueue != undefined && !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER))
                 //&& global.heap.creeps[this.name].maxContainer != undefined  // this condition might be wrong
             ) {
-                const destination = new RoomPosition(25, 25, this.memory.targetRoom);
-                this.travelTo(destination, { obstacles: fillersPos })
+                this.say("TR")
+                const destination = new RoomPosition(24, 24, this.memory.targetRoom);
+                this.travelTo(destination, { obstacles: fillersPos, range: 20 })
             }
             if (global.heap.creeps[this.name].targetRoomContainers != undefined && global.heap.creeps[this.name].targetRoomContainers.length > 0) {// find max_container and take resources from it or go sleep
 
@@ -251,6 +252,9 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         delete this.memory.resourceToCollect;
                     }
                     return;
+                }
+                else{
+                    this.travelTo(new RoomPosition(25,25,this.memory.targetRoom), { obstacles: fillersPos })
                 }
             }
 

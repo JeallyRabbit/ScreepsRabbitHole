@@ -34,11 +34,10 @@ Room.prototype.roomManager = function roomManager() {
     global.heap.rooms[this.name].containersId = []
     global.heap.rooms[this.name].construction = []
 
-    if(global.heap.rooms[this.name].repairerId!=undefined && Game.getObjectById(global.heap.rooms[this.name].repairerId)==null)
-    {
+    if (global.heap.rooms[this.name].repairerId != undefined && Game.getObjectById(global.heap.rooms[this.name].repairerId) == null) {
         global.heap.rooms[this.name].repairerId = undefined
     }
-    
+
 
 
 
@@ -80,7 +79,7 @@ Room.prototype.roomManager = function roomManager() {
         ///
 
 
-        if (Memory.rooms[this.name].quads == undefined) {
+        if (Memory.rooms[this.name]!=undefined && Memory.rooms[this.name].quads == undefined) {
             Memory.rooms[this.name].quads = []
         }
 
@@ -213,12 +212,10 @@ Room.prototype.roomManager = function roomManager() {
 
 
         //considering doctor store in myStorage - my Storage is used to determine reaction to run
-        var doctor=Game.getObjectById(global.heap.rooms[this.name].doctorId)
-        if(doctor!=null)
-        {
-            for(res in doctor.store)
-            {
-                 global.heap.rooms[this.name].myStorage[res] += doctor.store[res]
+        var doctor = Game.getObjectById(global.heap.rooms[this.name].doctorId)
+        if (doctor != null) {
+            for (res in doctor.store) {
+                global.heap.rooms[this.name].myStorage[res] += doctor.store[res]
             }
         }
 
@@ -528,10 +525,23 @@ Room.prototype.roomManager = function roomManager() {
 
 
 
+    var needEnergyForBuilding = false;
     // Adding state need energy if room is building and have little resources
     if (global.heap.rooms[this.name].building == true && (this.storage != undefined && this.terminal != undefined
         && this.storage.store[RESOURCE_ENERGY] + this.terminal.store[RESOURCE_ENERGY] < C.STORAGE_ENERGY_BOTTOM
     )) {
+        needEnergyForBuilding = true;
+
+    }
+
+
+    // adding state need energy if 
+    var needEnergyforOffense = false
+    if (global.heap.rooms[this.name].offensiveQueue!=undefined && global.heap.rooms[this.name].offensiveQueue.length>0) {
+        needEnergyforOffense=true
+    }
+
+    if (needEnergyForBuilding || needEnergyforOffense) {
         if (!global.heap.rooms[this.name].state.includes(C.STATE_NEED_ENERGY)) {
             global.heap.rooms[this.name].state.push(C.STATE_NEED_ENERGY)
         }
@@ -543,9 +553,11 @@ Room.prototype.roomManager = function roomManager() {
             if (index != -1) {
                 global.heap.rooms[this.name].state.splice(index, -1)
             }
-
         }
     }
+
+
+
 
 
     //Finding hostile Creeps

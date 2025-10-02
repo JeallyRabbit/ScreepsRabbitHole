@@ -207,7 +207,7 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
                 this.travelTo(in2)
             }
         }*/
-       this.say(this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANG)
+       this.say((this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) || (this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANGE))
         if (this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) {
             this.travelTo(in1)
             this.say("FillIn1_"+this.transfer(in1, res1),true)
@@ -233,9 +233,11 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
                 if (rawResources.includes(res)) {
                     store = this.room.terminal
                 }*/
-                if (this.withdraw(storage, res, Math.min(this.store.getCapacity(res), storage.store[res])) == ERR_NOT_IN_RANGE) {
+               var result=this.withdraw(storage, res, Math.min(this.store.getCapacity(res), storage.store[res]))
+                if (result == ERR_NOT_IN_RANGE) {
                     this.travelTo(storage)
                 }
+                this.say(result)
             }
         }
     }
