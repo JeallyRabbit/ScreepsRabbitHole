@@ -411,7 +411,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 {
                     var segmentCost=(BODYPART_COST[MOVE]*2)+BODYPART_COST[CLAIM]
                     var body=[]
-                    for(var i=0;i<energyCap/segmentCost;i++)
+                    for(var i=0;i<Math.floor(energyCap/segmentCost);i++)
                     {
                         body.push(MOVE)
                         body.push(MOVE)
