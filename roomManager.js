@@ -542,7 +542,7 @@ Room.prototype.roomManager = function roomManager() {
     }
 
     if (needEnergyForBuilding || needEnergyforOffense) {
-        if (!global.heap.rooms[this.name].state.includes(C.STATE_NEED_ENERGY)) {
+        if (global.heap.rooms[this.name].state!=undefined && !global.heap.rooms[this.name].state.includes(C.STATE_NEED_ENERGY)) {
             global.heap.rooms[this.name].state.push(C.STATE_NEED_ENERGY)
         }
     }
