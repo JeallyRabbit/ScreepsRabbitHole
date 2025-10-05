@@ -56,12 +56,18 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
 
         if (this.store.getFreeCapacity() == 0 || this.ticksToLive < this.memory.sourceDistance * 1.1) {
-            this.memory.collecting = false;
+
+            
+            this.memory.collecting = false
+            
         }
 
         if (this.store.getUsedCapacity(RESOURCE_ENERGY) == 0 || this.memory.collecting == undefined) {
             this.memory.collecting = true;
             this.memory.closestHomeContainer = undefined;
+
+            
+
         }
 
         if (global.heap.creeps[this.name].targetRoomContainers != undefined && global.heap.creeps[this.name].targetRoomContainers.length > 0) {
@@ -138,6 +144,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 this.say("TR")
                 const destination = new RoomPosition(24, 24, this.memory.targetRoom);
                 this.travelTo(destination, { obstacles: fillersPos, range: 20 })
+               //return
             }
             if (global.heap.creeps[this.name].targetRoomContainers != undefined && global.heap.creeps[this.name].targetRoomContainers.length > 0) {// find max_container and take resources from it or go sleep
 
