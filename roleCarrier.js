@@ -144,7 +144,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
 
 
-            if ((((this.room.name!=this.memory.targetRoom )) || this.pos.inRangeTo(spawn, 4))
+            if ((((this.room.name!=this.memory.targetRoom )) || this.pos.inRangeTo(spawn, 4)) && this.memory.homeRoom!=this.memory.targetRoom
             && (global.heap.rooms[this.memory.homeRoom].defensiveQueue != undefined && !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER))
                 //&& global.heap.creeps[this.name].maxContainer != undefined  // this condition might be wrong
             ) {
