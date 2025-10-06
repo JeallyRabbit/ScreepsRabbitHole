@@ -7,6 +7,14 @@ var Traveler = require('Traveler');
 const { fill } = require('lodash');
 
 
+
+class otherRoomPos {
+    constructor(pos) {
+        this.pos = pos
+    }
+}
+
+
 Creep.prototype.increaseBalancer = function increaseBalancer() {
     var aux = 0
     if (Game.getObjectById(this.memory.homeContainer) != null) {
@@ -136,15 +144,14 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
 
 
-            if (((this.room.name!=this.memory.targetRoom ) || this.pos.inRangeTo(spawn, 4))
-                && 
-            (global.heap.rooms[this.memory.homeRoom].defensiveQueue != undefined && !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER))
+            if ((((this.room.name!=this.memory.targetRoom )) || this.pos.inRangeTo(spawn, 4))
+            && (global.heap.rooms[this.memory.homeRoom].defensiveQueue != undefined && !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER))
                 //&& global.heap.creeps[this.name].maxContainer != undefined  // this condition might be wrong
             ) {
                 this.say("TR")
                 const destination = new RoomPosition(24, 24, this.memory.targetRoom);
-                this.travelTo(destination, { obstacles: fillersPos, range: 20 })
-               //return
+                this.travelTo(new otherRoomPos(destination))
+               return
             }
             if (global.heap.creeps[this.name].targetRoomContainers != undefined && global.heap.creeps[this.name].targetRoomContainers.length > 0) {// find max_container and take resources from it or go sleep
 
