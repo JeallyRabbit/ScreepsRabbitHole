@@ -82,7 +82,7 @@ module.exports.loop = function () {
 
     //console.log("GIT TEST")
     //Setting allies
-    Memory.allies = ["JeallyRabbit", "Alphonzo", "insainmonkey", "Trepidimous","csW"]
+    Memory.allies = ["JeallyRabbit", "Alphonzo", "insainmonkey", "Trepidimous","csW","Bleem"]
 
     //Setting enemies
     Memory.enemies = ["IronVengeance"]
