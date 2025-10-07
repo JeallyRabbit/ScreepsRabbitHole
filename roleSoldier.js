@@ -79,7 +79,7 @@ Creep.prototype.roleSoldier = function roleSoldier() {
 
             if (this.memory.isMelee == true) {
                 if (this.attack(global.heap.creeps[this.name].targetStructure) == ERR_NOT_IN_RANGE) {
-                    this.moveTo(global.heap.creeps[this.name].targetStructure, { maxRooms: 1, avoidCreeps: true, reusePath: 11, range: 1 });
+                    this.travelTo(global.heap.creeps[this.name].targetStructure, { maxRooms: 1, avoidCreeps: true, reusePath: 11, range: 1 });
                 }
 
             }
