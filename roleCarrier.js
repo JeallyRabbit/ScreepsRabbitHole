@@ -280,7 +280,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
         }
         else {//creep is full - go home_room_container
 
-
+            global.heap.creeps[this.name].maxContainer = undefined;
             //Passing energy to fillers containers
             if (Game.rooms[this.memory.homeRoom].memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START || Game.time % 2 == 0) {
 
@@ -423,7 +423,6 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         else if (transferResut == ERR_FULL) {
 
                             this.increaseBalancer()
-                            global.heap.creeps[this.name].maxContainer = undefined;
 
                             break;
 
@@ -433,7 +432,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         else if (transferResut == OK) {
 
                             this.increaseBalancer()
-                            global.heap.creeps[this.name].maxContainer = undefined;
+                           
                         }
                         /*
                         if (this.pos.inRangeTo(Game.getObjectById(this.memory.homeContainer), 3)
