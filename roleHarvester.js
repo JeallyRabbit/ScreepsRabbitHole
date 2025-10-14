@@ -39,7 +39,7 @@ Creep.prototype.roleHarvester = function roleHarvester() {
         //passing energy to repairer
         if(this.memory.targetRoom!= this.memory.homeRoom)
         {
-            if(Game.time%3==0 && global.heap.rooms[this.room.name].repairerId!=undefined)
+            if(Game.time%6==0 && global.heap.rooms[this.room.name].repairerId!=undefined)
             {
                 var repairer=Game.getObjectById(global.heap.rooms[this.room.name].repairerId)
                 if(repairer!=null && repairer.pos.isNearTo(this.pos.x,this.pos.y))

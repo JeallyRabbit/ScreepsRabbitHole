@@ -97,15 +97,19 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
                 if (this.memory._findHomeContainers != undefined) { this.memory._findHomeContainers++ }
                 else { this.memory._findHomeContainers = 1 }
+                var creepHomeRoom=this.memory.homeRoom
                 if (spawnPos != undefined) {
                     global.heap.creeps[this.name].targetRoomContainers = this.room.find(FIND_STRUCTURES, {
                         filter: (structure) => {
                             return structure.structureType === STRUCTURE_CONTAINER
                                 && ((structure.pos.x != spawnPos.x - 2 || structure.pos.y != spawnPos.y - 2) &&
                                     (structure.pos.x != spawnPos.x + 2 || structure.pos.y != spawnPos.y - 2))
-                                && (structure.pos.inRangeTo(Game.rooms[this.memory.homeRoom].controller.pos, 4) == false);
+                                && (structure.pos.x!=Game.rooms[creepHomeRoom].memory.controllerContainerPos.x ||
+                                     structure.pos.y!=Game.rooms[creepHomeRoom].memory.controllerContainerPos.y ||
+                                      structure.pos.roomName!=creepHomeRoom);
                         }
                     });
+                    this.memory._targetRoomContainers=global.heap.creeps[this.name].targetRoomContainers
                 }
                 else {
                     containers = []
@@ -125,6 +129,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                             return structure.structureType === STRUCTURE_CONTAINER;
                         }
                     });
+                    
                 }
 
             }
