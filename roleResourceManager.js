@@ -45,7 +45,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TAKE_FROM_LINK;
                 }
-                else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_ENERGY_BOTTOM) {
+                else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && (storage.store[RESOURCE_ENERGY] < C.STORAGE_ENERGY_BOTTOM || (Memory.fastRclUpgrade!=undefined && Memory.fastRclUpgrade==this.room.name))) {
 
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[RESOURCE_ENERGY]
                 }
@@ -134,7 +134,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 
                 //exit condition for resourceManager transfering from terminal to storage
                 if (resToTransfer == RESOURCE_ENERGY) {
-                    if (!(terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_TOP_ENERGY)) {
+                    if (!(terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_TOP_ENERGY) &&  Memory.fastRclUpgrade!=this.room.name) {
                         global.heap.rooms[this.room.name].managerTask = undefined
                     }
                 }
