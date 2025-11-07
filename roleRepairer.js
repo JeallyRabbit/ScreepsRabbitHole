@@ -32,6 +32,7 @@ Creep.prototype.roleRepairer = function roleRepairer() {
             this.taskCollect()
         }
         else if (((global.heap.rooms[this.memory.targetRoom].damagedStructuresId != undefined && global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length < 1) || global.heap.rooms[this.memory.targetRoom].damagedStructuresId == undefined)) {
+            this.say("build")
             this.taskBuild()
         }
         else {

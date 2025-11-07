@@ -34,12 +34,17 @@ Creep.prototype.roleSoldier = function roleSoldier() {
 
         var targetCreep = this.pos.findClosestByRange(global.heap.rooms[this.room.name].hostiles);
 
-        global.heap.creeps[this.name].targetStructure = this.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {
+        var invaderCore=this.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {
             filter: function (structure) {
                 return structure.structureType == STRUCTURE_INVADER_CORE
             }
         });
-        if(!global.heap.creeps[this.name].targetStructure)
+        if(invaderCore!=null)
+        {
+            global.heap.creeps[this.name].targetStructure = invaderCore
+        }
+        
+        if(!global.heap.creeps[this.name].targetStructure && Game.time%20==0)
         {
             global.heap.creeps[this.name].targetStructure=undefined
         }
@@ -52,7 +57,8 @@ Creep.prototype.roleSoldier = function roleSoldier() {
         if (targetCreep) {
 
             if (this.rangedAttack(targetCreep) == ERR_NOT_IN_RANGE) {
-                this.moveTo(targetCreep.pos, { maxRooms: 1, avoidSk: true, avoidCreeps: true });
+
+                this.travelTo(targetCreep.pos, { maxRooms: 1, avoidSk: true, avoidCreeps: true });
             }
 
             if (this.memory.isMelee == false) {
@@ -84,7 +90,7 @@ Creep.prototype.roleSoldier = function roleSoldier() {
 
             }
             else {
-                this.moveTo(global.heap.creeps[this.name].targetStructure, { maxRooms: 1, avoidCreeps: true });
+                this.travelTo(global.heap.creeps[this.name].targetStructure, { maxRooms: 1, avoidCreeps: true });
                 this.rangedMassAttack()
             }
 
@@ -92,27 +98,6 @@ Creep.prototype.roleSoldier = function roleSoldier() {
                 this.heal(this);
             }
         }
-        /*
-        if (Game.rooms[this.memory.targetRoom] != undefined && Game.rooms[this.memory.targetRoom].memory.damagedCreeps.length > 0) {
-            var damaged = [];
-            for (cr of Game.rooms[this.memory.targetRoom].memory.damagedCreeps) {
-                damaged.push(Game.getObjectById(cr))
-            }
-            var toHeal = this.pos.findClosestByRange(damaged)
-            if (toHeal != null) {
-                if (this.heal(toHeal) == ERR_NOT_IN_RANGE) {
-                    if (targetCreep == null) {
-                        this.say("6")
-                        this.moveTo(toHeal)
-                    }
-
-                    this.rangedHeal(toHeal)
-                }
-            }
-        }
-        else {
-        }
-            */
     }
     else {
 
@@ -120,7 +105,7 @@ Creep.prototype.roleSoldier = function roleSoldier() {
             this.rangedMassAttack()
             this.heal(this)
         }
-        this.moveTo(new RoomPosition(25, 25, this.memory.targetRoom), { reusePath: 25, avoidCreeps: true, range: 22 });
+        this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { reusePath: 25, avoidCreeps: true, range: 22 });
 
     }
 

@@ -47,7 +47,7 @@ const CREEP_MAX_BODYPARTS = 50; // maximum creep body length - couldn't find in 
 const CREEP_TICKS_TO_LIVE_BUFFER=100
 const HAULER_REQ_CARRY_PARTS = 6;
 const DEFAULT_COLONIZERS_AMOUNT = 4;
-const RAMPARTS_REPAIRERS_FACTOR=5
+const RAMPARTS_REPAIRERS_FACTOR=3
 
 //Creeps tasks
 const TASK_HARVEST = 'harvest'
