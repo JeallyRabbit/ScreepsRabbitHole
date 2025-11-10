@@ -82,6 +82,12 @@ Creep.prototype.roleRepairer = function roleRepairer() {
 
 
             }
+            else{
+                if(this.pos.x==49 || this.pos.y==49 || this.pos.x==1 || this.pos.y==1)
+                {
+                    this.travelTo(new RoomPosition(25,25,this.memory.targetRoom))
+                }
+            }
         }
 
     }
