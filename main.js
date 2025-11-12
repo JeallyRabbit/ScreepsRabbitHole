@@ -80,6 +80,8 @@ module.exports.loop = function () {
       global.heap = {}
     }
 
+    
+
     //console.log("GIT TEST")
     //Setting allies
     Memory.allies = ["JeallyRabbit", "Alphonzo", "insainmonkey", "Trepidimous","csW","Bleem"]
@@ -331,6 +333,14 @@ module.exports.loop = function () {
     if (toDelete != undefined) {
       //deleting construction sites of a dead room
       for (c in Game.constructionSites) {
+        console.log(c)
+        if (Game.getObjectById(c).room.name == toDelete || Game.rooms[toDelete].memory.harvestingRooms.find((r) => r.name == toDelete)) { // remove any road or extension construction site
+          Game.getObjectById(c).remove()
+        }
+
+      }
+
+      for (c in Game.structures) {
         console.log(c)
         if (Game.getObjectById(c).room.name == toDelete || Game.rooms[toDelete].memory.harvestingRooms.find((r) => r.name == toDelete)) { // remove any road or extension construction site
           Game.getObjectById(c).remove()

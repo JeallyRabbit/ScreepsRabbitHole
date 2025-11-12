@@ -155,7 +155,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
             ) {
                 this.say("TR")
                 const destination = new RoomPosition(24, 24, this.memory.targetRoom);
-                this.travelTo(new otherRoomPos(destination))
+                this.travelTo(destination)
                return
             }
             if (global.heap.creeps[this.name].targetRoomContainers != undefined && global.heap.creeps[this.name].targetRoomContainers.length > 0) {// find max_container and take resources from it or go sleep

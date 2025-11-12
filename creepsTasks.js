@@ -171,7 +171,7 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
 
     // just error controll
     if (in1 == undefined || in2 == undefined) {
-        this.say("FilLInError",true)
+        this.say("FilLInError", true)
         global.heap.rooms[this.room.name].doctorTask = undefined
         return
     }
@@ -186,7 +186,7 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
 
         // Minerals are already in labs
         if (in1.store[res1] > LAB_REACTION_AMOUNT && in2.store[res2] > LAB_REACTION_AMOUNT) {
-            this.say("FIlINExit",true)
+            this.say("FIlINExit", true)
             global.heap.rooms[this.room.name].doctorTask = undefined
             global.heap.rooms[this.room.name].reactionAmount = undefined
             return
@@ -207,14 +207,12 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
                 this.travelTo(in2)
             }
         }*/
-       this.say((this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) || (this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANGE))
+        this.say((this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) || (this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANGE))
         if (this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) {
             this.travelTo(in1)
-            this.say("FillIn1_"+this.transfer(in1, res1),true)
         }
         else if (this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANGE) {
             this.travelTo(in2)
-            this.say("FillIn1",true)
         }
         else {
 
@@ -233,11 +231,10 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
                 if (rawResources.includes(res)) {
                     store = this.room.terminal
                 }*/
-               var result=this.withdraw(storage, res, Math.min(this.store.getCapacity(res), storage.store[res]))
+                var result = this.withdraw(storage, res, Math.min(this.store.getCapacity(res), storage.store[res]))
                 if (result == ERR_NOT_IN_RANGE) {
                     this.travelTo(storage)
                 }
-                this.say(result)
             }
         }
     }
@@ -423,7 +420,6 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
     }
     if (global.heap.creeps[this.name].deposit != undefined && global.heap.creeps[this.name].deposit != null && global.heap.creeps[this.name].deposit.store[RESOURCE_ENERGY] == 0) {
 
-        this.say("0")
         global.heap.creeps[this.name].deposit = undefined
     }
 
@@ -432,7 +428,6 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
     //|| (Game.getObjectById(this.room.memory.controllerLinkId) != null && this.room.memory.controllerLinkId != global.heap.creeps[this.name].deposit && Game.getObjectById(this.room.memory.controllerLinkId).store[RESOURCE_ENERGY] > 0)
     //|| (this.room.memory.controllerContainerId != undefined && Game.getObjectById(this.room.memory.controllerContainerId) != null && this.room.memory.controllerContainerId != global.heap.creeps[this.name].deposit.id && Game.getObjectById(this.room.memory.controllerContainerId).store[RESOURCE_ENERGY] > 0)) 
     {
-        this.say("1")
         global.heap.creeps[this.name].deposit = undefined;
 
     }
@@ -440,14 +435,14 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
 
     if (global.heap.creeps[this.name].deposit == undefined) {
 
-        //this.say("FinDe")
         if (this.memory.role == C.ROLE_WORKER) {
-            //this.say("FinDe2")
 
             var auxDeposits = []
             if (this.room.storage != undefined
-                && this.room.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_UPGRADE_LIMIT)
+                && this.room.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_UPGRADE_LIMIT) {
                 auxDeposits.push(this.room.storage)
+            }
+
             if (this.room.memory.controllerLinkId != undefined && Game.getObjectById(this.room.memory.controllerLinkId) != null
                 && Game.getObjectById(this.room.memory.controllerLinkId).store[RESOURCE_ENERGY] > 0) {
                 auxDeposits.push(Game.getObjectById(this.room.memory.controllerLinkId))
@@ -460,11 +455,9 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
                 //debuging
                 this.memory._deposit = deposit
                 var debugging = this.memory._deposit
-                this.say(debugging)
                 //
 
                 this.memory._deposit = aux
-                // this.say("find")
             }
 
         }
@@ -499,8 +492,6 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
                         global.heap.creeps[this.name].deposit = deposit;
                         //debugging
                         this.memory._deposit = deposit
-                        var debugging = this.memory._deposit
-                        this.say(debugging)
 
                         this.memory._testDeposit = 3
                         //
@@ -516,31 +507,34 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
     }
 
     if (global.heap.creeps[this.name].deposit != undefined) {
-        //this.say("depo")
-        if ((this.room.controller != undefined && this.room.controller.level >= 4 && this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_UPGRADE_LIMIT)
 
-            || (this.room.memory.energyBalance != undefined && this.room.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START)) {
+        if (this.memory.targetRoom == this.memory.homeRoom) {
+            if ((this.room.controller != undefined && this.room.controller.level >= 4 && this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_UPGRADE_LIMIT)
 
-            var targetDeposit = global.heap.creeps[this.name].deposit
-            this.memory._targetDeposit = targetDeposit
-            this.say(this.withdraw(targetDeposit, RESOURCE_ENERGY))
-            if (this.withdraw(targetDeposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                this.travelTo(targetDeposit, { maxRooms: 1 });
+                || (this.room.memory.energyBalance != undefined && this.room.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START)) {
+
+                var targetDeposit = global.heap.creeps[this.name].deposit
                 this.memory._targetDeposit = targetDeposit
-                //this.say(targetDeposit.pos.x + " " + targetDeposit.pos.y)
-                //this.say(targetDeposit.room.name)
-                //move_avoid_hostile(creep,global.heap.creeps[this.name].deposit.pos,1);
+                this.say(this.withdraw(targetDeposit, RESOURCE_ENERGY))
+                if (this.withdraw(targetDeposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    this.travelTo(targetDeposit, { maxRooms: 1 });
+                    this.memory._targetDeposit = targetDeposit
 
-            }
-            else if (this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == OK) {
+                }
+                else if (this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == OK) {
 
-                //this.move((Math.random() * (8 - 1) + 1))
-                this.decreaseBalancer();
+                    //this.move((Math.random() * (8 - 1) + 1))
+                    this.decreaseBalancer();
+                }
             }
         }
         else {
             //this.fleeFrom(global.heap.creeps[this.name].deposit, { range: 5 })
-            global.heap.creeps[this.name].deposit = undefined
+            if (this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                this.travelTo(global.heap.creeps[this.name].deposit, { maxRooms: 1 });
+                this.memory._targetDeposit = global.heap.creeps[this.name].deposit
+
+            }
             //this.decreaseBalancer()
 
         }
