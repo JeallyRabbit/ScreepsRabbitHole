@@ -242,7 +242,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         global.heap.rooms[this.name].needWorkersParts = 1
 
 
-        if ((this.storage != undefined && this.storage.store[RESOURCE_ENERGY] > C.UPGRADE_FACTOR && this.controller.level < 8)
+        if ((this.storage != undefined && this.storage.store[RESOURCE_ENERGY] > C.LINEAR_WORKERS_AMOUNT_ENERGY_EDGE && this.controller.level < 8)
             || (global.heap.rooms[this.name].construction.length > 0 && this.controller.level == 8)
         ) {
             global.heap.rooms[this.name].needWorkersParts = this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR

@@ -228,6 +228,7 @@ Room.prototype.terminalManager = function terminalManager() {
     //Sharing energy to fastRclUpgrade
     if (Memory.fastRclUpgrade != undefined && Memory.fastRclUpgrade != this.name
         && this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>C.STORAGE_ENERGY_BOTTOM
+        && this.temrinal!=undefined && this.temrinal.store[RESOURCE_ENERGY]>C.TERMINAL_BOTTOM_ENERGY
     ) {
         if (this.terminal.send(RESOURCE_ENERGY, C.RESOURCE_SHARE_AMOUNT, Memory.fastRclUpgrade) == OK) {
             return;
