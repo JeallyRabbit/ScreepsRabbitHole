@@ -308,36 +308,42 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
 
     //Mineral Carriers
-    if (Game.getObjectById(this.memory.mineralId) != null && Game.getObjectById(this.memory.mineralId).mineralAmount > 0 && global.heap.rooms[this.name].mineralCarryPower < global.heap.rooms[this.name].mineralMiningPower
-        // && this.storage != undefined && this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM
-    ) {//Add to civilian queue
-        //console.log("Adding mineralCarrier")
-        if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_MINERAL_CARRIER) == undefined) {
-            global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_MINERAL_CARRIER))
-        }
-    }
-    else {
-        //Miners
-
-        if (Game.getObjectById(this.memory.mineralId) != null && Game.getObjectById(this.memory.mineralId).mineralAmount > 0 && global.heap.rooms[this.name].miners.length < this.memory.mineralOpenPositions.length
-            && this.memory.extractorId != undefined) {//Add to civilian queue
-            if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_MINER) == undefined) {
-                global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_MINER))
+    if (this.controller.level > 6) {
+        if (Game.getObjectById(this.memory.mineralId) != null && Game.getObjectById(this.memory.mineralId).mineralAmount > 0 && global.heap.rooms[this.name].mineralCarryPower < global.heap.rooms[this.name].mineralMiningPower
+            // && this.storage != undefined && this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM
+        ) {//Add to civilian queue
+            //console.log("Adding mineralCarrier")
+            if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_MINERAL_CARRIER) == undefined) {
+                global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_MINERAL_CARRIER))
             }
         }
-    }
+        else {
+            //Miners
 
+            if (Game.getObjectById(this.memory.mineralId) != null && Game.getObjectById(this.memory.mineralId).mineralAmount > 0 && global.heap.rooms[this.name].miners.length < this.memory.mineralOpenPositions.length
+                && this.memory.extractorId != undefined) {//Add to civilian queue
+                if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_MINER) == undefined) {
+                    global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_MINER))
+                }
+            }
+        }
 
-    if (global.heap.rooms[this.name].outLabsId.length > 0 && global.heap.rooms[this.name].doctorId == undefined
-        && global.heap.rooms[this.name].reaction != undefined
-    ) {
-        if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_DOCTOR) == undefined) {
-            global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_DOCTOR))
+        //doctor
+        if (global.heap.rooms[this.name].outLabsId.length > 0 && global.heap.rooms[this.name].doctorId == undefined
+            && global.heap.rooms[this.name].reaction != undefined
+        ) {
+            if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_DOCTOR) == undefined) {
+                global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_DOCTOR))
+            }
+
         }
 
     }
 
-    // console.log("global.heap.rooms[this.name].mineralMiningPower: ", global.heap.rooms[this.name].mineralMiningPower, " / global.heap.rooms[this.name].mineralCarryPower: ", global.heap.rooms[this.name].mineralCarryPower)
+
+
+
+
 
     //Rampart Repairers - civilian queue
     if (global.heap.rooms[this.name].requiredRampartsRepairersPower > global.heap.rooms[this.name].rampartRepairersPower
@@ -352,16 +358,14 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
         else {//Add to civilian queue
 
-            var energyStartCondition=false;
-            if(this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>C.STORAGE_ENERGY_BOTTOM)
-            {
-                energyStartCondition=true
+            var energyStartCondition = false;
+            if (this.storage != undefined && this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
+                energyStartCondition = true
             }
-            else if(this.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START)
-            {
-                energyStartCondition=true
+            else if (this.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START) {
+                energyStartCondition = true
             }
-            if (energyStartCondition==true && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RAMPART_REPAIRER) == undefined) {
+            if (energyStartCondition == true && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RAMPART_REPAIRER) == undefined) {
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_RAMPART_REPAIRER))
             }
 
