@@ -111,6 +111,7 @@ Room.prototype.terminalManager = function terminalManager() {
         || Game.time % 5 != 0) {
         return
     }
+    console.log("terminal test1")
 
     //Sharing T3 Military Boosts
     var resourceToShare = null
@@ -134,6 +135,8 @@ Room.prototype.terminalManager = function terminalManager() {
     }
 
 
+    console.log("terminal test2")
+
     //Sharing T3 Economic Boosts
     var resourceToShare = null
     var roomToShareWith = null
@@ -151,10 +154,12 @@ Room.prototype.terminalManager = function terminalManager() {
     if (resourceToShare != null && roomToShareWith != null) {
         var sendResult = this.terminal.send(resourceToShare, C.RESOURCE_SHARE_AMOUNT, roomToShareWith)
         if (sendResult == OK) {
+            console.log("Sending: ",resourceToShare," to: ",roomToShareWith)
             return;
         }
     }
 
+    console.log("terminal test3")
 
     //Sharing raw resources
     var resourceToShare = null
@@ -173,10 +178,12 @@ Room.prototype.terminalManager = function terminalManager() {
     if (resourceToShare != null && roomToShareWith != null) {
         var sendResult = this.terminal.send(resourceToShare, C.RESOURCE_SHARE_AMOUNT, roomToShareWith)
         if (sendResult == OK) {
+            console.log("Sending: ",resourceToShare," to: ",roomToShareWith)
             return;
         }
     }
 
+    console.log("terminal test4")
 
     //Selling Raw Resources
     for (res of global.heap.rooms[this.name].excessRawResources) {
@@ -191,14 +198,17 @@ Room.prototype.terminalManager = function terminalManager() {
 
     //
 
+    console.log("terminal test5")
 
     //Buying Raw Resources
     for (res of global.heap.rooms[this.name].needRawResources) {
         if (this.terminal.buyResource(res, C.RAW_RES_BUY_AMOUNT) == OK) {
+            console.log("Buying: ",res)
             return;
         }
     }
 
+    console.log("terminal test6")
 
     //Sharing energy to STATE_NEED_ENERGY
     var closestNeedingEnergy=undefined
@@ -224,12 +234,14 @@ Room.prototype.terminalManager = function terminalManager() {
     }
 
 
-
+    
     //Sharing energy to fastRclUpgrade
     if (Memory.fastRclUpgrade != undefined && Memory.fastRclUpgrade != this.name
         && this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>C.STORAGE_ENERGY_BOTTOM
-        && this.temrinal!=undefined && this.temrinal.store[RESOURCE_ENERGY]>C.TERMINAL_BOTTOM_ENERGY
+        && this.terminal!=undefined && this.terminal.store[RESOURCE_ENERGY]>C.TERMINAL_BOTTOM_ENERGY
     ) {
+        console.log("Sending energy to: ",Memory.fastRclUpgrade)
+        console.log(this.terminal.send(RESOURCE_ENERGY, C.RESOURCE_SHARE_AMOUNT, Memory.fastRclUpgrade) )
         if (this.terminal.send(RESOURCE_ENERGY, C.RESOURCE_SHARE_AMOUNT, Memory.fastRclUpgrade) == OK) {
             return;
         }
