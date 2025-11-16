@@ -79,7 +79,7 @@ Room.prototype.roomManager = function roomManager() {
         ///
 
 
-        if (Memory.rooms[this.name]!=undefined && Memory.rooms[this.name].quads == undefined) {
+        if (Memory.rooms!=undefined && Memory.rooms[this.name]!=undefined && Memory.rooms[this.name].quads == undefined) {
             Memory.rooms[this.name].quads = []
         }
 

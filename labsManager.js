@@ -18,12 +18,9 @@ Room.prototype.labsManager= function labsManager()
             outputs.push(out)
         }
     }
-    //console.log("outputs.length: ",outputs.length)
     for(out of outputs)
     {
-        //console.log("out.id ", out.id)
-        //console.log("out.runReaction(in1, in2): ",out.runReaction(in1, in2))
-
+        
         out.runReaction(in1, in2)
     }
 }

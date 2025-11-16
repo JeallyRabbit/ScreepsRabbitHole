@@ -20,12 +20,7 @@ function findRoute(starting_pos, destination) {
             let room = Game.rooms[roomName];
             if (!room) { return; }
 
-           // if (roomName == spawn.room.name) {
-           //     costs = roomCM;
-           // }
-           // else {
-                // setting costmatrix for for rooms other than spawnRoom
-                //console.log(roomName);
+           
                 costs = new PathFinder.CostMatrix;
                 const terrain = room.getTerrain()
 
@@ -39,8 +34,6 @@ function findRoute(starting_pos, destination) {
                         costs.set(x, y, weight);
                     }
                 }
-            //}
-            //let 
 
 
 
@@ -100,7 +93,6 @@ function findRoute(starting_pos, destination) {
     
 
     for (a of ret.path) {
-        //console.log(a)
         if( Game.rooms[a.roomName]!=undefined)
         {
             Game.rooms[a.roomName].visual.circle(a.x, a.y, { fill: 'white', radius: 0.5, stroke: 'red' });

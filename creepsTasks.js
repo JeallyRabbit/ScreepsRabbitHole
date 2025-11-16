@@ -109,15 +109,7 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1, in2) {
 
     if (areOutputsMineralEmpty == true) {
 
-        //debugging
-        //for (out of outputLabs) {
-        //    console.log(out.structureType, " ", out.pos, " ", out.id)
-        //    for (res in out.store) {
-        //        console.log(res)
-
-        //    }
-        //}
-        ////
+        
         this.say("clOutExit2", true)
         global.heap.rooms[this.room.name].doctorTask = undefined
         return
@@ -530,7 +522,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
         }
         else {
             //this.fleeFrom(global.heap.creeps[this.name].deposit, { range: 5 })
-            if (this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            if (global.heap.creeps[this.name]!=undefined && this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 this.travelTo(global.heap.creeps[this.name].deposit, { maxRooms: 1 });
                 this.memory._targetDeposit = global.heap.creeps[this.name].deposit
 
@@ -778,7 +770,6 @@ Creep.prototype.taskCollectMineral = function taskCollectMineral() {
             //miners.push(id)
         }
     }
-    console.log("mostFullID: ", mostFullId)
     if (mostFullId != undefined) {
         if (!this.pos.isNearTo(Game.getObjectById(mostFullId))) {
 

@@ -80,7 +80,6 @@ module.exports.loop = function () {
       global.heap = {}
     }
 
-    
 
     //console.log("GIT TEST")
     //Setting allies
@@ -163,7 +162,6 @@ module.exports.loop = function () {
 
       if (global.heap.rooms[roomName] == undefined) {
         global.heap.rooms[roomName] = {}
-        console.log("Setting heap for ", roomName)
       }
 
       if (Game.rooms[roomName].controller != undefined && Game.rooms[roomName].controller.my) {
@@ -246,7 +244,6 @@ module.exports.loop = function () {
 
 
     console.log(C.USERNAME)
-    console.log("Construction sites: ", Object.keys(Game.constructionSites).length)
 
 
 
@@ -294,7 +291,6 @@ module.exports.loop = function () {
       }
 
 
-      console.log("Used cpu: ", Game.cpu.getUsed() - start)
 
 
 
@@ -333,7 +329,6 @@ module.exports.loop = function () {
     if (toDelete != undefined) {
       //deleting construction sites of a dead room
       for (c in Game.constructionSites) {
-        console.log(c)
         if (Game.getObjectById(c).room.name == toDelete || Game.rooms[toDelete].memory.harvestingRooms.find((r) => r.name == toDelete)) { // remove any road or extension construction site
           Game.getObjectById(c).remove()
         }
@@ -341,7 +336,6 @@ module.exports.loop = function () {
       }
 
       for (c in Game.structures) {
-        console.log(c)
         if (Game.getObjectById(c).room.name == toDelete || Game.rooms[toDelete].memory.harvestingRooms.find((r) => r.name == toDelete)) { // remove any road or extension construction site
           Game.getObjectById(c).remove()
         }
@@ -360,7 +354,6 @@ module.exports.loop = function () {
     //remocing dead construction sites
     if (Game.time % 1234 == 0) {
       for (c in Game.constructionSites) {
-        //console.log(c)
         var inAnyHarvestingRoom = false
         for (m of Memory.mainRooms) {
           if (Game.getObjectById(c).room != undefined && Game.getObjectById(c).room.name == m) {

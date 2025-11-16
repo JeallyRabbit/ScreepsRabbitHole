@@ -4,7 +4,6 @@ const C = require('constants');
 Room.prototype.visualize = function visualizeroomManager() {
 
 
-    console.log("Visualizing ", this.name)
     var blockPosWidth = 4
     var blockPosHeight = 1
 

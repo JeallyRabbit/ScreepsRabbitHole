@@ -32,7 +32,6 @@ Room.prototype.creepsManager = function creepsManager() {
     }
     if (global.heap.rooms[this.name].resourceManagerId != undefined && Game.getObjectById(global.heap.rooms[this.name].resourceManagerId) == null) {
         global.heap.rooms[this.name].resourceManagerId = undefined
-        console.log("resourACeManager have died")
     }
     global.heap.rooms[this.name].mineralMiningPower = 0;//how much of mineral is extracted per tick
     if (global.heap.rooms[this.name].miners == undefined) {
@@ -68,7 +67,6 @@ Room.prototype.creepsManager = function creepsManager() {
 
         if (global.heap.creeps[cr] == undefined) {
             global.heap.creeps[cr] = {}
-            console.log("Setting heap for ", cr)
         }
 
         var creep = Game.creeps[cr];
@@ -120,7 +118,6 @@ Room.prototype.creepsManager = function creepsManager() {
                 creep.roleFiller()
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
                 if (global.heap.rooms[creep.memory.homeRoom].fillers.find(({ id }) => id === creep.id) == undefined) {
-                    console.log("no creep with: ", creep.id, " in array")
                     global.heap.rooms[creep.memory.homeRoom].fillers.push(creep);
                 }
 
@@ -197,7 +194,6 @@ Room.prototype.creepsManager = function creepsManager() {
                 //creep.say(creep.memory.quadId.slice(creep.memory.quadId.length-2))
                 for (attackRoom of Memory.roomsToAttack) {
                     for (q of attackRoom.quads) {
-                        //console.log("q.id: ", q.id)
 
                         if (q.id == creep.memory.quadId && !q.members.includes(creep.id)) {
 
