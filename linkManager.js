@@ -1,3 +1,7 @@
+
+const C = require('constants');
+
+
 Room.prototype.linkManager = function linkManager() {
 
     // /** @param {Game} game **/
@@ -103,6 +107,8 @@ Room.prototype.linkManager = function linkManager() {
     var fillerLink = Game.getObjectById(this.memory.fillerLinkId)
 
     var controllerLink = Game.getObjectById(this.memory.controllerLinkId)
+
+    console.log("controller Link: ",controllerLink)
     var sourcesLinks = []
     for (let link_id of this.memory.sourcesLinksId) {
         var link = Game.getObjectById(link_id)
@@ -113,16 +119,16 @@ Room.prototype.linkManager = function linkManager() {
 
     // Driver for manager link
     if (managerLink != undefined && managerLink != null && managerLink.cooldown == 0) {
-        if (managerLink != null && managerLink.cooldown == 0 && managerLink.store[RESOURCE_ENERGY] >= 700) {
+        if (managerLink != null && managerLink.cooldown == 0 && managerLink.store[RESOURCE_ENERGY] >= C.LINK_BOTTOM_ENERGY) {
             var transfered = false
             //transfer to filler link
-            if (fillerLink != null && fillerLink.store.getFreeCapacity([RESOURCE_ENERGY]) > 150) {
+            if (fillerLink != null && fillerLink.store.getFreeCapacity([RESOURCE_ENERGY]) > C.LINK_FREE_SPACE) {
                 if (managerLink.transferEnergy(fillerLink) == 0) {
                     transfered = true;
                 }
 
             }
-            if (controllerLink != null && controllerLink.store.getFreeCapacity([RESOURCE_ENERGY]) > 150 && transfered == false) {
+            if (controllerLink != null && controllerLink.store.getFreeCapacity([RESOURCE_ENERGY]) > C.LINK_FREE_SPACE && transfered == false) {
                 managerLink.transferEnergy(controllerLink)
             }
         }
@@ -133,7 +139,7 @@ Room.prototype.linkManager = function linkManager() {
         for (let src_link of sourcesLinks) {
             if (src_link.cooldown == 0 && src_link.store[RESOURCE_ENERGY] > 400) {
                 var transfered = false;
-                if (fillerLink != null && fillerLink.store.getFreeCapacity([RESOURCE_ENERGY]) > 150) {
+                if (fillerLink != null && fillerLink.store.getFreeCapacity([RESOURCE_ENERGY]) > C.LINK_FREE_SPACE) {
                     if (src_link.transferEnergy(fillerLink) == 0) {
                         transfered = true;
                     }
