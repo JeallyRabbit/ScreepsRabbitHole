@@ -324,7 +324,7 @@ Room.prototype.spawnManager = function spawnManager() {
                             body = workerBody(energyCap, scheme)
                         }
 
-                        if (this.controller.level == 8 && global.heap.rooms[this.name].needWorkersParts == 1) {
+                        if (this.controller.level == 8 || global.heap.rooms[this.name].needWorkersParts == 1) {
                             body = [MOVE, CARRY, WORK]
                         }
                     }
