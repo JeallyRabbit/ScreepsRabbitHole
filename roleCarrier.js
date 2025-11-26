@@ -35,6 +35,13 @@ Creep.prototype.increaseBalancer = function increaseBalancer() {
 Creep.prototype.roleCarrier = function roleCarrier() {
 
 
+    if(!this.spawning && this.room.name==this.memory.targetRoom && this.pos.x!=49 && this.pos.y!=49 && this.pos.x!=0 && this.pos.y!=0)
+    {
+        global.heap.creeps[this.name].inTargetRoom=true
+    }
+    else{
+        global.heap.creeps[this.name].inTargetRoom=false
+    }
     if (this.memory.boostingList == undefined) {
         //this.memory.boostingList = ["KH", "KH2O", "XKH2O"];//boost types that creep accepts
         this.memory.boostingList = []
@@ -149,7 +156,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
 
 
-            if ((((this.room.name!=this.memory.targetRoom )) || this.pos.inRangeTo(spawn, 4)) && this.memory.homeRoom!=this.memory.targetRoom
+            if (( global.heap.creeps[this.name].inTargetRoom || this.pos.inRangeTo(spawn, 4)) && this.memory.homeRoom!=this.memory.targetRoom
             && (global.heap.rooms[this.memory.homeRoom].defensiveQueue != undefined && !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER))
                 //&& global.heap.creeps[this.name].maxContainer != undefined  // this condition might be wrong
             ) {
