@@ -148,7 +148,7 @@ Room.prototype.spawnManager = function spawnManager() {
         return;
     }
 
-
+    
     if (global.heap.rooms[this.name].defensiveQueue.length > 0 && Game.rooms[this.name].energyAvailable > 300) {
 
         console.log("spawning from defensive queue")
@@ -204,7 +204,9 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
         }
     }
-    else if (global.heap.rooms[this.name].harvestingQueue.length > 0) {
+    else if (global.heap.rooms[this.name].harvestingQueue.length > 0
+      
+    ) {
 
         console.log("spawning from harvestingQueue")
         var request = global.heap.rooms[this.name].harvestingQueue[0]
@@ -269,6 +271,35 @@ Room.prototype.spawnManager = function spawnManager() {
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
                         global.heap.rooms[this.name].harvestingQueue.shift()
+
+                    }
+                    break;
+                }
+            case C.ROLE_WORKER:
+                {
+                    var body = []
+                    if (this.energyAvailable <= SPAWN_ENERGY_CAPACITY) { body = [WORK, CARRY, MOVE] }
+                    else {
+                        var scheme = [MOVE, CARRY, WORK, WORK]
+                        if (global.heap.rooms[this.name].construction.length > 0) {
+                            body = workerBody(energyCap, [MOVE, MOVE, CARRY, WORK])
+                        }
+                        else {
+                            body = workerBody(energyCap, scheme)
+                        }
+
+                        if (this.controller.level == 8 || global.heap.rooms[this.name].needWorkersParts == 1) {
+                            body = [MOVE, CARRY, WORK]
+                        }
+                    }
+
+
+
+                    var result = spawn.spawnCreep(body, "SlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_WORKER, directions: myDirections, homeRoom: this.name } })
+                    global.heap.rooms[this.name].spawnResult = result
+                    global.heap.rooms[this.name].spawnRole = role
+                    if (result == OK) {
+                        global.heap.rooms[this.name].civilianQueue.shift()
 
                     }
                     break;

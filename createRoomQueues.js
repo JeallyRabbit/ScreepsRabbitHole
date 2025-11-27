@@ -242,7 +242,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             || (global.heap.rooms[this.name].construction.length > 0 && this.controller.level == 8)
         ) {
             //global.heap.rooms[this.name].needWorkersParts = this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR_1
-            global.heap.rooms[this.name].needWorkersParts = Math.pow((this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR_1),2)/C.UPGRADE_FACTOR_2
+            global.heap.rooms[this.name].needWorkersParts = Math.pow((this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR_1), 2) / C.UPGRADE_FACTOR_2
 
         }
         /*
@@ -253,10 +253,23 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             */
 
         if (global.heap.rooms[this.name].workersParts < global.heap.rooms[this.name].needWorkersParts) {
-            if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_WORKER) == undefined) {
-                global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
 
+
+            if (this.storage != undefined && this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_TOP) {//storage is overfloved with energy
+                //and there aren't any fillers in a queue
+                if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_WORKER) == undefined
+                    && global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_FILLER) == undefined) {
+                    global.heap.rooms[this.name].harvestingQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
+
+                }
             }
+            else {
+                if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_WORKER) == undefined) {
+                    global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
+
+                }
+            }
+
         }
     }
 
