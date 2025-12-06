@@ -156,13 +156,13 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
 
 
-            if (( global.heap.creeps[this.name].inTargetRoom || this.pos.inRangeTo(spawn, 4)) && this.memory.homeRoom!=this.memory.targetRoom
+            if (( !global.heap.creeps[this.name].inTargetRoom || (this.room.name==this.memory.targetRoom && this.pos.inRangeTo(spawn, 4)))// && this.memory.homeRoom!=this.memory.targetRoom
             && (global.heap.rooms[this.memory.homeRoom].defensiveQueue != undefined && !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER))
                 //&& global.heap.creeps[this.name].maxContainer != undefined  // this condition might be wrong
             ) {
                 this.say("TR")
-                const destination = new RoomPosition(24, 24, this.memory.targetRoom);
-                this.travelTo(destination)
+                const destination = new RoomPosition(25, 25, this.memory.targetRoom);
+                this.travelTo(destination,{range: 22,ignoreCreeps: false})
                 /*
                 if(this.memory.resourceToCollect==undefined
                     || global.heap.creeps[this.name].maxContainer==undefined
@@ -205,7 +205,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     for (let resource in global.heap.creeps[this.name].maxContainer.store) {
                         if (this.withdraw(global.heap.creeps[this.name].maxContainer, resource) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
-                            this.travelTo(global.heap.creeps[this.name].maxContainer.pos, { obstacles: fillersPos })
+                            this.travelTo(global.heap.creeps[this.name].maxContainer.pos, { obstacles: fillersPos,ignoreCreeps: false })
                             break;
                         }
                     }
@@ -276,7 +276,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         global.heap.creeps[this.name].maxContainer = undefined;
                         if (this.pickup(Game.getObjectById(this.memory.resourceToCollect)) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
-                            this.travelTo(Game.getObjectById(this.memory.resourceToCollect), { obstacles: fillersPos })
+                            this.travelTo(Game.getObjectById(this.memory.resourceToCollect), { obstacles: fillersPos,ignoreCreeps: false })
                         }
                         else if (Game.getObjectById(this.memory.resourceToCollect) == null) {
                             this.memory.resourceToCollect = undefined
@@ -288,7 +288,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     return;
                 }
                 else{
-                    this.travelTo(new RoomPosition(25,25,this.memory.targetRoom), { obstacles: fillersPos })
+                    this.travelTo(new RoomPosition(25,25,this.memory.targetRoom), { obstacles: fillersPos,ignoreCreeps: false })
                 }
             }
 
@@ -396,7 +396,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     }
                 }
                 else {
-                    this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom))
+                    this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom),{ignoreCreeps: false})
                 }
 
                 //}
@@ -409,7 +409,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     for (let res in this.store) {
                         var transferResut = this.transfer(Game.getObjectById(this.memory.homeContainer), res);
                         if (transferResut == ERR_NOT_IN_RANGE) {
-                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { obstacles: fillersPos })
+                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { obstacles: fillersPos,ignoreCreeps: false })
                             break;
                         }
                         else if (transferResut == OK) {
@@ -431,7 +431,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         }
                         if (transferResut == ERR_NOT_IN_RANGE) {
 
-                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { avoidSk: true, obstacles: fillersPos })
+                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { avoidSk: true, obstacles: fillersPos,ignoreCreeps: false })
 
                             break;
                         }

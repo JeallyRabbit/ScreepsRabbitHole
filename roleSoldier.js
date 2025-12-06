@@ -80,6 +80,7 @@ Creep.prototype.roleSoldier = function roleSoldier() {
             }
 
 
+
         }
         else if (global.heap.creeps[this.name].targetStructure) {
 
@@ -97,6 +98,9 @@ Creep.prototype.roleSoldier = function roleSoldier() {
             if (this.hits < this.hitsMax) {
                 this.heal(this);
             }
+        }
+        else{
+            this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { reusePath: 25, avoidCreeps: true, range: 22 });
         }
     }
     else {
