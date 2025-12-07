@@ -4,7 +4,9 @@ function repairerBody(cap)// return array with max possible work parts for build
 {
     var parts=[];
 
-    while(cap>BODYPART_COST[MOVE]+BODYPART_COST[CARRY]+BODYPART_COST[WORK] && parts.length<C.CREEP_MAX_BODYPARTS-3)
+    while(cap>BODYPART_COST[MOVE]+BODYPART_COST[CARRY]+BODYPART_COST[WORK] && parts.length<C.CREEP_MAX_BODYPARTS-3
+        
+    )
     {
 
         parts.push(MOVE)
