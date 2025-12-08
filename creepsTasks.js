@@ -109,7 +109,7 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1, in2) {
 
     if (areOutputsMineralEmpty == true) {
 
-        
+
         this.say("clOutExit2", true)
         global.heap.rooms[this.room.name].doctorTask = undefined
         return
@@ -268,8 +268,12 @@ Creep.prototype.taskClearCreep = function taskClearCreep() {
 
             targetStorage = this.room.terminal
         }
-        else {
+        else if(this.room.storage.store.getFreeCapacity(RESOURCE_ENERGY)>0){
             targetStorage = this.room.storage
+        }
+        else if(this.room.terminal.store.getFreeCapacity(RESOURCE_ENERGY)>0)
+        {
+            targetStorage = this.room.terminal
         }
     }
     if (targetStorage != undefined) {
@@ -288,6 +292,12 @@ Creep.prototype.taskClearCreep = function taskClearCreep() {
             }
             else {
                 this.travelTo(this.room.storage)
+            }
+        }
+        else {
+            for (res in this.store) {
+                this.say("Drop")
+                this.drop(res)
             }
         }
     }
@@ -522,7 +532,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
         }
         else {
             //this.fleeFrom(global.heap.creeps[this.name].deposit, { range: 5 })
-            if (global.heap.creeps[this.name]!=undefined && this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            if (global.heap.creeps[this.name] != undefined && this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 this.travelTo(global.heap.creeps[this.name].deposit, { maxRooms: 1 });
                 this.memory._targetDeposit = global.heap.creeps[this.name].deposit
 
