@@ -282,17 +282,16 @@ Room.prototype.spawnManager = function spawnManager() {
                     else {
                         var scheme = [MOVE, CARRY, WORK, WORK]
                         if (global.heap.rooms[this.name].construction.length > 0) {
-                            body = workerBody(energyCap, [MOVE, MOVE, CARRY, WORK])
+                            body = workerBody(energyCap,C.CREEP_MAX_BODYPARTS,[MOVE, MOVE, CARRY, WORK])
                         }
                         else {
-                            body = workerBody(energyCap, scheme)
+                            body = workerBody(energyCap,C.CREEP_MAX_BODYPARTS, scheme)
                         }
 
                         if (this.controller.level == 8 || global.heap.rooms[this.name].needWorkersParts == 1) {
                             body = [MOVE, CARRY, WORK]
                         }
                     }
-
 
 
                     var result = spawn.spawnCreep(body, "SlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_WORKER, directions: myDirections, homeRoom: this.name } })
@@ -349,17 +348,16 @@ Room.prototype.spawnManager = function spawnManager() {
                     else {
                         var scheme = [MOVE, CARRY, WORK, WORK]
                         if (global.heap.rooms[this.name].construction.length > 0) {
-                            body = workerBody(energyCap, [MOVE, MOVE, CARRY, WORK])
+                            body = workerBody(energyCap, C.CREEP_MAX_BODYPARTS,[MOVE, MOVE, CARRY, WORK])
                         }
                         else {
-                            body = workerBody(energyCap, scheme)
+                            body = workerBody(energyCap,C.CREEP_MAX_BODYPARTS, scheme)
                         }
 
                         if (this.controller.level == 8 || global.heap.rooms[this.name].needWorkersParts == 1) {
                             body = [MOVE, CARRY, WORK]
                         }
                     }
-
 
 
                     var result = spawn.spawnCreep(body, "SlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_WORKER, directions: myDirections, homeRoom: this.name } })
@@ -461,7 +459,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_COLONIZER:
                 {
-                    var result = spawn.spawnCreep(workerBody(energyCap, [MOVE, CARRY, WORK, MOVE]), "PioneerRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_COLONIZER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
+                    var result = spawn.spawnCreep(workerBody(energyCap,C.CREEP_MAX_BODYPARTS, [MOVE, CARRY, WORK, MOVE]), "PioneerRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_COLONIZER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
