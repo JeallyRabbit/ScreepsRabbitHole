@@ -298,7 +298,7 @@ Room.prototype.spawnManager = function spawnManager() {
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
-                        global.heap.rooms[this.name].civilianQueue.shift()
+                        global.heap.rooms[this.name].harvestingQueue.shift()
 
                     }
                     break;
