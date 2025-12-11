@@ -180,7 +180,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     }
     if (this.memory.harvestingRooms != undefined) {
         for (harvestingRoom of this.memory.harvestingRooms) {
-            if (harvestingRoom.repairerId == undefined && this.memory.roomsToScan.length == 0) {
+            if (harvestingRoom.repairerId == undefined && this.memory.roomsToScan!=undefined && this.memory.roomsToScan.length == 0) {
                 if (harvestingRoom.name == this.name) {
                     if (this.storage == undefined) {
                         if (this.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_REPAIRER) == undefined) {
