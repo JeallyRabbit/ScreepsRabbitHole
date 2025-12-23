@@ -83,12 +83,12 @@ module.exports.loop = function () {
 
     //console.log("GIT TEST")
     //Setting allies
-    Memory.allies = ["JeallyRabbit", "Alphonzo", "insainmonkey", "Trepidimous","csW","Bleem"]
+    Memory.allies = ["JeallyRabbit", "Alphonzo", "insainmonkey", "Trepidimous", "csW", "Bleem"]
 
     //Setting enemies
     Memory.enemies = ["IronVengeance"]
 
-    if (Game.shard.name == 'shard0' || Game.shard.name == 'shard1'|| Game.shard.name == 'shard2') {
+    if (Game.shard.name == 'shard0' || Game.shard.name == 'shard1' || Game.shard.name == 'shard2') {
       if (Game.cpu.bucket == 10000) {
         Game.cpu.generatePixel();
       }
@@ -101,9 +101,8 @@ module.exports.loop = function () {
       console.log("setting global heap")
     }
 
-    if(global.heap.creeps==undefined)
-    {
-      global.heap.creeps=[]
+    if (global.heap.creeps == undefined) {
+      global.heap.creeps = []
     }
 
     //vision requests (observer)
@@ -227,7 +226,7 @@ module.exports.loop = function () {
           for (m of Memory.mainRooms) {
             if (Game.map.getRoomLinearDistance(m, r.name) < minDistance
               && Game.rooms[m].storage != undefined && Game.rooms[m].storage.store[RESOURCE_ENERGY] > C.COLONIZE_ENERGY_LIMIT
-              && r.name != m && Game.map.getRoomLinearDistance(m, r.name)<11) {
+              && r.name != m && Game.map.getRoomLinearDistance(m, r.name) < 11) {
 
               minDistance = Game.map.getRoomLinearDistance(m, r.name)
               r.colonizer = m;
@@ -260,6 +259,13 @@ module.exports.loop = function () {
         minDistanceToFastRclUpgrade = Game.rooms[mainRoom].memory.distanceToOthers;
         roomToFastRclUpgrade = mainRoom;
       }
+
+      console.log("roomToFastRclUpgrade: ", roomToFastRclUpgrade)
+      if (roomToFastRclUpgrade != undefined) {
+        Memory.fastRclUpgrade = roomToFastRclUpgrade
+      }
+
+
 
       Game.rooms[mainRoom].creepsManager()
 
@@ -297,10 +303,6 @@ module.exports.loop = function () {
     }
 
 
-    console.log("roomToFastRclUpgrade: ", roomToFastRclUpgrade)
-    if (roomToFastRclUpgrade != undefined) {
-      Memory.fastRclUpgrade = roomToFastRclUpgrade
-    }
 
     var totalUsedCpu = Math.round(Game.cpu.getUsed() - totalStart)
     for (mainRoom of Memory.mainRooms) {

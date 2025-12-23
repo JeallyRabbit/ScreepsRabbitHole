@@ -729,7 +729,12 @@ Room.prototype.roomManager = function roomManager() {
         global.heap.rooms[this.name].rampartsEnergyNeedPerTick = (global.heap.rooms[this.name].rampartsAmount * (RAMPART_DECAY_AMOUNT / REPAIR_POWER)) / RAMPART_DECAY_TIME
 
         if (global.heap.rooms[this.name].myRamparts.length > 0) {
-            global.heap.rooms[this.name].requiredRampartsRepairersPower = global.heap.rooms[this.name].rampartsEnergyNeedPerTick * C.RAMPARTS_REPAIRERS_FACTOR
+            //global.heap.rooms[this.name].requiredRampartsRepairersPower = global.heap.rooms[this.name].rampartsEnergyNeedPerTick * C.RAMPARTS_REPAIRERS_FACTOR
+           
+            // The same formula as for workers but multiplied by 0.75 
+            global.heap.rooms[this.name].requiredRampartsRepairersPower=(Math.pow((this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR_1), 2) / C.UPGRADE_FACTOR_2)* C.RAMPARTS_REPAIRERS_FACTOR
+            global.heap.rooms[this.name].requiredRampartsRepairersPower=Math.min(global.heap.rooms[this.name].requiredRampartsRepairersPower,global.heap.rooms[this.name].rampartsEnergyNeedPerTick)
+           
         }
         else {
             global.heap.rooms[this.name].requiredRampartsRepairersPower = 0
