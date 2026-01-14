@@ -31,10 +31,15 @@ Creep.prototype.taskFillLabEnergy = function taskFillLabEnergy(id) {
 
 Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
     if (this.room.ifBothInputMineralEmpty(in1, in2)) {
-        global.heap.rooms[this.room.name].doctorTask = undefined
-        this.say("IN_EMPT", true)
-        return
+        if(this.store.getCapacity(RESOURCE_ENERGY)==this.store.getFreeCapacity(RESOURCE_ENERGY))
+        {
+            global.heap.rooms[this.room.name].doctorTask = undefined
+            this.say("IN_EMPT", true)
+            return
+        }
+        
     }
+    global.heap.creeps[this.name].inEmpty=true
 
     if (this.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
         //if (in1.store.getFreeCapacity(RESOURCE_OXYGEN) < LAB_MINERAL_CAPACITY) {
@@ -47,6 +52,7 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
 
                 }
                 break
+                global.heap.creeps[this.name].inEmpty=false;
             }
         }
         //}
@@ -59,12 +65,24 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
                     this.travelTo(in2)
 
                 }
-                break
+                break;
+                global.heap.creeps[this.name].inEmpty=false;
             }
         }
         //}
     }
     else {
+        // transfer to storage
+        for (res in this.store) {
+            var transferResult = this.transfer(this.room.storage, res)
+            if (transferResult == ERR_NOT_IN_RANGE) {
+                this.travelTo(this.room.storage)
+            }
+            break;
+        }
+    }
+    if(global.heap.creeps[this.name].inEmpty==true )
+    {
         // transfer to storage
         for (res in this.store) {
             var transferResult = this.transfer(this.room.storage, res)
@@ -199,7 +217,12 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
                 this.travelTo(in2)
             }
         }*/
-        this.say((this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) || (this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANGE))
+        //this.say((this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) || (this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANGE))
+        if(this.transfer(in1, res1)== ERR_INVALID_TARGET || this.transfer(in2, res2)== ERR_INVALID_TARGET)
+        {
+            global.heap.rooms[this.room.name].doctorTask = undefined
+            return;
+        }
         if (this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) {
             this.travelTo(in1)
         }
