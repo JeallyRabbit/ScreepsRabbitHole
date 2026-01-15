@@ -211,7 +211,7 @@ Room.prototype.roomManager = function roomManager() {
         }
 
 
-        //considering doctor store in myStorage - my Storage is used to determine reaction to run
+        //adding doctor store ton myStorage - my Storage is used to determine reaction to run
         var doctor = Game.getObjectById(global.heap.rooms[this.name].doctorId)
         if (doctor != null) {
             for (res in doctor.store) {
@@ -219,6 +219,22 @@ Room.prototype.roomManager = function roomManager() {
             }
         }
 
+        var inputLab1 = Game.getObjectById(Game.rooms[this.name].memory.inLab1Id)
+        if (inputLab1 != null) {
+            for (res in inputLab1.store) {
+                global.heap.rooms[this.name].myStorage[res] += inputLab1.store[res]
+            }
+        }
+
+        var inputLab2 = Game.getObjectById(Game.rooms[this.name].memory.inLab2Id)
+        if (inputLab2 != null) {
+            for (res in inputLab2.store) {
+                global.heap.rooms[this.name].myStorage[res] += inputLab2.store[res]
+            }
+        }
+
+
+        //adding input labs to myStorage
 
         global.heap.rooms[this.name].state = []
         global.heap.rooms[this.name].needRawResources = []
