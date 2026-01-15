@@ -353,7 +353,7 @@ module.exports.loop = function () {
     }
 
 
-    //remocing dead construction sites
+    //removing dead construction sites
     if (Game.time % 1234 == 0) {
       for (c in Game.constructionSites) {
         var inAnyHarvestingRoom = false
@@ -362,7 +362,7 @@ module.exports.loop = function () {
             inAnyHarvestingRoom = true
             break
           }
-          else {
+          else if( Memory.rooms[m].harvestingRooms!=undefined){
             for (h of Memory.rooms[m].harvestingRooms) {
               if (Game.getObjectById(c).room != undefined && h.name == Game.getObjectById(c).room.name) {
                 inAnyHarvestingRoom = true
@@ -377,6 +377,30 @@ module.exports.loop = function () {
 
       }
     }
+
+    //removing structures in dead rooms
+    for (s in Game.structures) {
+        var inAliveRoom = false
+        for (m of Memory.mainRooms) {
+          if (Game.getObjectById(s).room != undefined && Game.getObjectById(s).room.name == m) {
+            inAliveRoom = true
+            break
+          }
+          else if(Memory.rooms[m].harvestingRooms!=undefined){
+            for (h of Memory.rooms[m].harvestingRooms) {
+              if (Game.getObjectById(s).room != undefined && h.name == Game.getObjectById(s).room.name) {
+                inAliveRoom = true
+                break
+              }
+            }
+          }
+        }
+        if (inAliveRoom == false) {
+          Game.getObjectById(s).destroy()
+        }
+
+      }
+    
 
 
   });
