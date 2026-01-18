@@ -79,7 +79,7 @@ Room.prototype.roomManager = function roomManager() {
         ///
 
 
-        if (Memory.rooms!=undefined && Memory.rooms[this.name]!=undefined && Memory.rooms[this.name].quads == undefined) {
+        if (Memory.rooms != undefined && Memory.rooms[this.name] != undefined && Memory.rooms[this.name].quads == undefined) {
             Memory.rooms[this.name].quads = []
         }
 
@@ -553,12 +553,12 @@ Room.prototype.roomManager = function roomManager() {
 
     // adding state need energy if 
     var needEnergyforOffense = false
-    if (global.heap.rooms[this.name].offensiveQueue!=undefined && global.heap.rooms[this.name].offensiveQueue.length>0) {
-        needEnergyforOffense=true
+    if (global.heap.rooms[this.name].offensiveQueue != undefined && global.heap.rooms[this.name].offensiveQueue.length > 0) {
+        needEnergyforOffense = true
     }
 
     if (needEnergyForBuilding || needEnergyforOffense) {
-        if (global.heap.rooms[this.name].state!=undefined && !global.heap.rooms[this.name].state.includes(C.STATE_NEED_ENERGY)) {
+        if (global.heap.rooms[this.name].state != undefined && !global.heap.rooms[this.name].state.includes(C.STATE_NEED_ENERGY)) {
             global.heap.rooms[this.name].state.push(C.STATE_NEED_ENERGY)
         }
     }
@@ -746,17 +746,16 @@ Room.prototype.roomManager = function roomManager() {
 
         if (global.heap.rooms[this.name].myRamparts.length > 0) {
             //global.heap.rooms[this.name].requiredRampartsRepairersPower = global.heap.rooms[this.name].rampartsEnergyNeedPerTick * C.RAMPARTS_REPAIRERS_FACTOR
-           
+
             // The same formula as for workers but multiplied by 0.75 
-            if(this.storage!=undefined)
-            {
-                            global.heap.rooms[this.name].requiredRampartsRepairersPower=(Math.pow((this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR_1), 2) / C.UPGRADE_FACTOR_2)* C.RAMPARTS_REPAIRERS_FACTOR
+            if (this.storage != undefined) {
+                global.heap.rooms[this.name].requiredRampartsRepairersPower = (Math.pow((this.storage.store[RESOURCE_ENERGY] / C.UPGRADE_FACTOR_1), 2) / C.UPGRADE_FACTOR_2) * C.RAMPARTS_REPAIRERS_FACTOR
 
             }
-            else{
+            else {
 
-            
-            global.heap.rooms[this.name].requiredRampartsRepairersPower=Math.min(global.heap.rooms[this.name].requiredRampartsRepairersPower,global.heap.rooms[this.name].rampartsEnergyNeedPerTick)
+
+                global.heap.rooms[this.name].requiredRampartsRepairersPower = Math.min(global.heap.rooms[this.name].requiredRampartsRepairersPower, global.heap.rooms[this.name].rampartsEnergyNeedPerTick)
             }
         }
         else {
