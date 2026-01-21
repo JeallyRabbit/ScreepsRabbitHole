@@ -1523,7 +1523,15 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
         }
         else {
             //build from lists and visualize roomPlan
-            if (Game.time % 123 == 0) {
+
+            //after resseting rooms to scan on rcl7/8 we should replan roads to sources
+            if(this.memory.roomsToScan==undefined || (this.memory.roomsToScan!=undefined && this.memory.roomsToScan.length!=0))
+            {
+                stage=1;
+            }
+            else 
+            {
+                if (Game.time % 123 == 0) {
                 this.buildFromLists()
                 if (this.memory.roomCM != undefined) {
                     delete this.memory.roomCM
@@ -1535,6 +1543,8 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
                     delete this.memory.buildingList
                 }
             }
+            }
+            
         }
 
 

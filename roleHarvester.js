@@ -89,7 +89,7 @@ Creep.prototype.roleHarvester = function roleHarvester() {
             var energy_amount = this.store[RESOURCE_ENERGY]
             var transferResult = this.transfer(Game.getObjectById(this.memory.closestContainerId), RESOURCE_ENERGY)
             if (transferResult == ERR_NOT_IN_RANGE) {
-                this.travelTo(Game.getObjectById(this.memory.closestContainerId))
+                this.travelTo(Game.getObjectById(this.memory.closestContainerId),{offRoad: true})
             }
             else if (transferResult == OK) {
                 this.harvest(Game.getObjectById(this.memory.sourceId))

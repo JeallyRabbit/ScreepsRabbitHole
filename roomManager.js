@@ -85,14 +85,14 @@ Room.prototype.roomManager = function roomManager() {
 
         if (this.memory.distanceToOthers == undefined && Game.time % C.ROOM_DISTANCE_CALC_STEP == 0) {
             var distance = 0;
-            var counter = 0
+            var distanceCounter = 0
             for (m of Memory.mainRooms) {
                 if (m != this.name) {
                     distance += Game.map.getRoomLinearDistance(this.name, m)
-                    counter++;
+                    distanceCounter++;
                 }
             }
-            this.memory.distanceToOthers = distance / counter;
+            this.memory.distanceToOthers = distance / distanceCounter;
         }
 
 
@@ -287,6 +287,7 @@ Room.prototype.roomManager = function roomManager() {
             var sourcesAmount = 0;
             var bodyPartsSum = 0
             var counter = 0;
+            var spawnNum=this.find(FIND_MY_SPAWNS).length
             for (s of this.memory.harvestingSources) {
 
                 if (this.memory.harvestingRooms.findIndex(room => room.name == s.roomName) == -1) {
@@ -294,7 +295,7 @@ Room.prototype.roomManager = function roomManager() {
                 }
                 bodyPartsSum += s.bodyPartsCost
                 counter++;
-                if (bodyPartsSum >= (CREEP_LIFE_TIME / CREEP_SPAWN_TIME) * C.HARVESTING_BODYPARTS_FRACTION) {
+                if (bodyPartsSum >= ((CREEP_LIFE_TIME / CREEP_SPAWN_TIME)*spawnNum) * C.HARVESTING_BODYPARTS_FRACTION) {
                     break;
                 }
             }
