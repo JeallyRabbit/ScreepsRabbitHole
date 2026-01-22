@@ -371,7 +371,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_REPAIRER:
                 {
-                    var result = spawn.spawnCreep(repairerBody(energyCap), "HandymanRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_REPAIRER, targetRoom: request.roomName, directions: myDirections, homeRoom: this.name } })
+                    var result = spawn.spawnCreep(repairerBody(energyCap,25), "HandymanRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_REPAIRER, targetRoom: request.roomName, directions: myDirections, homeRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
