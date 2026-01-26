@@ -36,7 +36,16 @@ Creep.prototype.roleRepairer = function roleRepairer() {
         //}
         else {
 
-            var toBuild = this.taskBuild();
+            if(global.heap.creeps[this.name].toBuild!=undefined && Game.getObjectById(global.heap.creeps[this.name].toBuild.id)==null)
+            {
+                global.heap.creeps[this.name].toBuild=undefined 
+            }
+            if(global.heap.creeps[this.name].toBuild==undefined)
+            {
+                
+                global.heap.creeps[this.name].toBuild = this.taskBuild();
+            }
+            var toBuild= global.heap.creeps[this.name].toBuild
 
             if (global.heap.rooms[this.memory.targetRoom].damagedStructuresId != undefined && global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length > 0) {
 
