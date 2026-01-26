@@ -20,41 +20,41 @@ Creep.prototype.roleRepairer = function roleRepairer() {
     if (this.room.name == this.memory.targetRoom) {
 
 
-        global.heap.rooms[this.room.name].repairerId=this.id
+        global.heap.rooms[this.room.name].repairerId = this.id
 
-        if(this.pos.x==0 || this.pos.x==49 || this.pos.y==0 || this.pos.y==49)
-        {
-            this.travelTo(new RoomPosition(25,25,this.memory.targetRoom))
+        if (this.pos.x == 0 || this.pos.x == 49 || this.pos.y == 0 || this.pos.y == 49) {
+            this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom))
             return;
         }
         if (this.store[RESOURCE_ENERGY] == 0) {
             this.say("collect")
             this.taskCollect()
         }
-        else if (((global.heap.rooms[this.memory.targetRoom].damagedStructuresId != undefined && global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length < 1) || global.heap.rooms[this.memory.targetRoom].damagedStructuresId == undefined)) {
-            this.say("build")
-            this.taskBuild()
-        }
+        //else if (((global.heap.rooms[this.memory.targetRoom].damagedStructuresId != undefined && global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length < 1) || global.heap.rooms[this.memory.targetRoom].damagedStructuresId == undefined)) {
+        // this.say("build")
+        //this.taskBuild()
+        //}
         else {
 
-            
+            var toBuild = this.taskBuild();
+
             if (global.heap.rooms[this.memory.targetRoom].damagedStructuresId != undefined && global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length > 0) {
 
-               
+
                 if (global.heap.creeps[this.name].targetStructureId != undefined && Game.getObjectById(global.heap.creeps[this.name].targetStructureId) == null) {
                     global.heap.creeps[this.name].targetStructureId = undefined
                 }
 
                 if (global.heap.creeps[this.name].targetStructureId != undefined && Game.getObjectById(global.heap.creeps[this.name].targetStructureId) != null
                     && (Game.getObjectById(global.heap.creeps[this.name].targetStructureId).hits == Game.getObjectById(global.heap.creeps[this.name].targetStructureId).hitsMax
-                || Game.getObjectById(global.heap.creeps[this.name].targetStructureId).room.name!=this.memory.targetRoom)) {
+                        || Game.getObjectById(global.heap.creeps[this.name].targetStructureId).room.name != this.memory.targetRoom)) {
                     global.heap.creeps[this.name].targetStructureId = undefined
                 }
 
                 if (global.heap.creeps[this.name].targetStructureId == undefined) {
                     var aux = [];
                     for (id of global.heap.rooms[this.memory.targetRoom].damagedStructuresId) {
-                        if (Game.getObjectById(id) != null && Game.getObjectById(id).room.name==this.memory.targetRoom
+                        if (Game.getObjectById(id) != null && Game.getObjectById(id).room.name == this.memory.targetRoom
                             && Game.getObjectById(id).hits < Game.getObjectById(id).hitsMax) {
                             aux.push(Game.getObjectById(id))
                         }
@@ -67,10 +67,42 @@ Creep.prototype.roleRepairer = function roleRepairer() {
 
                 if (global.heap.creeps[this.name].targetStructureId != undefined) {
                     var targetStructure = Game.getObjectById(global.heap.creeps[this.name].targetStructureId)
-                    if (targetStructure != null) {
-                        if (this.repair(targetStructure) == ERR_NOT_IN_RANGE) {
+                    if (targetStructure != null && toBuild != null) {
+
+                        console.log(targetStructure," ",toBuild)
+
+                        if (this.pos.findClosestByPath([targetStructure, toBuild])!=null && this.pos.findClosestByPath([targetStructure, toBuild]).id == targetStructure.id) {
+                            //repairing
+                            this.say("rep1")
+                            if (this.repair(targetStructure) == ERR_NOT_IN_RANGE) {
+                                this.travelTo(targetStructure, { reusePath: 17, maxRooms: 1 });
+                            }
+                        }
+                        else {
+                            //building
+                            this.say("build1")
+                            if (this.build(toBuild) == ERR_NOT_IN_RANGE) {
+                                this.travelTo(toBuild, { reusePath: 17, maxRooms: 1 });
+                            }
+
+                        }
+                        /* if (this.repair(targetStructure) == ERR_NOT_IN_RANGE) {
                             this.travelTo(targetStructure, {  reusePath: 17, maxRooms: 1 });
                             //move_avoid_hostile(this, closest_target.pos, 2, false);
+                        }*/
+                    }
+                    else if (targetStructure != null) {
+                        //repairing
+                        this.say("rep2")
+                        if (this.repair(targetStructure) == ERR_NOT_IN_RANGE) {
+                            this.travelTo(targetStructure, { reusePath: 17, maxRooms: 1 });
+                        }
+                    }
+                    else if (toBuild != null) {
+                        //building
+                        this.say("build2")
+                        if (this.build(toBuild) == ERR_NOT_IN_RANGE) {
+                            this.travelTo(toBuild, { reusePath: 17, maxRooms: 1 });
                         }
                     }
                     else {
@@ -82,17 +114,16 @@ Creep.prototype.roleRepairer = function roleRepairer() {
 
 
             }
-            else{
-                if(this.pos.x==49 || this.pos.y==49 || this.pos.x==1 || this.pos.y==1)
-                {
-                    this.travelTo(new RoomPosition(25,25,this.memory.targetRoom))
+            else {
+                if (this.pos.x == 49 || this.pos.y == 49 || this.pos.x == 1 || this.pos.y == 1) {
+                    this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom))
                 }
             }
         }
 
     }
     else {
-        this.travelTo(new RoomPosition(25,25,this.memory.targetRoom))
+        this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom))
         if (this.memory.targetRoom != undefined) {
             //this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { reusePath: 17 });
         }

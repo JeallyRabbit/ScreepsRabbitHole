@@ -252,9 +252,12 @@ module.exports.loop = function () {
 
     console.log(C.USERNAME)
 
-
+    
+    
 
     for (mainRoom of Memory.mainRooms) {
+
+      
 
       console.log("--------------- ", mainRoom, "---------------")
 

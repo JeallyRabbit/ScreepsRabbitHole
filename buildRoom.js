@@ -1532,17 +1532,21 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
             else 
             {
                 if (Game.time % 123 == 0) {
-                this.buildFromLists()
-                if (this.memory.roomCM != undefined) {
-                    delete this.memory.roomCM
+                    this.buildFromLists()
+                    if (Memory.rooms[this.name].roomCM != undefined) {
+                        delete Memory.rooms[this.name].roomCM
+                    }
+                    if (Memory.rooms[this.name].roomPlan != undefined) {
+                        delete Memory.rooms[this.name].roomPlan
+                    }
+                    if (Memory.rooms[this.name].buildingList != undefined) {
+                        delete Memory.rooms[this.name].buildingList
+                    }
                 }
-                if (this.memory.roomPlan != undefined) {
-                    delete this.memory.roomPlan
-                }
-                if (this.memory.buildingList != undefined) {
-                    delete this.memory.buildingList
-                }
-            }
+
+                //this.memory.finalBuildingList
+                //this.memory.roadBuildingList
+
             }
             
         }
