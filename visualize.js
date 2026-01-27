@@ -157,12 +157,12 @@ Room.prototype.visualize = function visualizeroomManager() {
 
 
     blockPos.y += blockPosHeight
-        this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
-        this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
-        this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-        this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-        this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-        this.visual.text("Room States:", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.text("Room States:", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
     //state need energy
     for (s of global.heap.rooms[this.name].state) {
@@ -210,37 +210,38 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.text("Construction Sites: " + Object.keys(Game.constructionSites).length, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
-    var sitesRooms=[]
+    var sitesRooms = []
 
-    for(c in Game.constructionSites)
-    {
-        
-        const roomName = Game.getObjectById(c).room.name;
+    for (c in Game.constructionSites) {
 
-        const room = sitesRooms.find(obj => obj.name === roomName);
+        var cc = Game.getObjectById(c)
+        if (cc != null && cc.room!=undefined) {
+            const roomName = cc.room.name;
 
-        if (!room) {
-            sitesRooms.push({ name: roomName, count: 1 });
-        } else {
-            room.count++;
+            const room = sitesRooms.find(obj => obj.name === roomName);
+
+            if (!room) {
+                sitesRooms.push({ name: roomName, count: 1 });
+            } else {
+                room.count++;
+            }
         }
+
         //console.log(sitesRooms[0].name+": "+sitesRooms[0].count)
     }
 
-    if(sitesRooms.length>0)
-    {
-        for(r of sitesRooms)
-            {
-                blockPos.y += blockPosHeight
-                this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
-                this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
-                this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-                this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-                this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-                this.visual.text(r.name+": " + r.count, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
-            }
+    if (sitesRooms.length > 0) {
+        for (r of sitesRooms) {
+            blockPos.y += blockPosHeight
+            this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+            this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+            this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+            this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+            this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+            this.visual.text(r.name + ": " + r.count, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+        }
     }
-    
+
 
     //building
     //global.heap.rooms[this.name].construction
