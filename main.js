@@ -21,6 +21,32 @@ const labsManager = require('labsManager')
 const attackManager = require('attackManager')
 const visualize = require('visualize');
 
+
+
+Room.prototype.unclaim = function unclaim()
+{
+  for (c in Game.constructionSites) {
+    if(Game.getObjectById(c)!=null && Game.getObjectById(c).room.name==this.name)
+    {
+      Game.getObjectById(c).remove()
+    }
+  }
+
+  for (c in Game.creeps) {
+    if(Game.getObjectById(c)!=null && Game.creeps[c].memory.homeRoom==this.name)
+    {
+      Game.creeps[c].suicide()
+    }
+  }
+
+  for (c in Game.structures) {
+    if(Game.getObjectById(c)!=null && Game.getObjectById(c).room.name==this.name)
+    {
+      Game.getObjectById(c).destroy()
+    }
+  }
+  this.controller.unclaim();
+}
 Room.prototype.removeConstructionSites = function removeConstructionSites() {
   for (constr in Game.constructionSites) {
     Game.constructionSites[constr].remove()
