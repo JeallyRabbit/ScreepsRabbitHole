@@ -252,7 +252,7 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
                     }
                 }
 
-                if (alreadyUsed == false && ret.path.length < 100) {
+                if (alreadyUsed == false && ret.path.length < C.MAX_SOURCE_DISTANCE) {
                     Game.rooms[this.memory.homeRoom].memory.keepersRooms.push(new_keeper_room);
 
                 }
@@ -301,7 +301,7 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
                         }
                     }
 
-                    if (ret.path.length < 100 && alreadyUsed != true
+                    if (ret.path.length < C.MAX_SOURCE_DISTANCE && alreadyUsed != true
                         && isRoadSafe == true
                     ) {
                         Game.rooms[this.memory.homeRoom].memory.harvestingSources.push(new_farming_source);
