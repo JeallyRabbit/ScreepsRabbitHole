@@ -61,22 +61,26 @@ Room.prototype.roomManager = function roomManager() {
         //If it is one of main rooms 
 
 
-        //debugging
-        /*
-        console.log(this.name)
-        if(this.memory.finalBuildingList!=undefined)
+        // Resetting roomsToScan after 2nd and 3rd spawns are build
+        if(Game.time&2341==0 || true)
         {
-            for(b of this.memory.finalBuildingList)
+            if(this.controller.level>=7)
             {
-                if(b.structureType==STRUCTURE_CONTAINER)
+                var sp = this.find(FIND_MY_SPAWNS)
+                if(sp.length>1 && this.memory.rcl7RoomsReset!=true)
                 {
-                    console.log("STRUCTURE_CONTAINER: ", b.x," ",b.y," ",b.roomName)
+                    this.memory.roomsToScan=undefined
+                    this.memory.rcl7RoomsReset=true
+                }
+
+                if(sp.length>2 && this.memory.rcl8RoomsReset!=true)
+                {
+                    this.memory.roomsToScan=undefined
+                    this.memory.rcl8RoomsReset=true
                 }
             }
         }
-        */
-
-        ///
+        
 
 
         if (Memory.rooms != undefined && Memory.rooms[this.name] != undefined && Memory.rooms[this.name].quads == undefined) {

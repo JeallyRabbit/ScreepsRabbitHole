@@ -33,7 +33,7 @@ Room.prototype.unclaim = function unclaim()
   }
 
   for (c in Game.creeps) {
-    if(Game.getObjectById(c)!=null && Game.creeps[c].memory.homeRoom==this.name)
+    if(Game.getObjectById(c)!=null && (Game.creeps[c].memory.homeRoom==this.name || Game.creeps[c].memory.targetRoom==this.name))
     {
       Game.creeps[c].suicide()
     }
