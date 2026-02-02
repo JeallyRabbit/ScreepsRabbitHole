@@ -31,6 +31,12 @@ Creep.prototype.roleHarvester = function roleHarvester() {
         }
     }
 
+    for(hr of Game.rooms[this.memory.homeRoom].memory.harvestingRooms)
+    {
+        global.heap.rooms[hr.name].harvestingPower+=(_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+        break;
+    }
+
     if (this.room.name == this.memory.targetRoom /* && this.store.getFreeCapacity(RESOURCE_ENERGY) > 0*/) {
         // if have some free space and at destination room - go harvest
 

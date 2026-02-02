@@ -126,6 +126,9 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
 
 
+
+
+
         //Carriers and Harvesters for sure won't be mixed on queue
         if (this.storage != undefined) {
 
@@ -134,15 +137,24 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             if (haveSourcesLinks) {
                 harvestingSource.carryPower = 9999999
             }
-            if (harvestingSource.carryPower < harvestingSource.harvestingPower && haveSourcesLinks != true) {
-                //Carriers
-                if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
-                    if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_CARRIER) == undefined) {
-                        global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestCarrier(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
+            if (harvestingSource.carryPower < harvestingSource.harvestingPower && haveSourcesLinks != true
+            ) {
+                //testing
+                for (hr of this.memory.harvestingRooms) {
+                    if (hr.name == harvestingSource.roomName && global.heap.rooms[hr.name].carryPower < global.heap.rooms[hr.name].harvestingPower) {
+                        //Carriers
+                        if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
+                            if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_CARRIER) == undefined) {
+                                global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestCarrier(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
+                            }
+                        }
+                        areCarriersSatisfied = false
+                        break;
                     }
                 }
-                areCarriersSatisfied = false
-                break;
+                //
+
+
 
             }//Harvesters
             else if (harvestingSource.harvestingPower < (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME) && harvestingSource.harvesters < harvestingSource.maxHarvesters) {
@@ -180,7 +192,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     }
     if (this.memory.harvestingRooms != undefined) {
         for (harvestingRoom of this.memory.harvestingRooms) {
-            if (harvestingRoom.repairerId == undefined && this.memory.roomsToScan!=undefined && this.memory.roomsToScan.length == 0) {
+            if (harvestingRoom.repairerId == undefined && this.memory.roomsToScan != undefined && this.memory.roomsToScan.length == 0) {
                 if (harvestingRoom.name == this.name) {
                     if (this.storage == undefined) {
                         if (this.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_REPAIRER) == undefined) {

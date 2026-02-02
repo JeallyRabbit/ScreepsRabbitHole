@@ -45,7 +45,10 @@ Room.prototype.creepsManager = function creepsManager() {
         global.heap.rooms[this.name].fillers = []
     }
 
+    global.heap.rooms[this.name].harvestingPower=0
+    global.heap.rooms[this.name].carryPower=0
     global.heap.rooms[this.name].mineralCarryPower = 0
+
 
 
     global.heap.rooms[this.name].creepsBodyParts = 0

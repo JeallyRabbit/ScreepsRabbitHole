@@ -716,6 +716,20 @@ Room.prototype.roomManager = function roomManager() {
             }
 
 
+            for(hr in this.memory.harvestingRooms)
+            {
+                this.harvestingSources=0
+                for(hs in this.memory.harvestingSources)
+                {
+                    if(hs.roomName==hr.name)
+                    {
+                        hr.harvestingSources++;
+                    }
+                }
+            }
+
+
+
         }
         else if (str.owner != undefined && Memory.allies.includes(str.owner.username) && false) {
             // What allied structures we need to know ??

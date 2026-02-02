@@ -55,6 +55,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
             if (src.id == this.memory.sourceId) {
 
                 src.carryPower += this.store.getCapacity() / (src.distance * 2);
+                global.heap.rooms[this.memory.targetRoom].carryPower+= this.store.getCapacity() / (src.distance * 2);
                 break;
             }
         }
