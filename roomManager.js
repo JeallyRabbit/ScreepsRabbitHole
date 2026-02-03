@@ -34,6 +34,9 @@ Room.prototype.roomManager = function roomManager() {
     global.heap.rooms[this.name].containersId = []
     global.heap.rooms[this.name].construction = []
 
+    global.heap.rooms[this.name].harvestingPower=0;
+    global.heap.rooms[this.name].carryPower=0
+
     if (global.heap.rooms[this.name].repairerId != undefined && Game.getObjectById(global.heap.rooms[this.name].repairerId) == null) {
         global.heap.rooms[this.name].repairerId = undefined
     }
@@ -327,6 +330,8 @@ Room.prototype.roomManager = function roomManager() {
             }
 
         }
+
+        
 
 
 

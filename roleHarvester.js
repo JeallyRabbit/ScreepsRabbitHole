@@ -18,9 +18,17 @@ Creep.prototype.roleHarvester = function roleHarvester() {
     Creep.memory.harvestingPower
     */
 
+    
+
     if (this.memory.harvestingPower == undefined) {
         this.memory.harvestingPower = _.filter(this.body, { type: WORK }).length * HARVEST_POWER;
     }
+
+    if(global.heap.rooms[this.memory.targetRoom]!=undefined)
+    {
+        global.heap.rooms[this.memory.targetRoom].harvestingPower+=(_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+    }
+    
 
     for (src of Game.rooms[this.memory.homeRoom].memory.harvestingSources) {
         if (src.id == this.memory.sourceId) {

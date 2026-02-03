@@ -141,7 +141,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             ) {
                 //testing
                 for (hr of this.memory.harvestingRooms) {
-                    if (hr.name == harvestingSource.roomName && global.heap.rooms[hr.name].carryPower < global.heap.rooms[hr.name].harvestingPower) {
+                    if (global.heap.rooms[hr.name].carryPower < global.heap.rooms[hr.name].harvestingPower) {
                         //Carriers
                         if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
                             if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_CARRIER) == undefined) {
