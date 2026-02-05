@@ -291,14 +291,14 @@ Room.prototype.roomManager = function roomManager() {
 
             this.memory.harvestingSources.sort((a, b) => a.bodyPartsCost - b.bodyPartsCost)
 
-            var sourcesAmount = 0;
             var bodyPartsSum = 0
             var counter = 0;
             var spawnNum=this.find(FIND_MY_SPAWNS).length
+            var sourcesAmount=this.find(FIND_SOURCES).length
             for (s of this.memory.harvestingSources) {
 
                 if (this.memory.harvestingRooms.findIndex(room => room.name == s.roomName) == -1) {
-                    this.memory.harvestingRooms.push({ name: s.roomName, repairerId: undefined })
+                    this.memory.harvestingRooms.push({ name: s.roomName,sourcesAmount: sourcesAmount, repairerId: undefined })
                 }
                 bodyPartsSum += s.bodyPartsCost
                 counter++;

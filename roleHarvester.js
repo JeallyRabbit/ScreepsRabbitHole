@@ -28,6 +28,10 @@ Creep.prototype.roleHarvester = function roleHarvester() {
     {
         global.heap.rooms[this.memory.targetRoom].harvestingPower+=(_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
     }
+    else{
+        global.heap.rooms[this.memory.targetRoom].harvestingPower=(_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+    
+    }
     
 
     for (src of Game.rooms[this.memory.homeRoom].memory.harvestingSources) {

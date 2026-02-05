@@ -1,7 +1,9 @@
 function harvesterBody(cap,ifLimit=true)// return array with max possible work parts for builder
 {
     var parts=[];
-    var reqHarvPower=(SOURCE_ENERGY_CAPACITY/ENERGY_REGEN_TIME)-(2*HARVEST_POWER);
+    var reqHarvPower=(SOURCE_ENERGY_CAPACITY/ENERGY_REGEN_TIME)-(2*HARVEST_POWER);//6
+
+    //cap is max amount of energy that can be spent on body
 
     if(cap>(BODYPART_COST[MOVE]+(2*BODYPART_COST[WORK]))*reqHarvPower && ifLimit==true)
     {

@@ -52,6 +52,41 @@ class soldierRequest {
 
 Room.prototype.createRoomQueues = function createRoomQueues() {
 
+
+
+    
+    if (this.memory.spawnId != undefined) {
+        var sp1 = Game.getObjectById(this.memory.spawnId)
+    }
+    if (this.memory.spawn2Id != undefined) {
+        var sp2 = Game.getObjectById(this.memory.spawn2Id)
+    }
+    if (this.memory.spawn3Id != undefined) {
+        var sp3 = Game.getObjectById(this.memory.spawn3Id)
+    }
+
+    var minSpawnTime = 99999
+
+    if (sp1 != null && sp1.Spawning != null) {
+        if (sp1.Spawning.needTime - sp1.Spawning.remainingTime < minSpawnTime) {
+            minSpawnTime = sp1.Spawning.needTime - sp1.Spawning.remainingTime
+        }
+    }
+    if (sp2 != null && sp2.Spawning != null) {
+        if (sp2.Spawning.needTime - sp2.Spawning.remainingTime < minSpawnTime) {
+            minSpawnTime = sp2.Spawning.needTime - sp2.Spawning.remainingTime
+        }
+    }
+    if (sp3 != null && sp3.Spawning != null) {
+        if (sp3.Spawning.needTime - sp3.Spawning.remainingTime < minSpawnTime) {
+            minSpawnTime = sp3.Spawning.needTime - sp3.Spawning.remainingTime
+        }
+    }
+        
+
+
+
+
     if (global.heap.rooms[this.name].offensiveQueue == undefined) {
         global.heap.rooms[this.name].offensiveQueue = []
     }
@@ -64,6 +99,10 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
     if (global.heap.rooms[this.name].civilianQueue == undefined) {
         global.heap.rooms[this.name].civilianQueue = []
+    }
+
+    if (minSpawnTime < 2) {
+        return;
     }
 
 
@@ -99,6 +138,17 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     }
 
 
+    // Fillers
+    if (this.controller.level > 1 && global.heap.rooms[this.name].fillers.length < 4
+        && ((global.heap.rooms[this.name].myExtensions != undefined && global.heap.rooms[this.name].myExtensions.length > 0)
+            || (this.memory.fillerContainers != undefined && this.memory.fillerContainers.length > 0))
+    ) {
+        if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_FILLER) == undefined) {
+            global.heap.rooms[this.name].harvestingQueue.push(new generalRoomRequest(this.name, C.ROLE_FILLER))
+        }
+    }
+
+
     //  Carriers / Harvesters
     var areCarriersSatisfied = true
     var areHarvestersSatisfied = true
@@ -115,15 +165,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             continue;
         }
 
-        // Fillers
-        if (this.controller.level > 1 && global.heap.rooms[this.name].fillers.length < 4
-            && ((global.heap.rooms[this.name].myExtensions != undefined && global.heap.rooms[this.name].myExtensions.length > 0)
-                || (this.memory.fillerContainers != undefined && this.memory.fillerContainers.length > 0))
-        ) {
-            if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_FILLER) == undefined) {
-                global.heap.rooms[this.name].harvestingQueue.push(new generalRoomRequest(this.name, C.ROLE_FILLER))
-            }
-        }
+
 
 
 
@@ -141,7 +183,9 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             ) {
                 //testing
                 for (hr of this.memory.harvestingRooms) {
-                    if (global.heap.rooms[hr.name].carryPower < global.heap.rooms[hr.name].harvestingPower) {
+                    if (global.heap.rooms[hr.name].carryPower < global.heap.rooms[hr.name].harvestingPower
+                        && global.heap.rooms[hr.name].carryPower<hr.sourcesAmount*(SOURCE_ENERGY_CAPACITY/ENERGY_REGEN_TIME)
+                    ) {
                         //Carriers
                         if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
                             if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_CARRIER) == undefined) {
@@ -167,6 +211,34 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
         else //if (this.memory.energyBalance <= 1.5 || true)
         {
+
+            var haveSourcesLinks = (harvestingSource.roomName == this.name && this.memory.sourcesLinksId != undefined && this.memory.sourcesLinksId.length > 1)
+            if (haveSourcesLinks) {
+                harvestingSource.carryPower = 9999999
+            }
+            if (harvestingSource.carryPower < harvestingSource.harvestingPower && haveSourcesLinks != true
+            ) {
+                //testing
+                for (hr of this.memory.harvestingRooms) {
+                    if (global.heap.rooms[hr.name].carryPower < global.heap.rooms[hr.name].harvestingPower
+                        && global.heap.rooms[hr.name].carryPower<hr.sourcesAmount*(SOURCE_ENERGY_CAPACITY/ENERGY_REGEN_TIME)
+                    ) {
+                        //Carriers
+                        if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
+                            if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_CARRIER) == undefined) {
+                                global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestCarrier(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
+                            }
+                        }
+                        areCarriersSatisfied = false
+                        break;
+                    }
+                }
+                //
+
+
+
+            }
+            /*
             if (harvestingSource.carryPower < harvestingSource.harvestingPower) {
                 //Carriers
                 if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
@@ -178,7 +250,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
                 }
 
-            }//Harvesters
+            }*///Harvesters
             else if (harvestingSource.harvestingPower < (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME) && harvestingSource.harvesters < harvestingSource.maxHarvesters) {
                 if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_HARVESTER) == undefined) {
                     global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestFarmer(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
