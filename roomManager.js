@@ -34,8 +34,8 @@ Room.prototype.roomManager = function roomManager() {
     global.heap.rooms[this.name].containersId = []
     global.heap.rooms[this.name].construction = []
 
-    global.heap.rooms[this.name].harvestingPower=0;
-    global.heap.rooms[this.name].carryPower=0
+    global.heap.rooms[this.name].harvestingPower = 0;
+    global.heap.rooms[this.name].carryPower = 0
 
     if (global.heap.rooms[this.name].repairerId != undefined && Game.getObjectById(global.heap.rooms[this.name].repairerId) == null) {
         global.heap.rooms[this.name].repairerId = undefined
@@ -65,25 +65,21 @@ Room.prototype.roomManager = function roomManager() {
 
 
         // Resetting roomsToScan after 2nd and 3rd spawns are build
-        if(Game.time&2341==0 || true)
-        {
-            if(this.controller.level>=7)
-            {
+        if (Game.time & 2341 == 0 || true) {
+            if (this.controller.level >= 7) {
                 var sp = this.find(FIND_MY_SPAWNS)
-                if(sp.length>1 && this.memory.rcl7RoomsReset!=true)
-                {
-                    this.memory.roomsToScan=undefined
-                    this.memory.rcl7RoomsReset=true
+                if (sp.length > 1 && this.memory.rcl7RoomsReset != true) {
+                    this.memory.roomsToScan = undefined
+                    this.memory.rcl7RoomsReset = true
                 }
 
-                if(sp.length>2 && this.memory.rcl8RoomsReset!=true)
-                {
-                    this.memory.roomsToScan=undefined
-                    this.memory.rcl8RoomsReset=true
+                if (sp.length > 2 && this.memory.rcl8RoomsReset != true) {
+                    this.memory.roomsToScan = undefined
+                    this.memory.rcl8RoomsReset = true
                 }
             }
         }
-        
+
 
 
         if (Memory.rooms != undefined && Memory.rooms[this.name] != undefined && Memory.rooms[this.name].quads == undefined) {
@@ -293,16 +289,16 @@ Room.prototype.roomManager = function roomManager() {
 
             var bodyPartsSum = 0
             var counter = 0;
-            var spawnNum=this.find(FIND_MY_SPAWNS).length
-            var sourcesAmount=this.find(FIND_SOURCES).length
+            var spawnNum = this.find(FIND_MY_SPAWNS).length
+            var sourcesAmount = this.find(FIND_SOURCES).length
             for (s of this.memory.harvestingSources) {
 
                 if (this.memory.harvestingRooms.findIndex(room => room.name == s.roomName) == -1) {
-                    this.memory.harvestingRooms.push({ name: s.roomName,sourcesAmount: sourcesAmount, repairerId: undefined })
+                    this.memory.harvestingRooms.push({ name: s.roomName, sourcesAmount: sourcesAmount, repairerId: undefined })
                 }
                 bodyPartsSum += s.bodyPartsCost
                 counter++;
-                if (bodyPartsSum >= ((CREEP_LIFE_TIME / CREEP_SPAWN_TIME)*spawnNum) * C.HARVESTING_BODYPARTS_FRACTION) {
+                if (bodyPartsSum >= ((CREEP_LIFE_TIME / CREEP_SPAWN_TIME) * spawnNum) * C.HARVESTING_BODYPARTS_FRACTION) {
                     break;
                 }
             }
@@ -331,7 +327,7 @@ Room.prototype.roomManager = function roomManager() {
 
         }
 
-        
+
 
 
 
@@ -544,9 +540,8 @@ Room.prototype.roomManager = function roomManager() {
         }
     }
     else {
-        if (global.heap.rooms[this.name].building != undefined) {
-            delete global.heap.rooms[this.name].building
-        }
+        global.heap.rooms[this.name].building = false
+
     }
 
 
@@ -721,13 +716,10 @@ Room.prototype.roomManager = function roomManager() {
             }
 
 
-            for(hr in this.memory.harvestingRooms)
-            {
-                this.harvestingSources=0
-                for(hs in this.memory.harvestingSources)
-                {
-                    if(hs.roomName==hr.name)
-                    {
+            for (hr in this.memory.harvestingRooms) {
+                this.harvestingSources = 0
+                for (hs in this.memory.harvestingSources) {
+                    if (hs.roomName == hr.name) {
                         hr.harvestingSources++;
                     }
                 }
