@@ -174,7 +174,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
             ) {
                 this.say("TR")
                 const destination = new RoomPosition(25, 25, this.memory.targetRoom);
-                this.travelTo(destination,{range: 22,ignoreCreeps: false})
+                this.travelTo(destination,{range: 22})
                 /*
                 if(this.memory.resourceToCollect==undefined
                     || global.heap.creeps[this.name].maxContainer==undefined
@@ -443,7 +443,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         }
                         if (transferResut == ERR_NOT_IN_RANGE) {
 
-                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { avoidSk: true, obstacles: fillersPos,ignoreCreeps: false })
+                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { avoidSk: true, obstacles: fillersPos })
 
                             break;
                         }
