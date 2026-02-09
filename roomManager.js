@@ -36,6 +36,18 @@ Room.prototype.roomManager = function roomManager() {
 
     global.heap.rooms[this.name].harvestingPower = 0;
     global.heap.rooms[this.name].carryPower = 0
+    if (this.memory.harvestingRooms != undefined) {
+        for (hr of this.memory.harvestingRooms) {
+            if(global.heap.rooms[hr.name]==undefined)
+            {
+                global.heap.rooms[hr.name]={}
+            }
+            global.heap.rooms[hr.name].hostiles=[]
+            global.heap.rooms[hr.name].carryPower = 0
+            global.heap.rooms[hr.name].harvestingPower = 0;
+        }
+    }
+
 
     if (global.heap.rooms[this.name].repairerId != undefined && Game.getObjectById(global.heap.rooms[this.name].repairerId) == null) {
         global.heap.rooms[this.name].repairerId = undefined

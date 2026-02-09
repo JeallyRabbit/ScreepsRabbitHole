@@ -35,12 +35,11 @@ Creep.prototype.increaseBalancer = function increaseBalancer() {
 Creep.prototype.roleCarrier = function roleCarrier() {
 
 
-    if(!this.spawning && this.room.name==this.memory.targetRoom && this.pos.x!=49 && this.pos.y!=49 && this.pos.x!=0 && this.pos.y!=0)
-    {
-        global.heap.creeps[this.name].inTargetRoom=true
+    if (!this.spawning && this.room.name == this.memory.targetRoom && this.pos.x != 49 && this.pos.y != 49 && this.pos.x != 0 && this.pos.y != 0) {
+        global.heap.creeps[this.name].inTargetRoom = true
     }
-    else{
-        global.heap.creeps[this.name].inTargetRoom=false
+    else {
+        global.heap.creeps[this.name].inTargetRoom = false
     }
     if (this.memory.boostingList == undefined) {
         //this.memory.boostingList = ["KH", "KH2O", "XKH2O"];//boost types that creep accepts
@@ -55,18 +54,9 @@ Creep.prototype.roleCarrier = function roleCarrier() {
             if (src.id == this.memory.sourceId) {
 
                 src.carryPower += this.store.getCapacity() / (src.distance * 2);
-                if(global.heap.rooms[this.memory.targetRoom]!=undefined && global.heap.rooms[this.memory.targetRoom].carryPower!=undefined)
-                {
-                    global.heap.rooms[this.memory.targetRoom].carryPower+= this.store.getCapacity() / (src.distance * 2);
-                }
-                else {
-                    if(global.heap.rooms[this.memory.targetRoom]!=undefined)
-                    {
-                        global.heap.rooms[this.memory.targetRoom]={}
-                    }
-                    global.heap.rooms[this.memory.targetRoom].carryPower=this.store.getCapacity() / (src.distance * 2);
-                }
-                
+                global.heap.rooms[this.memory.targetRoom].carryPower += this.store.getCapacity() / (src.distance * 2);
+
+
                 break;
             }
         }
@@ -84,16 +74,16 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
         if (this.store.getFreeCapacity() == 0 || this.ticksToLive < this.memory.sourceDistance * 1.1) {
 
-            
+
             this.memory.collecting = false
-            
+
         }
 
         if (this.store.getUsedCapacity(RESOURCE_ENERGY) == 0 || this.memory.collecting == undefined) {
             this.memory.collecting = true;
             this.memory.closestHomeContainer = undefined;
 
-            
+
 
         }
 
@@ -116,19 +106,19 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
                 if (this.memory._findHomeContainers != undefined) { this.memory._findHomeContainers++ }
                 else { this.memory._findHomeContainers = 1 }
-                var creepHomeRoom=this.memory.homeRoom
+                var creepHomeRoom = this.memory.homeRoom
                 if (spawnPos != undefined) {
                     global.heap.creeps[this.name].targetRoomContainers = this.room.find(FIND_STRUCTURES, {
                         filter: (structure) => {
                             return structure.structureType === STRUCTURE_CONTAINER
                                 && ((structure.pos.x != spawnPos.x - 2 || structure.pos.y != spawnPos.y - 2) &&
                                     (structure.pos.x != spawnPos.x + 2 || structure.pos.y != spawnPos.y - 2))
-                                && (structure.pos.x!=Game.rooms[creepHomeRoom].memory.controllerContainerPos.x ||
-                                     structure.pos.y!=Game.rooms[creepHomeRoom].memory.controllerContainerPos.y ||
-                                      structure.pos.roomName!=creepHomeRoom);
+                                && (structure.pos.x != Game.rooms[creepHomeRoom].memory.controllerContainerPos.x ||
+                                    structure.pos.y != Game.rooms[creepHomeRoom].memory.controllerContainerPos.y ||
+                                    structure.pos.roomName != creepHomeRoom);
                         }
                     });
-                    this.memory._targetRoomContainers=global.heap.creeps[this.name].targetRoomContainers
+                    this.memory._targetRoomContainers = global.heap.creeps[this.name].targetRoomContainers
                 }
                 else {
                     containers = []
@@ -148,7 +138,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                             return structure.structureType === STRUCTURE_CONTAINER;
                         }
                     });
-                    
+
                 }
 
             }
@@ -161,20 +151,20 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
             var fillersPos = []
             if (global.heap.rooms[this.memory.homeRoom].fillers != undefined) {
-                fillersPos=global.heap.rooms[this.memory.homeRoom].fillers
+                fillersPos = global.heap.rooms[this.memory.homeRoom].fillers
             }
-            
 
 
 
 
-            if (( !global.heap.creeps[this.name].inTargetRoom || (this.room.name==this.memory.targetRoom && this.pos.inRangeTo(spawn, 4)))// && this.memory.homeRoom!=this.memory.targetRoom
-            && (global.heap.rooms[this.memory.homeRoom].defensiveQueue != undefined && !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER))
+
+            if ((!global.heap.creeps[this.name].inTargetRoom || (this.room.name == this.memory.targetRoom && this.pos.inRangeTo(spawn, 4)))// && this.memory.homeRoom!=this.memory.targetRoom
+                && (global.heap.rooms[this.memory.homeRoom].defensiveQueue != undefined && !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER))
                 //&& global.heap.creeps[this.name].maxContainer != undefined  // this condition might be wrong
             ) {
                 this.say("TR")
                 const destination = new RoomPosition(25, 25, this.memory.targetRoom);
-                this.travelTo(destination,{range: 22})
+                this.travelTo(destination, { range: 22 })
                 /*
                 if(this.memory.resourceToCollect==undefined
                     || global.heap.creeps[this.name].maxContainer==undefined
@@ -183,7 +173,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     return
                 }
                 */
-               
+
             }
             if (global.heap.creeps[this.name].targetRoomContainers != undefined && global.heap.creeps[this.name].targetRoomContainers.length > 0) {// find max_container and take resources from it or go sleep
 
@@ -205,7 +195,8 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         //global.heap.creeps[this.name].maxContainer = undefined;
                     }
                 }
-                else {global.heap.creeps[this.name].maxContainer
+                else {
+                    global.heap.creeps[this.name].maxContainer
                     global.heap.creeps[this.name].maxContainer = undefined;
                 }
 
@@ -217,7 +208,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     for (let resource in global.heap.creeps[this.name].maxContainer.store) {
                         if (this.withdraw(global.heap.creeps[this.name].maxContainer, resource) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
-                            this.travelTo(global.heap.creeps[this.name].maxContainer.pos, { obstacles: fillersPos,ignoreCreeps: false })
+                            this.travelTo(global.heap.creeps[this.name].maxContainer.pos, { obstacles: fillersPos, ignoreCreeps: false })
                             break;
                         }
                     }
@@ -288,7 +279,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         global.heap.creeps[this.name].maxContainer = undefined;
                         if (this.pickup(Game.getObjectById(this.memory.resourceToCollect)) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
-                            this.travelTo(Game.getObjectById(this.memory.resourceToCollect), { obstacles: fillersPos,ignoreCreeps: false })
+                            this.travelTo(Game.getObjectById(this.memory.resourceToCollect), { obstacles: fillersPos, ignoreCreeps: false })
                         }
                         else if (Game.getObjectById(this.memory.resourceToCollect) == null) {
                             this.memory.resourceToCollect = undefined
@@ -299,8 +290,8 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     }
                     return;
                 }
-                else{
-                    this.travelTo(new RoomPosition(25,25,this.memory.targetRoom), { obstacles: fillersPos,ignoreCreeps: false })
+                else {
+                    this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { obstacles: fillersPos, ignoreCreeps: false })
                 }
             }
 
@@ -408,7 +399,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     }
                 }
                 else {
-                    this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom),{ignoreCreeps: false})
+                    this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom), { ignoreCreeps: false })
                 }
 
                 //}
@@ -421,7 +412,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     for (let res in this.store) {
                         var transferResut = this.transfer(Game.getObjectById(this.memory.homeContainer), res);
                         if (transferResut == ERR_NOT_IN_RANGE) {
-                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { obstacles: fillersPos,ignoreCreeps: false })
+                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { obstacles: fillersPos, ignoreCreeps: false })
                             break;
                         }
                         else if (transferResut == OK) {
@@ -459,7 +450,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         else if (transferResut == OK) {
 
                             this.increaseBalancer()
-                           
+
                         }
                         /*
                         if (this.pos.inRangeTo(Game.getObjectById(this.memory.homeContainer), 3)

@@ -330,7 +330,14 @@ Room.prototype.visualize = function visualizeroomManager() {
 
             var aux = Math.round((src.harvestingPower / (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)) * Math.min(1, src.carryPower / src.harvestingPower) * 100)
             
-            var aux2="🚚 "+Math.round(global.heap.rooms[src.roomName].carryPower)+"/"+src.harvestingPower+" ⛏️";
+            if(global.heap.rooms[src.roomName]!=undefined)
+            {
+                var aux2="🚚 "+Math.round(global.heap.rooms[src.roomName].carryPower)+"/"+src.harvestingPower+" ⛏️";
+            }
+            else{
+                var aux2="🚚 "+"-1"+"/"+"-1"+" ⛏️";
+            }
+            
             this.visual.text(src.roomName + " (" + src.pos.x + " " + src.pos.y + ") -> " + aux2 
                 , blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 

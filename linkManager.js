@@ -108,7 +108,6 @@ Room.prototype.linkManager = function linkManager() {
 
     var controllerLink = Game.getObjectById(this.memory.controllerLinkId)
 
-    console.log("controller Link: ",controllerLink)
     var sourcesLinks = []
     for (let link_id of this.memory.sourcesLinksId) {
         var link = Game.getObjectById(link_id)

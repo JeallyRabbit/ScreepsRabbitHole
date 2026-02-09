@@ -148,7 +148,7 @@ Room.prototype.spawnManager = function spawnManager() {
         return;
     }
 
-    
+
     if (global.heap.rooms[this.name].defensiveQueue.length > 0 && Game.rooms[this.name].energyAvailable > 300) {
 
         console.log("spawning from defensive queue")
@@ -169,13 +169,25 @@ Room.prototype.spawnManager = function spawnManager() {
         switch (role) {
             case C.ROLE_SOLDIER:
                 {
-                    var result = spawn.spawnCreep(soldierBody(energyCap, request.isMelee), 'SadisticRabbit' + '_' + this.name + Game.time, { memory: { role: C.ROLE_SOLDIER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
-                    global.heap.rooms[this.name].spawnResult = result
-                    global.heap.rooms[this.name].spawnRole = role
-                    if (result == OK) {
-                        global.heap.rooms[this.name].defensiveQueue.shift()
-                        break;
+                    var ifCanSkip = false
+                    if (global.heap.rooms[this.name].harvestingQueue.length > 0) {
+                        var harvestingRequest = global.heap.rooms[this.name].harvestingQueue[0]
+                        var harvestingRole = harvestingRequest.role
+                        if (harvestingRequest.sourceRoom != request.roomName && (harvestingRole == C.ROLE_CARRIER || harvestingRole == C.ROLE_HARVESTER)) {
+                            ifCanSkip = true
+                            console.log("Skipping soldier - can spawn harvesters to other rooms")
+                        }
                     }
+                    if (!ifCanSkip) {
+                        var result = spawn.spawnCreep(soldierBody(energyCap, request.isMelee), 'SadisticRabbit' + '_' + this.name + Game.time, { memory: { role: C.ROLE_SOLDIER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
+                        global.heap.rooms[this.name].spawnResult = result
+                        global.heap.rooms[this.name].spawnRole = role
+                        if (result == OK) {
+                            global.heap.rooms[this.name].defensiveQueue.shift()
+                            break;
+                        }
+                    }
+
 
                 }
             case C.ROLE_RAMPART_REPAIRER:
@@ -205,7 +217,7 @@ Room.prototype.spawnManager = function spawnManager() {
         }
     }
     else if (global.heap.rooms[this.name].harvestingQueue.length > 0
-      
+
     ) {
 
         console.log("spawning from harvestingQueue")
@@ -282,10 +294,10 @@ Room.prototype.spawnManager = function spawnManager() {
                     else {
                         var scheme = [MOVE, CARRY, WORK, WORK]
                         if (global.heap.rooms[this.name].construction.length > 0) {
-                            body = workerBody(energyCap,C.CREEP_MAX_BODYPARTS,[MOVE, MOVE, CARRY, WORK])
+                            body = workerBody(energyCap, C.CREEP_MAX_BODYPARTS, [MOVE, MOVE, CARRY, WORK])
                         }
                         else {
-                            body = workerBody(energyCap,C.CREEP_MAX_BODYPARTS, scheme)
+                            body = workerBody(energyCap, C.CREEP_MAX_BODYPARTS, scheme)
                         }
 
                         if (this.controller.level == 8 || global.heap.rooms[this.name].needWorkersParts == 1) {
@@ -348,10 +360,10 @@ Room.prototype.spawnManager = function spawnManager() {
                     else {
                         var scheme = [MOVE, CARRY, WORK, WORK]
                         if (global.heap.rooms[this.name].construction.length > 0) {
-                            body = workerBody(energyCap, C.CREEP_MAX_BODYPARTS,[MOVE, MOVE, CARRY, WORK])
+                            body = workerBody(energyCap, C.CREEP_MAX_BODYPARTS, [MOVE, MOVE, CARRY, WORK])
                         }
                         else {
-                            body = workerBody(energyCap,C.CREEP_MAX_BODYPARTS, scheme)
+                            body = workerBody(energyCap, C.CREEP_MAX_BODYPARTS, scheme)
                         }
 
                         if (this.controller.level == 8 || global.heap.rooms[this.name].needWorkersParts == 1) {
@@ -371,7 +383,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_REPAIRER:
                 {
-                    var result = spawn.spawnCreep(repairerBody(energyCap,25), "HandymanRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_REPAIRER, targetRoom: request.roomName, directions: myDirections, homeRoom: this.name } })
+                    var result = spawn.spawnCreep(repairerBody(energyCap, 25), "HandymanRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_REPAIRER, targetRoom: request.roomName, directions: myDirections, homeRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -399,8 +411,8 @@ Room.prototype.spawnManager = function spawnManager() {
                 {
                     //This condition should be unneccesary but it keeps still spawning rampartsRepairers so added it here
                     if (global.heap.rooms[this.name].rampartRepairersPower < global.heap.rooms[this.name].requiredRampartsRepairersPower) {
-                        var result = spawn.spawnCreep(workerBody(energyCap,global.heap.rooms[this.name].requiredRampartsRepairersPower+1),
-                         "RampartLovingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RAMPART_REPAIRER, directions: myDirections, homeRoom: this.name } })
+                        var result = spawn.spawnCreep(workerBody(energyCap, global.heap.rooms[this.name].requiredRampartsRepairersPower + 1),
+                            "RampartLovingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RAMPART_REPAIRER, directions: myDirections, homeRoom: this.name } })
 
                         global.heap.rooms[this.name].spawnResult = result
                         global.heap.rooms[this.name].spawnRole = role
@@ -440,10 +452,9 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_CLAIMER:
                 {
-                    var segmentCost=(BODYPART_COST[MOVE]*2)+BODYPART_COST[CLAIM]
-                    var body=[]
-                    for(var i=0;i<Math.floor(energyCap/segmentCost);i++)
-                    {
+                    var segmentCost = (BODYPART_COST[MOVE] * 2) + BODYPART_COST[CLAIM]
+                    var body = []
+                    for (var i = 0; i < Math.floor(energyCap / segmentCost); i++) {
                         body.push(MOVE)
                         body.push(MOVE)
                         body.push(CLAIM)
@@ -459,7 +470,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_COLONIZER:
                 {
-                    var result = spawn.spawnCreep(workerBody(energyCap,C.CREEP_MAX_BODYPARTS, [MOVE, CARRY, WORK, MOVE]), "PioneerRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_COLONIZER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
+                    var result = spawn.spawnCreep(workerBody(energyCap, C.CREEP_MAX_BODYPARTS, [MOVE, CARRY, WORK, MOVE]), "PioneerRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_COLONIZER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {

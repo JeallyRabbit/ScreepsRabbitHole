@@ -18,38 +18,28 @@ Creep.prototype.roleHarvester = function roleHarvester() {
     Creep.memory.harvestingPower
     */
 
-    
+
 
     if (this.memory.harvestingPower == undefined) {
         this.memory.harvestingPower = _.filter(this.body, { type: WORK }).length * HARVEST_POWER;
     }
 
-    if(global.heap.rooms[this.memory.targetRoom]!=undefined)
-    {
-        global.heap.rooms[this.memory.targetRoom].harvestingPower+=(_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
-    }
-    else{
-        if(global.heap.rooms[this.memory.targetRoom]==undefined)
-        {
-            global.heap.rooms[this.memory.targetRoom]={}
-        }
-        global.heap.rooms[this.memory.targetRoom].harvestingPower=(_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
-    
-    }
-    
+
+    global.heap.rooms[this.memory.targetRoom].harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+
+
 
     for (src of Game.rooms[this.memory.homeRoom].memory.harvestingSources) {
         if (src.id == this.memory.sourceId) {
 
-            src.harvestingPower+= (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+            src.harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
             src.harvesters++;
             break;
         }
     }
 
-    for(hr of Game.rooms[this.memory.homeRoom].memory.harvestingRooms)
-    {
-        global.heap.rooms[hr.name].harvestingPower+=(_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+    for (hr of Game.rooms[this.memory.homeRoom].memory.harvestingRooms) {
+        global.heap.rooms[hr.name].harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
         break;
     }
 
@@ -59,14 +49,11 @@ Creep.prototype.roleHarvester = function roleHarvester() {
 
 
         //passing energy to repairer
-        if(this.memory.targetRoom!= this.memory.homeRoom)
-        {
-            if(Game.time%6==0 && global.heap.rooms[this.room.name].repairerId!=undefined)
-            {
-                var repairer=Game.getObjectById(global.heap.rooms[this.room.name].repairerId)
-                if(repairer!=null && repairer.pos.isNearTo(this.pos.x,this.pos.y))
-                {
-                    this.transfer(repairer,RESOURCE_ENERGY)
+        if (this.memory.targetRoom != this.memory.homeRoom) {
+            if (Game.time % 6 == 0 && global.heap.rooms[this.room.name].repairerId != undefined) {
+                var repairer = Game.getObjectById(global.heap.rooms[this.room.name].repairerId)
+                if (repairer != null && repairer.pos.isNearTo(this.pos.x, this.pos.y)) {
+                    this.transfer(repairer, RESOURCE_ENERGY)
                 }
             }
         }
@@ -111,7 +98,7 @@ Creep.prototype.roleHarvester = function roleHarvester() {
             var energy_amount = this.store[RESOURCE_ENERGY]
             var transferResult = this.transfer(Game.getObjectById(this.memory.closestContainerId), RESOURCE_ENERGY)
             if (transferResult == ERR_NOT_IN_RANGE) {
-                this.travelTo(Game.getObjectById(this.memory.closestContainerId),{offRoad: true})
+                this.travelTo(Game.getObjectById(this.memory.closestContainerId), { offRoad: true })
             }
             else if (transferResult == OK) {
                 this.harvest(Game.getObjectById(this.memory.sourceId))
@@ -131,7 +118,7 @@ Creep.prototype.roleHarvester = function roleHarvester() {
         if (Game.getObjectById(this.memory.sourceId) != null && Game.getObjectById(this.memory.sourceId).energy > 0
             && this.store.getFreeCapacity(RESOURCE_ENERGY) > this.memory.harvestingPower) {
             if (this.harvest(Game.getObjectById(this.memory.sourceId)) == ERR_NOT_IN_RANGE) {
-                this.travelTo(Game.getObjectById(this.memory.sourceId), { range: 1, maxRooms:1 });
+                this.travelTo(Game.getObjectById(this.memory.sourceId), { range: 1, maxRooms: 1 });
                 //this.memory.is_working = false;
             }/*
             else if (this.harvest(Game.getObjectById(this.memory.sourceId)) == OK) { 
@@ -147,7 +134,7 @@ Creep.prototype.roleHarvester = function roleHarvester() {
     else if (this.room.name != this.memory.targetRoom /*&& this.store[RESOURCE_ENERGY] == 0*/) {// not in target room and have free space - go to target room
         //const destination = new RoomPosition(25, 25, this.memory.targetRoom); 
         if (this.memory.sourceId != undefined && Game.getObjectById(this.memory.sourceId) != null) {
-            this.travelTo(Game.getObjectById(this.memory.sourceId), {  swampCost: 1, plainCost: 1 });
+            this.travelTo(Game.getObjectById(this.memory.sourceId), { swampCost: 1, plainCost: 1 });
         }
         if (Game.rooms[this.memory.targetRoom] == undefined) {
             const destination = new RoomPosition(25, 25, this.memory.targetRoom); // Replace with your destination coordinates and room name

@@ -476,7 +476,8 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     //Soldiers
     if (this.memory.harvestingRooms != undefined) {
         for (r of this.memory.harvestingRooms) {
-            if (global.heap.rooms[r.name] != undefined && (global.heap.rooms[r.name].hostiles.length > 0 || global.heap.rooms[r.name].hostileStructures.length > 0)) {
+            if (global.heap.rooms[r.name] != undefined && 
+                 ((global.heap.rooms[r.name].hostiles!=undefined && global.heap.rooms[r.name].hostiles.length > 0) || (global.heap.rooms[r.name].hostileStructures!=undefined && global.heap.rooms[r.name].hostileStructures.length > 0))) {
 
                 var ifNeedMelee = false;
                 if (global.heap.rooms[r.name].hostiles.length == 0 && global.heap.rooms[r.name].hostileStructures.length > 0) {
