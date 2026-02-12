@@ -1,5 +1,6 @@
 
 const Movement = require('screeps-movement');
+const C = require('constants');
 
 Creep.prototype.roleHarvester = function roleHarvester() {
 
@@ -25,21 +26,29 @@ Creep.prototype.roleHarvester = function roleHarvester() {
     }
 
 
-    global.heap.rooms[this.memory.targetRoom].harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+    if (this.ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER) {
+        global.heap.rooms[this.memory.targetRoom].harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+    }
+
 
 
 
     for (src of Game.rooms[this.memory.homeRoom].memory.harvestingSources) {
         if (src.id == this.memory.sourceId) {
 
-            src.harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
-            src.harvesters++;
+            if (this.ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER) {
+                src.harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+                src.harvesters++;
+            }
+
             break;
         }
     }
 
     for (hr of Game.rooms[this.memory.homeRoom].memory.harvestingRooms) {
-        global.heap.rooms[hr.name].harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+        if (this.ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER) {
+            global.heap.rooms[hr.name].harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+        }
         break;
     }
 
