@@ -178,10 +178,18 @@ Room.prototype.spawnManager = function spawnManager() {
                             console.log("Skipping soldier - can spawn harvesters to other rooms")
                         }
                     }
+
+                    if((global.heap.rooms[r.name].hostiles!=undefined && global.heap.rooms[r.name].hostiles.length == 0))
+                    {
+                        global.heap.rooms[this.name].defensiveQueue.shift()
+                        ifCanSkip=false
+                    }
+
                     if (!ifCanSkip) {
                         var result = spawn.spawnCreep(soldierBody(energyCap, request.isMelee), 'SadisticRabbit' + '_' + this.name + Game.time, { memory: { role: C.ROLE_SOLDIER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
                         global.heap.rooms[this.name].spawnResult = result
                         global.heap.rooms[this.name].spawnRole = role
+                        console.log(C.ROLE_SOLDIER+" for: ",request.roomName+" spawning result: "+result )
                         if (result == OK) {
                             global.heap.rooms[this.name].defensiveQueue.shift()
                             break;
