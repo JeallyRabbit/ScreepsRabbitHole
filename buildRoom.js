@@ -52,8 +52,8 @@ Room.prototype.planRoadToTarget = function planRoadToTarget(roomCM, target, rcl,
 
     var ret = PathFinder.search(startPosition, destination, {
         //maxRooms: 64,
-        plainCost: 2,
-        swampCost: 2,
+        plainCost: 3,
+        swampCost: 3,
         maxOps: 8000,
 
         roomCallback: function (roomName) {

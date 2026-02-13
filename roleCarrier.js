@@ -162,7 +162,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 && (global.heap.rooms[this.memory.homeRoom].defensiveQueue != undefined && !global.heap.rooms[this.memory.homeRoom].defensiveQueue.some(obj => obj.role === C.ROLE_SOLDIER))
                 //&& global.heap.creeps[this.name].maxContainer != undefined  // this condition might be wrong
             ) {
-                this.say("TR")
+                
                 const destination = new RoomPosition(25, 25, this.memory.targetRoom);
                 this.travelTo(destination, { range: 22 })
                 /*

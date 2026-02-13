@@ -682,9 +682,8 @@ Creep.prototype.taskBuild = function taskBuild() {
                         }
                         else if (Game.getObjectById(c).structureType == STRUCTURE_ROAD) {
 
-                            if(toFocus==null)
-                            {
-                                toFocus=Game.getObjectById(c)
+                            if (toFocus == null) {
+                                toFocus = Game.getObjectById(c)
                             }
                             else if (this.pos.findClosestByPath([toFocus, Game.getObjectById(c)]).id == Game.getObjectById(c).id) {
                                 toFocus = Game.getObjectById(c)
@@ -733,13 +732,25 @@ Creep.prototype.taskBuild = function taskBuild() {
 
                 }
             }
+
+            if (global.heap.rooms[this.room.name].myRamparts != undefined) {
+                for (r of global.heap.rooms[this.room.name].myRamparts) {
+                    var ra = Game.getObjectById(r)
+                    if (ra != null && ra.hits < C.RAMPART_MIN_WORKER_HITS) {
+                        aux.push(ra)
+                    }
+                }
+            }
+
             if (toFocus == null) {
+
+
                 toFocus = this.pos.findClosestByRange(aux)
             }
         }
 
         if (toFocus != null) {
-            if (this.build(toFocus) == ERR_NOT_IN_RANGE) {
+            if (this.build(toFocus) == ERR_NOT_IN_RANGE || this.repair(toFocus) == ERR_NOT_IN_RANGE) {
                 this.travelTo(toFocus, { range: 1, maxRooms: 1, ignoreCreeps: false })
             }
             else if (this.build(toFocus) == ERR_INVALID_TARGET) {
@@ -754,7 +765,9 @@ Creep.prototype.taskBuild = function taskBuild() {
 
             var closest = this.pos.findClosestByRange(sites)
             if (closest != null) {
-                if (this.build(closest) == ERR_NOT_IN_RANGE) {
+
+
+                if (this.build(closest) == ERR_NOT_IN_RANGE || this.repair(closest) == ERR_NOT_IN_RANGE) {
                     this.travelTo(closest, { range: 2, maxRooms: 1 })
                 }
                 this.travelTo(closest, { range: 2, maxRooms: 1 })
