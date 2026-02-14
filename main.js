@@ -109,6 +109,8 @@ profiler.enable();
 module.exports.loop = function () {
   profiler.wrap(function () {
 
+
+    
     var totalStart = Game.cpu.getUsed()
 
     if (Game.time % 8911 == 0) {
@@ -284,7 +286,13 @@ module.exports.loop = function () {
 
     for (mainRoom of Memory.mainRooms) {
 
-      
+      console.log("Game.cpu.get Used: ",Game.cpu.getUsed(), " ",Game.cpu.limit)
+      if(Game.cpu.getUsed()>Game.cpu.limit*0.7
+    && Game.cpu.bucket<500)
+      {
+        console.log("NOT ENOUGH CPU")
+        return
+      }
 
       console.log("--------------- ", mainRoom, "---------------")
 

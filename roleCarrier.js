@@ -405,7 +405,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     }
                 }
                 else {
-                    this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom))
+                    this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom),{ range: 5})
                 }
 
                 //}
