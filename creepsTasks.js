@@ -551,7 +551,10 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
         }
         else {
             //this.fleeFrom(global.heap.creeps[this.name].deposit, { range: 5 })
-            if (global.heap.creeps[this.name] != undefined && this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            if (global.heap.creeps[this.name] != undefined &&
+                global.heap.creeps[this.name].deposit!=undefined &&
+                Game.getObjectById(global.heap.creeps[this.name].deposit)!=null
+                && this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 this.travelTo(global.heap.creeps[this.name].deposit, { maxRooms: 1 });
                 this.memory._targetDeposit = global.heap.creeps[this.name].deposit
 

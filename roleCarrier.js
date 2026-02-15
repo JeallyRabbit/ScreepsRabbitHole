@@ -53,7 +53,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
         for (src of Game.rooms[this.memory.homeRoom].memory.harvestingSources) {
             if (src.id == this.memory.sourceId) {
 
-                if (this.ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER) {
+                if (this.ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER || this.spawning) {
                     src.carryPower += this.store.getCapacity() / (src.distance * 2);
                     global.heap.rooms[this.memory.targetRoom].carryPower += this.store.getCapacity() / (src.distance * 2);
                 }

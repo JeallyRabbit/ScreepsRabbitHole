@@ -26,7 +26,7 @@ Creep.prototype.roleHarvester = function roleHarvester() {
     }
 
 
-    if (this.ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER/2) {
+    if (this.ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER/2 || this.spawning) {
         global.heap.rooms[this.memory.targetRoom].harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
     }
 
