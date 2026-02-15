@@ -536,7 +536,6 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
 
                 var targetDeposit = global.heap.creeps[this.name].deposit
                 this.memory._targetDeposit = targetDeposit
-                this.say(this.withdraw(targetDeposit, RESOURCE_ENERGY))
                 if (this.withdraw(targetDeposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     this.travelTo(targetDeposit, { maxRooms: 1 });
                     this.memory._targetDeposit = targetDeposit
@@ -658,12 +657,13 @@ Creep.prototype.taskUpgrade = function taskUpgrade() {
 //TASK BUILD
 Creep.prototype.taskBuild = function taskBuild() {
 
-
+    this.say("2")
     if (this.store[RESOURCE_ENERGY] == 0) {
         global.heap.creeps[this.name].task = undefined
     }
 
     if (global.heap.rooms[this.room.name].building != true) {
+        this.say("quit building ")
         global.heap.creeps[this.name].task = undefined
         this.memory.task = 'undefined_debugging_build'
         return null
@@ -685,10 +685,15 @@ Creep.prototype.taskBuild = function taskBuild() {
                         }
                         else if (Game.getObjectById(c).structureType == STRUCTURE_ROAD) {
 
+                            
+                            var aux=[];
+                            if(toFocus!=null){aux.push(toFocus)}
+                            if( Game.getObjectById(c)!=null){aux.push( Game.getObjectById(c))}
+                            var closest=this.pos.findClosestByPath(aux)
                             if (toFocus == null) {
                                 toFocus = Game.getObjectById(c)
                             }
-                            else if (this.pos.findClosestByPath([toFocus, Game.getObjectById(c)]).id == Game.getObjectById(c).id) {
+                            else if (closest!= null && closest.id == Game.getObjectById(c).id) {
                                 toFocus = Game.getObjectById(c)
                             }
 
@@ -701,6 +706,7 @@ Creep.prototype.taskBuild = function taskBuild() {
 
                 }
             }
+            
             if (toFocus == null) {
                 toFocus = this.pos.findClosestByRange(aux)
             }
@@ -752,6 +758,7 @@ Creep.prototype.taskBuild = function taskBuild() {
             }
         }
 
+        this.say(toFocus)
         if (toFocus != null) {
             if (this.build(toFocus) == ERR_NOT_IN_RANGE || this.repair(toFocus) == ERR_NOT_IN_RANGE) {
                 this.travelTo(toFocus, { range: 1, maxRooms: 1, ignoreCreeps: false })

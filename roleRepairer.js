@@ -19,7 +19,6 @@ Creep.prototype.roleRepairer = function roleRepairer() {
 
     if (this.room.name == this.memory.targetRoom) {
 
-
         global.heap.rooms[this.room.name].repairerId = this.id
 
         if (this.pos.x == 0 || this.pos.x == 49 || this.pos.y == 0 || this.pos.y == 49) {
@@ -27,28 +26,33 @@ Creep.prototype.roleRepairer = function roleRepairer() {
             return;
         }
         if (this.store[RESOURCE_ENERGY] == 0) {
-            this.say("collect")
+            //this.say("collect")
             this.taskCollect()
         }
         //else if (((global.heap.rooms[this.memory.targetRoom].damagedStructuresId != undefined && global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length < 1) || global.heap.rooms[this.memory.targetRoom].damagedStructuresId == undefined)) {
-        // this.say("build")
+      
         //this.taskBuild()
         //}
         else {
-
             if(global.heap.creeps[this.name].toBuild!=undefined && Game.getObjectById(global.heap.creeps[this.name].toBuild.id)==null)
             {
                 global.heap.creeps[this.name].toBuild=undefined 
             }
             if(global.heap.creeps[this.name].toBuild==undefined)
             {
-                
                 global.heap.creeps[this.name].toBuild = this.taskBuild();
+            }
+            if(global.heap.creeps[this.name].toBuild!=undefined)
+            {
+                if(this.build(global.heap.creeps[this.name].toBuild)==ERR_NOT_IN_RANGE)
+                {
+                    this.travelTo(global.heap.creeps[this.name].toBuild)
+                }
             }
             var toBuild= global.heap.creeps[this.name].toBuild
 
-            if (global.heap.rooms[this.memory.targetRoom].damagedStructuresId != undefined && global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length > 0) {
-
+            if (global.heap.rooms[this.memory.targetRoom].damagedStructuresId != undefined && global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length > 0)
+            {
 
                 if (global.heap.creeps[this.name].targetStructureId != undefined && Game.getObjectById(global.heap.creeps[this.name].targetStructureId) == null) {
                     global.heap.creeps[this.name].targetStructureId = undefined
@@ -82,14 +86,12 @@ Creep.prototype.roleRepairer = function roleRepairer() {
 
                         if (this.pos.findClosestByPath([targetStructure, toBuild])!=null && this.pos.findClosestByPath([targetStructure, toBuild]).id == targetStructure.id) {
                             //repairing
-                            this.say("rep1")
                             if (this.repair(targetStructure) == ERR_NOT_IN_RANGE) {
                                 this.travelTo(targetStructure, { reusePath: 17, maxRooms: 1 });
                             }
                         }
                         else {
                             //building
-                            this.say("build1")
                             if (this.build(toBuild) == ERR_NOT_IN_RANGE) {
                                 this.travelTo(toBuild, { reusePath: 17, maxRooms: 1 });
                             }
@@ -109,7 +111,6 @@ Creep.prototype.roleRepairer = function roleRepairer() {
                     }
                     else if (toBuild != null) {
                         //building
-                        this.say("build2")
                         if (this.build(toBuild) == ERR_NOT_IN_RANGE) {
                             this.travelTo(toBuild, { reusePath: 17, maxRooms: 1 });
                         }
