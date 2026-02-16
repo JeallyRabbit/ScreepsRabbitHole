@@ -511,6 +511,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
                     if (deposit != null) {
 
                         global.heap.creeps[this.name].deposit = deposit;
+                        this.memory.deposit=deposit
                         //debugging
                         this.memory._deposit = deposit
 
@@ -531,8 +532,8 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
 
         if (this.memory.targetRoom == this.memory.homeRoom) {
             if ((this.room.controller != undefined && this.room.controller.level >= 4 && this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_UPGRADE_LIMIT)
-
-                || (this.room.memory.energyBalance != undefined && this.room.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START)) {
+                || (this.room.memory.energyBalance != undefined && this.room.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START))
+                {
 
                 var targetDeposit = global.heap.creeps[this.name].deposit
                 this.memory._targetDeposit = targetDeposit
@@ -551,9 +552,9 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
         else {
             //this.fleeFrom(global.heap.creeps[this.name].deposit, { range: 5 })
             if (global.heap.creeps[this.name] != undefined &&
-                global.heap.creeps[this.name].deposit!=undefined &&
-                Game.getObjectById(global.heap.creeps[this.name].deposit)!=null
-                && this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                global.heap.creeps[this.name].deposit!=undefined 
+                && this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
+                 {
                 this.travelTo(global.heap.creeps[this.name].deposit, { maxRooms: 1 });
                 this.memory._targetDeposit = global.heap.creeps[this.name].deposit
 
