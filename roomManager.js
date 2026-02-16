@@ -639,6 +639,7 @@ Room.prototype.roomManager = function roomManager() {
 
     //Finding structures - single Room.Find then filtering and saving id to heap
     var structures = this.find(FIND_STRUCTURES)
+    global.heap.rooms[this.name].spawns=[];
     for (str of structures) {
 
         const role = str.structureType
@@ -721,6 +722,7 @@ Room.prototype.roomManager = function roomManager() {
                     if (str.name != undefined && str.name.endsWith('1')) {
                         this.memory.spawnPos = str.pos
                     }
+                    global.heap.rooms[this.name].spawns.push(str)
                     break;
 
 

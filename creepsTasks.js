@@ -594,7 +594,30 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
             }
         }
         else {//no container or dropped energy to collect from
-            this.sleep(10)
+            var awayFromSpawn=true
+            if(global.heap.rooms[this.memory.homeRoom].spawns!=undefined)
+            {
+                for(sp of global.heap.rooms[this.memory.homeRoom].spawns)
+                {
+                    if(this.pos.inRangeTo(sp.pos,4))
+                    {
+                        if(this.room.memory.mineralId!=undefined &&
+                            Game.getObjectById(this.room.memory.mineralId)!=null
+                        )
+                        {
+                            this.travelTo(Game.getObjectById(this.room.memory.mineralId), {range: 1 })
+                        }
+                        
+                        awayFromSpawn=false
+                    }
+                    
+                }
+            }
+            if(awayFromSpawn)
+            {
+                this.sleep(10)
+            }
+            
         }
     }
 }
@@ -657,13 +680,13 @@ Creep.prototype.taskUpgrade = function taskUpgrade() {
 //TASK BUILD
 Creep.prototype.taskBuild = function taskBuild() {
 
-    this.say("2")
+    
     if (this.store[RESOURCE_ENERGY] == 0) {
         global.heap.creeps[this.name].task = undefined
     }
 
     if (global.heap.rooms[this.room.name].building != true) {
-        this.say("quit building ")
+        
         global.heap.creeps[this.name].task = undefined
         this.memory.task = 'undefined_debugging_build'
         return null
@@ -758,7 +781,6 @@ Creep.prototype.taskBuild = function taskBuild() {
             }
         }
 
-        this.say(toFocus)
         if (toFocus != null) {
             if (this.build(toFocus) == ERR_NOT_IN_RANGE || this.repair(toFocus) == ERR_NOT_IN_RANGE) {
                 this.travelTo(toFocus, { range: 1, maxRooms: 1, ignoreCreeps: false })

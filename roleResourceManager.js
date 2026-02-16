@@ -104,7 +104,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                 if (this.store[RESOURCE_ENERGY] == 0) {
                     
                     this.withdraw(storage, RESOURCE_ENERGY,Math.min(this.store.getFreeCapacity(RESOURCE_ENERGY),amount))
-                    if (this.room.terminal != undefined && this.room.terminal.store[RESOURCE_ENERGY] > C.TERMINAL_BOTTOM_ENERGY) {
+                    if (this.room.terminal != undefined /*&& this.room.terminal.store[RESOURCE_ENERGY] > C.TERMINAL_BOTTOM_ENERGY */) {
                         this.withdraw(terminal, RESOURCE_ENERGY, amount)
                     }
                 }

@@ -214,7 +214,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         }
                         if (this.withdraw(global.heap.creeps[this.name].maxContainer, resource) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
-                            this.travelTo(global.heap.creeps[this.name].maxContainer.pos, { obstacles: fillersPos })
+                            this.travelTo(global.heap.creeps[this.name].maxContainer.pos, { obstacles: fillersPos, ignoreCreeps: false })
                             break;
                         }
                     }
