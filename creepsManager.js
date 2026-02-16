@@ -116,6 +116,7 @@ Room.prototype.creepsManager = function creepsManager() {
                 creep.roleWorker()
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
                 global.heap.rooms[creep.memory.homeRoom].workersParts += _.filter(creep.body, { type: WORK }).length
+                global.heap.rooms[creep.memory.homeRoom].workersPopulation++;
                 break;
             case C.ROLE_FILLER:
                 creep.roleFiller()

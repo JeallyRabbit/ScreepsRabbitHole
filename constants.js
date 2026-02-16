@@ -403,6 +403,7 @@ const TASK_TRANSFER_TO_TERMINAL = {
 //Economy const
 const MAX_SOURCE_DISTANCE=150;
 const BALANCER_STEP = 1// value by which workers and carriers change value of balancer
+const MAX_WORKERS_POPULATION=15
 const BALANCER_WORKER_STEP = 3
 const BALANCER_CARRIER_STEP = 1
 const BALANCER_DECAY = 10 // natural decay towards 0 of balancer
@@ -563,6 +564,7 @@ module.exports = {
 
   MAX_SOURCE_DISTANCE,
   BALANCER_STEP,
+  MAX_WORKERS_POPULATION,
   BALANCER_WORKER_STEP,
   BALANCER_CARRIER_STEP,
 

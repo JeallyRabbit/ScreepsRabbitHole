@@ -54,7 +54,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
 
 
-    
+
     if (this.memory.spawnId != undefined) {
         var sp1 = Game.getObjectById(this.memory.spawnId)
     }
@@ -82,7 +82,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             minSpawnTime = sp3.Spawning.needTime - sp3.Spawning.remainingTime
         }
     }
-        
+
 
 
 
@@ -184,7 +184,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
                 //testing
                 for (hr of this.memory.harvestingRooms) {
                     if (global.heap.rooms[hr.name].carryPower < global.heap.rooms[hr.name].harvestingPower
-                        && global.heap.rooms[hr.name].carryPower<hr.sourcesAmount*(SOURCE_ENERGY_CAPACITY/ENERGY_REGEN_TIME)
+                        && global.heap.rooms[hr.name].carryPower < hr.sourcesAmount * (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)
                     ) {
                         //Carriers
                         if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
@@ -221,7 +221,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
                 //testing
                 for (hr of this.memory.harvestingRooms) {
                     if (global.heap.rooms[hr.name].carryPower < global.heap.rooms[hr.name].harvestingPower
-                        && global.heap.rooms[hr.name].carryPower<hr.sourcesAmount*(SOURCE_ENERGY_CAPACITY/ENERGY_REGEN_TIME)
+                        && global.heap.rooms[hr.name].carryPower < hr.sourcesAmount * (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)
                     ) {
                         //Carriers
                         if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
@@ -295,28 +295,30 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     if (this.storage == undefined || this.controller.level < 4) {
 
         global.heap.rooms[this.name].needWorkersParts = 1
+        if (global.heap.rooms[this.name].workersPopulation < C.MAX_WORKERS_POPULATION) {
+            if (this.memory.energyBalance > C.ENERGY_BALANCER_WORKER_SPAWN && Game.time % 2 == 0) {
+                if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_WORKER) == undefined) {
+                    global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
 
-        if (this.memory.energyBalance > C.ENERGY_BALANCER_WORKER_SPAWN && Game.time % 2 == 0) {
-            if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_WORKER) == undefined) {
-                global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
+                }
 
             }
-
-        }
-        else if (global.heap.rooms[this.name].workersParts == 0 && this.energyAvailable <= SPAWN_ENERGY_CAPACITY && areHarvestersSatisfied && areCarriersSatisfied) {
-            //this moght be not fully correct but it should assure that on rcl 1 we start spawning workers
-            if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_WORKER) == undefined) {
-                global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
-            }
-        }
-        if (this.controller.level == 4 && this.storage == undefined) {//RCL 4 but no storage
-            if (global.heap.rooms[this.name].workersParts < 1) {
-                global.heap.rooms[this.name].needWorkersParts = 1
+            else if (global.heap.rooms[this.name].workersParts == 0 && this.energyAvailable <= SPAWN_ENERGY_CAPACITY && areHarvestersSatisfied && areCarriersSatisfied) {
+                //this moght be not fully correct but it should assure that on rcl 1 we start spawning workers
                 if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_WORKER) == undefined) {
                     global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
                 }
             }
+            if (this.controller.level == 4 && this.storage == undefined) {//RCL 4 but no storage
+                if (global.heap.rooms[this.name].workersParts < 1) {
+                    global.heap.rooms[this.name].needWorkersParts = 1
+                    if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_WORKER) == undefined) {
+                        global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_WORKER))
+                    }
+                }
+            }
         }
+
     }
     else {//Workers above and on RCL4
         global.heap.rooms[this.name].needWorkersParts = 1
@@ -476,8 +478,8 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     //Soldiers
     if (this.memory.harvestingRooms != undefined) {
         for (r of this.memory.harvestingRooms) {
-            if (global.heap.rooms[r.name] != undefined && 
-                 ((global.heap.rooms[r.name].hostiles!=undefined && global.heap.rooms[r.name].hostiles.length > 0) || (global.heap.rooms[r.name].hostileStructures!=undefined && global.heap.rooms[r.name].hostileStructures.length > 0))) {
+            if (global.heap.rooms[r.name] != undefined &&
+                ((global.heap.rooms[r.name].hostiles != undefined && global.heap.rooms[r.name].hostiles.length > 0) || (global.heap.rooms[r.name].hostileStructures != undefined && global.heap.rooms[r.name].hostileStructures.length > 0))) {
 
                 var ifNeedMelee = false;
                 if (global.heap.rooms[r.name].hostiles.length == 0 && global.heap.rooms[r.name].hostileStructures.length > 0) {

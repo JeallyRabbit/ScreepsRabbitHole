@@ -357,7 +357,7 @@ Room.prototype.roomManager = function roomManager() {
         }
 
         global.heap.rooms[this.name].workersParts = 0;
-
+        global.heap.rooms[this.name].workersPopulation = 0;
 
         this.memory.progressOld = this.memory.progress;
         this.memory.progress = this.controller.progress;
