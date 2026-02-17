@@ -148,7 +148,7 @@ Room.prototype.spawnManager = function spawnManager() {
         return;
     }
 
-
+    skippedDefensiveQueue=false
     if (global.heap.rooms[this.name].defensiveQueue.length > 0 && Game.rooms[this.name].energyAvailable > 300) {
 
         console.log("spawning from defensive queue")
@@ -175,7 +175,9 @@ Room.prototype.spawnManager = function spawnManager() {
                         var harvestingRole = harvestingRequest.role
                         if (harvestingRequest.sourceRoom != request.roomName && (harvestingRole == C.ROLE_CARRIER || harvestingRole == C.ROLE_HARVESTER)) {
                             ifCanSkip = true
+                            skippedDefensiveQueue=true
                             console.log("Skipping soldier - can spawn harvesters to other rooms")
+                            break;
                         }
                     }
 
@@ -224,8 +226,8 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
         }
     }
-    else if (global.heap.rooms[this.name].harvestingQueue.length > 0
-
+    if (global.heap.rooms[this.name].harvestingQueue.length > 0
+        && (global.heap.rooms[this.name].defensiveQueue.length==0 || skippedDefensiveQueue==true)
     ) {
 
         console.log("spawning from harvestingQueue")
