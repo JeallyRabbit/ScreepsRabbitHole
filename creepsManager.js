@@ -106,6 +106,11 @@ Room.prototype.creepsManager = function creepsManager() {
                 break;
             case C.ROLE_HARVESTER:
                 global.heap.rooms[creep.memory.homeRoom].harvestingParts += _.filter(creep.body, { type: WORK }).length
+                if (creep.ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER/2 || creep.spawning==true) {
+                    
+                    global.heap.rooms[creep.memory.targetRoom].harvestingPower += (_.filter(creep.body, { type: WORK }).length * HARVEST_POWER);
+                }
+                
                 creep.roleHarvester()
                 break;
             case C.ROLE_CARRIER:

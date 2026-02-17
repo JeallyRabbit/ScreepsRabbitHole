@@ -206,6 +206,7 @@ Room.prototype.roomManager = function roomManager() {
         global.heap.rooms[this.name].myExtractor = undefined
         global.heap.rooms[this.name].myObserver = undefined
         global.heap.rooms[this.name].myStorage = {}
+        global.heap.rooms[this.name].harvestingSources=[]
 
 
         for (res in C.RESOURCES) {
@@ -332,6 +333,9 @@ Room.prototype.roomManager = function roomManager() {
             }
 
             for (s of this.memory.harvestingSources) {
+                global.heap.rooms[this.name].harvestingSources[s.id]={}
+                global.heap.rooms[this.name].harvestingSources[s.id]={id: s.id,harvesters:0,harvestingPower:0 ,carryPower:0, roomName: s.roomName}
+                
                 s.harvestingPower = 0;
                 s.carryPower = 0;
                 s.harvesters = 0;

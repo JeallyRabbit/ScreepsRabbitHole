@@ -429,6 +429,10 @@ Room.prototype.visualize = function visualizeroomManager() {
             this.visual.text(req.role+" ("+req.sourceRoom+")", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
             
         }
+        else if(req.role==C.ROLE_HARVESTER)
+        {
+            this.visual.text(req.role+" (..."+req.sourceId.substr(req.sourceId.length-5)+")", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+        }
         else{
             this.visual.text(req.role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
         }

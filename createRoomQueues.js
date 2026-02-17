@@ -201,12 +201,17 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
 
             }//Harvesters
-            else if (harvestingSource.harvestingPower < (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME) && harvestingSource.harvesters < harvestingSource.maxHarvesters) {
-                if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_HARVESTER) == undefined) {
-                    global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestFarmer(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
-                }
-                areHarvestersSatisfied = false
-                break;
+            else if (harvestingSource.harvestingPower < (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME) && harvestingSource.harvesters < harvestingSource.maxHarvesters
+        && global.heap.rooms[this.name].harvestingSources[harvestingSource.id].harvestingPower< (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)) {
+
+                
+                    if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_HARVESTER) == undefined) {
+                        global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestFarmer(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
+                    }
+                    areHarvestersSatisfied = false
+                    break;
+                
+
             }
         }
         else //if (this.memory.energyBalance <= 1.5 || true)
@@ -251,12 +256,16 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
                 }
 
             }*///Harvesters
-            else if (harvestingSource.harvestingPower < (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME) && harvestingSource.harvesters < harvestingSource.maxHarvesters) {
-                if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_HARVESTER) == undefined) {
-                    global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestFarmer(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
-                }
-                areHarvestersSatisfied = false
-                break;
+            else if (harvestingSource.harvestingPower < (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME) && harvestingSource.harvesters < harvestingSource.maxHarvesters
+        && global.heap.rooms[this.name].harvestingSources[harvestingSource.id].harvestingPower< (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)) {
+               
+                    if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_HARVESTER) == undefined) {
+                        global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestFarmer(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
+                    }
+                    areHarvestersSatisfied = false
+                    break;
+                
+
             }
         }
 

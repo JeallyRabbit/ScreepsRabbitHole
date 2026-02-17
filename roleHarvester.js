@@ -26,13 +26,11 @@ Creep.prototype.roleHarvester = function roleHarvester() {
     }
 
 
-    if (this.ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER/2 || this.spawning) {
-        global.heap.rooms[this.memory.targetRoom].harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
-    }
+    
 
 
 
-
+    //loop for memory
     for (src of Game.rooms[this.memory.homeRoom].memory.harvestingSources) {
         if (src.id == this.memory.sourceId) {
 
@@ -44,6 +42,15 @@ Creep.prototype.roleHarvester = function roleHarvester() {
             break;
         }
     }
+
+    //loop for heap
+    
+    global.heap.rooms[this.memory.homeRoom].harvestingSources[this.memory.sourceId].harvesters++;
+    global.heap.rooms[this.memory.homeRoom].harvestingSources[this.memory.sourceId].harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+    this.say(global.heap.rooms[this.memory.homeRoom].harvestingSources[this.memory.sourceId].harvestingPower)
+    
+
+
 
     for (hr of Game.rooms[this.memory.homeRoom].memory.harvestingRooms) {
         if (this.ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER) {
