@@ -468,6 +468,12 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
                 && Game.getObjectById(this.room.memory.controllerLinkId).store[RESOURCE_ENERGY] > 0) {
                 auxDeposits.push(Game.getObjectById(this.room.memory.controllerLinkId))
             }
+
+            if(this.room.memory.upgradersContainerId!=undefined && Game.getObjectById(this.room.memory.upgradersContainerId)!=null
+         && Game.getObjectById(this.room.memory.upgradersContainerId).store[RESOURCE_ENERGY]>0)
+            {
+                auxDeposits.push(Game.getObjectById(this.room.memory.upgradersContainerId))
+            }
             this.memory._auxDeposits = auxDeposits
             aux = this.pos.findClosestByPath(auxDeposits)
             if (aux != null) {
