@@ -414,7 +414,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
 
     //Mineral Carriers
-    if (this.controller.level > 6) {
+    if (this.controller.level >= 6) {
         if (Game.getObjectById(this.memory.mineralId) != null && Game.getObjectById(this.memory.mineralId).mineralAmount > 0 && global.heap.rooms[this.name].mineralCarryPower < global.heap.rooms[this.name].mineralMiningPower
             // && this.storage != undefined && this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM
         ) {//Add to civilian queue

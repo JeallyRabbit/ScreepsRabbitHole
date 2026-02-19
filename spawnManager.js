@@ -173,7 +173,7 @@ Room.prototype.spawnManager = function spawnManager() {
                     if (global.heap.rooms[this.name].harvestingQueue.length > 0) {
                         var harvestingRequest = global.heap.rooms[this.name].harvestingQueue[0]
                         var harvestingRole = harvestingRequest.role
-                        if (harvestingRequest.sourceRoom != request.roomName && (harvestingRole == C.ROLE_CARRIER || harvestingRole == C.ROLE_HARVESTER)) {
+                        if (harvestingRequest.sourceRoom != request.roomName && harvestingRequest.sourceRoom!=this.name && (harvestingRole == C.ROLE_CARRIER || harvestingRole == C.ROLE_HARVESTER)) {
                             ifCanSkip = true
                             skippedDefensiveQueue=true
                             console.log("Skipping soldier - can spawn harvesters to other rooms")
