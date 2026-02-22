@@ -55,7 +55,7 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
         var bodyType = b.bodyType
 
         if (global.heap.rooms[this.memory.homeRoom].availableT3Boosts.length == 0
-            || global.heap.rooms[this.name].doctorId==undefined
+            || global.heap.rooms[this.memory.homeRoom].doctorId==undefined
         ) {
             return;
 
