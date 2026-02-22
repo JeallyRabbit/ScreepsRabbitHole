@@ -31,11 +31,16 @@ Creep.prototype.roleWorker = function roleWorker() {
 
 
 
-    if (this.memory.boosters == undefined) {
-        this.memory.boosters = ["XGH2O"];//boost types that creep accepts
+    if (global.heap.creeps[this.name].boosters == undefined || true) {
+        global.heap.creeps[this.name].boosters=[]
+        aux={}
+        aux={bodyType: WORK,res:'XGH2O', amount:_.filter(this.body, { type: WORK }).length*LAB_BOOST_MINERAL}//boost types that creep accepts
+        global.heap.creeps[this.name].boosters.push(aux)
+        
     }
-    // else 
-    if (true /*boosting_driver(creep, , this.memory.boosters, WORK) == -1 */) {
+
+    
+    if (this.taskGetBoosted()!=-1) {
 
         if (this.room.name != this.memory.homeRoom) {
             //this condition allows sending workers to remote rooms

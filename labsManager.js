@@ -23,4 +23,28 @@ Room.prototype.labsManager= function labsManager()
         
         out.runReaction(in1, in2)
     }
+
+
+
+    var boostingLab=Game.getObjectById(global.heap.rooms[this.name].boostingLabId)
+    if(boostingLab!=null)
+    {
+        if(global.heap.rooms[this.name].boostingRequests.length>0)
+        {
+            for(r of global.heap.rooms[this.name].boostingRequests)
+            {
+                var creepToBoost=Game.getObjectById(r.creepId)
+                if(creepToBoost!=null)
+                {
+                    var boostResult=boostingLab.boostCreep(creepToBoost,r.amount/LAB_BOOST_MINERAL)
+                    if(boostResult==OK)
+                    {
+                        global.heap.rooms[this.name].boostingRequests.shift()
+                    }
+                }
+                
+                break;
+            }
+        }
+    }
 }

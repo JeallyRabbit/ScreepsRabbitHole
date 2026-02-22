@@ -38,11 +38,10 @@ Room.prototype.roomManager = function roomManager() {
     global.heap.rooms[this.name].carryPower = 0
     if (this.memory.harvestingRooms != undefined) {
         for (hr of this.memory.harvestingRooms) {
-            if(global.heap.rooms[hr.name]==undefined)
-            {
-                global.heap.rooms[hr.name]={}
+            if (global.heap.rooms[hr.name] == undefined) {
+                global.heap.rooms[hr.name] = {}
             }
-            global.heap.rooms[hr.name].hostiles=[]
+            global.heap.rooms[hr.name].hostiles = []
             global.heap.rooms[hr.name].carryPower = 0
             global.heap.rooms[hr.name].harvestingPower = 0;
         }
@@ -206,7 +205,14 @@ Room.prototype.roomManager = function roomManager() {
         global.heap.rooms[this.name].myExtractor = undefined
         global.heap.rooms[this.name].myObserver = undefined
         global.heap.rooms[this.name].myStorage = {}
-        global.heap.rooms[this.name].harvestingSources=[]
+        global.heap.rooms[this.name].harvestingSources = []
+        global.heap.rooms[this.name].boosts = {};
+
+
+
+        var rawResources = ["H", "O", "U", "L", "K", "Z", "X"]//140k total
+        var T3EconomicBoosts = ["XUHO2", "XKH2O", "XLH2O", "XGH2O"]
+        var T3MilitaryBoosts = ["XUH2O", "XKHO2", "XLHO2", "XZH2O", "XZHO2", "XGHO2"]
 
 
         for (res in C.RESOURCES) {
@@ -262,7 +268,52 @@ Room.prototype.roomManager = function roomManager() {
         if (global.heap.rooms[this.name].boostingRequests == undefined) {
             global.heap.rooms[this.name].boostingRequests = []
         }
+        global.heap.rooms[this.name].availableT3Boosts = []
 
+        //checking what boosts ara availabler for boosting drive (creepsTasks)
+        if (this.terminal != undefined) {
+            for (res in this.terminal.store) {
+                if (T3EconomicBoosts.includes(res) || T3MilitaryBoosts.includes(res)) {
+                    global.heap.rooms[this.name].availableT3Boosts.push({resourceType: res, amount:this.terminal.store[res]})
+                }
+            }
+        }
+
+        
+        console.log("1. Available boosts")
+        for(r of global.heap.rooms[this.name].availableT3Boosts)
+        {
+            console.log(r.resourceType," ",r.amount)
+        }
+            
+        
+
+
+        //removing outdated requests
+        console.log("removing old requests")
+        if (global.heap.rooms[this.name].boostingRequests != undefined
+            && global.heap.rooms[this.name].boostingRequests.length > 0
+        ) {
+            console.log("==============================")
+            console.log(global.heap.rooms[this.name].boostingRequests.length)
+            for(r of global.heap.rooms[this.name].boostingRequests)
+            {
+                for(var property in r)
+                {
+                    console.log(r,": ",r[property])
+                }
+            }
+            console.log("++++++++++++++")
+
+            global.heap.rooms[this.name].boostingRequests = global.heap.rooms[this.name].boostingRequests.find(
+                req =>{
+                    return req!=undefined && req.ttl>Game.time
+                })
+            if(global.heap.rooms[this.name].boostingRequests==undefined)
+            {
+                global.heap.rooms[this.name].boostingRequests=[]
+            }
+        }
 
 
         if (this.memory.energyBalance == undefined && (this.storage == undefined
@@ -333,9 +384,9 @@ Room.prototype.roomManager = function roomManager() {
             }
 
             for (s of this.memory.harvestingSources) {
-                global.heap.rooms[this.name].harvestingSources[s.id]={}
-                global.heap.rooms[this.name].harvestingSources[s.id]={id: s.id,harvesters:0,harvestingPower:0 ,carryPower:0, roomName: s.roomName}
-                
+                global.heap.rooms[this.name].harvestingSources[s.id] = {}
+                global.heap.rooms[this.name].harvestingSources[s.id] = { id: s.id, harvesters: 0, harvestingPower: 0, carryPower: 0, roomName: s.roomName }
+
                 s.harvestingPower = 0;
                 s.carryPower = 0;
                 s.harvesters = 0;
@@ -482,9 +533,7 @@ Room.prototype.roomManager = function roomManager() {
         }
 
         //minerals sharing
-        var rawResources = ["H", "O", "U", "L", "K", "Z", "X"]//140k total
-        var T3EconomicBoosts = ["XUHO2", "XKH2O", "XLH2O", "XGH2O"]
-        var T3MilitaryBoosts = ["XUH2O", "XKHO2", "XLHO2", "XZH2O", "XZHO2", "XGHO2"]
+
         if (this.terminal != undefined && this.storage != undefined) {
             for (res of rawResources) {
                 if (this.terminal.store[res] + this.storage.store[res] < C.MIN_RAW_RESOURCE_AMOUNT) {
@@ -643,7 +692,7 @@ Room.prototype.roomManager = function roomManager() {
 
     //Finding structures - single Room.Find then filtering and saving id to heap
     var structures = this.find(FIND_STRUCTURES)
-    global.heap.rooms[this.name].spawns=[];
+    global.heap.rooms[this.name].spawns = [];
     for (str of structures) {
 
         const role = str.structureType

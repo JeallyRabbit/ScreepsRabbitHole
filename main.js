@@ -315,6 +315,7 @@ module.exports.loop = function () {
 
       Game.rooms[mainRoom].creepsManager()
 
+      
       //console.log("global.heap.rooms[,", mainRoom, "].creepsBodyParts after creepsManger: ",
       //  global.heap.rooms[mainRoom].creepsBodyParts)
 
