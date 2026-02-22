@@ -42,7 +42,6 @@ Creep.prototype.roleWorker = function roleWorker() {
     boostingDriverResult=this.taskGetBoosted()
     if (boostingDriverResult!=0) {
 
-
         if (this.room.name != this.memory.homeRoom) {
             //this condition allows sending workers to remote rooms
             this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom))
