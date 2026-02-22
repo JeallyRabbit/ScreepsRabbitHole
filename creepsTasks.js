@@ -61,8 +61,28 @@ Creep.prototype.processBoostRequest = function processBoostRequest() {
 Creep.prototype.taskGetBoosted = function taskGetBoosted() {
 
     this.say("GB")
+    var boostedBodyTypes=0
+
+    //check if creep is fully boosted
+    for (b of global.heap.creeps[this.name].boosters) 
+    {
+        if(_.filter(this.body, { type: bodyType }).length - _.filter(this.body, { type: bodyType, boosted: undefined }).length==_.filter(this.body, { type: bodyType }).length)
+        {
+            boostedBodyTypes++;
+            this.say("FB")
+            
+        }
+
+    }
+
+    if(global.heap.creeps[this.name].boosters.length==boostedBodyTypes)
+    {
+        return -4
+    }
+    /// end of check
+
+
     for (b of global.heap.creeps[this.name].boosters) {
-        this.say(global.heap.rooms[this.memory.homeRoom].availableT3Boosts.length)
         var reqBoost = b.res
         var reqBoostAmount = b.amount
         var bodyType = b.bodyType
@@ -70,17 +90,14 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
         if (global.heap.rooms[this.memory.homeRoom].availableT3Boosts.length == 0
             || global.heap.rooms[this.memory.homeRoom].doctorId==undefined
         ) {
-            return;
+            return -1;
         }
-
-        if(_.filter(this.body, { type: bodyType, boosted: false }).length==0)
-        {
-            return
-        }
+        
+        
 
 
         for (ab of global.heap.rooms[this.memory.homeRoom].availableT3Boosts) {
-            this.say(ab.resourceType)
+            
             this.say("BG2")
             if (ab.resourceType == reqBoost) {
                 this.say("BG3")
@@ -91,7 +108,6 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
                     {
                         global.heap.rooms[this.room.name].boostingRequests=[]
                     }
-                    this.say(global.heap.rooms[this.room.name].boostingRequests.length)
                     //debugging
                     //console.log("2.: ", this.ticksToLive > C.MIN_BOOSTING_TTL, " ", global.heap.rooms[this.memory.homeRoom].boostingRequests.find(obj => { return obj.creepId == this.id }))
                     if (global.heap.rooms[this.room.name].boostingRequests != undefined) {
@@ -116,25 +132,23 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
                 break
             }
         }
-
+        
     }
+    
 
-
-
+    //this.say("db0")
     if (this.ticksToLive > C.MIN_BOOSTING_TTL && global.heap.rooms[this.room.name].boostingRequests.find(obj => { return obj.creepId == this.id }) != undefined) {
 
 
         //check if  first request is this creep request
         var isFirstOne = false
-        this.say("db1")
+        //this.say("db1")
         for (r of global.heap.rooms[this.room.name].boostingRequests) {
             if (r.creepId == this.id) { isFirstOne = true }
             break;
         }
-        this.say(isFirstOne)
         if (isFirstOne) {
 
-            this.say(Game.getObjectById(global.heap.rooms[this.memory.homeRoom].boostingLabId))
             if (global.heap.rooms[this.memory.homeRoom].boostingLabId != undefined && Game.getObjectById(global.heap.rooms[this.memory.homeRoom].boostingLabId)!=null) {
                 var boostingLab = Game.getObjectById(global.heap.rooms[this.memory.homeRoom].boostingLabId)
                 this.travelTo(boostingLab)
@@ -142,7 +156,7 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
             }
         }
     }
-    return -1;
+    return -3;
 
 }
 
@@ -476,7 +490,6 @@ Creep.prototype.taskClearCreep = function taskClearCreep() {
         }
         else {
             for (res in this.store) {
-                this.say("Drop")
                 this.drop(res)
             }
         }

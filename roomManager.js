@@ -279,36 +279,33 @@ Room.prototype.roomManager = function roomManager() {
             }
         }
 
-        
-        console.log("1. Available boosts")
-        for(r of global.heap.rooms[this.name].availableT3Boosts)
-        {
-            console.log(r.resourceType," ",r.amount)
-        }
-            
-        
-
 
         //removing outdated requests
-        console.log("removing old requests")
+        //console.log("removing old requests")
         if (global.heap.rooms[this.name].boostingRequests != undefined
             && global.heap.rooms[this.name].boostingRequests.length > 0
         ) {
 
-            /*
-            global.heap.rooms[this.name].boostingRequests = global.heap.rooms[this.name].boostingRequests.find(
+            //console.log("boosting requests before: ",global.heap.rooms[this.name].boostingRequests)
+            var aux = global.heap.rooms[this.name].boostingRequests.filter(
                 req =>{
-                    return req!=undefined && req.ttl>Game.time
+                    return req.ttl>Game.time && Game.getObjectById(req.creepId)!=null
                 })
-                    */
-            if(global.heap.rooms[this.name].boostingRequests==undefined)
+                    
+            if(aux==undefined)
             {
                 global.heap.rooms[this.name].boostingRequests=[]
             }
-
+            else{
+                global.heap.rooms[this.name].boostingRequests=aux
+            }
+            //console.log("boosting requests after ",global.heap.rooms[this.name].boostingRequests)
 
         }
-
+        else{
+            //console.log("boosting requests after2 ",global.heap.rooms[this.name].boostingRequests)
+            global.heap.rooms[this.name].boostingRequests=[]
+        }
 
         if (this.memory.energyBalance == undefined && (this.storage == undefined
             || this.controller.level < 4)
