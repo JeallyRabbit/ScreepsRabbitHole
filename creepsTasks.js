@@ -60,7 +60,7 @@ Creep.prototype.processBoostRequest = function processBoostRequest() {
 
 Creep.prototype.taskGetBoosted = function taskGetBoosted() {
 
-    this.say("GB")
+    //this.say("GB")
     var boostedBodyTypes=0
 
     //check if creep is fully boosted
