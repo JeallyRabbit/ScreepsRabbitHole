@@ -435,7 +435,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
         //doctor
         if (global.heap.rooms[this.name].outLabsId.length > 0 && global.heap.rooms[this.name].doctorId == undefined
-            && global.heap.rooms[this.name].reaction != undefined
+            //&& global.heap.rooms[this.name].reaction != undefined
         ) {
             if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_DOCTOR) == undefined) {
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_DOCTOR))

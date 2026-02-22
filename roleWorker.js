@@ -31,7 +31,7 @@ Creep.prototype.roleWorker = function roleWorker() {
 
 
 
-    if (global.heap.creeps[this.name].boosters == undefined || true) {
+    if (global.heap.creeps[this.name].boosters == undefined) {
         global.heap.creeps[this.name].boosters=[]
         aux={}
         aux={bodyType: WORK,res:'XGH2O', amount:_.filter(this.body, { type: WORK }).length*LAB_BOOST_MINERAL}//boost types that creep accepts
@@ -39,8 +39,10 @@ Creep.prototype.roleWorker = function roleWorker() {
         
     }
 
-    
-    if (this.taskGetBoosted()!=-1) {
+    boostingDriverResult=this.taskGetBoosted()
+    if (boostingDriverResult!=0) {
+
+        this.say(boostingDriverResult)
 
         if (this.room.name != this.memory.homeRoom) {
             //this condition allows sending workers to remote rooms

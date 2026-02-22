@@ -102,7 +102,17 @@ Creep.prototype.roleDoctor = function roleDoctor() {
         else if (global.heap.rooms[this.room.name].doctorTask == C.TASK_FILL_LAB_ENERGY) {
             this.taskFillLabEnergy(global.heap.rooms[this.room.name].labNeedEnergyId)
         }
+        else if(global.heap.rooms[this.room.name].doctorTask == C.TASK_BOOST_CREEP)
+        {
+            this.processBoostRequest()
+        }
         else if (global.heap.rooms[this.room.name].doctorTask == C.TASK_FILL_INPUT_LABS_MINERAL) {
+            
+            if (global.heap.rooms[this.room.name].boostingRequests.length > 0) {
+                this.say("3")
+                global.heap.rooms[this.room.name].doctorTask = C.TASK_BOOST_CREEP
+            }
+
             this.say("fill in")
             this.taskFillInputLabsMineral(inputLab1, inputLab2)
         }
@@ -112,6 +122,7 @@ Creep.prototype.roleDoctor = function roleDoctor() {
         else if (global.heap.rooms[this.room.name].doctorTask == C.TASK_CLEAR_OUTPUT_LABS) {
             this.taskClearOutputLabs(inputLab1, inputLab2)
         }
+        
     }
 }
 

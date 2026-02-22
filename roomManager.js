@@ -294,25 +294,19 @@ Room.prototype.roomManager = function roomManager() {
         if (global.heap.rooms[this.name].boostingRequests != undefined
             && global.heap.rooms[this.name].boostingRequests.length > 0
         ) {
-            console.log("==============================")
-            console.log(global.heap.rooms[this.name].boostingRequests.length)
-            for(r of global.heap.rooms[this.name].boostingRequests)
-            {
-                for(var property in r)
-                {
-                    console.log(r,": ",r[property])
-                }
-            }
-            console.log("++++++++++++++")
 
+            /*
             global.heap.rooms[this.name].boostingRequests = global.heap.rooms[this.name].boostingRequests.find(
                 req =>{
                     return req!=undefined && req.ttl>Game.time
                 })
+                    */
             if(global.heap.rooms[this.name].boostingRequests==undefined)
             {
                 global.heap.rooms[this.name].boostingRequests=[]
             }
+
+
         }
 
 
