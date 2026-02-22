@@ -66,14 +66,15 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
     //check if creep is fully boosted
     for (b of global.heap.creeps[this.name].boosters) 
     {
-        if(_.filter(this.body, { type: bodyType }).length - _.filter(this.body, { type: bodyType, boosted: undefined }).length==_.filter(this.body, { type: bodyType }).length)
+        //this.say(_.filter(this.body, { type: b.bodyType }).length - _.filter(this.body, { type: b.bodyType, boost: undefined }).length==_.filter(this.body, { type: b.bodyType }).length)
+        if(_.filter(this.body, { type: b.bodyType }).length - _.filter(this.body, { type: b.bodyType, boost: undefined }).length==_.filter(this.body, { type: b.bodyType }).length)
         {
             boostedBodyTypes++;
-            this.say("FB")
             
         }
 
     }
+    //this.say(boostedBodyTypes)
 
     if(global.heap.creeps[this.name].boosters.length==boostedBodyTypes)
     {
@@ -98,12 +99,12 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
 
         for (ab of global.heap.rooms[this.memory.homeRoom].availableT3Boosts) {
             
-            this.say("BG2")
+            //this.say("BG2")
             if (ab.resourceType == reqBoost) {
-                this.say("BG3")
+                //this.say("BG3")
                 if (ab.amount > b.amount) {
 
-                    this.say("BG4")
+                    //this.say("BG4")
                     if (global.heap.rooms[this.room.name].boostingRequests == undefined)
                     {
                         global.heap.rooms[this.room.name].boostingRequests=[]
