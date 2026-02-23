@@ -215,7 +215,7 @@ Room.prototype.visualize = function visualizeroomManager() {
     for (c in Game.constructionSites) {
 
         var cc = Game.getObjectById(c)
-        if (cc != null && cc.room!=undefined) {
+        if (cc != null && cc.room != undefined) {
             const roomName = cc.room.name;
 
             const room = sitesRooms.find(obj => obj.name === roomName);
@@ -303,7 +303,49 @@ Room.prototype.visualize = function visualizeroomManager() {
     var task = (global.heap.rooms[this.name].doctorTask != undefined) ? global.heap.rooms[this.name].doctorTask.slice(5) : 'No task'
 
     this.visual.text("Doc task: " + task, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    tasksVisualizationPos.y += blockPosHeight
 
+    //boosting requests
+
+
+    var blockPos = new RoomPosition(tasksVisualizationPos.x, tasksVisualizationPos.y, this.name)
+    this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+    tasksVisualizationPos.y += blockPosHeight
+    this.visual.text("boosting requests:", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    
+
+    if (global.heap.rooms[this.name].boostingRequests != undefined
+        && global.heap.rooms[this.name].boostingRequests.length > 0
+    ) {
+        for (req of global.heap.rooms[this.name].boostingRequests) {
+
+            var blockPos = new RoomPosition(tasksVisualizationPos.x, tasksVisualizationPos.y, this.name)
+            this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+            this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+            this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+            this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+            this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+            var printReq = "..." + req.creepId.slice(-3) + " " + req.resource + " " + req.bodyType
+            this.visual.text("printReq", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+            tasksVisualizationPos.y += blockPosHeight
+        }
+    }
+    else {
+        var blockPos = new RoomPosition(tasksVisualizationPos.x, tasksVisualizationPos.y, this.name)
+        this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+        this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+        this.visual.text("No Requests", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+        tasksVisualizationPos.y += blockPosHeight
+    }
+
+    //
 
     //harvesting data
     var blockPos = new RoomPosition(3, 1, this.name)
@@ -329,16 +371,15 @@ Room.prototype.visualize = function visualizeroomManager() {
             this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
 
             var aux = Math.round((src.harvestingPower / (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)) * Math.min(1, src.carryPower / src.harvestingPower) * 100)
-            
-            if(global.heap.rooms[src.roomName]!=undefined)
-            {
-                var aux2="🚚 "+Math.round(global.heap.rooms[src.roomName].carryPower)+"/"+src.harvestingPower+" ⛏️";
+
+            if (global.heap.rooms[src.roomName] != undefined) {
+                var aux2 = "🚚 " + Math.round(global.heap.rooms[src.roomName].carryPower) + "/" + src.harvestingPower + " ⛏️";
             }
-            else{
-                var aux2="🚚 "+"-1"+"/"+"-1"+" ⛏️";
+            else {
+                var aux2 = "🚚 " + "-1" + "/" + "-1" + " ⛏️";
             }
-            
-            this.visual.text(src.roomName + " (" + src.pos.x + " " + src.pos.y + ") -> " + aux2 
+
+            this.visual.text(src.roomName + " (" + src.pos.x + " " + src.pos.y + ") -> " + aux2
                 , blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
@@ -424,16 +465,14 @@ Room.prototype.visualize = function visualizeroomManager() {
         this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-        if(req.role==C.ROLE_CARRIER)
-        {
-            this.visual.text(req.role+" ("+req.sourceRoom+")", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
-            
+        if (req.role == C.ROLE_CARRIER) {
+            this.visual.text(req.role + " (" + req.sourceRoom + ")", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+
         }
-        else if(req.role==C.ROLE_HARVESTER)
-        {
-            this.visual.text(req.role+" (..."+req.sourceId.substr(req.sourceId.length-5)+")", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+        else if (req.role == C.ROLE_HARVESTER) {
+            this.visual.text(req.role + " (..." + req.sourceId.substr(req.sourceId.length - 5) + ")", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
         }
-        else{
+        else {
             this.visual.text(req.role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
         }
 

@@ -74,7 +74,7 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
         }
 
     }
-    //this.say(boostedBodyTypes)
+    this.say(boostedBodyTypes)
 
     if(global.heap.creeps[this.name].boosters.length==boostedBodyTypes)
     {
