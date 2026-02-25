@@ -330,7 +330,7 @@ Room.prototype.visualize = function visualizeroomManager() {
             this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
             this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
             var printReq = "..." + req.creepId.slice(-3) + " " + req.resource + " " + req.bodyType
-            this.visual.text("printReq", blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+            this.visual.text(printReq, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
             tasksVisualizationPos.y += blockPosHeight
         }
     }

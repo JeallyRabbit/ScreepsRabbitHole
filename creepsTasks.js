@@ -31,7 +31,7 @@ Creep.prototype.processBoostRequest = function processBoostRequest() {
 
              this.say(boostingLab.store.getFreeCapacity(r.resource) + boostingLab.store[r.resource] < r.amount)
             if (boostingLab.store.getFreeCapacity(r.resource) + boostingLab.store[r.resource] < r.amount) {
-                this.taskClearBoostingLab(boostngLab, [r.resource, RESOURCE_ENERGY])
+                this.taskClearBoostingLab(boostingLab, [r.resource, RESOURCE_ENERGY])
                 this.say("DBS2")
             }
 
@@ -60,21 +60,23 @@ Creep.prototype.processBoostRequest = function processBoostRequest() {
 
 Creep.prototype.taskGetBoosted = function taskGetBoosted() {
 
-    //this.say("GB")
+    
     var boostedBodyTypes=0
 
     //check if creep is fully boosted
     for (b of global.heap.creeps[this.name].boosters) 
     {
-        //this.say(_.filter(this.body, { type: b.bodyType }).length - _.filter(this.body, { type: b.bodyType, boost: undefined }).length==_.filter(this.body, { type: b.bodyType }).length)
-        if(_.filter(this.body, { type: b.bodyType }).length - _.filter(this.body, { type: b.bodyType, boost: undefined }).length==_.filter(this.body, { type: b.bodyType }).length)
+        var requiredParts=_.filter(this.body, { type: b.bodyType})
+        var unboostedParts=_.filter(requiredParts, obj => !('boost' in obj)).length
+        //this.say(requiredParts.length+" "+unboostedParts+" ")
+        if(unboostedParts==0)
         {
             boostedBodyTypes++;
             
         }
 
     }
-    this.say(boostedBodyTypes)
+    
 
     if(global.heap.creeps[this.name].boosters.length==boostedBodyTypes)
     {
@@ -82,6 +84,7 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
     }
     /// end of check
 
+    
 
     for (b of global.heap.creeps[this.name].boosters) {
         var reqBoost = b.res
@@ -98,6 +101,7 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
 
 
         for (ab of global.heap.rooms[this.memory.homeRoom].availableT3Boosts) {
+            
             
             //this.say("BG2")
             if (ab.resourceType == reqBoost) {
@@ -140,7 +144,7 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
     //this.say("db0")
     if (this.ticksToLive > C.MIN_BOOSTING_TTL && global.heap.rooms[this.room.name].boostingRequests.find(obj => { return obj.creepId == this.id }) != undefined) {
 
-
+        this.say("GB")
         //check if  first request is this creep request
         var isFirstOne = false
         //this.say("db1")
@@ -248,14 +252,14 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
 }
 
 
-Creep.prototype.taskClearBoostingLab = function taskClearBoostingLab(boostngLab, notTake) {
+Creep.prototype.taskClearBoostingLab = function taskClearBoostingLab(boostingLab, notTake) {
     var creepFull = false
     var tookFromLab = false;
-    for (res of boostngLab.store) {
+    for (res in boostingLab.store) {
         if (notTake.includes(res)) { continue }
         var withdrawResult = this.withdraw(boostingLab, res)
         if (withdrawResult == ERR_NOT_IN_RANGE) {
-            this.travelTo(boostngLab)
+            this.travelTo(boostingLab)
         }
         else if (withdrawResult == ERR_FULL) {
             creepFull = true

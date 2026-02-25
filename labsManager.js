@@ -20,7 +20,11 @@ Room.prototype.labsManager= function labsManager()
     }
     for(out of outputs)
     {
-        
+        if (out.id==global.heap.rooms[this.name].boostingLabId
+            && global.heap.rooms[this.name].boostingRequests.length > 0)
+        {
+            continue
+        }
         out.runReaction(in1, in2)
     }
 
