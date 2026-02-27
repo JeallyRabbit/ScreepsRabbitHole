@@ -44,13 +44,12 @@ Creep.prototype.roleRepairer = function roleRepairer() {
                 if(this.build(global.heap.creeps[this.name].toBuild)==ERR_NOT_IN_RANGE)
                 {
                     this.travelTo(global.heap.creeps[this.name].toBuild)
+                    return
                 }
             }
-            var toBuild= global.heap.creeps[this.name].toBuild
-
-            if (global.heap.rooms[this.memory.targetRoom].damagedStructuresId != undefined && global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length > 0)
+            else if (global.heap.rooms[this.memory.targetRoom].damagedStructuresId != undefined && global.heap.rooms[this.memory.targetRoom].damagedStructuresId.length > 0)
             {
-
+                var toBuild= global.heap.creeps[this.name].toBuild
                 if (global.heap.creeps[this.name].targetStructureId != undefined && Game.getObjectById(global.heap.creeps[this.name].targetStructureId) == null) {
                     global.heap.creeps[this.name].targetStructureId = undefined
                 }
@@ -85,31 +84,31 @@ Creep.prototype.roleRepairer = function roleRepairer() {
                             //repairing
                             if (this.repair(targetStructure) == ERR_NOT_IN_RANGE) {
                                 this.travelTo(targetStructure, { reusePath: 17, maxRooms: 1 });
+                                return
                             }
                         }
                         else {
                             //building
                             if (this.build(toBuild) == ERR_NOT_IN_RANGE) {
                                 this.travelTo(toBuild, { reusePath: 17, maxRooms: 1 });
+                                return
                             }
 
                         }
-                        /* if (this.repair(targetStructure) == ERR_NOT_IN_RANGE) {
-                            this.travelTo(targetStructure, {  reusePath: 17, maxRooms: 1 });
-                            //move_avoid_hostile(this, closest_target.pos, 2, false);
-                        }*/
                     }
                     else if (targetStructure != null) {
                         //repairing
                         this.say("rep2")
                         if (this.repair(targetStructure) == ERR_NOT_IN_RANGE) {
                             this.travelTo(targetStructure, { reusePath: 17, maxRooms: 1 });
+                            return
                         }
                     }
                     else if (toBuild != null) {
                         //building
                         if (this.build(toBuild) == ERR_NOT_IN_RANGE) {
                             this.travelTo(toBuild, { reusePath: 17, maxRooms: 1 });
+                            return
                         }
                     }
                     else {

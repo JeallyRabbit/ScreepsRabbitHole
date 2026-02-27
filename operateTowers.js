@@ -15,16 +15,16 @@ Room.prototype.operateTowers = function operateTowers() {
             var rampart = Game.getObjectById(r)
             if (rampart != null && rampart.hits < C.RAMPART_HITS_BOTTOM_LIMIT) {
                 repairTarget = rampart
-                break;
+                //break;
             }
         }
         if (repairTarget != undefined) {
             for (t of global.heap.rooms[this.name].myTowersId) {
                 if (Game.getObjectById(t) != null) {
-                    Game.getObjectById(t).repair(repairTarget)
+                    //Game.getObjectById(t).repair(repairTarget)
                 }
             }
-            return
+            //return
         }
     }
 

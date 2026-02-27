@@ -111,6 +111,7 @@ Creep.prototype.roleDoctor = function roleDoctor() {
             if (global.heap.rooms[this.room.name].boostingRequests.length > 0) {
                 this.say("3")
                 global.heap.rooms[this.room.name].doctorTask = C.TASK_BOOST_CREEP
+                return
             }
 
             this.say("fill in")

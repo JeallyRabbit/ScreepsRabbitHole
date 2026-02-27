@@ -30,7 +30,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 
         if (terminal != undefined && storage != undefined) {
 
-
+            
             if (global.heap.rooms[this.room.name].managerTask == undefined) {
 
                 if (this.store.getCapacity(RESOURCE_ENERGY) > this.store.getFreeCapacity(RESOURCE_ENERGY)) {
@@ -54,10 +54,10 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[RESOURCE_ENERGY]
                 }
-                else if (isT3BoostInStore(terminal.store) != false)//T3 boosts should be only in storage
+                else if (isT3BoostInStore(storage.store) != false)//T3 boosts should be only in terminal
                 {
-
-                    global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[isT3BoostInStore(terminal.store)]
+                    
+                    global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isT3BoostInStore(terminal.store)]
                 }
                 else if (isRawResInStore(storage.store) != false)//Raw Resources should be in terminal
                 {
@@ -99,11 +99,14 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
             if (global.heap.rooms[this.room.name].managerTask == C.TASK_FILL_LINK) {
 
                 
-                var amount = Math.min((C.LINK_BOTTOM_ENERGY - managerLink.store[RESOURCE_ENERGY]) + 1,this.store.getFreeCapacity(RESOURCE_ENERGY))
+                //var amount = Math.min((C.LINK_BOTTOM_ENERGY - managerLink.store[RESOURCE_ENERGY]) + 1,this.store.getFreeCapacity(RESOURCE_ENERGY))
                 
+                var amount = managerLink.store.getFreeCapacity(RESOURCE_ENERGY)
                 if (this.store[RESOURCE_ENERGY] == 0) {
                     
+                    
                     this.withdraw(storage, RESOURCE_ENERGY,Math.min(this.store.getFreeCapacity(RESOURCE_ENERGY),amount))
+                    
                     if (this.room.terminal != undefined /*&& this.room.terminal.store[RESOURCE_ENERGY] > C.TERMINAL_BOTTOM_ENERGY */) {
                         this.withdraw(terminal, RESOURCE_ENERGY, amount)
                     }
@@ -195,10 +198,12 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 
 function isT3BoostInStore(store) {
 
+    
     for (res in store) {
         if (res == RESOURCE_ENERGY) { continue; }
 
-        if (C.REVERSED_RESOURCE[res].startsWith("CATALYZED")) {
+        //console.log(res, " ",C.REVERSED_RESOURCE[res], store[res])
+        if (C.REVERSED_RESOURCE[res].replace("RESOURCE_","").startsWith("CATALYZED")) {
             return res
         }
     }

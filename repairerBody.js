@@ -4,7 +4,7 @@ function repairerBody(cap,maxBodyParts=C.CREEP_MAX_BODYPARTS)// return array wit
 {
     var parts=[];
 
-    while(cap>BODYPART_COST[MOVE]+BODYPART_COST[CARRY]+BODYPART_COST[WORK] && parts.length<C.CREEP_MAX_BODYPARTS-3
+    while(cap>BODYPART_COST[MOVE]+BODYPART_COST[MOVE]+BODYPART_COST[CARRY]+BODYPART_COST[WORK] && parts.length<C.CREEP_MAX_BODYPARTS-4
         
     )
     {
@@ -12,6 +12,8 @@ function repairerBody(cap,maxBodyParts=C.CREEP_MAX_BODYPARTS)// return array wit
         {
             return parts
         }
+        parts.push(MOVE)
+        cap-=BODYPART_COST[MOVE]
         parts.push(MOVE)
         cap-=BODYPART_COST[MOVE]
         parts.push(CARRY)
