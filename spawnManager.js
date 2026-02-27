@@ -421,7 +421,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 {
                     //This condition should be unneccesary but it keeps still spawning rampartsRepairers so added it here
                     if (global.heap.rooms[this.name].rampartRepairersPower < global.heap.rooms[this.name].requiredRampartsRepairersPower) {
-                        var result = spawn.spawnCreep(repairerBody(energyCap, global.heap.rooms[this.name].requiredRampartsRepairersPower + 1),
+                        var result = spawn.spawnCreep(repairerBody(energyCap /*, global.heap.rooms[this.name].requiredRampartsRepairersPower + 1 */) ,
                             "RampartLovingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RAMPART_REPAIRER, directions: myDirections, homeRoom: this.name,targetRoom: this.name  } })
 
                         global.heap.rooms[this.name].spawnResult = result
