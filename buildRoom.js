@@ -855,18 +855,13 @@ Room.prototype.buildFromLists = function buildFromLists() {
         }
     }
 
-    if (this.name == 'W7N4') {
-        console.log("roadsBuildingList at: ", this.name, " is length: ", this.memory.roadBuildingList.length)
         for (r of this.memory.roadBuildingList) {
             
-            if (r.roomName != this.name) {
-                console.log(r.x, " ", r.y, " ", r.roomName, " ", r.structureType)
-            }
             if (r.minRCL <= rcl && r.roomName != undefined) {
                 Game.rooms[r.roomName].createConstructionSite(r.x, r.y, r.structureType)
             }
         }
-    }
+    
 
 }
 
@@ -1524,7 +1519,6 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
         if (this.memory.fillerLinkPos != undefined && (this.memory.fillerLinkPos.x != this.memory.spawnPos.x || this.memory.fillerLinkPos.y != this.memory.spawnPos.y - 2)) {
             this.memory.baseVariations = undefined
             this.memory.finishedPlanning = undefined
-            console.log("ERROR ON PLANNING BASE")
             //mixed spawnPos of variations, in theory this should enforce next planning to be spawnPos
         }
         else {
