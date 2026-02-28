@@ -76,20 +76,26 @@ Room.prototype.roomManager = function roomManager() {
 
 
         // Resetting roomsToScan after 2nd and 3rd spawns are build
-        if (Game.time & 2341 == 0 || true) {
+        //if (Game.time & 2341 == 0 || true) {
             if (this.controller.level >= 7) {
                 var sp = this.find(FIND_MY_SPAWNS)
                 if (sp.length > 1 && this.memory.rcl7RoomsReset != true) {
                     this.memory.roomsToScan = undefined
                     this.memory.rcl7RoomsReset = true
+                    this.memory.buildingStage=1;
+                    //this.memory.finishedPlanning=false
+                    this.memory.plannedRoads=false
                 }
 
                 if (sp.length > 2 && this.memory.rcl8RoomsReset != true) {
                     this.memory.roomsToScan = undefined
                     this.memory.rcl8RoomsReset = true
+                    this.memory.buildingStage=1
+                    //this.memory.finishedPlanning=false
+                    this.memory.plannedRoads=false
                 }
             }
-        }
+        //}
 
 
 
@@ -510,7 +516,7 @@ Room.prototype.roomManager = function roomManager() {
                 if (this.memory.variationToBuild == undefined) {
                     this.memory.finishedPlanning = undefined
                 }
-                if (Game.time % 5 == 0 || true) {
+                if (Game.time % 56 == 0) {
                     //console.log("room: ",this.name," is building from list")
                     //debugging condition
                     if (this.controller.level != 8) {
@@ -646,7 +652,7 @@ Room.prototype.roomManager = function roomManager() {
     })
 
     if (hostiles.length > 0) {
-        console.log("Adding hostiles in ", this.name)
+        //console.log("Adding hostiles in ", this.name)
         for (a of hostiles) {
             global.heap.rooms[this.name].hostiles.push(a)
             global.heap.rooms[this.name].hostileHealPower += _.filter(a.body, { type: HEAL }).length * HEAL_POWER

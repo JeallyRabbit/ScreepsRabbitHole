@@ -80,11 +80,14 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
 
     if(global.heap.creeps[this.name].boosters.length==boostedBodyTypes)
     {
+        this.memory.isBoosted=true
+        global.heap.creeps[this.name].isBoosted=true
         return -4
     }
+    
     /// end of check
 
-    
+    global.heap.creeps[this.name].isBoosted=false
 
     for (b of global.heap.creeps[this.name].boosters) {
         var reqBoost = b.res
@@ -114,15 +117,9 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
                         global.heap.rooms[this.room.name].boostingRequests=[]
                     }
                     //debugging
-                    //console.log("2.: ", this.ticksToLive > C.MIN_BOOSTING_TTL, " ", global.heap.rooms[this.memory.homeRoom].boostingRequests.find(obj => { return obj.creepId == this.id }))
                     if (global.heap.rooms[this.room.name].boostingRequests != undefined) {
 
-                        
-                        console.log("sgdhjfkaghjsdgfhjasgdjh")
-                        for(x of global.heap.rooms[this.room.name].boostingRequests)
-                        {
-                            console.log(x)
-                        }
+                       
                         var crRequest = new boostRequest(this.id, reqBoost, reqBoostAmount, bodyType, Game.time + (CREEP_LIFE_TIME - C.MIN_BOOSTING_TTL))
                         var auxCreepId=this.id
                         if (this.ticksToLive > C.MIN_BOOSTING_TTL &&
@@ -432,6 +429,7 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
         }
     }
     else {
+        global.heap.rooms[this.room.name].doctorTask = undefined
         return
     }
 
@@ -807,10 +805,16 @@ Creep.prototype.taskUpgrade = function taskUpgrade() {
 
     if (global.heap.rooms[this.memory.homeRoom].building == true &&
         this.room.controller.ticksToDowngrade > (CONTROLLER_DOWNGRADE[this.room.controller.level] * C.CONTROLLER_DOWNGRADE_TOP_LIMIT)
+        
     ) {
+
         global.heap.creeps[this.name].task = C.TASK_BUILD
-        this.memory.task = C.TASK_BUILD
-        return;
+        //this.memory.task = C.TASK_BUILD
+        
+        this.say(global.heap.creeps[this.name].isBoosted && this.memory.role==C.ROLE_WORKER)
+        {
+             global.heap.creeps[this.name].task=C.TASK_UPGRADE
+        }
 
     }
 

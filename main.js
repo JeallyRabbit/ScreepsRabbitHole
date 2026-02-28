@@ -118,7 +118,6 @@ module.exports.loop = function () {
     }
 
 
-    //console.log("GIT TEST")
     //Setting allies
     Memory.allies = ["JeallyRabbit", "Alphonzo", "insainmonkey", "Trepidimous", "csW", "Bleem"]
 
@@ -286,11 +285,11 @@ module.exports.loop = function () {
 
     for (mainRoom of Memory.mainRooms) {
 
-      console.log("Game.cpu.get Used: ",Game.cpu.getUsed(), " ",Game.cpu.limit)
+     //console.log("Game.cpu.get Used: ",Game.cpu.getUsed(), " ",Game.cpu.limit)
       if(Game.cpu.getUsed()>Game.cpu.limit*0.7
     && Game.cpu.bucket<500)
       {
-        console.log("NOT ENOUGH CPU")
+        c//onsole.log("NOT ENOUGH CPU")
         return
       }
 
@@ -306,7 +305,6 @@ module.exports.loop = function () {
         roomToFastRclUpgrade = mainRoom;
       }
 
-      console.log("roomToFastRclUpgrade: ", roomToFastRclUpgrade)
       if (roomToFastRclUpgrade != undefined) {
         Memory.fastRclUpgrade = roomToFastRclUpgrade
       }

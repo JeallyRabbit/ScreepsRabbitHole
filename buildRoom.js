@@ -851,15 +851,23 @@ Room.prototype.buildFromLists = function buildFromLists() {
             }
 
 
+
         }
     }
 
-    for (let i = 0; i < this.memory.roadBuildingList.length; i++) {
-
-        if (this.memory.roadBuildingList[i].minRCL <= rcl && Game.rooms[this.memory.roadBuildingList[i].roomName] != undefined) {
-            Game.rooms[this.memory.roadBuildingList[i].roomName].createConstructionSite(this.memory.roadBuildingList[i].x, this.memory.roadBuildingList[i].y, this.memory.roadBuildingList[i].structureType);
+    if (this.name == 'W7N4') {
+        console.log("roadsBuildingList at: ", this.name, " is length: ", this.memory.roadBuildingList.length)
+        for (r of this.memory.roadBuildingList) {
+            
+            if (r.roomName != this.name) {
+                console.log(r.x, " ", r.y, " ", r.roomName, " ", r.structureType)
+            }
+            if (r.minRCL <= rcl && r.roomName != undefined) {
+                Game.rooms[r.roomName].createConstructionSite(r.x, r.y, r.structureType)
+            }
         }
     }
+
 }
 
 
@@ -1260,9 +1268,8 @@ Room.prototype.planSpawnPos = function planSpawnPos(type) {
             {
                 var spawn = this.find(FIND_MY_SPAWNS)
                 this.memory.spawnPos = new RoomPosition(spawn[0].pos.x, spawn[0].pos.y, this.name)
-                if(this.memory.baseVariations[type]==undefined)
-                {
-                    this.memory.baseVariations[type]={}
+                if (this.memory.baseVariations[type] == undefined) {
+                    this.memory.baseVariations[type] = {}
                 }
                 this.memory.baseVariations[type].spawnPos = new RoomPosition(spawn[0].pos.x, spawn[0].pos.y, this.name)
                 seeds.push(spawn[0].pos)
@@ -1271,7 +1278,7 @@ Room.prototype.planSpawnPos = function planSpawnPos(type) {
 
 
     if (type != C.CURRENT_SPAWNPOS) {
-        
+
         let roomCM = new PathFinder.CostMatrix;
         const terrain = new Room.Terrain(this.name);
         for (let i = 0; i < 50; i++) {
@@ -1328,9 +1335,8 @@ Room.prototype.planExtractor = function planExtractor() {
 Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
 
 
-    if(this.memory.spawnId!=undefined)
-    {
-        this.memory.variationToBuild=C.CURRENT_SPAWNPOS
+    if (this.memory.spawnId != undefined) {
+        this.memory.variationToBuild = C.CURRENT_SPAWNPOS
     }
     if (this.memory.variationToBuild != undefined) {//This might be wrong
         type = this.memory.variationToBuild
@@ -1454,7 +1460,7 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
 
         }
 
-        
+
 
         this.memory.baseVariations[key].variationFinished = true
 
@@ -1505,7 +1511,7 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
 
 
             this.memory.finalBuildingList = uniqueArray
-            
+
             this.memory.roomCM = roomCM1.serialize();
 
         }
@@ -1525,14 +1531,13 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
             //build from lists and visualize roomPlan
 
             //after resseting rooms to scan on rcl7/8 we should replan roads to sources
-            if(this.memory.roomsToScan==undefined || (this.memory.roomsToScan!=undefined && this.memory.roomsToScan.length!=0))
-            {
-                stage=1;
+            if (this.memory.roomsToScan == undefined || (this.memory.roomsToScan != undefined && this.memory.roomsToScan.length != 0)) {
+                stage = 1;
             }
-            else 
-            {
-                if (Game.time % 123 == 0) {
+            else {
+                if (Game.time % 123 == 0 || true) {
                     this.buildFromLists()
+                    this.visual.text("BUILD", 25, 25)
                     if (Memory.rooms[this.name].roomCM != undefined) {
                         delete Memory.rooms[this.name].roomCM
                     }
@@ -1548,7 +1553,7 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
                 //this.memory.roadBuildingList
 
             }
-            
+
         }
 
 

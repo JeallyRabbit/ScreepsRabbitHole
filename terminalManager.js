@@ -9,7 +9,6 @@ StructureTerminal.prototype.buyResource = function buyResource(res, amount) {
     }
 
     var buyResult = null
-    //console.log("i have storage");
     bestPrice = 0
     var bestOrderId = undefined
     const resourceOrders = Game.market.getAllOrders({ type: ORDER_SELL, resourceType: res }) // fast
@@ -17,13 +16,10 @@ StructureTerminal.prototype.buyResource = function buyResource(res, amount) {
         bestOrderId = resourceOrders[0].id
     }
     for (let i = 1; i < resourceOrders.length; i++) {
-        //console.log(i)
         var tradeAmount = Math.min(amount, resourceOrders[i].amount)
         var transferCost = Game.market.calcTransactionCost(tradeAmount, resourceOrders[i].roomName, this.room.name)
         var price = (resourceOrders[i].price * tradeAmount) + transferCost
-        //console.log("Profit: ",profit);
         var pricePerUnit = price * tradeAmount
-        //console.log("profit per unit: ", profitPerUnit);
         if (res == RESOURCE_ENERGY) {
             if (pricePerUnit < bestPrice && tradeAmount > transferCost*2) {
                 bestPrice = pricePerUnit
@@ -86,17 +82,14 @@ StructureTerminal.prototype.sellResource = function sellResource(res, amount) {
             bestOrderId = sellOrders[i].id
         }
     }
-    //console.log("best order id: ",bestOrderId)
     if (bestOrderId != undefined) {
 
-        //onsole.log("best offer: ",bestOrderId);
         var tradeAmount = Math.min(this.store[res], Game.market.getOrderById(bestOrderId).amount)
         tradeAmount = 1000
         var cost = Game.market.calcTransactionCost(tradeAmount, Game.market.getOrderById(bestOrderId).roomName,
             this.room.name)
         var profit = (Game.market.getOrderById(bestOrderId).price * tradeAmount) - cost
         var profitPerUnit = profit / tradeAmount
-        //console.log("profit per unit: ",profitPerUnit)
         if (profitPerUnit > 10 || true) {
             sellResult = Game.market.deal(bestOrderId, tradeAmount, this.room.name)
         }
@@ -150,7 +143,6 @@ Room.prototype.terminalManager = function terminalManager() {
     if (resourceToShare != null && roomToShareWith != null) {
         var sendResult = this.terminal.send(resourceToShare, C.RESOURCE_SHARE_AMOUNT, roomToShareWith)
         if (sendResult == OK) {
-            console.log("Sending: ",resourceToShare," to: ",roomToShareWith)
             return;
         }
     }
@@ -172,7 +164,6 @@ Room.prototype.terminalManager = function terminalManager() {
     if (resourceToShare != null && roomToShareWith != null) {
         var sendResult = this.terminal.send(resourceToShare, C.RESOURCE_SHARE_AMOUNT, roomToShareWith)
         if (sendResult == OK) {
-            console.log("Sending: ",resourceToShare," to: ",roomToShareWith)
             return;
         }
     }
@@ -181,7 +172,6 @@ Room.prototype.terminalManager = function terminalManager() {
     for (res of global.heap.rooms[this.name].excessRawResources) {
         
         var result=this.terminal.sellResource(res, C.RAW_RES_SELL_AMOUNT) 
-        console.log("Trying to sell: ",res," result: ",result)
         if (result== OK) {
             return
         }
@@ -194,7 +184,6 @@ Room.prototype.terminalManager = function terminalManager() {
     //Buying Raw Resources
     for (res of global.heap.rooms[this.name].needRawResources) {
         if (this.terminal.buyResource(res, C.RAW_RES_BUY_AMOUNT) == OK) {
-            console.log("Buying: ",res)
             return;
         }
     }
@@ -220,7 +209,6 @@ Room.prototype.terminalManager = function terminalManager() {
     if(closestNeedingEnergy!=undefined)
     {
         var result=this.terminal.send(RESOURCE_ENERGY, C.RESOURCE_SHARE_AMOUNT, closestNeedingEnergy)
-        console.log("Result of sharing energy (not fastRCLUpgrade): ",result)
     }
 
 
@@ -231,8 +219,6 @@ Room.prototype.terminalManager = function terminalManager() {
         && this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>C.STORAGE_ENERGY_BOTTOM
         && this.terminal!=undefined && this.terminal.store[RESOURCE_ENERGY]>C.TERMINAL_BOTTOM_ENERGY
     ) {
-        console.log("Sending energy to: ",Memory.fastRclUpgrade)
-        console.log(this.terminal.send(RESOURCE_ENERGY, C.RESOURCE_SHARE_AMOUNT, Memory.fastRclUpgrade) )
         if (this.terminal.send(RESOURCE_ENERGY, C.RESOURCE_SHARE_AMOUNT, Memory.fastRclUpgrade) == OK) {
             return;
         }
@@ -242,7 +228,6 @@ Room.prototype.terminalManager = function terminalManager() {
         && this.storage.store[RESOURCE_ENERGY]<C.STORAGE_ENERGY_BUY_BOTTOM
     ) {
         let result = this.terminal.buyResource(RESOURCE_ENERGY, C.RAW_RES_BUY_AMOUNT)
-        console.log("trying to buy energy: ", result)
         if (result == OK) {
             return;
         }

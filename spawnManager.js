@@ -151,7 +151,7 @@ Room.prototype.spawnManager = function spawnManager() {
     skippedDefensiveQueue=false
     if (global.heap.rooms[this.name].defensiveQueue.length > 0 && Game.rooms[this.name].energyAvailable > 300) {
 
-        console.log("spawning from defensive queue")
+        //console.log("spawning from defensive queue")
         var request = global.heap.rooms[this.name].defensiveQueue[0]
         var role = request.role
         var energyCap = Game.rooms[this.name].energyAvailable
@@ -230,7 +230,7 @@ Room.prototype.spawnManager = function spawnManager() {
         && (global.heap.rooms[this.name].defensiveQueue.length==0 || skippedDefensiveQueue==true)
     ) {
 
-        console.log("spawning from harvestingQueue")
+        //console.log("spawning from harvestingQueue")
         var request = global.heap.rooms[this.name].harvestingQueue[0]
         var role = request.role
         var energyCap = Game.rooms[this.name].energyAvailable
@@ -331,7 +331,7 @@ Room.prototype.spawnManager = function spawnManager() {
     else if (global.heap.rooms[this.name].civilianQueue.length > 0) {
 
 
-        console.log("spawning from civilianQueue")
+        //console.log("spawning from civilianQueue")
 
         var request = global.heap.rooms[this.name].civilianQueue[0]
         var role = request.role
@@ -530,10 +530,10 @@ Room.prototype.spawnManager = function spawnManager() {
         && global.heap.rooms[this.name].haulersParts > 0
     ) {
 
-        console.log("entering offensive queueeee")
+        //console.log("entering offensive queueeee")
         var request = global.heap.rooms[this.name].offensiveQueue[0]
         var role = request.role
-        console.log("role: ", role)
+        //console.log("role: ", role)
         var energyCap = Game.rooms[this.name].energyAvailable
 
         switch (role) {
@@ -574,8 +574,6 @@ Room.prototype.spawnManager = function spawnManager() {
                     if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
                         var name = "MasochisticRabbit"
                         var body = drainerBody(energyCap)
-                        console.log(body)
-                        console.log(body.length)
                         var result = spawn.spawnCreep(body, name + '_' + this.name + Game.time, { memory: { role: C.ROLE_ENERGY_DRAINER, targetRoom: request.roomName, directions: myDirections, homeRoom: this.name } })
                         global.heap.rooms[this.name].spawnResult = result
                         global.heap.rooms[this.name].spawnRole = role

@@ -78,7 +78,6 @@ Creep.prototype.roleRepairer = function roleRepairer() {
                     var targetStructure = Game.getObjectById(global.heap.creeps[this.name].targetStructureId)
                     if (targetStructure != null && toBuild != null) {
 
-                        console.log(targetStructure," ",toBuild)
 
                         if (this.pos.findClosestByPath([targetStructure, toBuild])!=null && this.pos.findClosestByPath([targetStructure, toBuild]).id == targetStructure.id) {
                             //repairing
