@@ -83,7 +83,7 @@ Room.prototype.roomManager = function roomManager() {
                     this.memory.roomsToScan = undefined
                     this.memory.rcl7RoomsReset = true
                     this.memory.buildingStage=1;
-                    //this.memory.finishedPlanning=false
+                    this.memory.finishedPlanning=true
                     this.memory.plannedRoads=false
                 }
 
