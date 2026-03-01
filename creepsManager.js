@@ -48,7 +48,7 @@ Room.prototype.creepsManager = function creepsManager() {
     global.heap.rooms[this.name].harvestingPower=0
     global.heap.rooms[this.name].carryPower=0
     global.heap.rooms[this.name].mineralCarryPower = 0
-
+    global.heap.rooms[this.name].carriers=0;
 
 
     global.heap.rooms[this.name].creepsBodyParts = 0
@@ -115,6 +115,7 @@ Room.prototype.creepsManager = function creepsManager() {
                 break;
             case C.ROLE_CARRIER:
                 creep.roleCarrier()
+                global.heap.rooms[creep.memory.homeRoom].carriers++
                 global.heap.rooms[creep.memory.homeRoom].harvestingParts += creep.body.length
                 break;
             case C.ROLE_WORKER:

@@ -185,6 +185,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
                 for (hr of this.memory.harvestingRooms) {
                     if (global.heap.rooms[hr.name].carryPower < global.heap.rooms[hr.name].harvestingPower
                         && global.heap.rooms[hr.name].carryPower < hr.sourcesAmount * (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)
+                        && global.heap.rooms[this.name].carriers<C.CARRIERS_LIMIT
                     ) {
                         //Carriers
                         if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
@@ -227,6 +228,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
                 for (hr of this.memory.harvestingRooms) {
                     if (global.heap.rooms[hr.name].carryPower < global.heap.rooms[hr.name].harvestingPower
                         && global.heap.rooms[hr.name].carryPower < hr.sourcesAmount * (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)
+                        && global.heap.rooms[this.name].carriers<C.CARRIERS_LIMIT
                     ) {
                         //Carriers
                         if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
