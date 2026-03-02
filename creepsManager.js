@@ -177,6 +177,7 @@ Room.prototype.creepsManager = function creepsManager() {
                 break;
             case C.ROLE_COLONIZER:
                 creep.roleColonizer()
+                
                 global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
                 if (global.heap.rooms[creep.memory.targetRoom].colonizers != undefined) {//As room will have spawn built it will no longer have "colonizers" property but 
                     global.heap.rooms[creep.memory.targetRoom].colonizers.push(creep.id)
