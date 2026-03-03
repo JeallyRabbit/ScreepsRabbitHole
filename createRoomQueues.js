@@ -136,7 +136,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
         }
 
-        if(this.storage.store[RESOURCE_ENERGY] > C.STORAGE_BALANCER_START * 2
+        if(this.storage.store[RESOURCE_ENERGY] > C.STORAGE_BALANCER_START * 4
             && global.heap.rooms[this.name].controllerHauler==undefined
         )
         {
