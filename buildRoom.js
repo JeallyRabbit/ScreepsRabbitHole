@@ -857,7 +857,7 @@ Room.prototype.buildFromLists = function buildFromLists() {
 
         for (r of this.memory.roadBuildingList) {
             
-            if (r.minRCL <= rcl && r.roomName != undefined) {
+            if (r.minRCL <= rcl && r.roomName != undefined && Game.rooms[r.roomName]!=undefined) {
                 Game.rooms[r.roomName].createConstructionSite(r.x, r.y, r.structureType)
             }
         }

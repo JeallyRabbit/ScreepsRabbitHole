@@ -27,6 +27,7 @@ const ROLE_SCOUT = 'scout'
 const ROLE_WORKER = 'worker'
 const ROLE_REPAIRER = 'repairer'
 const ROLE_HAULER = 'hauler'
+const ROLE_CONTROLLER_HAULER='controller_hauler'
 const ROLE_RESERVER = 'reserver'
 const ROLE_RAMPART_REPAIRER = 'rampart_repairer'
 const ROLE_RESOURCE_MANAGER = 'resource_manager'
@@ -510,6 +511,7 @@ module.exports = {
   ROLE_WORKER,
   ROLE_REPAIRER,
   ROLE_HAULER,
+  ROLE_CONTROLLER_HAULER,
   ROLE_RESERVER,
   ROLE_RAMPART_REPAIRER,
   ROLE_RESOURCE_MANAGER,

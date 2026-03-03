@@ -29,7 +29,7 @@ Creep.prototype.processBoostRequest = function processBoostRequest() {
                 return
              }
 
-             this.say(boostingLab.store.getFreeCapacity(r.resource) + boostingLab.store[r.resource] < r.amount)
+             //this.say(boostingLab.store.getFreeCapacity(r.resource) + boostingLab.store[r.resource] < r.amount)
             if (boostingLab.store.getFreeCapacity(r.resource) + boostingLab.store[r.resource] < r.amount) {
                 this.taskClearBoostingLab(boostingLab, [r.resource, RESOURCE_ENERGY])
                 this.say("DBS2")
@@ -37,7 +37,6 @@ Creep.prototype.processBoostRequest = function processBoostRequest() {
 
             if (this.store[r.resource] < r.amount && this.room.terminal.store[r.resource] > 0) {
                 this.say("DB3.1")
-                this.say(r.resource)
                 if (this.withdraw(this.room.terminal,r.resource,Math.min(r.amount,this.store.getFreeCapacity(r.amount))) == ERR_NOT_IN_RANGE) {
                     this.travelTo(this.room.terminal)
                     this.say("DB3")
@@ -811,7 +810,7 @@ Creep.prototype.taskUpgrade = function taskUpgrade() {
         global.heap.creeps[this.name].task = C.TASK_BUILD
         //this.memory.task = C.TASK_BUILD
         
-        this.say(global.heap.creeps[this.name].isBoosted && this.memory.role==C.ROLE_WORKER)
+        if(global.heap.creeps[this.name].isBoosted && this.memory.role==C.ROLE_WORKER)
         {
              global.heap.creeps[this.name].task=C.TASK_UPGRADE
         }
@@ -1104,7 +1103,7 @@ Creep.prototype.taskFillNukerGhodium = function taskFillNukerGhodium() {
     var terminal = this.room.terminal;
 
     if (nuker == null || storage == undefined || terminal == undefined) {
-        this.say("error")
+        
         return
     }
     if (storage.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT) {

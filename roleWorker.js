@@ -4,20 +4,7 @@ const Movement = require('screeps-movement');
 const creepsTasks = require('creepsTasks')
 
 
-/*Creep needs:
-   Mandatory:
-   Creep.memory.homeRoom - roomName in which creep will operate
-    
-   Creep base its decisions on Game.rooms[this.memory.homeRoom].memory.energyBalance
-   lower values means we are using more energy than harvesting
-   higher value means we are harvesting more than using
 
-    Will Calculate in its own:
-    this.memory.workPartsNum - 
-    this.memory.boosters - acceptable boosters - putting only upgrade controller for now
-    global.heap.creeps[this.name].task - currently done task -> colelct/upgrade/build 
-
-   */
 
 
 Creep.prototype.roleWorker = function roleWorker() {

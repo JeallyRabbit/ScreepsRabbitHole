@@ -300,6 +300,17 @@ Room.prototype.spawnManager = function spawnManager() {
                     }
                     break;
                 }
+                case C.ROLE_CONTROLLER_HAULER:
+                {
+                    var result = spawn.spawnCreep(carrierBody(energyCap), "CHaulingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_CONTROLLER_HAULER, directions: myDirections, homeRoom: this.name } })
+                    global.heap.rooms[this.name].spawnResult = result
+                    global.heap.rooms[this.name].spawnRole = role
+                    if (result == OK) {
+                        global.heap.rooms[this.name].harvestingQueue.shift()
+
+                    }
+                    break;
+                }
             case C.ROLE_WORKER:
                 {
                     var body = []

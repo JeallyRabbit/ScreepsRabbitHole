@@ -8,6 +8,7 @@ const roleWorker = require('roleWorker')
 const roleFiller = require('roleFiller')
 const roleRepairer = require('roleRepairer')
 const roleHauler = require('roleHauler')
+const roleControllerHauler=require('roleControllerHauler')
 const roleReserver = require('roleReserver')
 const roleRampartRepairer = require('roleRampartRepairer')
 const roleResourceManager = require('roleResourceManager')
@@ -25,6 +26,7 @@ Room.prototype.creepsManager = function creepsManager() {
 
     global.heap.rooms[this.name].haveScout = false;
     global.heap.rooms[this.name].haulersParts = 0;
+    global.heap.rooms[this.name].controllerHauler=undefined
 
 
     if (global.heap.rooms[this.name].doctorId != undefined && Game.getObjectById(global.heap.rooms[this.name].doctorId) == null) {
@@ -144,6 +146,10 @@ Room.prototype.creepsManager = function creepsManager() {
                 }
                 creep.roleHauler()
                 break;
+            case C.ROLE_CONTROLLER_HAULER:
+                global.heap.rooms[creep.room.name].controllerHauler=creep.id
+                creep.roleControllerHauler();
+                break;
             case C.ROLE_RESERVER:
                 creep.roleReserver()
                 global.heap.rooms[creep.memory.homeRoom].harvestingParts += creep.body.length
@@ -250,6 +256,7 @@ Room.prototype.creepsManager = function creepsManager() {
         }
     }
     this.memory.creepsBodyParts = global.heap.rooms[this.name].creepsBodyParts
+
 
     for (q of this.memory.quads) {
         this.operateQuad(q)

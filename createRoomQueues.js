@@ -135,6 +135,16 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             }
 
         }
+
+        if(this.storage.store[RESOURCE_ENERGY] > C.STORAGE_BALANCER_START * 2
+            && global.heap.rooms[this.name].controllerHauler==undefined
+        )
+        {
+            
+            if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_CONTROLLER_HAULER) == undefined) {
+                global.heap.rooms[this.name].harvestingQueue.push(new generalRoomRequest(this.name, C.ROLE_CONTROLLER_HAULER))
+            }
+        }
     }
 
 
