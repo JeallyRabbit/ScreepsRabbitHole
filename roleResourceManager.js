@@ -28,9 +28,8 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
     }
     else {
 
-        if (terminal != undefined && storage != undefined) {
+        if (storage != undefined) {
 
-            
             if (global.heap.rooms[this.room.name].managerTask == undefined) {
 
                 if (this.store.getCapacity(RESOURCE_ENERGY) > this.store.getFreeCapacity(RESOURCE_ENERGY)) {
@@ -41,49 +40,52 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                     global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_LINK
                 }
                 else if (managerLink != undefined && managerLink.store[RESOURCE_ENERGY] > C.LINK_TOP_ENERGY
-                    && this.room.controller.level==8
+                    && this.room.controller.level == 8
                 ) {
 
                     global.heap.rooms[this.room.name].managerTask = C.TASK_TAKE_FROM_LINK;
                 }
-                else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && (storage.store[RESOURCE_ENERGY] < C.STORAGE_ENERGY_BOTTOM || (Memory.fastRclUpgrade != undefined && Memory.fastRclUpgrade == this.room.name))) {
+                else if (terminal != undefined) {
+                    if (terminal != undefined && terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && (storage.store[RESOURCE_ENERGY] < C.STORAGE_ENERGY_BOTTOM || (Memory.fastRclUpgrade != undefined && Memory.fastRclUpgrade == this.room.name))) {
 
-                    global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[RESOURCE_ENERGY]
-                }
-                else if (terminal.store[RESOURCE_ENERGY] < C.TERMINAL_BOTTOM_ENERGY && storage.store[RESOURCE_ENERGY] > C.STORAGE_TOP_ENERGY) {
-
-                    global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[RESOURCE_ENERGY]
-                }
-                else if (isT3BoostInStore(storage.store) != false)//T3 boosts should be only in terminal
-                {
-                    
-                    global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isT3BoostInStore(terminal.store)]
-                }
-                else if (isRawResInStore(storage.store) != false)//Raw Resources should be in terminal
-                {
-
-                    global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isRawResInStore(storage.store)]
-                }
-                else if (isT1orT2InStore(terminal.store) != false)//T1/T2 should be only in storage
-                {
-
-                    global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[isT1orT2InStore(terminal.store)]
-                }
-                else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_TOP_ENERGY) {
-
-                    global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[RESOURCE_ENERGY]
-                }
-                else if (Game.getObjectById(global.heap.rooms[this.room.name].myNuker) != null) {
-                    var nuker = Game.getObjectById(global.heap.rooms[this.room.name].myNuker)
-                    if ((nuker.store[RESOURCE_GHODIUM] < NUKER_GHODIUM_CAPACITY && (storage.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT))
-                    ) {
-                        global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_GHODIUM
+                        global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[RESOURCE_ENERGY]
                     }
-                    else if ((nuker.store[RESOURCE_ENERGY] < NUKER_ENERGY_CAPACITY) && (storage.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT)) {
-                        global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_ENERGY
-                    }
+                    else if (terminal.store[RESOURCE_ENERGY] < C.TERMINAL_BOTTOM_ENERGY && storage.store[RESOURCE_ENERGY] > C.STORAGE_TOP_ENERGY) {
 
+                        global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[RESOURCE_ENERGY]
+                    }
+                    else if (isT3BoostInStore(storage.store) != false)//T3 boosts should be only in terminal
+                    {
+
+                        global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isT3BoostInStore(terminal.store)]
+                    }
+                    else if (isRawResInStore(storage.store) != false)//Raw Resources should be in terminal
+                    {
+
+                        global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isRawResInStore(storage.store)]
+                    }
+                    else if (isT1orT2InStore(terminal.store) != false)//T1/T2 should be only in storage
+                    {
+
+                        global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[isT1orT2InStore(terminal.store)]
+                    }
+                    else if (terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_TOP_ENERGY) {
+
+                        global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[RESOURCE_ENERGY]
+                    }
+                    else if (Game.getObjectById(global.heap.rooms[this.room.name].myNuker) != null) {
+                        var nuker = Game.getObjectById(global.heap.rooms[this.room.name].myNuker)
+                        if ((nuker.store[RESOURCE_GHODIUM] < NUKER_GHODIUM_CAPACITY && (storage.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT))
+                        ) {
+                            global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_GHODIUM
+                        }
+                        else if ((nuker.store[RESOURCE_ENERGY] < NUKER_ENERGY_CAPACITY) && (storage.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT || terminal.store[RESOURCE_ENERGY] > C.MIN_NUKER_RES_AMOUNT)) {
+                            global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_NUKER_ENERGY
+                        }
+
+                    }
                 }
+
 
             }
 
@@ -98,15 +100,15 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
             }
             if (global.heap.rooms[this.room.name].managerTask == C.TASK_FILL_LINK) {
 
-                
+
                 //var amount = Math.min((C.LINK_BOTTOM_ENERGY - managerLink.store[RESOURCE_ENERGY]) + 1,this.store.getFreeCapacity(RESOURCE_ENERGY))
-                
+
                 var amount = managerLink.store.getFreeCapacity(RESOURCE_ENERGY)
                 if (this.store[RESOURCE_ENERGY] == 0) {
-                    
-                    
-                    this.withdraw(storage, RESOURCE_ENERGY,Math.min(this.store.getFreeCapacity(RESOURCE_ENERGY),amount))
-                    
+
+
+                    this.withdraw(storage, RESOURCE_ENERGY, Math.min(this.store.getFreeCapacity(RESOURCE_ENERGY), amount))
+
                     if (this.room.terminal != undefined /*&& this.room.terminal.store[RESOURCE_ENERGY] > C.TERMINAL_BOTTOM_ENERGY */) {
                         this.withdraw(terminal, RESOURCE_ENERGY, amount)
                     }
@@ -143,9 +145,8 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                     if (!(terminal.store[RESOURCE_ENERGY] > C.TERMINAL_TOP_ENERGY && storage.store[RESOURCE_ENERGY] < C.STORAGE_TOP_ENERGY) && Memory.fastRclUpgrade != this.room.name) {
                         global.heap.rooms[this.room.name].managerTask = undefined
                     }
-                    if(storage.store.getFreeCapacity(RESOURCE_ENERGY)==0)
-                    {
-                        this.transfer(managerLink,RESOURCE_ENERGY)
+                    if (storage.store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
+                        this.transfer(managerLink, RESOURCE_ENERGY)
                         global.heap.rooms[this.room.name].managerTask = undefined
                     }
                 }
@@ -198,12 +199,12 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 
 function isT3BoostInStore(store) {
 
-    
+
     for (res in store) {
         if (res == RESOURCE_ENERGY) { continue; }
 
         //console.log(res, " ",C.REVERSED_RESOURCE[res], store[res])
-        if (C.REVERSED_RESOURCE[res].replace("RESOURCE_","").startsWith("CATALYZED")) {
+        if (C.REVERSED_RESOURCE[res].replace("RESOURCE_", "").startsWith("CATALYZED")) {
             return res
         }
     }
