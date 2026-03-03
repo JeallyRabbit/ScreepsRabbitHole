@@ -124,7 +124,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
     }
 
-    if (this.storage != undefined) {
+    if (this.storage != undefined && this.controller.level>=4) {
 
         if (global.heap.rooms[this.name].haulersParts < C.HAULER_REQ_CARRY_PARTS && Game.time % 2 == 0) {
             this.memory._haulersParts = global.heap.rooms[this.name].haulersParts
@@ -480,7 +480,9 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
     }
 
-    if (this.storage != undefined && global.heap.rooms[this.name].resourceManagerId == undefined && Game.time % 3 == 0) {
+    if (this.storage != undefined && global.heap.rooms[this.name].resourceManagerId == undefined && Game.time % 3 == 0
+        && this.controller.level>=4
+    ) {
         if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RESOURCE_MANAGER) == undefined) {
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_RESOURCE_MANAGER))
         }

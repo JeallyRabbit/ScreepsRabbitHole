@@ -23,26 +23,22 @@ const visualize = require('visualize');
 
 
 
-Room.prototype.unclaim = function unclaim()
-{
+Room.prototype.unclaim = function unclaim() {
   for (c in Game.constructionSites) {
-    if(Game.getObjectById(c)!=null && Game.getObjectById(c).room.name==this.name)
-    {
+    if (Game.getObjectById(c) != null && Game.getObjectById(c).room.name == this.name) {
       Game.getObjectById(c).remove()
     }
   }
 
   for (c in Game.creeps) {
-    cr=Game.creeps[c]
-    if(cr!=null && (cr.memory.homeRoom==this.name || cr.memory.targetRoom==this.name))
-    {
+    cr = Game.creeps[c]
+    if (cr != null && (cr.memory.homeRoom == this.name || cr.memory.targetRoom == this.name)) {
       cr.suicide()
     }
   }
 
   for (c in Game.structures) {
-    if(Game.getObjectById(c)!=null && Game.getObjectById(c).room.name==this.name)
-    {
+    if (Game.getObjectById(c) != null && Game.getObjectById(c).room.name == this.name) {
       Game.getObjectById(c).destroy()
     }
   }
@@ -110,7 +106,7 @@ module.exports.loop = function () {
   profiler.wrap(function () {
 
 
-    
+
     var totalStart = Game.cpu.getUsed()
 
     if (Game.time % 8911 == 0) {
@@ -278,17 +274,31 @@ module.exports.loop = function () {
     var minDistanceToFastRclUpgrade = Infinity
 
 
+
+    //Adding manualAvoid to avoidance for traveler
+    if (Memory.manualAvoid != undefined && Memory.manualAvoid.length > 0) {
+      for (r of Memory.manualAvoid) {
+        if (Memory.rooms[r] == undefined) {
+          Memory.rooms[r] = {}
+          Memory.rooms[r].avoid = 1;
+        }
+        else {
+          Memory.rooms[r].avoid = 1;
+        }
+
+      }
+    }
+
     console.log(C.USERNAME)
 
-    
-    
+
+
 
     for (mainRoom of Memory.mainRooms) {
 
-     //console.log("Game.cpu.get Used: ",Game.cpu.getUsed(), " ",Game.cpu.limit)
-      if(Game.cpu.getUsed()>Game.cpu.limit*0.7
-    && Game.cpu.bucket<500)
-      {
+      //console.log("Game.cpu.get Used: ",Game.cpu.getUsed(), " ",Game.cpu.limit)
+      if (Game.cpu.getUsed() > Game.cpu.limit * 0.7
+        && Game.cpu.bucket < 500) {
         c//onsole.log("NOT ENOUGH CPU")
         return
       }
@@ -313,7 +323,7 @@ module.exports.loop = function () {
 
       Game.rooms[mainRoom].creepsManager()
 
-      
+
       //console.log("global.heap.rooms[,", mainRoom, "].creepsBodyParts after creepsManger: ",
       //  global.heap.rooms[mainRoom].creepsBodyParts)
 

@@ -71,7 +71,7 @@ Room.prototype.spawnManager = function spawnManager() {
         }
     }
 
-    if (spawn.spawning != undefined && spawn.spawning.remainingTime < spawn.spawning.needTime - 2) {
+    if (spawn!= null && spawn.spawning != undefined && spawn.spawning.remainingTime < spawn.spawning.needTime - 2) {
         global.heap.rooms[this.name].spawn2Name = spawn.spawning.name
         if (this.memory.spawn3Id != undefined) {
             spawn = Game.getObjectById(this.memory.spawn3Id)
@@ -84,7 +84,10 @@ Room.prototype.spawnManager = function spawnManager() {
     }
     var energyCap = Game.rooms[this.name].energyAvailable
 
-
+    if(spawn==null)
+    {
+        return
+    }
     //check if there is quad that has started spawning in offensiveQueue (members>0)
     // if yes then spawn it before the rest
     // else spawn after other queues
@@ -101,7 +104,7 @@ Room.prototype.spawnManager = function spawnManager() {
         console.log("spawning not first quad member")
         var request = global.heap.rooms[this.name].offensiveQueue[0]
 
-        var blockPos = new RoomPosition(38, 8, this.name)
+        var blockPos = new RoomPosition(38,22, this.name)
         var blockPosWidth = 8
         var blockPosHeight = 1
         this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
@@ -149,14 +152,14 @@ Room.prototype.spawnManager = function spawnManager() {
     }
 
     skippedDefensiveQueue=false
-    if (global.heap.rooms[this.name].defensiveQueue.length > 0 && Game.rooms[this.name].energyAvailable > 300) {
+    if (global.heap.rooms[this.name].defensiveQueue.length > 0 && Game.rooms[this.name].energyAvailable >= 300) {
 
         //console.log("spawning from defensive queue")
         var request = global.heap.rooms[this.name].defensiveQueue[0]
         var role = request.role
         var energyCap = Game.rooms[this.name].energyAvailable
 
-        var blockPos = new RoomPosition(38, 8, this.name)
+        var blockPos = new RoomPosition(38,22, this.name)
         var blockPosWidth = 8
         var blockPosHeight = 1
         this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
@@ -164,8 +167,8 @@ Room.prototype.spawnManager = function spawnManager() {
         this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-        this.visual.text("🛡️ Queue: " + role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
-
+        this.visual.text("🛡️ Queue: " + role+" "+request.roomName, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+        console.log("role: ",role," ",request.roomName)
         switch (role) {
             case C.ROLE_SOLDIER:
                 {
@@ -186,7 +189,7 @@ Room.prototype.spawnManager = function spawnManager() {
                         global.heap.rooms[this.name].defensiveQueue.shift()
                         ifCanSkip=false
                     }
-
+                    console.log("Can skip: ",ifCanSkip)
                     if (!ifCanSkip) {
                         var result = spawn.spawnCreep(soldierBody(energyCap, request.isMelee), 'SadisticRabbit' + '_' + this.name + Game.time, { memory: { role: C.ROLE_SOLDIER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
                         global.heap.rooms[this.name].spawnResult = result
@@ -235,7 +238,7 @@ Room.prototype.spawnManager = function spawnManager() {
         var role = request.role
         var energyCap = Game.rooms[this.name].energyAvailable
 
-        var blockPos = new RoomPosition(38, 8, this.name)
+        var blockPos = new RoomPosition(38,22, this.name)
         var blockPosWidth = 8
         var blockPosHeight = 1
         this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
@@ -337,7 +340,7 @@ Room.prototype.spawnManager = function spawnManager() {
         var role = request.role
         var energyCap = Game.rooms[this.name].energyAvailable
 
-        var blockPos = new RoomPosition(38, 8, this.name)
+        var blockPos = new RoomPosition(38,22, this.name)
         var blockPosWidth = 8
         var blockPosHeight = 1
         this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })

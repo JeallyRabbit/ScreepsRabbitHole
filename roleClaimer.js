@@ -44,7 +44,7 @@ Creep.prototype.roleClaimer = function roleClaimer() {
         }
         else { // not in target room - go claim
             roomsToAvoid= (Memory.manualAvoid!= undefined ? Memory.manualAvoid: []);
-            this.travelTo(new RoomPosition(25,25,this.memory.targetRoom), { range:21, avoidHostile: true, avoidCreeps: true, avoidSk: true, avoidHostileRooms: true, avoidRooms: roomsToAvoid,maxOps: 40000,preferHighway: true})
+            this.travelTo(new RoomPosition(25,25,this.memory.targetRoom), { range:21, avoidHostile: true, avoidCreeps: true, avoidSk: true,preferHighway: true})
         }
     }
     else {

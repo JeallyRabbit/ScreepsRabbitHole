@@ -9,7 +9,7 @@ const C=require('constants');
 
 
 
-Creep.prototype.roleColonizer = function roleColonizer() {
+Creep.prototype.roleColonizer = function roleColonizer() { 
 
     
     if(this.room.name!=this.memory.targetRoom)

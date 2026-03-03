@@ -235,7 +235,7 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
                     avoid.push(this.room.storage)
                 }
                 if (avoid.length > 0) {
-                    //this.fleeFrom(avoid, 3);
+                    this.fleeFrom(avoid, 3);
                 }
                 else {
                     var spawn1=Game.getObjectById(this.room.memory.spawnId)
