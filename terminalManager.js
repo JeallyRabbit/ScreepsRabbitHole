@@ -214,6 +214,7 @@ Room.prototype.terminalManager = function terminalManager() {
 
     
     //Sharing energy to fastRclUpgrade
+    /* temporaly off
     if (Memory.fastRclUpgrade != undefined && Memory.fastRclUpgrade != this.name
         && global.heap.rooms[this.name].building==false
         && this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>C.STORAGE_ENERGY_BOTTOM
@@ -223,7 +224,9 @@ Room.prototype.terminalManager = function terminalManager() {
             return;
         }
     }
+        */
 
+    //buying energy
     if (this.terminal.store[RESOURCE_ENERGY] < C.TERMINAL_BOTTOM_ENERGY
         && this.storage.store[RESOURCE_ENERGY]<C.STORAGE_ENERGY_BUY_BOTTOM
     ) {

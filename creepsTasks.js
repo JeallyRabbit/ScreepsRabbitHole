@@ -821,15 +821,25 @@ Creep.prototype.taskUpgrade = function taskUpgrade() {
         global.heap.creeps[this.name].task = undefined
         return -1;
     }
-    if (!this.pos.isNearTo(this.room.controller)) {
-        //this might be wrong
-        // this.travelTo(this.room.controller, { maxStuck: 10 })
-    }
     var upgradeResult = this.upgradeController(this.room.controller);
     //this.travelTo(this.room.controller, { reusePath: 17,maxRooms:1 });
     if (upgradeResult == ERR_NOT_IN_RANGE || true) {
         this.travelTo(this.room.controller, { reusePath: 17, maxRooms: 1 });
     }
+
+    //Repairing ramparts on the road to controller
+    if (global.heap.rooms[this.room.name].myRamparts != undefined) {
+                for (r of global.heap.rooms[this.room.name].myRamparts) {
+                    var ra = Game.getObjectById(r)
+                    if (ra != null && ra.hits < C.RAMPART_MIN_WORKER_HITS
+                        && this.pos.getRangeTo(ra.pos.x,ra.pos.y)<4
+                    ) {
+                        //aux.push(ra)
+                        this.repair(ra)
+                        break;
+                    }
+                }
+            }
 
     //Sharing energy
     if (this.store[RESOURCE_ENERGY] > 0 && global.heap.rooms[this.memory.homeRoom].myWorkers != undefined && global.heap.rooms[this.memory.homeRoom].myWorkers.length > 0
@@ -951,9 +961,11 @@ Creep.prototype.taskBuild = function taskBuild() {
                 for (r of global.heap.rooms[this.room.name].myRamparts) {
                     var ra = Game.getObjectById(r)
                     if (ra != null && ra.hits < C.RAMPART_MIN_WORKER_HITS
-                        && this.pos.getRangeTo(ra.pos.x,ra.pos.y)<3
+                        && this.pos.getRangeTo(ra.pos.x,ra.pos.y)<4
                     ) {
-                        aux.push(ra)
+                        //aux.push(ra)
+                        this.repair(ra)
+                        break;
                     }
                 }
             }
