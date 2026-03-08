@@ -217,7 +217,7 @@ Room.prototype.terminalManager = function terminalManager() {
         && this.terminal != undefined && this.terminal.store[RESOURCE_ENERGY] > C.TERMINAL_BOTTOM_ENERGY
     ) {
         var sendCost = Game.market.calcTransactionCost(C.RESOURCE_SHARE_AMOUNT, Memory.fastRclUpgrade, this.name)
-        if (sendCost < C.RESOURCE_SHARE_AMOUNT) {
+        if (sendCost < C.RESOURCE_SHARE_AMOUNT*2) {
             if (this.terminal.send(RESOURCE_ENERGY, C.RESOURCE_SHARE_AMOUNT, Memory.fastRclUpgrade) == OK) {
                 return;
             }
