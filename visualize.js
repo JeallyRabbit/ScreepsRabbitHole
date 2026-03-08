@@ -433,7 +433,17 @@ Room.prototype.visualize = function visualizeroomManager() {
     this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
     this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    this.visual.text("RampRep: Parts: " + global.heap.rooms[this.name].rampartRepairersPower + "/" + (Math.round((global.heap.rooms[this.name].requiredRampartsRepairersPower) * 100) / 100), blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+    
+    var text="RampRep: Parts: " + global.heap.rooms[this.name].rampartRepairersPower + "/" + (Math.round((global.heap.rooms[this.name].requiredRampartsRepairersPower) * 100) / 100)
+
+    if(global.heap.rooms[this.name].rampartsRepairerStop==true)
+    {
+        text+=" 🟥"
+    }
+    else{
+        text+=" 🟩"
+    }
+    this.visual.text(text, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
 
 
     //Mineral Carrier

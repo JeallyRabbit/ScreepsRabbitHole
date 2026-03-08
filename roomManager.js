@@ -21,7 +21,7 @@ Room.prototype.roomManager = function roomManager() {
 
     global.heap.rooms[this.name].myCreeps = []
     global.heap.rooms[this.name].hostiles = []
-    global.heap.rooms[this.name].hostileHealPower = 0;
+    global.heap.rooms[this.name].hostileHealPower = 1;
     global.heap.rooms[this.name].hostileAttackPower = 0;
     global.heap.rooms[this.name].hostileRangedAttackPower = 0;
     global.heap.rooms[this.name].hostileStructures = []
@@ -75,6 +75,10 @@ Room.prototype.roomManager = function roomManager() {
         //If it is one of main rooms 
 
 
+        //that high value is needed to properly find minimum value among myRamparts
+            global.heap.rooms[this.name].minRampartHits=RAMPART_HITS_MAX[this.controller.level]
+
+
         // Resetting roomsToScan after 2nd and 3rd spawns are build
         //if (Game.time & 2341 == 0 || true) {
             if (this.controller.level >= 7) {
@@ -96,6 +100,10 @@ Room.prototype.roomManager = function roomManager() {
                 }
             }
         //}
+
+
+
+        
 
 
 
@@ -424,7 +432,6 @@ Room.prototype.roomManager = function roomManager() {
 
         if (global.heap.isSomeRoomPlanning == false) {
 
-            // console.log("Room: ", this.name, " entered building/planning base")
             //this.visualizeBase() // debugging
             // assuring that only one room in a tick would go into room building
             if (this.memory.finishedPlanning != true) {
@@ -517,7 +524,6 @@ Room.prototype.roomManager = function roomManager() {
                     this.memory.finishedPlanning = undefined
                 }
                 if (Game.time % 56 == 0) {
-                    //console.log("room: ",this.name," is building from list")
                     //debugging condition
                     if (this.controller.level != 8) {
                         this.buildRoom(this.memory.variationToBuild)
@@ -652,7 +658,6 @@ Room.prototype.roomManager = function roomManager() {
     })
 
     if (hostiles.length > 0) {
-        //console.log("Adding hostiles in ", this.name)
         for (a of hostiles) {
             global.heap.rooms[this.name].hostiles.push(a)
             global.heap.rooms[this.name].hostileHealPower += _.filter(a.body, { type: HEAL }).length * HEAL_POWER
@@ -705,6 +710,10 @@ Room.prototype.roomManager = function roomManager() {
 
 
         if (str.my && Memory.mainRooms.includes(this.name)) {
+
+
+            
+
             this.memory.myStructures.push(str.id)
 
             switch (role) {
@@ -768,6 +777,10 @@ Room.prototype.roomManager = function roomManager() {
                     break;
                 case STRUCTURE_RAMPART:
                     global.heap.rooms[this.name].myRamparts.push(str.id)
+                    if(str.hits<global.heap.rooms[this.name].minRampartHits)
+                    {
+                        global.heap.rooms[this.name].minRampartHits=str.hits
+                    }
                 case STRUCTURE_SPAWN:
                     if (str.name != undefined && str.name.endsWith('1')) {
                         this.memory.spawnPos = str.pos
@@ -808,16 +821,24 @@ Room.prototype.roomManager = function roomManager() {
             }
 
         }
+
+
+        
+
+
+
     }
 
 
 
-
+    
 
 
 
     if (Memory.mainRooms.includes(this.name))//again checking if room is main room
     {
+
+        
 
         //calculating ramparts amount
         global.heap.rooms[this.name].rampartsAmount = global.heap.rooms[this.name].myRamparts.length
@@ -840,6 +861,20 @@ Room.prototype.roomManager = function roomManager() {
         }
         else {
             global.heap.rooms[this.name].requiredRampartsRepairersPower = 0
+        }
+
+        //check to limit ramparts below rcl8
+        if(this.controller.level<8)
+        {
+
+            if(global.heap.rooms[this.name].minRampartHits>C.RAMPARTS_HITS_REPAIR_STOP)
+            {
+                global.heap.rooms[this.name].rampartsRepairerStop=true
+                global.heap.rooms[this.name].requiredRampartsRepairersPower=0;
+            }
+            else if(global.heap.rooms[this.name].minRampartHits<C.RAMPARTS_HITS_REPAIR_START){
+                global.heap.rooms[this.name].rampartsRepairerStop=false
+            }
         }
 
 

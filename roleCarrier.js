@@ -285,7 +285,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         global.heap.creeps[this.name].maxContainer = undefined;
                         if (this.pickup(Game.getObjectById(this.memory.resourceToCollect)) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
-                            this.travelTo(Game.getObjectById(this.memory.resourceToCollect), { obstacles: fillersPos })
+                            this.travelTo(Game.getObjectById(this.memory.resourceToCollect), { obstacles: fillersPos,ignoreCreeps: false })
                         }
                         else if (Game.getObjectById(this.memory.resourceToCollect) == null) {
                             this.memory.resourceToCollect = undefined
@@ -297,7 +297,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     return;
                 }
                 else {
-                    this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { obstacles: fillersPos })
+                    this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { obstacles: fillersPos,ignoreCreeps: false })
                 }
             }
 

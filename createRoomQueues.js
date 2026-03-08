@@ -482,7 +482,8 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             else if (this.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START) {
                 energyStartCondition = true
             }
-            if (energyStartCondition == true && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RAMPART_REPAIRER) == undefined) {
+            if (energyStartCondition == true 
+                && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RAMPART_REPAIRER) == undefined) {
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_RAMPART_REPAIRER))
             }
 

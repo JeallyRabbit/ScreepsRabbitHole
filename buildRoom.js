@@ -148,6 +148,10 @@ Room.prototype.planRoadToTarget = function planRoadToTarget(roomCM, target, rcl,
 
     for (let i = 0; i < 50; i++) {
         for (let j = 0; j < 50; j++) {
+            if(this.memory.roomPlan==undefined)
+            {
+                this.memory.roomPlan= new Array(50).fill(null).map(() => new Array(50).fill(0));
+            }
             if (this.memory.roomPlan[i][j] == STRUCTURE_ROAD) {
                 roomCM.set(i, j, 0);
             }
@@ -1469,6 +1473,10 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
     }
     else if (stage == 1) {
 
+        if(this.memory.buildingList==undefined)
+        {
+            this.memory.buildingList=[];
+        }
 
         let roomCM1 = PathFinder.CostMatrix.deserialize(this.memory.roomCM);
 
