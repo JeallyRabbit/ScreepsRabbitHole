@@ -308,7 +308,7 @@ module.exports.loop = function () {
       var start = Game.cpu.getUsed()
 
       if (Game.rooms[mainRoom].memory.distanceToOthers != undefined && Game.rooms[mainRoom].memory.distanceToOthers < minDistanceToFastRclUpgrade
-        && Game.rooms[mainRoom].storage != undefined && Game.rooms[mainRoom].terminal != undefined && Game.rooms[mainRoom].controller.level < 8
+        && Game.rooms[mainRoom].storage != undefined && Game.rooms[mainRoom].terminal != undefined && Game.rooms[mainRoom].controller.level>=6 && Game.rooms[mainRoom].controller.level < 8
         && Game.rooms[mainRoom].memory.distanceToOthers != 0
       ) {
         minDistanceToFastRclUpgrade = Game.rooms[mainRoom].memory.distanceToOthers;
