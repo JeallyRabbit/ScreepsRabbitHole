@@ -418,7 +418,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     for (let res in this.store) {
                         var transferResut = this.transfer(Game.getObjectById(this.memory.homeContainer), res);
                         if (transferResut == ERR_NOT_IN_RANGE) {
-                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { obstacles: fillersPos, ignoreCreeps: true })
+                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { obstacles: fillersPos, ignoreCreeps: false })
                             break;
                         }
                         else if (transferResut == OK) {
@@ -440,7 +440,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         }
                         if (transferResut == ERR_NOT_IN_RANGE) {
 
-                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { avoidSk: true, obstacles: fillersPos })
+                            this.travelTo(Game.getObjectById(this.memory.homeContainer), { avoidSk: true, obstacles: fillersPos,ignoreCreeps: false })
 
                             break;
                         }
