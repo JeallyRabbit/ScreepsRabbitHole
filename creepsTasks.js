@@ -20,6 +20,7 @@ Creep.prototype.processBoostRequest = function processBoostRequest() {
     this.say("DBS")
     if (global.heap.rooms[this.room.name].boostingRequests.length > 0) {
         this.say("DBS1")
+        global.heap.rooms[this.room.name].doctorTask = C.TASK_BOOST_CREEP
         for (r of global.heap.rooms[this.room.name].boostingRequests) {
 
             this.say("DBS1")
@@ -33,13 +34,18 @@ Creep.prototype.processBoostRequest = function processBoostRequest() {
             if (boostingLab.store.getFreeCapacity(r.resource) + boostingLab.store[r.resource] < r.amount) {
                 this.taskClearBoostingLab(boostingLab, [r.resource, RESOURCE_ENERGY])
                 this.say("DBS2")
+                return
             }
 
             if (this.store[r.resource] < r.amount && this.room.terminal.store[r.resource] > 0) {
-                this.say("DB3.1")
-                if (this.withdraw(this.room.terminal,r.resource,Math.min(r.amount,this.store.getFreeCapacity(r.amount))) == ERR_NOT_IN_RANGE) {
+                this.say("DB"+r.amount)
+                if (this.withdraw(this.room.terminal,r.resource,r.amount) == ERR_NOT_IN_RANGE) {
                     this.travelTo(this.room.terminal)
                     this.say("DB3")
+                }
+                else if(this.withdraw(this.room.terminal,r.resource,r.amount) == OK)
+                {
+                    global.heap.rooms[this.room.name].doctorTask = C.TASK_BOOST_CREEP
                 }
             }
             else {
@@ -48,12 +54,11 @@ Creep.prototype.processBoostRequest = function processBoostRequest() {
                     this.travelTo(boostingLab)
                 }
             }
-
-
-
-
             break
         }
+    }
+    else{
+        global.heap.rooms[this.room.name].doctorTask = undefined
     }
 }
 
@@ -74,6 +79,11 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
             
         }
 
+        if(Memory.fastRclUpgrade!=undefined && Memory.fastRclUpgrade!=this.memory.homeRoom && b.res=="XGH2O")
+        {//skipping upgrade boost if focusing on upgrading other room
+            boostedBodyTypes++;
+        }
+
     }
     
 
@@ -85,6 +95,8 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
     }
     
     /// end of check
+
+    
 
     global.heap.creeps[this.name].isBoosted=false
 
