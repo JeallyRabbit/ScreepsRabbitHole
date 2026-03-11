@@ -719,7 +719,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
                 var targetDeposit = global.heap.creeps[this.name].deposit
                 this.memory._targetDeposit = targetDeposit
                 if (this.withdraw(targetDeposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    this.travelTo(targetDeposit, { maxRooms: 1 });
+                    this.travelTo(targetDeposit, { maxRooms: 1, ignoreCreeps:false });
                     this.memory._targetDeposit = targetDeposit
 
                 }
@@ -735,7 +735,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
             if (global.heap.creeps[this.name] != undefined &&
                 global.heap.creeps[this.name].deposit != undefined
                 && this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                this.travelTo(global.heap.creeps[this.name].deposit, { maxRooms: 1 });
+                this.travelTo(global.heap.creeps[this.name].deposit, { maxRooms: 1, ignoreCreeps:false });
                 this.memory._targetDeposit = global.heap.creeps[this.name].deposit
 
             }
@@ -767,7 +767,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
 
             if (this.pickup(global.heap.creeps[this.name].closestDroppedEnergy) == ERR_NOT_IN_RANGE) {
                 // Move to it
-                this.travelTo(global.heap.creeps[this.name].closestDroppedEnergy, { maxRooms: 1 });
+                this.travelTo(global.heap.creeps[this.name].closestDroppedEnergy, { maxRooms: 1, ignoreCreeps:false });
                 //move_avoid_hostile(creep,closestDroppedEnergy.pos);
             }
             else if (this.pickup(global.heap.creeps[this.name].closestDroppedEnergy) == OK) {
@@ -782,7 +782,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
                         if (this.room.memory.mineralId != undefined &&
                             Game.getObjectById(this.room.memory.mineralId) != null
                         ) {
-                            this.travelTo(Game.getObjectById(this.room.memory.mineralId), { range: 1 })
+                            this.travelTo(Game.getObjectById(this.room.memory.mineralId), { range: 1, ignoreCreeps:false })
                         }
 
                         awayFromSpawn = false
@@ -824,7 +824,7 @@ Creep.prototype.taskUpgrade = function taskUpgrade() {
     var upgradeResult = this.upgradeController(this.room.controller);
     //this.travelTo(this.room.controller, { reusePath: 17,maxRooms:1 });
     if (upgradeResult == ERR_NOT_IN_RANGE || true) {
-        this.travelTo(this.room.controller, { reusePath: 17, maxRooms: 1 });
+        this.travelTo(this.room.controller, { reusePath: 17, maxRooms: 1, ignoreCreeps:false });
     }
 
     //Repairing ramparts on the road to controller
@@ -997,7 +997,7 @@ Creep.prototype.taskBuild = function taskBuild() {
 
 
                 if (this.build(closest) == ERR_NOT_IN_RANGE || this.repair(closest) == ERR_NOT_IN_RANGE) {
-                    this.travelTo(closest, { range: 2, maxRooms: 1 })
+                    this.travelTo(closest, { range: 2, maxRooms: 1, ignoreCreeps:false})
                 }
                 //this.travelTo(closest, { range: 2, maxRooms: 1 })
                 return closest
