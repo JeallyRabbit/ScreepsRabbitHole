@@ -82,6 +82,12 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
         if(Memory.fastRclUpgrade!=undefined && Memory.fastRclUpgrade!=this.memory.homeRoom && b.res=="XGH2O")
         {//skipping upgrade boost if focusing on upgrading other room
             boostedBodyTypes++;
+
+            var index=global.heap.rooms[this.memory.homeRoom].boostingRequests.find(obj => { return obj.creepId == this.id && obj.resource==b.res})
+            if(index != undefined)
+            {
+                global.heap.rooms[this.memory.homeRoom].boostingRequests.splice(index, 1)
+            }
         }
 
     }
@@ -91,6 +97,8 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
     {
         this.memory.isBoosted=true
         global.heap.creeps[this.name].isBoosted=true
+
+        
         return -4
     }
     
