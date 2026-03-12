@@ -62,9 +62,10 @@ Creep.prototype.roleDoctor = function roleDoctor() {
             res1 = (global.heap.rooms[this.room.name].reaction[0] != undefined) ? global.heap.rooms[this.room.name].reaction[0] : undefined;
             res2 = (global.heap.rooms[this.room.name].reaction[0] != undefined) ? global.heap.rooms[this.room.name].reaction[1] : undefined;
         }
-
+        
         if (this.store.getCapacity() != this.store.getFreeCapacity(RESOURCE_ENERGY)
-            && (res1 != undefined && this.store[res1] == 0 && res2 != undefined && this.store[res2] == 0) // this line might be wrong
+            && (res1 != undefined && this.store[res1] == 0 && res2 != undefined && this.store[res2] == 0
+        &&  global.heap.rooms[this.room.name].doctorTask != C.TASK_BOOST_CREEP) // this line might be wrong
         ) {
             this.say("1")
             global.heap.rooms[this.room.name].doctorTask = C.TASK_CLEAR_CREEP
@@ -111,11 +112,14 @@ Creep.prototype.roleDoctor = function roleDoctor() {
             if (global.heap.rooms[this.room.name].boostingRequests.length > 0) {
                 this.say("3")
                 global.heap.rooms[this.room.name].doctorTask = C.TASK_BOOST_CREEP
-                return
+                
             }
-
-            this.say("fill in")
-            this.taskFillInputLabsMineral(inputLab1, inputLab2)
+            else
+            {
+                this.say("fill in")
+                this.taskFillInputLabsMineral(inputLab1, inputLab2)
+            }
+            
         }
         else if (global.heap.rooms[this.room.name].doctorTask == C.TASK_CLEAR_INPUT_LABS) {
             this.taskClearInputLabs(inputLab1, inputLab2)

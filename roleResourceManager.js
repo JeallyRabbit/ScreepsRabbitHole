@@ -57,7 +57,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                     else if (isT3BoostInStore(storage.store) != false)//T3 boosts should be only in terminal
                     {
 
-                        global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isT3BoostInStore(terminal.store)]
+                        global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[isT3BoostInStore(storage.store)]
                     }
                     else if (isRawResInStore(storage.store) != false)//Raw Resources should be in terminal
                     {

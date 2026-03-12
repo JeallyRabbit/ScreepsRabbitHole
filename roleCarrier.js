@@ -164,7 +164,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
             ) {
                 
                 const destination = new RoomPosition(25, 25, this.memory.targetRoom);
-                this.travelTo(destination, { range: 22 })
+                this.travelTo(destination, { range: 22,ignoreCreeps: false })
                 /*
                 if(this.memory.resourceToCollect==undefined
                     || global.heap.creeps[this.name].maxContainer==undefined
@@ -405,7 +405,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     }
                 }
                 else {
-                    this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom),{ range: 5})
+                    this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom),{ range: 5,ignoreCreeps: false})
                 }
 
                 //}
