@@ -738,7 +738,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
                 var targetDeposit = global.heap.creeps[this.name].deposit
                 this.memory._targetDeposit = targetDeposit
                 if (this.withdraw(targetDeposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    this.travelTo(targetDeposit, { maxRooms: 1, ignoreCreeps:false });
+                    this.travelTo(targetDeposit, { maxRooms: 1  });
                     this.memory._targetDeposit = targetDeposit
 
                 }
@@ -754,7 +754,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
             if (global.heap.creeps[this.name] != undefined &&
                 global.heap.creeps[this.name].deposit != undefined
                 && this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                this.travelTo(global.heap.creeps[this.name].deposit, { maxRooms: 1, ignoreCreeps:false });
+                this.travelTo(global.heap.creeps[this.name].deposit, { maxRooms: 1  });
                 this.memory._targetDeposit = global.heap.creeps[this.name].deposit
 
             }
@@ -786,7 +786,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
 
             if (this.pickup(global.heap.creeps[this.name].closestDroppedEnergy) == ERR_NOT_IN_RANGE) {
                 // Move to it
-                this.travelTo(global.heap.creeps[this.name].closestDroppedEnergy, { maxRooms: 1, ignoreCreeps:false });
+                this.travelTo(global.heap.creeps[this.name].closestDroppedEnergy, { maxRooms: 1  });
                 //move_avoid_hostile(creep,closestDroppedEnergy.pos);
             }
             else if (this.pickup(global.heap.creeps[this.name].closestDroppedEnergy) == OK) {
@@ -801,7 +801,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
                         if (this.room.memory.mineralId != undefined &&
                             Game.getObjectById(this.room.memory.mineralId) != null
                         ) {
-                            this.travelTo(Game.getObjectById(this.room.memory.mineralId), { range: 1, ignoreCreeps:false })
+                            this.travelTo(Game.getObjectById(this.room.memory.mineralId), { range: 1  })
                         }
 
                         awayFromSpawn = false
@@ -843,7 +843,7 @@ Creep.prototype.taskUpgrade = function taskUpgrade() {
     var upgradeResult = this.upgradeController(this.room.controller);
     //this.travelTo(this.room.controller, { reusePath: 17,maxRooms:1 });
     if (upgradeResult == ERR_NOT_IN_RANGE || true) {
-        this.travelTo(this.room.controller, { reusePath: 17, maxRooms: 1, ignoreCreeps:false });
+        this.travelTo(this.room.controller, { reusePath: 17, maxRooms: 1  });
     }
 
     //Repairing ramparts on the road to controller
@@ -998,7 +998,7 @@ Creep.prototype.taskBuild = function taskBuild() {
 
         if (toFocus != null) {
             if (this.build(toFocus) == ERR_NOT_IN_RANGE || this.repair(toFocus) == ERR_NOT_IN_RANGE) {
-                this.travelTo(toFocus, { range: 1, maxRooms: 1, ignoreCreeps: false })
+                this.travelTo(toFocus, { range: 1, maxRooms: 1  })
                 return
             }
             else if (this.build(toFocus) == ERR_INVALID_TARGET) {
@@ -1016,7 +1016,7 @@ Creep.prototype.taskBuild = function taskBuild() {
 
 
                 if (this.build(closest) == ERR_NOT_IN_RANGE || this.repair(closest) == ERR_NOT_IN_RANGE) {
-                    this.travelTo(closest, { range: 2, maxRooms: 1, ignoreCreeps:false})
+                    this.travelTo(closest, { range: 2, maxRooms: 1 })
                 }
                 //this.travelTo(closest, { range: 2, maxRooms: 1 })
                 return closest
@@ -1054,7 +1054,7 @@ Creep.prototype.taskHarvest = function taskHarvest() {
 
     if (global.heap.creeps[this.name].targetSource != undefined) {
         if (Game.getObjectById(global.heap.creeps[this.name].targetSource) != null && this.harvest(Game.getObjectById(global.heap.creeps[this.name].targetSource)) == ERR_NOT_IN_RANGE) {
-            this.travelTo(Game.getObjectById(global.heap.creeps[this.name].targetSource), { ignoreCreeps: false, maxRooms: 1 })
+            this.travelTo(Game.getObjectById(global.heap.creeps[this.name].targetSource), {  maxRooms: 1 })
         }
     }
 
