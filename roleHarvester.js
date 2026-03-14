@@ -152,7 +152,7 @@ Creep.prototype.roleHarvester = function roleHarvester() {
         }
         if (Game.rooms[this.memory.targetRoom] == undefined) {
             const destination = new RoomPosition(25, 25, this.memory.targetRoom); // Replace with your destination coordinates and room name
-            this.travelTo(destination,{ ignoreCreeps: false});
+            this.travelTo(destination);
         }
 
     }
