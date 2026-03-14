@@ -58,7 +58,7 @@ Creep.prototype.roleSoldier = function roleSoldier() {
 
             if (this.rangedAttack(targetCreep) == ERR_NOT_IN_RANGE) {
 
-                this.travelTo(targetCreep.pos, { maxRooms: 1, avoidSk: true  });
+                this.travelTo(targetCreep.pos, { maxRooms: 1});
             }
 
             if (this.memory.isMelee == false) {
@@ -86,7 +86,7 @@ Creep.prototype.roleSoldier = function roleSoldier() {
 
             if (this.memory.isMelee == true) {
                 if (this.attack(global.heap.creeps[this.name].targetStructure) == ERR_NOT_IN_RANGE) {
-                    this.travelTo(global.heap.creeps[this.name].targetStructure, { maxRooms: 1 , reusePath: 11, range: 1 });
+                    this.travelTo(global.heap.creeps[this.name].targetStructure, { maxRooms: 1, range: 1 });
                 }
 
             }
@@ -100,7 +100,7 @@ Creep.prototype.roleSoldier = function roleSoldier() {
             }
         }
         else{
-            this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { reusePath: 25 , range: 22 });
+            this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { range: 22 });
         }
     }
     else {
@@ -109,7 +109,7 @@ Creep.prototype.roleSoldier = function roleSoldier() {
             this.rangedMassAttack()
             this.heal(this)
         }
-        this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { reusePath: 25 , range: 22 });
+        this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), {range: 22 });
 
     }
 

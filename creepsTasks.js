@@ -400,17 +400,7 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
 
 
 
-        //creep have minerals in store or first mineral is already in lab and second in store
-        /*if ((this.store[res1] > 0 && this.store[res2] > 0)
-            || (this.store[res2] > 0 && in1.store[res1] > 0)) 
-        {
-            if (this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) {
-                this.travelTo(in1)
-            }
-            else if (this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANGE) {
-                this.travelTo(in2)
-            }
-        }*/
+        
         //this.say((this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) || (this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANGE))
         if (this.transfer(in1, res1) == ERR_INVALID_TARGET || this.transfer(in2, res2) == ERR_INVALID_TARGET) {
             global.heap.rooms[this.room.name].doctorTask = undefined
@@ -562,7 +552,7 @@ Creep.prototype.taskFillTowers = function taskFillTowers() {
     if (this.memory.targetTower != undefined) {
         if (this.transfer(Game.getObjectById(this.memory.targetTower), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
 
-            this.travelTo(Game.getObjectById(this.memory.targetTower), { reusePath: 11 })
+            this.travelTo(Game.getObjectById(this.memory.targetTower))
         }
     }
 
@@ -601,7 +591,7 @@ Creep.prototype.taskRepairRamparts = function taskRepairRamparts() {
 
         if (Game.getObjectById(this.memory.minRampartId) != null) {
             if (this.repair(Game.getObjectById(this.memory.minRampartId)) == ERR_NOT_IN_RANGE) {
-                this.travelTo(Game.getObjectById(this.memory.minRampartId), { reusePath: 11 })
+                this.travelTo(Game.getObjectById(this.memory.minRampartId))
             }
         }
 
@@ -841,9 +831,8 @@ Creep.prototype.taskUpgrade = function taskUpgrade() {
         return -1;
     }
     var upgradeResult = this.upgradeController(this.room.controller);
-    //this.travelTo(this.room.controller, { reusePath: 17,maxRooms:1 });
     if (upgradeResult == ERR_NOT_IN_RANGE || true) {
-        this.travelTo(this.room.controller, { reusePath: 17, maxRooms: 1  });
+        this.travelTo(this.room.controller, { maxRooms: 1  });
     }
 
     //Repairing ramparts on the road to controller
@@ -1005,7 +994,6 @@ Creep.prototype.taskBuild = function taskBuild() {
                 //this.move(Math.floor(Math.random() * (8 - 1 + 1)) + 1)
                 return null;
             }
-            //this.travelTo(toFocus, { range: 1, maxRooms: 1 })
 
             return toFocus;
         }
@@ -1018,7 +1006,6 @@ Creep.prototype.taskBuild = function taskBuild() {
                 if (this.build(closest) == ERR_NOT_IN_RANGE || this.repair(closest) == ERR_NOT_IN_RANGE) {
                     this.travelTo(closest, { range: 2, maxRooms: 1 })
                 }
-                //this.travelTo(closest, { range: 2, maxRooms: 1 })
                 return closest
             }
 

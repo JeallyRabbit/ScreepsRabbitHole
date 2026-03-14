@@ -18,7 +18,7 @@ Creep.prototype.roleClaimer = function roleClaimer() {
                 claimResult=this.claimController(this.room.controller)
                 this.say(claimResult)
                 if (claimResult == ERR_NOT_IN_RANGE) {
-                    this.travelTo(this.room.controller, { reusePath: 15, avoidSk: true, maxRooms: 1 });
+                    this.travelTo(this.room.controller, { maxRooms: 1 });
                 }
                 if (claimResult == ERR_INVALID_TARGET &&
                     (this.room.controller.owner != undefined && this.room.controller.owner.username != C.USERNAME )
@@ -39,12 +39,12 @@ Creep.prototype.roleClaimer = function roleClaimer() {
                 }
 
             }
-            this.travelTo(this.room.controller, { reusePath: 15, maxRooms: 1 });
+            this.travelTo(this.room.controller, {maxRooms: 1 });
             //this.move(LEFT)
         }
         else { // not in target room - go claim
             roomsToAvoid= (Memory.manualAvoid!= undefined ? Memory.manualAvoid: []);
-            this.travelTo(new RoomPosition(25,25,this.memory.targetRoom), { range:21, avoidHostile: true, avoidCreeps: true, avoidSk: true,preferHighway: true})
+            this.travelTo(new RoomPosition(25,25,this.memory.targetRoom), { allowHostile: true, preferHighway: true})
         }
     }
     else {

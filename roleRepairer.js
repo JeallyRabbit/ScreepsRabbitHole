@@ -82,14 +82,14 @@ Creep.prototype.roleRepairer = function roleRepairer() {
                         if (this.pos.findClosestByPath([targetStructure, toBuild])!=null && this.pos.findClosestByPath([targetStructure, toBuild]).id == targetStructure.id) {
                             //repairing
                             if (this.repair(targetStructure) == ERR_NOT_IN_RANGE) {
-                                this.travelTo(targetStructure, { reusePath: 17, maxRooms: 1 });
+                                this.travelTo(targetStructure, { maxRooms: 1 });
                                 return
                             }
                         }
                         else {
                             //building
                             if (this.build(toBuild) == ERR_NOT_IN_RANGE) {
-                                this.travelTo(toBuild, { reusePath: 17, maxRooms: 1 });
+                                this.travelTo(toBuild, { maxRooms: 1 });
                                 return
                             }
 
@@ -99,14 +99,14 @@ Creep.prototype.roleRepairer = function roleRepairer() {
                         //repairing
                         this.say("rep2")
                         if (this.repair(targetStructure) == ERR_NOT_IN_RANGE) {
-                            this.travelTo(targetStructure, { reusePath: 17, maxRooms: 1 });
+                            this.travelTo(targetStructure, {maxRooms: 1 });
                             return
                         }
                     }
                     else if (toBuild != null) {
                         //building
                         if (this.build(toBuild) == ERR_NOT_IN_RANGE) {
-                            this.travelTo(toBuild, { reusePath: 17, maxRooms: 1 });
+                            this.travelTo(toBuild, {maxRooms: 1 });
                             return
                         }
                     }

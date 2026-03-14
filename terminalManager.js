@@ -147,6 +147,21 @@ Room.prototype.terminalManager = function terminalManager() {
         }
     }
 
+    //sending XGH2O to Memory.fastRclUpgrade -> upgrade boost
+    if(Memory.fastRclUpgrade!=undefined && Memory.fastRclUpgrade!=this.name)
+    {
+        if(this.terminal!=undefined && this.terminal.store["XGH2O"]>0)
+        {
+            if(this.terminal.send("XGH2O",this.terminal.store["XGH2O"],Memory.fastRclUpgrade)==-6)
+            {
+                if(this.terminal.send("XGH2O",C.RESOURCE_SHARE_AMOUNT/5,Memory.fastRclUpgrade)==OK)
+                {
+                    return;
+                }
+            }
+        }
+    }
+
     //Sharing raw resources
     var resourceToShare = null
     var roomToShareWith = null
