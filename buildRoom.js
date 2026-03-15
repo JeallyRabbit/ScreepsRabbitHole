@@ -389,7 +389,7 @@ Room.prototype.planExtensionStamp = function planExtensionStamp(roomCM, rcl, spa
     for (i = 0; i < 50; i++) {
         for (let j = 0; j < 50; j++) {
             if (distanceCM.get(i, j) >= 2 && floodCM.get(i, j) < minDistanceFromSpawn
-                && (i > 8 && i < 43) && (j > 8 && j < 43)) {
+                && (i > 8 && i < 43) && (j > 8 && j < 43) && this.controller.pos.getRangeTo(i,j)>3) {
                 minDistanceFromSpawn = floodCM.get(i, j);
                 posForStamp.x = i;
                 posForStamp.y = j;

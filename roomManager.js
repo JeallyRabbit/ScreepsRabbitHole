@@ -661,6 +661,7 @@ Room.prototype.roomManager = function roomManager() {
         for (a of hostiles) {
             global.heap.rooms[this.name].hostiles.push(a)
             global.heap.rooms[this.name].hostileHealPower += _.filter(a.body, { type: HEAL }).length * HEAL_POWER
+            global.heap.rooms[this.name].hostileHealPower += _.filter(a.body, { type: WORK }).length * DISMANTLE_POWER*.3// to trigger defense also on enemy workers enter
             global.heap.rooms[this.name].hostileAttackPower += _.filter(a.body, { type: ATTACK }).length * ATTACK_POWER
             global.heap.rooms[this.name].hostileRangedAttackPower += _.filter(a.body, { type: RANGED_ATTACK }).length * RANGED_ATTACK_POWER
         }
