@@ -211,7 +211,7 @@ class Traveler {
      */
     static findTravelPath(origin, destination, options = {}) {
         _.defaults(options, {
-            ignoreCreeps: false,
+            ignoreCreeps: true,
             maxOps: DEFAULT_MAXOPS,
             range: 1,
         });

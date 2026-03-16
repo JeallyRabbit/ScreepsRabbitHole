@@ -14,7 +14,7 @@ Creep.prototype.roleColonizer = function roleColonizer() {
     
     if(this.room.name!=this.memory.targetRoom)
     {
-         this.travelTo(new RoomPosition(25,25,this.memory.targetRoom), {avoidHostile: true, allowHostile: true,preferHighway: true})
+         this.travelTo(new RoomPosition(25,25,this.memory.targetRoom), {avoidHostile: true,preferHighway: true})
     }
     else{
         this.colonizerGetTask()

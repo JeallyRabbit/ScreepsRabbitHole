@@ -130,7 +130,7 @@ Creep.prototype.roleRepairer = function roleRepairer() {
     else {
         this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom))
         if (this.memory.targetRoom != undefined) {
-            //this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { reusePath: 17 });
+            //this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom));
         }
 
     }
