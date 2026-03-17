@@ -50,7 +50,8 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
 
                         global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_STORAGE[RESOURCE_ENERGY]
                     }
-                    else if (terminal.store[RESOURCE_ENERGY] < C.TERMINAL_BOTTOM_ENERGY && storage.store[RESOURCE_ENERGY] > C.STORAGE_TOP_ENERGY) {
+                    else if (terminal.store[RESOURCE_ENERGY] < C.TERMINAL_BOTTOM_ENERGY && 
+                        (storage.store[RESOURCE_ENERGY] > C.STORAGE_TOP_ENERGY || (Memory.fastRclUpgrade!=undefined && Memory.fastRclUpgrade!=this.room.name && storage.store[RESOURCE_ENERGY]>C.STORAGE_ENERGY_BOTTOM*0.8))) {
 
                         global.heap.rooms[this.room.name].managerTask = C.TASK_TRANSFER_TO_TERMINAL[RESOURCE_ENERGY]
                     }

@@ -132,7 +132,7 @@ Creep.prototype.roleHarvester = function roleHarvester() {
         if (Game.getObjectById(this.memory.sourceId) != null && Game.getObjectById(this.memory.sourceId).energy > 0
             && this.store.getFreeCapacity(RESOURCE_ENERGY) > this.memory.harvestingPower) {
             if (this.harvest(Game.getObjectById(this.memory.sourceId)) == ERR_NOT_IN_RANGE) {
-                this.travelTo(Game.getObjectById(this.memory.sourceId), { range: 1, maxRooms: 1});
+                this.travelTo(Game.getObjectById(this.memory.sourceId), { range: 1, maxRooms: 1,ignoreCreeps: false});
                 //this.memory.is_working = false;
             }/*
             else if (this.harvest(Game.getObjectById(this.memory.sourceId)) == OK) { 
@@ -148,11 +148,11 @@ Creep.prototype.roleHarvester = function roleHarvester() {
     else if (this.room.name != this.memory.targetRoom /*&& this.store[RESOURCE_ENERGY] == 0*/) {// not in target room and have free space - go to target room
         //const destination = new RoomPosition(25, 25, this.memory.targetRoom); 
         if (this.memory.sourceId != undefined && Game.getObjectById(this.memory.sourceId) != null) {
-            this.travelTo(Game.getObjectById(this.memory.sourceId));
+            this.travelTo(Game.getObjectById(this.memory.sourceId),{ignoreCreeps: false});
         }
         if (Game.rooms[this.memory.targetRoom] == undefined) {
             const destination = new RoomPosition(25, 25, this.memory.targetRoom); // Replace with your destination coordinates and room name
-            this.travelTo(destination);
+            this.travelTo(destination,{ignoreCreeps: false});
         }
 
     }

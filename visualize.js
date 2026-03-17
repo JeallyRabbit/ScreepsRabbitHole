@@ -10,7 +10,6 @@ Room.prototype.visualize = function visualizeroomManager() {
 
     // energyBalance visualization
     if (Game.rooms[this.name].memory.energyBalance != undefined) {
-        console.log("energy Balance: ", Game.rooms[this.name].memory.energyBalance)
         //visualize balancing
         Game.rooms[this.name].visual.rect(Game.rooms[this.name].controller.pos.x - (C.BALANCER_HARVEST_LIMIT / 500),
             Game.rooms[this.name].controller.pos.y - 1, (C.BALANCER_HARVEST_LIMIT / 500) * 2, 1, {
@@ -227,7 +226,6 @@ Room.prototype.visualize = function visualizeroomManager() {
             }
         }
 
-        //console.log(sitesRooms[0].name+": "+sitesRooms[0].count)
     }
 
     if (sitesRooms.length > 0) {
@@ -263,13 +261,24 @@ Room.prototype.visualize = function visualizeroomManager() {
     var tasksVisualizationPos = new RoomPosition(11, 1, this.name)
     var blockPosWidth = 10
     var blockPos = new RoomPosition(tasksVisualizationPos.x, tasksVisualizationPos.y, this.name)
-    this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
-    this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
-    this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
-    this.visual.text("Hauler task: " + global.heap.rooms[this.name].haulerTask, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
-    tasksVisualizationPos.y += blockPosHeight
+
+
+    if(global.heap.rooms[this.name].myHaulers!=undefined && Object.keys(global.heap.rooms[this.name].myHaulers).length>0)
+    {
+        for(h in global.heap.rooms[this.name].myHaulers)
+        {
+            var text=global.heap.rooms[this.name].myHaulers[h].task ==undefined ? "hauler no task":
+            "..."+h.substr(h.length-4)+" "+global.heap.rooms[this.name].myHaulers[h].task
+            this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
+            this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
+            this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+            this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+            this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
+            this.visual.text(text, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+            tasksVisualizationPos.y += blockPosHeight
+            blockPos.y+=blockPosHeight
+        }
+    }
 
     //Manager task
     var blockPosWidth = 10

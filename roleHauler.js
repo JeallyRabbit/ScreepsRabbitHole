@@ -14,6 +14,12 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
         this.taskClearCreep()
         return
     }
+
+    if(global.heap.rooms[this.memory.homeRoom].myHaulers[this.id]==undefined)
+    {
+        global.heap.rooms[this.memory.homeRoom].myHaulers[this.id]={}
+    }
+
     //this.move(TOP);
     //this.memory.cIdMax=undefined;
     if ((this.room.controller!=undefined && this.room.controller.level <= 2) || (this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] == 0)) {
@@ -43,13 +49,12 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
 
 
     if (this.store[RESOURCE_ENERGY] == 0) {
-        //global.heap.rooms[this.room.name].haulerTask=undefined // check if that is good idea
-        global.heap.rooms[this.room.name].haulerTask = C.TASK_COLLECT
+        global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task = C.TASK_COLLECT
     }
 
 
     //Assigning tasks
-    if (global.heap.rooms[this.room.name].haulerTask == undefined) {
+    if (global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task == undefined) {
 
         this.memory.containerToFill = undefined;
 
@@ -77,7 +82,7 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
         if (this.room.memory.managerLinkId != undefined && global.heap.rooms[this.memory.homeRoom].resourceManagerId == undefined
             && Game.getObjectById(this.room.memory.managerLinkId)!=null && Game.getObjectById(this.room.memory.managerLinkId).store[RESOURCE_ENERGY]<C.LINK_BOTTOM_ENERGY
         ) {
-            global.heap.rooms[this.room.name].haulerTask = C.TASK_FILL_MANAGER_LINK
+            global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task = C.TASK_FILL_MANAGER_LINK
         }
         else if (this.room.memory.fillerContainers != undefined && this.room.memory.fillerContainers.length > 0
             && (this.memory.managerLinkId ==undefined || this.memory.fillerLinkId==undefined)
@@ -85,7 +90,7 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
             var minEnergy = CONTAINER_CAPACITY
             for (cont of this.room.memory.fillerContainers) {
                 if (Game.getObjectById(cont) != null && Game.getObjectById(cont).store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
-                    global.heap.rooms[this.room.name].haulerTask = C.TASK_FILL_FILLERS_CONTAINERS
+                    global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task = C.TASK_FILL_FILLERS_CONTAINERS
                     if (Game.getObjectById(cont).store[RESOURCE_ENERGY] < minEnergy) {
                         minEnergy = Game.getObjectById(cont).store[RESOURCE_ENERGY]
                         this.memory.containerToFill = cont
@@ -94,21 +99,21 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
                 }
             }
         }
-        if (global.heap.rooms[this.room.name].haulerTask == undefined) {
+        if (global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task == undefined) {
             if (global.heap.rooms[this.memory.homeRoom].towersNeedRefill == true) {
-                global.heap.rooms[this.room.name].haulerTask = C.TASK_FILL_TOWERS
+                global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task = C.TASK_FILL_TOWERS
             }
-            else if (global.heap.rooms[this.room.name].extensionsFull == false && global.heap.rooms[this.room.name].haulerTask == undefined) {
-                global.heap.rooms[this.room.name].haulerTask = C.TASK_FILL_EXTENSIONS
+            else if (global.heap.rooms[this.room.name].extensionsFull == false && global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task == undefined) {
+                global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task = C.TASK_FILL_EXTENSIONS
             }
-            else if (global.heap.rooms[this.room.name].haulerTask == undefined && this.room.memory.upgradersContainer != undefined && Game.getObjectById(this.room.memory.upgradersContainer) != null
+            else if (global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task == undefined && this.room.memory.upgradersContainer != undefined && Game.getObjectById(this.room.memory.upgradersContainer) != null
                 && Game.getObjectById(this.room.memory.upgradersContainer).store.getFreeCapacity(RESOURCE_ENERGY) >= this.store.getCapacity(RESOURCE_ENERGY) / 2) {
-                global.heap.rooms[this.room.name].haulerTask = C.TASK_FILL_UPGRADERS_CONTAIER
+                global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task = C.TASK_FILL_UPGRADERS_CONTAIER
                 this.memory.containerToFill = this.room.memory.upgradersContainer
             }
 
-            else if (spawn != null && spawn.store != undefined && spawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && global.heap.rooms[this.room.name].haulerTask == undefined) {
-                global.heap.rooms[this.room.name].haulerTask = C.FILL_SPAWN
+            else if (spawn != null && spawn.store != undefined && spawn.store.getFreeCapacity(RESOURCE_ENERGY) > 0 && global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task == undefined) {
+                global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task = C.FILL_SPAWN
             }
             else {
                 //spawnPos = Game.rooms[this.memory.homeRoom].memory.spawnPos
@@ -119,25 +124,25 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
     }
 
 
-    if(global.heap.rooms[this.room.name].haulerTask==C.TASK_FILL_MANAGER_LINK)
+    if(global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task==C.TASK_FILL_MANAGER_LINK)
     {
         if(global.heap.rooms[this.memory.homeRoom].resourceManagerId!=undefined
         )
         {
-            global.heap.rooms[this.room.name].haulerTask=undefined
+            global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task=undefined
             return;
         }
         this.taskFillManagerLink()
     }
-    if (global.heap.rooms[this.room.name].haulerTask == C.TASK_FILL_TOWERS) {
+    if (global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task == C.TASK_FILL_TOWERS) {
         this.taskFillTowers();
         return
     }
 
-    if (global.heap.rooms[this.room.name].haulerTask == C.TASK_COLLECT) // if is empty go to container
+    if (global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task == C.TASK_COLLECT) // if is empty go to container
     {// go to container
         if (this.store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
-            global.heap.rooms[this.room.name].haulerTask = undefined;
+            global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task = undefined;
             return;
         }
         if (this.room.storage != undefined /* && this.memory.cIdMax==undefined */ /* && (this.memory.cIdMax!=undefined && Game.getObjectById(this.memory.cIdMax)==null)*/) {
@@ -262,10 +267,10 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
 
 
 
-    if (global.heap.rooms[this.room.name].haulerTask == C.TASK_FILL_FILLERS_CONTAINERS) {
+    if (global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task == C.TASK_FILL_FILLERS_CONTAINERS) {
         
         if (Game.getObjectById(this.memory.containerToFill) != null && Game.getObjectById(this.memory.containerToFill).store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
-            global.heap.rooms[this.room.name].haulerTask = undefined
+            global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task = undefined
             return;
         }
         if (this.transfer(Game.getObjectById(this.memory.containerToFill), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -275,10 +280,10 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
     }
 
 
-    if (global.heap.rooms[this.room.name].haulerTask == C.TASK_FILL_UPGRADERS_CONTAIER) {
+    if (global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task == C.TASK_FILL_UPGRADERS_CONTAIER) {
         
         if (Game.getObjectById(this.memory.containerToFill) != null && Game.getObjectById(this.memory.containerToFill).store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
-            global.heap.rooms[this.room.name].haulerTask = undefined
+            global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task = undefined
             return;
         }
         if (this.transfer(Game.getObjectById(this.memory.containerToFill), RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -287,11 +292,11 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
         }
     }
 
-    if (global.heap.rooms[this.room.name].haulerTask == C.TASK_FILL_EXTENSIONS) {
+    if (global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task == C.TASK_FILL_EXTENSIONS) {
         
         if (global.heap.rooms[this.room.name].extensionsFull == true) {
             global.heap.rooms[this.room.name].extensionsFull = undefined
-            global.heap.rooms[this.room.name].haulerTask = undefined
+            global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task = undefined
             return;
         }
         var extensions = [];
@@ -337,7 +342,7 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
         }
     }
 
-    if (global.heap.rooms[this.room.name].haulerTask == C.FILL_SPAWN) {
+    if (global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task == C.FILL_SPAWN) {
 
 
         var spawn = null;
@@ -366,7 +371,7 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
 
             }
             if (spawn.store.getFreeCapacity(RESOURCE_ENERGY) == 0) {
-                global.heap.rooms[this.room.name].haulerTask = undefined
+                global.heap.rooms[this.memory.homeRoom].myHaulers[this.id].task = undefined
             }
         }
 

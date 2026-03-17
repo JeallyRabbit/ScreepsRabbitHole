@@ -20,6 +20,11 @@ Room.prototype.roomManager = function roomManager() {
 
 
     global.heap.rooms[this.name].myCreeps = []
+    if(global.heap.rooms[this.name].myHaulers==undefined)
+    {
+       global.heap.rooms[this.name].myHaulers=[] 
+    }
+    
     global.heap.rooms[this.name].hostiles = []
     global.heap.rooms[this.name].hostileHealPower = 1;
     global.heap.rooms[this.name].hostileAttackPower = 0;

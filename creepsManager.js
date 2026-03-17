@@ -66,6 +66,7 @@ Room.prototype.creepsManager = function creepsManager() {
         if (!global.heap.creeps[cr]) {
             delete global.heap.creeps[cr];
         }
+
     }
 
     for (cr in Game.creeps) {
@@ -140,6 +141,8 @@ Room.prototype.creepsManager = function creepsManager() {
                 break;
             case C.ROLE_HAULER:
                 if (creep.ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER || creep.spawning) {
+                    
+                    //creep.say(global.heap.rooms[creep.memory.homeRoom].myHaulers.length)
                     global.heap.rooms[creep.memory.homeRoom].haulersParts += _.filter(creep.body, { type: CARRY }).length
                     global.heap.rooms[creep.memory.homeRoom].civilianParts += creep.body.length
 
