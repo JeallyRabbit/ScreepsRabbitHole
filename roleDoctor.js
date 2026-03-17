@@ -85,7 +85,8 @@ Creep.prototype.roleDoctor = function roleDoctor() {
             global.heap.rooms[this.room.name].doctorTask = C.TASK_FILL_INPUT_LABS_MINERAL
         }
         else if (this.room.oneInputMineralEmpty(inputLab1, inputLab2) != false
-    || this.room.bothInputMineralNotEmpty(inputLab1,inputLab2)==true) {
+    //|| this.room.bothInputMineralNotEmpty(inputLab1,inputLab2)==true
+    ) {
             this.say("5")
             global.heap.rooms[this.room.name].doctorTask = C.TASK_CLEAR_INPUT_LABS
         }
