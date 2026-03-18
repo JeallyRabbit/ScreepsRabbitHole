@@ -386,6 +386,10 @@ Room.prototype.spawnManager = function spawnManager() {
                         if (global.heap.rooms[this.name].construction.length > 0) {
                             body = workerBody(energyCap, C.CREEP_MAX_BODYPARTS, [MOVE, MOVE, CARRY, WORK])
                         }
+                        else if(Memory.fastRclUpgrade!=this.name)
+                        {
+                            body=scheme
+                        }
                         else {
                             body = workerBody(energyCap, C.CREEP_MAX_BODYPARTS, scheme)
                         }
