@@ -159,9 +159,11 @@ Room.prototype.spawnManager = function spawnManager() {
         var role = request.role
         var energyCap = Game.rooms[this.name].energyAvailable
 
+        /*
         var blockPos = new RoomPosition(38,22, this.name)
         var blockPosWidth = 8
         var blockPosHeight = 1
+
         this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
         this.visual.line(blockPos.x, blockPos.y, blockPos.x + blockPosWidth, blockPos.y, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x, blockPos.y, blockPos.x, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
@@ -169,6 +171,7 @@ Room.prototype.spawnManager = function spawnManager() {
         this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.text("🛡️ Queue: " + role+" "+request.roomName, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
         console.log("role: ",role," ",request.roomName)
+        */
         switch (role) {
             case C.ROLE_SOLDIER:
                 {
@@ -238,6 +241,7 @@ Room.prototype.spawnManager = function spawnManager() {
         var role = request.role
         var energyCap = Game.rooms[this.name].energyAvailable
 
+        /*
         var blockPos = new RoomPosition(38,22, this.name)
         var blockPosWidth = 8
         var blockPosHeight = 1
@@ -247,6 +251,7 @@ Room.prototype.spawnManager = function spawnManager() {
         this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.text("⛏️ Queue: " + role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
+        */
 
         switch (role) {
             case C.ROLE_HARVESTER:
@@ -351,6 +356,7 @@ Room.prototype.spawnManager = function spawnManager() {
         var role = request.role
         var energyCap = Game.rooms[this.name].energyAvailable
 
+        /*
         var blockPos = new RoomPosition(38,22, this.name)
         var blockPosWidth = 8
         var blockPosHeight = 1
@@ -360,7 +366,7 @@ Room.prototype.spawnManager = function spawnManager() {
         this.visual.line(blockPos.x, blockPos.y + blockPosHeight, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.line(blockPos.x + blockPosWidth, blockPos.y, blockPos.x + blockPosWidth, blockPos.y + blockPosHeight, { color: C.OUTLINE_COLOR })
         this.visual.text("🏦 Queue: " + role, blockPos.x + blockPosWidth / 2, blockPos.y + 0.75)
-
+        */
 
         switch (role) {
 
