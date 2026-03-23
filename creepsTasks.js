@@ -900,6 +900,12 @@ Creep.prototype.taskBuild = function taskBuild() {
                 if (Game.getObjectById(c) != null && Game.getObjectById(c).pos !== this.pos) {
                     aux.push(Game.getObjectById(c))
                     if (toFocus == null || (toFocus != null && toFocus.structureType == STRUCTURE_ROAD)) {
+
+                        if (Game.getObjectById(c).structureType == STRUCTURE_SPAWN) {
+                            toFocus = Game.getObjectById(c)
+                            break;
+                        }
+
                         if (Game.getObjectById(c).structureType == STRUCTURE_STORAGE) {
                             toFocus = Game.getObjectById(c)
                         }

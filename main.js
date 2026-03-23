@@ -195,7 +195,9 @@ module.exports.loop = function () {
         global.heap.rooms[roomName] = {}
       }
 
-      if (Game.rooms[roomName].controller != undefined && Game.rooms[roomName].controller.my) {
+      if (Game.rooms[roomName].controller != undefined && Game.rooms[roomName].controller.my
+        && Game.rooms[roomName].find(FIND_MY_SPAWNS).length>0
+      ) {
         Memory.mainRooms.push(roomName)
       }
 
@@ -401,7 +403,7 @@ module.exports.loop = function () {
 
       Memory.rooms[toDelete] = {}
       global.heap.rooms[toDelete] = {}
-      var index = Memory.mainRoom.find((r) => r == toDelete);
+      var index = Memory.mainRooms.find((r) => r == toDelete);
       if (index != undefined) {
         Memory.roomsToColonize.splice(index, 1);
       }
