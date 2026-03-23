@@ -196,7 +196,7 @@ module.exports.loop = function () {
       }
 
       if (Game.rooms[roomName].controller != undefined && Game.rooms[roomName].controller.my
-        && Game.rooms[roomName].find(FIND_MY_SPAWNS).length>0
+        //&& Game.rooms[roomName].find(FIND_MY_SPAWNS).length>0
       ) {
         Memory.mainRooms.push(roomName)
       }
