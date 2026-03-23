@@ -29,6 +29,20 @@ function isPosFree(x, y, roomName) {
 
 }
 
+Room.prototype.printRoads= function printRoads()
+{
+    if(this.memory.roadBuildingList!=undefined && this.memory.roadBuildingList.length>0)
+    {
+        for(r of this.memory.roadBuildingList)
+        {
+            Game.rooms[r.roomName].visual.circle(r.x, r.y, { fill: '#666666', radius: 0.5, stroke: 'black' });
+            console.log(r.roomName," ",r.x," ",r.y)
+        }
+    }
+    else{
+        console.log("No road building list")
+    }
+}
 
 Room.prototype.planRoadToTarget = function planRoadToTarget(roomCM, target, rcl, myRange = 1, start = this.memory.spawnPos) {
 
@@ -1487,7 +1501,7 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
         // If finished scanning
         if (this.memory.roomsToScan != undefined && this.memory.roomsToScan.length == 0) {
 
-            this.memory.roadBuildingList = []
+            
             var spawnPos = this.memory.baseVariations[type].spawnPos
 
             this.planRoadToTarget(roomCM1, this.controller.pos, 2, 1, spawnPos)

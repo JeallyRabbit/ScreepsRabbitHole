@@ -42,20 +42,26 @@ Creep.prototype.roleHarvester = function roleHarvester() {
             break;
         }
     }
-
-    global.heap.rooms[this.memory.homeRoom].harvestingSources[this.memory.sourceId].harvesters++;
-    global.heap.rooms[this.memory.homeRoom].harvestingSources[this.memory.sourceId].harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+    if(global.heap.rooms[this.memory.homeRoom].harvestingSources[this.memory.sourceId]!=undefined)
+    {
+        global.heap.rooms[this.memory.homeRoom].harvestingSources[this.memory.sourceId].harvesters++;
+        global.heap.rooms[this.memory.homeRoom].harvestingSources[this.memory.sourceId].harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
+    }
+    
     //this.say(global.heap.rooms[this.memory.homeRoom].harvestingSources[this.memory.sourceId].harvestingPower)
     
 
 
-
-    for (hr of Game.rooms[this.memory.homeRoom].memory.harvestingRooms) {
+    if(Game.rooms[this.memory.homeRoom].memory.harvestingRooms!=undefined)
+    {
+        for (hr of Game.rooms[this.memory.homeRoom].memory.harvestingRooms) {
         if (this.ticksToLive > C.CREEP_TICKS_TO_LIVE_BUFFER) {
             global.heap.rooms[hr.name].harvestingPower += (_.filter(this.body, { type: WORK }).length * HARVEST_POWER);
         }
         break;
     }
+    }
+    
 
     if (this.room.name == this.memory.targetRoom /* && this.store.getFreeCapacity(RESOURCE_ENERGY) > 0*/) {
         // if have some free space and at destination room - go harvest
