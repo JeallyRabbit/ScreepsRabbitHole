@@ -29,6 +29,12 @@ function isPosFree(x, y, roomName) {
 
 }
 
+Room.prototype.rebuildRoads = function rebuildRoads()
+{
+    this.memory.plannedRoads=false;
+    this.memory.buildingStage=undefined
+}
+
 Room.prototype.printRoads= function printRoads()
 {
     if(this.memory.roadBuildingList!=undefined && this.memory.roadBuildingList.length>0)
@@ -1519,7 +1525,7 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
             }
             if (this.planSourcesContainers() != -1) {
                 this.memory.plannedRoads = true
-                this.memory.stage++;
+                this.memory.buildingStage++;
             }
 
             const uniqueArray = Array.from(

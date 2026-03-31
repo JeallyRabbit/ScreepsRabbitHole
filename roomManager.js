@@ -91,16 +91,14 @@ Room.prototype.roomManager = function roomManager() {
                 if (sp.length > 1 && this.memory.rcl7RoomsReset != true) {
                     this.memory.roomsToScan = undefined
                     this.memory.rcl7RoomsReset = true
-                    this.memory.buildingStage=1;
-                    this.memory.finishedPlanning=true
+                    this.memory.buildingStage=undefined;
                     this.memory.plannedRoads=false
                 }
 
                 if (sp.length > 2 && this.memory.rcl8RoomsReset != true) {
                     this.memory.roomsToScan = undefined
                     this.memory.rcl8RoomsReset = true
-                    this.memory.buildingStage=1
-                    //this.memory.finishedPlanning=false
+                    this.memory.buildingStage=undefined
                     this.memory.plannedRoads=false
                 }
             }
