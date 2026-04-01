@@ -325,7 +325,11 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
                     }
                 }
 
-                if (!alreadyUsed) {
+                if (!alreadyUsed ) {
+                    if(Game.rooms[this.memory.homeRoom].memory==undefined)
+                    {
+                        Game.rooms[this.memory.homeRoom].memory= {}
+                    }
                     Game.rooms[this.memory.homeRoom].memory.harvestingRooms.push(newFarming);
                 }
             }

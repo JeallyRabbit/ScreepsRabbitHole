@@ -113,7 +113,8 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                             return structure.structureType === STRUCTURE_CONTAINER
                                 && ((structure.pos.x != spawnPos.x - 2 || structure.pos.y != spawnPos.y - 2) &&
                                     (structure.pos.x != spawnPos.x + 2 || structure.pos.y != spawnPos.y - 2))
-                                && (structure.pos.x != Game.rooms[creepHomeRoom].memory.controllerContainerPos.x ||
+                                && Game.rooms[creepHomeRoom].memory.controllerContainerPos!=undefined &&
+                                (structure.pos.x != Game.rooms[creepHomeRoom].memory.controllerContainerPos.x ||
                                     structure.pos.y != Game.rooms[creepHomeRoom].memory.controllerContainerPos.y ||
                                     structure.pos.roomName != creepHomeRoom);
                         }
