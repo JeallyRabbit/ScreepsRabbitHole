@@ -107,7 +107,7 @@ Room.prototype.terminalManager = function terminalManager() {
     //Sharing T3 Military Boosts
     var resourceToShare = null
     var roomToShareWith = null
-    for (m of Memory.mainRooms) {
+    for (m of global.heap.mainRooms) {
         if (m != this.name && Game.rooms[m].terminal != undefined) {
             for (boost of global.heap.rooms[this.name].excessT3MilitaryBoosts) {
                 if (global.heap.rooms[m].needT3MilitaryBoosts == boost) {
@@ -129,7 +129,7 @@ Room.prototype.terminalManager = function terminalManager() {
     //Sharing T3 Economic Boosts
     var resourceToShare = null
     var roomToShareWith = null
-    for (m of Memory.mainRooms) {
+    for (m of global.heap.mainRooms) {
         if (m != this.name && Game.rooms[m].terminal != undefined) {
             for (boost of global.heap.rooms[this.name].excessT3EconomicBoost) {
                 if (global.heap.rooms[m].needT3EconomicBoosts == boost) {
@@ -165,7 +165,7 @@ Room.prototype.terminalManager = function terminalManager() {
     //Sharing raw resources
     var resourceToShare = null
     var roomToShareWith = null
-    for (m of Memory.mainRooms) {
+    for (m of global.heap.mainRooms) {
         if (m != this.name && Game.rooms[m].terminal != undefined) {
             for (res of global.heap.rooms[this.name].excessRawResources) {
                 if (global.heap.rooms[m].needRawResources == res) {
@@ -207,7 +207,7 @@ Room.prototype.terminalManager = function terminalManager() {
     //Sharing energy to STATE_NEED_ENERGY
     var closestNeedingEnergy = undefined
     var distance = Infinity
-    for (m of Memory.mainRooms) {
+    for (m of global.heap.mainRooms) {
         if (m == this.name) { continue }
         if (this.storage.store[RESOURCE_ENERGY] < C.STORAGE_ENERGY_BOTTOM || this.terminal.store[RESOURCE_ENERGY] < C.RESOURCE_SHARE_AMOUNT) {
             break;

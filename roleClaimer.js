@@ -29,9 +29,9 @@ Creep.prototype.roleClaimer = function roleClaimer() {
                 }
                 if(claimResult==OK)
                 { 
-                    if(!Memory.mainRooms.includes(this.room.name))
+                    if(!global.heap.mainRooms.includes(this.room.name))
                     {
-                        Memory.mainRooms.push(this.room.name)
+                        global.heap.mainRooms.push(this.room.name)
                     }
                 }
                 if (this.room.controller.text !=  C.SIGN_TEXT) {

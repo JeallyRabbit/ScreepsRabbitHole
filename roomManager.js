@@ -76,7 +76,7 @@ Room.prototype.roomManager = function roomManager() {
 
 
 
-    if (Memory.mainRooms.includes(this.name)) {
+    if (global.heap.mainRooms.includes(this.name)) {
         //If it is one of main rooms 
 
 
@@ -114,10 +114,11 @@ Room.prototype.roomManager = function roomManager() {
             Memory.rooms[this.name].quads = []
         }
 
-        if (this.memory.distanceToOthers == undefined && Game.time % C.ROOM_DISTANCE_CALC_STEP == 0) {
+        if ((this.memory.distanceToOthers == undefined || this.memory.distanceToOthers == null) && Game.time % C.ROOM_DISTANCE_CALC_STEP == 0) {
             var distance = 0;
             var distanceCounter = 0
-            for (m of Memory.mainRooms) {
+            
+            for (m of global.heap.mainRooms) {
                 if (m != this.name) {
                     distance += Game.map.getRoomLinearDistance(this.name, m)
                     distanceCounter++;
@@ -713,7 +714,7 @@ Room.prototype.roomManager = function roomManager() {
             */
 
 
-        if (str.my && Memory.mainRooms.includes(this.name)) {
+        if (str.my && global.heap.mainRooms.includes(this.name)) {
 
 
             
@@ -839,7 +840,7 @@ Room.prototype.roomManager = function roomManager() {
 
 
 
-    if (Memory.mainRooms.includes(this.name))//again checking if room is main room
+    if (global.heap.mainRooms.includes(this.name))//again checking if room is main room
     {
 
         

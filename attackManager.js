@@ -277,7 +277,7 @@ function attackManager(attackRoom) {
                 //add request
                 var minDistance = Infinity
                 var minRoom = undefined
-                for (m of Memory.mainRooms) {
+                for (m of global.heap.mainRooms) {
                     if (Game.map.getRoomLinearDistance(m, attackRoom.name) < minDistance) {
                         minDistance = Game.map.getRoomLinearDistance(m, attackRoom.name)
                         minRoom = m
@@ -308,7 +308,7 @@ function attackManager(attackRoom) {
                 //
                 var minDistance = Infinity
                 var minRoom = undefined
-                for (m of Memory.mainRooms) {
+                for (m of global.heap.mainRooms) {
                     if (Game.map.getRoomLinearDistance(m, attackRoom.name) < minDistance) {
                         minDistance = Game.map.getRoomLinearDistance(m, attackRoom.name)
                         minRoom = m
@@ -374,7 +374,7 @@ function quadAttack(attackRoom) {
 
                 var distanceToTargetRoom = Infinity;
                 var roomToSpawnQuad = undefined;
-                for (m of Memory.mainRooms) {
+                for (m of global.heap.mainRooms) {
                     var maxBodyParts = CREEP_LIFE_TIME / CREEP_SPAWN_TIME;
                     if (Memory.rooms[m].spawn2Id != undefined) {
                         maxBodyParts += CREEP_LIFE_TIME / CREEP_SPAWN_TIME;

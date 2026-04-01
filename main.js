@@ -137,6 +137,34 @@ module.exports.loop = function () {
       global.heap.creeps = []
     }
 
+
+    //setting mainRooms
+    global.heap.mainRooms = []
+    Memory.mainRooms=[]
+    global.heap.isSomeRoomPlanning = false;
+    for (roomName in Game.rooms) {
+
+      if (global.heap.rooms[roomName] == undefined) {
+        global.heap.rooms[roomName] = {}
+      }
+
+      if (Game.rooms[roomName].controller != undefined && Game.rooms[roomName].controller.my
+        //&& Game.rooms[roomName].find(FIND_MY_SPAWNS).length>0
+      ) {
+        global.heap.mainRooms.push(roomName)
+        Memory.mainRooms.push(roomName)
+      }
+
+      
+    }
+
+    //RoomManager over all rooms
+    for (roomName in Game.rooms) {
+      Game.rooms[roomName].roomManager()
+    }
+
+
+
     //vision requests (observer)
     if (global.heap.visionRequests == undefined) {
       global.heap.visionRequests = []
@@ -157,6 +185,8 @@ module.exports.loop = function () {
       global.heap.rooms[Memory.manualColonize] = {}
 
     }
+
+
 
 
     for (colonizeRoom of Memory.roomsToColonize) {
@@ -185,24 +215,7 @@ module.exports.loop = function () {
 
 
 
-    Memory.mainRooms = []
-    global.heap.isSomeRoomPlanning = false;
-
-
-    for (roomName in Game.rooms) {
-
-      if (global.heap.rooms[roomName] == undefined) {
-        global.heap.rooms[roomName] = {}
-      }
-
-      if (Game.rooms[roomName].controller != undefined && Game.rooms[roomName].controller.my
-        //&& Game.rooms[roomName].find(FIND_MY_SPAWNS).length>0
-      ) {
-        Memory.mainRooms.push(roomName)
-      }
-
-      Game.rooms[roomName].roomManager()
-    }
+    
 
 
     if (Memory.roomsToAttack == undefined) {
@@ -257,7 +270,7 @@ module.exports.loop = function () {
       for (r of Memory.roomsToColonize) {
         if (r.colonizer == undefined) {
           minDistance = Infinity
-          for (m of Memory.mainRooms) {
+          for (m of global.heap.mainRooms) {
             if (Game.map.getRoomLinearDistance(m, r.name) < minDistance
               && Game.rooms[m].storage != undefined && Game.rooms[m].storage.store[RESOURCE_ENERGY] > C.COLONIZE_ENERGY_LIMIT
               && r.name != m && Game.map.getRoomLinearDistance(m, r.name) < 11) {
@@ -296,7 +309,7 @@ module.exports.loop = function () {
 
 
 
-    for (mainRoom of Memory.mainRooms) {
+    for (mainRoom of global.heap.mainRooms) {
 
       //console.log("Game.cpu.get Used: ",Game.cpu.getUsed(), " ",Game.cpu.limit)
       if (Game.cpu.getUsed() > Game.cpu.limit * 0.7
@@ -362,7 +375,7 @@ module.exports.loop = function () {
 
 
     var totalUsedCpu = Math.round(Game.cpu.getUsed() - totalStart)
-    for (mainRoom of Memory.mainRooms) {
+    for (mainRoom of global.heap.mainRooms) {
       //total used cpu
       var blockPos = new RoomPosition(38, 0, mainRoom)
       var blockPosWidth = 6
@@ -378,7 +391,7 @@ module.exports.loop = function () {
 
     //Clearing Memory of a dead room
     var toDelete = undefined
-    for (mainRoom of Memory.mainRooms) {
+    for (mainRoom of global.heap.mainRooms) {
 
       if (!Game.rooms[mainRoom].controller.my) {
         toDelete = mainRoom
@@ -403,7 +416,7 @@ module.exports.loop = function () {
 
       Memory.rooms[toDelete] = {}
       global.heap.rooms[toDelete] = {}
-      var index = Memory.mainRooms.find((r) => r == toDelete);
+      var index = global.heap.mainRooms.find((r) => r == toDelete);
       if (index != undefined) {
         Memory.roomsToColonize.splice(index, 1);
       }
@@ -414,7 +427,7 @@ module.exports.loop = function () {
     if (Game.time % 1234 == 0) {
       for (c in Game.constructionSites) {
         var inAnyHarvestingRoom = false
-        for (m of Memory.mainRooms) {
+        for (m of global.heap.mainRooms) {
           if (Game.getObjectById(c).room != undefined && Game.getObjectById(c).room.name == m) {
             inAnyHarvestingRoom = true
             break
@@ -438,7 +451,7 @@ module.exports.loop = function () {
     //removing structures in dead rooms
     for (s in Game.structures) {
       var inAliveRoom = false
-      for (m of Memory.mainRooms) {
+      for (m of global.heap.mainRooms) {
         if (Game.getObjectById(s).room != undefined && Game.getObjectById(s).room.name == m) {
           inAliveRoom = true
           break

@@ -226,7 +226,7 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
                     var alreadyUsed = false;
 
                     // If source is used in other room or on creep homeRoom
-                    for (otherRoom in Memory.mainRooms) {
+                    for (otherRoom in global.heap.mainRooms) {
                         if (Game.rooms[otherRoom].memory.keepersSources.some(obj => obj.id === src.id)) {
                             alreadyUsed = true
                         }
@@ -246,7 +246,7 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
 
                 var alreadyUsed = false
 
-                for (otherRoom in Memory.mainRooms) {
+                for (otherRoom in global.heap.mainRooms) {
                     if (Game.rooms[otherRoom].memory.keepersRooms.some(obj => obj.id === src.id)) {
                         alreadyUsed = true
                     }
@@ -285,7 +285,7 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
                     }
 
                     // If source is used in other room or on creep homeRoom
-                    for (otherRoom of Memory.mainRooms) {
+                    for (otherRoom of global.heap.mainRooms) {
                         if (Game.rooms[otherRoom].memory.harvestingSources.some(obj => obj.id === src.id)) {
                             alreadyUsed = true
                         }
@@ -319,7 +319,7 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
 
 
                 var alreadyUsed = false;
-                for (otherRoom of Memory.mainRooms) {
+                for (otherRoom of global.heap.mainRooms) {
                     if (Game.rooms[otherRoom].memory.harvestingRooms!=undefined && Game.rooms[otherRoom].memory.harvestingRooms.some(obj => obj.name === this.room.name)) {
                         alreadyUsed = true
                     }
