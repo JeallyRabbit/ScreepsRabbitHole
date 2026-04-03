@@ -384,7 +384,8 @@ function quadAttack(attackRoom) {
                     }
                     if (maxBodyParts - Game.rooms[m].memory.creepsBodyParts > C.QUAD_BODY_PARTS_AMOUNT) {
 
-                        if (Game.map.getRoomLinearDistance(m, attackRoom.name) < distanceToTargetRoom
+                        quadsAmount=Game.rooms[m].memory.quads!=undefined ? Game.rooms[m].memory.quads.length : 0;
+                        if (Game.map.getRoomLinearDistance(m, attackRoom.name)*(Math.pow(1.1,quadsAmount)) < distanceToTargetRoom
                             && Game.rooms[m].controller.level >= 7) {
                             distanceToTargetRoom = Game.map.getRoomLinearDistance(m, attackRoom.name);
                             roomToSpawnQuad = m;
@@ -402,6 +403,7 @@ function quadAttack(attackRoom) {
                 if (global.heap.rooms[q.homeRoom].offensiveQueue.find(({ role }) => role === C.ROLE_QUAD_MEMBER) == undefined
             && Game.time%2==0
         ) {
+                    console.log("quad members: ",q.members.length)
                     if (q.members.length == 0) {
                         global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, true));
                         console.log("adding first member of quad: ",q.id);
@@ -414,7 +416,7 @@ function quadAttack(attackRoom) {
                         break;
                        
                     }
-                    else if (q.members.length < 4) {
+                    else if (q.members.length == 2 || q.members.length == 3) {
                         global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.HEALER_BODY, false));
                         console.log("adding third/fourth member")
                         break;
@@ -429,7 +431,9 @@ function quadAttack(attackRoom) {
 
 
     for (q of attackRoom.quads) {
+        console.log("opearting quad: ",q.id)
         operateQuad(q);
+        
     }
 }
 

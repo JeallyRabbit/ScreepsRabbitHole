@@ -261,9 +261,7 @@ Room.prototype.creepsManager = function creepsManager() {
     this.memory.creepsBodyParts = global.heap.rooms[this.name].creepsBodyParts
 
 
-    for (q of this.memory.quads) {
-        this.operateQuad(q)
-    }
+    
 
     //Removing dead miners from array
     if (global.heap.rooms[this.name].miners.length > 0) {

@@ -1361,13 +1361,18 @@ function verifyPositionAssignment(quad) {
 
 function operateQuad(quad) {
 
+
     startCpu = Game.cpu.getUsed()
     var topLeft = Game.getObjectById(quad.topLeftId);
     var topRight = Game.getObjectById(quad.topRightId);
     var bottomLeft = Game.getObjectById(quad.bottomLeftId);
     var bottomRight = Game.getObjectById(quad.bottomRightId);
 
-
+    if(topLeft!=null)
+    {
+        topLeft.say(quad.isCompleted)
+    }
+    
 
     if (topLeft != undefined) {
         topLeft.room.visual.circle(topLeft.pos, { fill: 'transparent', radius: 0.55, stroke: 'purple' })
@@ -1445,7 +1450,7 @@ function operateQuad(quad) {
     }
 
     quadSelfHeal(quad)
-
+    console.log("localHeap.isQuadPacked: ",localHeap.isQuadPacked)
     if (localHeap.isQuadPacked == false) {
 
         localHeap.path = undefined
@@ -1534,7 +1539,8 @@ function operateQuad(quad) {
         }
         if (topRight != null && quad.groupingPos != undefined) {
             if (topLeft != null ) {
-                topRight.travelTo(new RoomPosition(Math.min(49,topLeft.pos.x + 1), topLeft.pos.y, topLeft.pos.roomName))
+                //topRight.travelTo(new RoomPosition(Math.min(49,topLeft.pos.x + 1), topLeft.pos.y, topLeft.pos.roomName))
+                topRight.travelTo(new RoomPosition(Math.min(49,topLeft.pos.x + 1), quad.groupingPos.y, quad.groupingPos.roomName))
             }
             else {
                 topRight.travelTo(new RoomPosition(quad.groupingPos.x + 1, quad.groupingPos.y, quad.groupingPos.roomName))
