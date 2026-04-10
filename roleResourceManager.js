@@ -40,6 +40,7 @@ Creep.prototype.roleResourceManager = function roleResourceManager() {//transfer
                     global.heap.rooms[this.room.name].managerTask = C.TASK_FILL_LINK
                 }
                 else if (managerLink != undefined && managerLink.store[RESOURCE_ENERGY] > C.LINK_TOP_ENERGY
+                    && Game.rooms[this.memory.homeRoom].memory.sourcesLinksId!=undefined && Game.rooms[this.memory.homeRoom].memory.sourcesLinksId.length>0
                     && this.room.controller.level == 8
                 ) {
 
