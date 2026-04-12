@@ -323,7 +323,7 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1, in2) {
 
 
         this.say("clOutExit2", true)
-        global.heap.rooms[this.room.name].doctorTask = undefined
+        global.heap.rooms[this.room.name].doctorTask = C.TASK_CLEAR_INPUT_LABS
         return
     }
 
