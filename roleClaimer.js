@@ -24,6 +24,7 @@ Creep.prototype.roleClaimer = function roleClaimer() {
                     (this.room.controller.owner != undefined && this.room.controller.owner.username != C.USERNAME )
                 && !Memory.allies.includes(this.room.controller.owner.username)) {
 
+                    this.say("attackC")
                     this.attackController(this.room.controller);
 
                 }
@@ -38,6 +39,13 @@ Creep.prototype.roleClaimer = function roleClaimer() {
                     this.signController(this.room.controller, C.SIGN_TEXT)
                 }
 
+
+            }
+            else if(this.room.controller.reservation != undefined && this.room.controller.reservation.username != C.USERNAME 
+                && !Memory.allies.includes(this.room.controller.reservation.username ))
+            {
+                this.say("attackC2")
+                this.attackController(this.room.controller)
             }
             this.travelTo(this.room.controller, {maxRooms: 1 });
             //this.move(LEFT)

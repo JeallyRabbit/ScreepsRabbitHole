@@ -24,20 +24,20 @@ const visualize = require('visualize');
 
 
 Room.prototype.unclaim = function unclaim() {
-  for (c in Game.constructionSites) {
+  for (let c in Game.constructionSites) {
     if (Game.getObjectById(c) != null && Game.getObjectById(c).room.name == this.name) {
       Game.getObjectById(c).remove()
     }
   }
 
-  for (c in Game.creeps) {
+  for (let c in Game.creeps) {
     cr = Game.creeps[c]
     if (cr != null && (cr.memory.homeRoom == this.name || cr.memory.targetRoom == this.name)) {
       cr.suicide()
     }
   }
 
-  for (c in Game.structures) {
+  for (let c in Game.structures) {
     if (Game.getObjectById(c) != null && Game.getObjectById(c).room.name == this.name) {
       Game.getObjectById(c).destroy()
     }

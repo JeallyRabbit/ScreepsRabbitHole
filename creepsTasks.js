@@ -25,12 +25,12 @@ Creep.prototype.processBoostRequest = function processBoostRequest() {
 
             this.say("DBS1")
             var boostingLab = Game.getObjectById(global.heap.rooms[this.memory.homeRoom].boostingLabId)
-            if (boostingLab == null) { 
-                this.say("DBS1.1")    
+            if (boostingLab == null) {
+                this.say("DBS1.1")
                 return
-             }
+            }
 
-             //this.say(boostingLab.store.getFreeCapacity(r.resource) + boostingLab.store[r.resource] < r.amount)
+            //this.say(boostingLab.store.getFreeCapacity(r.resource) + boostingLab.store[r.resource] < r.amount)
             if (boostingLab.store.getFreeCapacity(r.resource) + boostingLab.store[r.resource] < r.amount) {
                 this.taskClearBoostingLab(boostingLab, [r.resource, RESOURCE_ENERGY])
                 this.say("DBS2")
@@ -38,13 +38,12 @@ Creep.prototype.processBoostRequest = function processBoostRequest() {
             }
 
             if (this.store[r.resource] < r.amount && this.room.terminal.store[r.resource] > 0) {
-                this.say("DB"+r.amount)
-                if (this.withdraw(this.room.terminal,r.resource,r.amount) == ERR_NOT_IN_RANGE) {
+                this.say("DB" + r.amount)
+                if (this.withdraw(this.room.terminal, r.resource, r.amount) == ERR_NOT_IN_RANGE) {
                     this.travelTo(this.room.terminal)
                     this.say("DB3")
                 }
-                else if(this.withdraw(this.room.terminal,r.resource,r.amount) == OK)
-                {
+                else if (this.withdraw(this.room.terminal, r.resource, r.amount) == OK) {
                     global.heap.rooms[this.room.name].doctorTask = C.TASK_BOOST_CREEP
                 }
             }
@@ -57,55 +56,50 @@ Creep.prototype.processBoostRequest = function processBoostRequest() {
             break
         }
     }
-    else{
+    else {
         global.heap.rooms[this.room.name].doctorTask = undefined
     }
 }
 
 Creep.prototype.taskGetBoosted = function taskGetBoosted() {
 
-    
-    var boostedBodyTypes=0
+
+    var boostedBodyTypes = 0
 
     //check if creep is fully boosted
-    for (b of global.heap.creeps[this.name].boosters) 
-    {
-        var requiredParts=_.filter(this.body, { type: b.bodyType})
-        var unboostedParts=_.filter(requiredParts, obj => !('boost' in obj)).length
+    for (b of global.heap.creeps[this.name].boosters) {
+        var requiredParts = _.filter(this.body, { type: b.bodyType })
+        var unboostedParts = _.filter(requiredParts, obj => !('boost' in obj)).length
         //this.say(requiredParts.length+" "+unboostedParts+" ")
-        if(unboostedParts==0)
-        {
+        if (unboostedParts == 0) {
             boostedBodyTypes++;
-            
+
         }
 
-        if(Memory.fastRclUpgrade!=undefined && Memory.fastRclUpgrade!=this.memory.homeRoom && b.res=="XGH2O")
-        {//skipping upgrade boost if focusing on upgrading other room
-            
+        if (Memory.fastRclUpgrade != undefined && Memory.fastRclUpgrade != this.memory.homeRoom && b.res == "XGH2O") {//skipping upgrade boost if focusing on upgrading other room
 
-            var index=global.heap.rooms[this.memory.homeRoom].boostingRequests.find(obj => { return obj.creepId == this.id && obj.resource==b.res})
-            if(index != undefined)
-            {
+
+            var index = global.heap.rooms[this.memory.homeRoom].boostingRequests.find(obj => { return obj.creepId == this.id && obj.resource == b.res })
+            if (index != undefined) {
                 global.heap.rooms[this.memory.homeRoom].boostingRequests.splice(index, 1)
             }
         }
 
     }
-    
-    if(global.heap.creeps[this.name].boosters.length==boostedBodyTypes)
-    {
-        this.memory.isBoosted=true
-        global.heap.creeps[this.name].isBoosted=true
 
-        
+    if (global.heap.creeps[this.name].boosters.length == boostedBodyTypes) {
+        this.memory.isBoosted = true
+        global.heap.creeps[this.name].isBoosted = true
+
+
         return -4
     }
-    
+
     /// end of check
 
-    
 
-    global.heap.creeps[this.name].isBoosted=false
+
+    global.heap.creeps[this.name].isBoosted = false
 
     for (b of global.heap.creeps[this.name].boosters) {
         var reqBoost = b.res
@@ -113,36 +107,34 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
         var bodyType = b.bodyType
 
         if (global.heap.rooms[this.memory.homeRoom].availableT3Boosts.length == 0
-            || global.heap.rooms[this.memory.homeRoom].doctorId==undefined
+            || global.heap.rooms[this.memory.homeRoom].doctorId == undefined
         ) {
             return -1;
         }
-        
-        
+
+
 
 
         for (ab of global.heap.rooms[this.memory.homeRoom].availableT3Boosts) {
-            
-            
+
+
             this.say("BG2")
             if (ab.resourceType == reqBoost) {
                 this.say("BG3")
                 if (ab.amount > b.amount) {
 
                     this.say("BG4")
-                    if (global.heap.rooms[this.room.name].boostingRequests == undefined)
-                    {
-                        global.heap.rooms[this.room.name].boostingRequests=[]
+                    if (global.heap.rooms[this.room.name].boostingRequests == undefined) {
+                        global.heap.rooms[this.room.name].boostingRequests = []
                     }
                     //debugging
                     if (global.heap.rooms[this.room.name].boostingRequests != undefined) {
 
-                       
+
                         var crRequest = new boostRequest(this.id, reqBoost, reqBoostAmount, bodyType, Game.time + (CREEP_LIFE_TIME - C.MIN_BOOSTING_TTL))
-                        var auxCreepId=this.id
+                        var auxCreepId = this.id
                         if (this.ticksToLive > C.MIN_BOOSTING_TTL &&
-                            global.heap.rooms[this.room.name].boostingRequests.find(({ creepId }) => creepId === auxCreepId) == undefined)
-                        {
+                            global.heap.rooms[this.room.name].boostingRequests.find(({ creepId }) => creepId === auxCreepId) == undefined) {
                             global.heap.rooms[this.room.name].boostingRequests.push(crRequest)
                             this.say("RB")
                         }
@@ -152,9 +144,9 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
                 break
             }
         }
-        
+
     }
-    
+
     //this.say(boostedBodyTypes)
     //this.say("db0")
     if (this.ticksToLive > C.MIN_BOOSTING_TTL && global.heap.rooms[this.memory.homeRoom].boostingRequests.find(obj => { return obj.creepId == this.id }) != undefined) {
@@ -170,7 +162,7 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
         if (isFirstOne) {
 
             this.say("GB2")
-            if (global.heap.rooms[this.memory.homeRoom].boostingLabId != undefined && Game.getObjectById(global.heap.rooms[this.memory.homeRoom].boostingLabId)!=null) {
+            if (global.heap.rooms[this.memory.homeRoom].boostingLabId != undefined && Game.getObjectById(global.heap.rooms[this.memory.homeRoom].boostingLabId) != null) {
                 var boostingLab = Game.getObjectById(global.heap.rooms[this.memory.homeRoom].boostingLabId)
                 this.travelTo(boostingLab)
                 return 0
@@ -323,7 +315,15 @@ Creep.prototype.taskClearOutputLabs = function taskClearOutputLabs(in1, in2) {
 
 
         this.say("clOutExit2", true)
-        global.heap.rooms[this.room.name].doctorTask = C.TASK_CLEAR_INPUT_LABS
+        if (this.room.oneInputMineralEmpty(in1, in2) != false
+            //|| this.room.bothInputMineralNotEmpty(inputLab1,inputLab2)==true
+        ) {
+            this.say("5")
+            global.heap.rooms[this.room.name].doctorTask = C.TASK_CLEAR_INPUT_LABS
+        }
+        else {
+            global.heap.rooms[this.room.name].doctorTask = undefined
+        }
         return
     }
 
@@ -400,7 +400,7 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
 
 
 
-        
+
         //this.say((this.store[res1] > 0 && this.transfer(in1, res1) == ERR_NOT_IN_RANGE) || (this.store[res2] > 0 && this.transfer(in2, res2) == ERR_NOT_IN_RANGE))
         if (this.transfer(in1, res1) == ERR_INVALID_TARGET || this.transfer(in2, res2) == ERR_INVALID_TARGET) {
             global.heap.rooms[this.room.name].doctorTask = undefined
@@ -728,7 +728,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
                 var targetDeposit = global.heap.creeps[this.name].deposit
                 this.memory._targetDeposit = targetDeposit
                 if (this.withdraw(targetDeposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    this.travelTo(targetDeposit, { maxRooms: 1  });
+                    this.travelTo(targetDeposit, { maxRooms: 1 });
                     this.memory._targetDeposit = targetDeposit
 
                 }
@@ -744,7 +744,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
             if (global.heap.creeps[this.name] != undefined &&
                 global.heap.creeps[this.name].deposit != undefined
                 && this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                this.travelTo(global.heap.creeps[this.name].deposit, { maxRooms: 1  });
+                this.travelTo(global.heap.creeps[this.name].deposit, { maxRooms: 1 });
                 this.memory._targetDeposit = global.heap.creeps[this.name].deposit
 
             }
@@ -776,7 +776,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
 
             if (this.pickup(global.heap.creeps[this.name].closestDroppedEnergy) == ERR_NOT_IN_RANGE) {
                 // Move to it
-                this.travelTo(global.heap.creeps[this.name].closestDroppedEnergy, { maxRooms: 1  });
+                this.travelTo(global.heap.creeps[this.name].closestDroppedEnergy, { maxRooms: 1 });
                 //move_avoid_hostile(creep,closestDroppedEnergy.pos);
             }
             else if (this.pickup(global.heap.creeps[this.name].closestDroppedEnergy) == OK) {
@@ -791,7 +791,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
                         if (this.room.memory.mineralId != undefined &&
                             Game.getObjectById(this.room.memory.mineralId) != null
                         ) {
-                            this.travelTo(Game.getObjectById(this.room.memory.mineralId), { range: 1  })
+                            this.travelTo(Game.getObjectById(this.room.memory.mineralId), { range: 1 })
                         }
 
                         awayFromSpawn = false
@@ -813,15 +813,14 @@ Creep.prototype.taskUpgrade = function taskUpgrade() {
 
     if (global.heap.rooms[this.memory.homeRoom].building == true &&
         this.room.controller.ticksToDowngrade > (CONTROLLER_DOWNGRADE[this.room.controller.level] * C.CONTROLLER_DOWNGRADE_TOP_LIMIT)
-        
+
     ) {
 
         global.heap.creeps[this.name].task = C.TASK_BUILD
         //this.memory.task = C.TASK_BUILD
-        
-        if(global.heap.creeps[this.name].isBoosted && this.memory.role==C.ROLE_WORKER)
-        {
-             global.heap.creeps[this.name].task=C.TASK_UPGRADE
+
+        if (global.heap.creeps[this.name].isBoosted && this.memory.role == C.ROLE_WORKER) {
+            global.heap.creeps[this.name].task = C.TASK_UPGRADE
         }
 
     }
@@ -832,22 +831,22 @@ Creep.prototype.taskUpgrade = function taskUpgrade() {
     }
     var upgradeResult = this.upgradeController(this.room.controller);
     if (upgradeResult == ERR_NOT_IN_RANGE || true) {
-        this.travelTo(this.room.controller, { maxRooms: 1  });
+        this.travelTo(this.room.controller, { maxRooms: 1 });
     }
 
     //Repairing ramparts on the road to controller
     if (global.heap.rooms[this.room.name].myRamparts != undefined) {
-                for (r of global.heap.rooms[this.room.name].myRamparts) {
-                    var ra = Game.getObjectById(r)
-                    if (ra != null && ra.hits < C.RAMPART_MIN_WORKER_HITS
-                        && this.pos.getRangeTo(ra.pos.x,ra.pos.y)<4
-                    ) {
-                        //aux.push(ra)
-                        this.repair(ra)
-                        break;
-                    }
-                }
+        for (r of global.heap.rooms[this.room.name].myRamparts) {
+            var ra = Game.getObjectById(r)
+            if (ra != null && ra.hits < C.RAMPART_MIN_WORKER_HITS
+                && this.pos.getRangeTo(ra.pos.x, ra.pos.y) < 4
+            ) {
+                //aux.push(ra)
+                this.repair(ra)
+                break;
             }
+        }
+    }
 
     //Sharing energy
     if (this.store[RESOURCE_ENERGY] > 0 && global.heap.rooms[this.memory.homeRoom].myWorkers != undefined && global.heap.rooms[this.memory.homeRoom].myWorkers.length > 0
@@ -975,7 +974,7 @@ Creep.prototype.taskBuild = function taskBuild() {
                 for (r of global.heap.rooms[this.room.name].myRamparts) {
                     var ra = Game.getObjectById(r)
                     if (ra != null && ra.hits < C.RAMPART_MIN_WORKER_HITS
-                        && this.pos.getRangeTo(ra.pos.x,ra.pos.y)<4
+                        && this.pos.getRangeTo(ra.pos.x, ra.pos.y) < 4
                     ) {
                         //aux.push(ra)
                         this.repair(ra)
@@ -993,7 +992,7 @@ Creep.prototype.taskBuild = function taskBuild() {
 
         if (toFocus != null) {
             if (this.build(toFocus) == ERR_NOT_IN_RANGE || this.repair(toFocus) == ERR_NOT_IN_RANGE) {
-                this.travelTo(toFocus, { range: 1, maxRooms: 1  })
+                this.travelTo(toFocus, { range: 1, maxRooms: 1 })
                 return
             }
             else if (this.build(toFocus) == ERR_INVALID_TARGET) {
@@ -1047,7 +1046,7 @@ Creep.prototype.taskHarvest = function taskHarvest() {
 
     if (global.heap.creeps[this.name].targetSource != undefined) {
         if (Game.getObjectById(global.heap.creeps[this.name].targetSource) != null && this.harvest(Game.getObjectById(global.heap.creeps[this.name].targetSource)) == ERR_NOT_IN_RANGE) {
-            this.travelTo(Game.getObjectById(global.heap.creeps[this.name].targetSource), {  maxRooms: 1 })
+            this.travelTo(Game.getObjectById(global.heap.creeps[this.name].targetSource), { maxRooms: 1 })
         }
     }
 
@@ -1127,7 +1126,7 @@ Creep.prototype.taskFillNukerGhodium = function taskFillNukerGhodium() {
     var terminal = this.room.terminal;
 
     if (nuker == null || storage == undefined || terminal == undefined) {
-        
+
         return
     }
     if (storage.store[RESOURCE_GHODIUM] > C.MIN_NUKER_RES_AMOUNT) {
