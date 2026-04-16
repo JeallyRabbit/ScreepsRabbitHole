@@ -234,7 +234,6 @@ Creep.prototype.taskClearInputLabs = function taskClearInputLabs(in1, in2) {
                 global.heap.creeps[this.name].inEmpty = false;
             }
         }
-        //}
     }
     else {
         // transfer to storage

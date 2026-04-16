@@ -85,7 +85,7 @@ Creep.prototype.roleDoctor = function roleDoctor() {
             global.heap.rooms[this.room.name].doctorTask = C.TASK_FILL_INPUT_LABS_MINERAL
         }
         else if (this.room.oneInputMineralEmpty(inputLab1, inputLab2) != false
-    // add checking if input labs have wrong ingredients
+    || this.room.inputLabsMatchReaction(inputLab1,inputLab2)==false//,add checking if input labs have wrong ingredients
     ) {
             this.say("5")
             global.heap.rooms[this.room.name].doctorTask = C.TASK_CLEAR_INPUT_LABS
@@ -131,6 +131,21 @@ Creep.prototype.roleDoctor = function roleDoctor() {
         }
         
     }
+}
+
+Room.prototype.inputLabsMatchReaction = function inputLabsMatchReaction(in1,in2)
+{
+    if(global.heap.rooms[this.name].reaction==undefined)
+    {
+        return false
+    }
+    var res1=global.heap.rooms[this.name].reaction[0]
+    var res2=global.heap.rooms[this.name].reaction[1]
+    if(in1.store[res1]==0 || in2.store[res2]==0)
+        {
+        return false
+    }
+    return true
 }
 
 Room.prototype.bothInputMineralNotEmpty = function bothInputMineralNotEmpty(in1, in2) {
