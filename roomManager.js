@@ -20,11 +20,10 @@ Room.prototype.roomManager = function roomManager() {
 
 
     global.heap.rooms[this.name].myCreeps = []
-    if(global.heap.rooms[this.name].myHaulers==undefined)
-    {
-       global.heap.rooms[this.name].myHaulers=[] 
+    if (global.heap.rooms[this.name].myHaulers == undefined) {
+        global.heap.rooms[this.name].myHaulers = []
     }
-    
+
     global.heap.rooms[this.name].hostiles = []
     global.heap.rooms[this.name].hostileHealPower = 1;
     global.heap.rooms[this.name].hostileAttackPower = 0;
@@ -81,32 +80,32 @@ Room.prototype.roomManager = function roomManager() {
 
 
         //that high value is needed to properly find minimum value among myRamparts
-            global.heap.rooms[this.name].minRampartHits=RAMPART_HITS_MAX[this.controller.level]
+        global.heap.rooms[this.name].minRampartHits = RAMPART_HITS_MAX[this.controller.level]
 
 
         // Resetting roomsToScan after 2nd and 3rd spawns are build
         //if (Game.time & 2341 == 0 || true) {
-            if (this.controller.level >= 7) {
-                var sp = this.find(FIND_MY_SPAWNS)
-                if (sp.length > 1 && this.memory.rcl7RoomsReset != true) {
-                    this.memory.roomsToScan = undefined
-                    this.memory.rcl7RoomsReset = true
-                    this.memory.buildingStage=undefined;
-                    this.memory.plannedRoads=false
-                }
-
-                if (sp.length > 2 && this.memory.rcl8RoomsReset != true) {
-                    this.memory.roomsToScan = undefined
-                    this.memory.rcl8RoomsReset = true
-                    this.memory.buildingStage=undefined
-                    this.memory.plannedRoads=false
-                }
+        if (this.controller.level >= 7) {
+            var sp = this.find(FIND_MY_SPAWNS)
+            if (sp.length > 1 && this.memory.rcl7RoomsReset != true) {
+                this.memory.roomsToScan = undefined
+                this.memory.rcl7RoomsReset = true
+                this.memory.buildingStage = undefined;
+                this.memory.plannedRoads = false
             }
+
+            if (sp.length > 2 && this.memory.rcl8RoomsReset != true) {
+                this.memory.roomsToScan = undefined
+                this.memory.rcl8RoomsReset = true
+                this.memory.buildingStage = undefined
+                this.memory.plannedRoads = false
+            }
+        }
         //}
 
 
 
-        
+
 
 
 
@@ -117,7 +116,7 @@ Room.prototype.roomManager = function roomManager() {
         if ((this.memory.distanceToOthers == undefined || this.memory.distanceToOthers == null) && Game.time % C.ROOM_DISTANCE_CALC_STEP == 0) {
             var distance = 0;
             var distanceCounter = 0
-            
+
             for (m of global.heap.mainRooms) {
                 if (m != this.name) {
                     distance += Game.map.getRoomLinearDistance(this.name, m)
@@ -292,7 +291,7 @@ Room.prototype.roomManager = function roomManager() {
         if (this.terminal != undefined) {
             for (res in this.terminal.store) {
                 if (T3EconomicBoosts.includes(res) || T3MilitaryBoosts.includes(res)) {
-                    global.heap.rooms[this.name].availableT3Boosts.push({resourceType: res, amount:this.terminal.store[res]})
+                    global.heap.rooms[this.name].availableT3Boosts.push({ resourceType: res, amount: this.terminal.store[res] })
                 }
             }
         }
@@ -306,23 +305,22 @@ Room.prototype.roomManager = function roomManager() {
 
             //console.log("boosting requests before: ",global.heap.rooms[this.name].boostingRequests)
             var aux = global.heap.rooms[this.name].boostingRequests.filter(
-                req =>{
-                    return req.ttl>Game.time && Game.getObjectById(req.creepId)!=null
+                req => {
+                    return req.ttl > Game.time && Game.getObjectById(req.creepId) != null
                 })
-                    
-            if(aux==undefined)
-            {
-                global.heap.rooms[this.name].boostingRequests=[]
+
+            if (aux == undefined) {
+                global.heap.rooms[this.name].boostingRequests = []
             }
-            else{
-                global.heap.rooms[this.name].boostingRequests=aux
+            else {
+                global.heap.rooms[this.name].boostingRequests = aux
             }
             //console.log("boosting requests after ",global.heap.rooms[this.name].boostingRequests)
 
         }
-        else{
+        else {
             //console.log("boosting requests after2 ",global.heap.rooms[this.name].boostingRequests)
-            global.heap.rooms[this.name].boostingRequests=[]
+            global.heap.rooms[this.name].boostingRequests = []
         }
 
         if (this.memory.energyBalance == undefined && (this.storage == undefined
@@ -528,10 +526,9 @@ Room.prototype.roomManager = function roomManager() {
                     this.memory.finishedPlanning = undefined
                 }
                 if (Game.time % 56 == 0) {
-                    //debugging condition
-                    if (this.controller.level != 8) {
-                        this.buildRoom(this.memory.variationToBuild)
-                    }
+
+                    this.buildRoom(this.memory.variationToBuild)
+
 
                     //global.heap.isSomeRoomPlanning = true
                 }
@@ -665,7 +662,7 @@ Room.prototype.roomManager = function roomManager() {
         for (a of hostiles) {
             global.heap.rooms[this.name].hostiles.push(a)
             global.heap.rooms[this.name].hostileHealPower += _.filter(a.body, { type: HEAL }).length * HEAL_POWER
-            global.heap.rooms[this.name].hostileHealPower += _.filter(a.body, { type: WORK }).length * DISMANTLE_POWER*.3// to trigger defense also on enemy workers enter
+            global.heap.rooms[this.name].hostileHealPower += _.filter(a.body, { type: WORK }).length * DISMANTLE_POWER * .3// to trigger defense also on enemy workers enter
             global.heap.rooms[this.name].hostileAttackPower += _.filter(a.body, { type: ATTACK }).length * ATTACK_POWER
             global.heap.rooms[this.name].hostileRangedAttackPower += _.filter(a.body, { type: RANGED_ATTACK }).length * RANGED_ATTACK_POWER
         }
@@ -717,7 +714,7 @@ Room.prototype.roomManager = function roomManager() {
         if (str.my && global.heap.mainRooms.includes(this.name)) {
 
 
-            
+
 
             this.memory.myStructures.push(str.id)
 
@@ -782,9 +779,8 @@ Room.prototype.roomManager = function roomManager() {
                     break;
                 case STRUCTURE_RAMPART:
                     global.heap.rooms[this.name].myRamparts.push(str.id)
-                    if(str.hits<global.heap.rooms[this.name].minRampartHits)
-                    {
-                        global.heap.rooms[this.name].minRampartHits=str.hits
+                    if (str.hits < global.heap.rooms[this.name].minRampartHits) {
+                        global.heap.rooms[this.name].minRampartHits = str.hits
                     }
                 case STRUCTURE_SPAWN:
                     if (str.name != undefined && str.name.endsWith('1')) {
@@ -828,7 +824,7 @@ Room.prototype.roomManager = function roomManager() {
         }
 
 
-        
+
 
 
 
@@ -836,14 +832,14 @@ Room.prototype.roomManager = function roomManager() {
 
 
 
-    
+
 
 
 
     if (global.heap.mainRooms.includes(this.name))//again checking if room is main room
     {
 
-        
+
 
         //calculating ramparts amount
         global.heap.rooms[this.name].rampartsAmount = global.heap.rooms[this.name].myRamparts.length
@@ -869,16 +865,14 @@ Room.prototype.roomManager = function roomManager() {
         }
 
         //check to limit ramparts below rcl8
-        if(this.controller.level<8)
-        {
+        if (this.controller.level < 8) {
 
-            if(global.heap.rooms[this.name].minRampartHits>C.RAMPARTS_HITS_REPAIR_STOP)
-            {
-                global.heap.rooms[this.name].rampartsRepairerStop=true
-                global.heap.rooms[this.name].requiredRampartsRepairersPower=0;
+            if (global.heap.rooms[this.name].minRampartHits > C.RAMPARTS_HITS_REPAIR_STOP) {
+                global.heap.rooms[this.name].rampartsRepairerStop = true
+                global.heap.rooms[this.name].requiredRampartsRepairersPower = 0;
             }
-            else if(global.heap.rooms[this.name].minRampartHits<C.RAMPARTS_HITS_REPAIR_START){
-                global.heap.rooms[this.name].rampartsRepairerStop=false
+            else if (global.heap.rooms[this.name].minRampartHits < C.RAMPARTS_HITS_REPAIR_START) {
+                global.heap.rooms[this.name].rampartsRepairerStop = false
             }
         }
 
