@@ -187,7 +187,7 @@ Room.prototype.roomManager = function roomManager() {
         }
 
 
-        if (Memory.roomsToColonize.some(e => e.name == this.name) && this.controller.level > 1 && this.memory.spawnId != undefined) {
+        if (Memory.roomsToColonize!=undefined && Memory.roomsToColonize.some(e => e.name == this.name) && this.controller.level > 1 && this.memory.spawnId != undefined) {
             //Room is finished being colonizer
             if (Memory.manualColonize = this.name) {
                 Memory.manualColonize = '??'
