@@ -330,6 +330,10 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
                     {
                         Game.rooms[this.memory.homeRoom].memory= {}
                     }
+                    if(Game.rooms[this.memory.homeRoom].memory.harvestingRooms==undefined)
+                    {
+                        Game.rooms[this.memory.homeRoom].memory.harvestingRooms=[]
+                    }
                     Game.rooms[this.memory.homeRoom].memory.harvestingRooms.push(newFarming);
                 }
             }

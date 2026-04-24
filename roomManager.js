@@ -525,7 +525,7 @@ Room.prototype.roomManager = function roomManager() {
                 if (this.memory.variationToBuild == undefined) {
                     this.memory.finishedPlanning = undefined
                 }
-                if (Game.time % 56 == 0) {
+                if (Game.time % 11 == 0) {
 
                     this.buildRoom(this.memory.variationToBuild)
 
