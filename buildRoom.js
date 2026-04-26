@@ -1353,7 +1353,7 @@ Room.prototype.planExtractor = function planExtractor() {
 
 Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
 
-
+    
     if (this.memory.spawnId != undefined) {
         this.memory.variationToBuild = C.CURRENT_SPAWNPOS
     }
@@ -1386,6 +1386,7 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
 
     }
 
+    console.log("Room: ",this.name," is building, with stage: ",stage)
     //this.visual.text("Stage: " + stage, 25, 5)
 
     if (stage == 0) {

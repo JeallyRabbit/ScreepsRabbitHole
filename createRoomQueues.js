@@ -124,7 +124,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
         }
     }
 
-    if (this.storage != undefined && this.controller.level>=4) {
+    if (this.storage != undefined && this.controller.level >= 4) {
 
         if (global.heap.rooms[this.name].haulersParts < C.HAULER_REQ_CARRY_PARTS && Game.time % 2 == 0) {
             this.memory._haulersParts = global.heap.rooms[this.name].haulersParts
@@ -136,12 +136,11 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
         }
 
-        if(this.storage.store[RESOURCE_ENERGY] > C.STORAGE_BALANCER_START * 4
-            && global.heap.rooms[this.name].controllerHauler==undefined
-            && this.memory.upgradersContainerId!=undefined && Game.getObjectById(this.memory.upgradersContainerId)!=null
-        )
-        {
-            
+        if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_BALANCER_START * 4
+            && global.heap.rooms[this.name].controllerHauler == undefined
+            && this.memory.upgradersContainerId != undefined && Game.getObjectById(this.memory.upgradersContainerId) != null
+        ) {
+
             if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_CONTROLLER_HAULER) == undefined) {
                 global.heap.rooms[this.name].harvestingQueue.push(new generalRoomRequest(this.name, C.ROLE_CONTROLLER_HAULER))
             }
@@ -196,7 +195,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
                 for (hr of this.memory.harvestingRooms) {
                     if (global.heap.rooms[hr.name].carryPower < global.heap.rooms[hr.name].harvestingPower
                         && global.heap.rooms[hr.name].carryPower < hr.sourcesAmount * (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)
-                        && global.heap.rooms[this.name].carriers<C.CARRIERS_LIMIT
+                        && global.heap.rooms[this.name].carriers < C.CARRIERS_LIMIT
                     ) {
                         //Carriers
                         if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
@@ -214,15 +213,15 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
             }//Harvesters
             else if (harvestingSource.harvestingPower < (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME) && harvestingSource.harvesters < harvestingSource.maxHarvesters
-        && global.heap.rooms[this.name].harvestingSources[harvestingSource.id].harvestingPower< (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)) {
+                && global.heap.rooms[this.name].harvestingSources[harvestingSource.id].harvestingPower < (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)) {
 
-                
-                    if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_HARVESTER) == undefined) {
-                        global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestFarmer(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
-                    }
-                    areHarvestersSatisfied = false
-                    break;
-                
+
+                if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_HARVESTER) == undefined) {
+                    global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestFarmer(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
+                }
+                areHarvestersSatisfied = false
+                break;
+
 
             }
         }
@@ -239,7 +238,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
                 for (hr of this.memory.harvestingRooms) {
                     if (global.heap.rooms[hr.name].carryPower < global.heap.rooms[hr.name].harvestingPower
                         && global.heap.rooms[hr.name].carryPower < hr.sourcesAmount * (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)
-                        && global.heap.rooms[this.name].carriers<C.CARRIERS_LIMIT
+                        && global.heap.rooms[this.name].carriers < C.CARRIERS_LIMIT
                     ) {
                         //Carriers
                         if (harvestingSource.id != undefined && harvestingSource.roomName != undefined) {
@@ -270,14 +269,14 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
 
             }*///Harvesters
             else if (harvestingSource.harvestingPower < (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME) && harvestingSource.harvesters < harvestingSource.maxHarvesters
-        && global.heap.rooms[this.name].harvestingSources[harvestingSource.id].harvestingPower< (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)) {
-               
-                    if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_HARVESTER) == undefined) {
-                        global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestFarmer(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
-                    }
-                    areHarvestersSatisfied = false
-                    break;
-                
+                && global.heap.rooms[this.name].harvestingSources[harvestingSource.id].harvestingPower < (SOURCE_ENERGY_CAPACITY / ENERGY_REGEN_TIME)) {
+
+                if (global.heap.rooms[this.name].harvestingQueue.find(({ role }) => role === C.ROLE_HARVESTER) == undefined) {
+                    global.heap.rooms[this.name].harvestingQueue.push(new harvestingSourceRequestFarmer(harvestingSource.id, harvestingSource.roomName, harvestingSource.distance))
+                }
+                areHarvestersSatisfied = false
+                break;
+
 
             }
         }
@@ -396,10 +395,24 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
                         break;
                     }
                 }
+                if (global.heap.rooms[rc.name].myColonizeSoldiers.length == 0) {
+                    if (global.heap.rooms[this.name].offensiveQueue.find(({ role }) => role === C.ROLE_SOLDIER) == undefined) {
+                        global.heap.rooms[this.name].offensiveQueue.push(new generalRoomRequest(rc.name, C.ROLE_SOLDIER))
+                        break;
+                    }
+                }
                 else if (global.heap.rooms[rc.name].colonizers.length < global.heap.rooms[rc.name].maxColonizers) {
                     if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_COLONIZER) == undefined) {
                         global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(rc.name, C.ROLE_COLONIZER))
                         break;
+                    }
+                }
+                else {
+                    if (global.heap.rooms[rc.name].myColonizeSoldiers.length == global.heap.rooms[rc.name].maxSoldiers) {
+                        if (global.heap.rooms[this.name].offensiveQueue.find(({ role }) => role === C.ROLE_SOLDIER) == undefined) {
+                            global.heap.rooms[this.name].offensiveQueue.push(new generalRoomRequest(rc.name, C.ROLE_SOLDIER))
+                            break;
+                        }
                     }
                 }
 
@@ -483,7 +496,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
             else if (this.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START) {
                 energyStartCondition = true
             }
-            if (energyStartCondition == true 
+            if (energyStartCondition == true
                 && global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RAMPART_REPAIRER) == undefined) {
                 global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_RAMPART_REPAIRER))
             }
@@ -493,7 +506,7 @@ Room.prototype.createRoomQueues = function createRoomQueues() {
     }
 
     if (this.storage != undefined && global.heap.rooms[this.name].resourceManagerId == undefined && Game.time % 3 == 0
-        && this.controller.level>=4
+        && this.controller.level >= 4
     ) {
         if (global.heap.rooms[this.name].civilianQueue.find(({ role }) => role === C.ROLE_RESOURCE_MANAGER) == undefined) {
             global.heap.rooms[this.name].civilianQueue.push(new generalRoomRequest(this.name, C.ROLE_RESOURCE_MANAGER))

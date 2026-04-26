@@ -176,6 +176,10 @@ Room.prototype.creepsManager = function creepsManager() {
                     global.heap.rooms[creep.memory.targetRoom].myHealPower += _.filter(creep.body, { type: HEAL }).length * HEAL_POWER;
                     global.heap.rooms[creep.memory.targetRoom].myAttackPower += _.filter(creep.body, { type: ATTACK }).length * ATTACK_POWER;
                     global.heap.rooms[creep.memory.targetRoom].myRangedAttackPower += _.filter(creep.body, { type: RANGED_ATTACK }).length * RANGED_ATTACK_POWER;
+                    if(global.heap.rooms[creep.memory.targetRoom].myColonizeSoldiers!=undefined)
+                    {
+                        global.heap.rooms[creep.memory.targetRoom].myColonizeSoldiers.push(creep.id)
+                    }
                 }
 
                 break;

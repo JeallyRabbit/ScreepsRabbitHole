@@ -106,7 +106,7 @@ module.exports.loop = function () {
   profiler.wrap(function () {
 
 
-
+    console.log("Time: ",Game.time)
     var totalStart = Game.cpu.getUsed()
 
     if (Game.time % 8911 == 0) {
@@ -196,8 +196,11 @@ module.exports.loop = function () {
 
       global.heap.rooms[colonizeRoom.name].claimer = undefined
       global.heap.rooms[colonizeRoom.name].colonizers = []
+      global.heap.rooms[colonizeRoom.name].myColonizeSoldiers=[]
       global.heap.rooms[colonizeRoom.name].maxColonizers = C.DEFAULT_COLONIZERS_AMOUNT // as we get vision on that room it will be definied in next step
 
+      
+      global.heap.rooms[colonizeRoom.name].maxSoldiers = C.DEFAULT_COLONIZE_SOLDIERS_AMOUNT
 
       if (Game.rooms[colonizeRoom.name] != undefined) {//Room is being colonized
 

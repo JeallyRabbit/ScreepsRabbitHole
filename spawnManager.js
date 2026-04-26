@@ -182,7 +182,7 @@ Room.prototype.spawnManager = function spawnManager() {
                         if (harvestingRequest.sourceRoom != request.roomName && harvestingRequest.sourceRoom!=this.name && (harvestingRole == C.ROLE_CARRIER || harvestingRole == C.ROLE_HARVESTER)) {
                             ifCanSkip = true
                             skippedDefensiveQueue=true
-                            console.log("Skipping soldier - can spawn harvesters to other rooms")
+                            //console.log("Skipping soldier - can spawn harvesters to other rooms")
                             break;
                         }
                     }
@@ -192,12 +192,10 @@ Room.prototype.spawnManager = function spawnManager() {
                         global.heap.rooms[this.name].defensiveQueue.shift()
                         ifCanSkip=false
                     }
-                    console.log("Can skip: ",ifCanSkip)
                     if (!ifCanSkip) {
                         var result = spawn.spawnCreep(soldierBody(energyCap, request.isMelee), 'SadisticRabbit' + '_' + this.name + Game.time, { memory: { role: C.ROLE_SOLDIER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
                         global.heap.rooms[this.name].spawnResult = result
                         global.heap.rooms[this.name].spawnRole = role
-                        console.log(C.ROLE_SOLDIER+" for: ",request.roomName+" spawning result: "+result )
                         if (result == OK) {
                             global.heap.rooms[this.name].defensiveQueue.shift()
                             break;
@@ -561,6 +559,16 @@ Room.prototype.spawnManager = function spawnManager() {
         var energyCap = Game.rooms[this.name].energyAvailable
 
         switch (role) {
+            case C.ROLE_SOLDIER:
+                {
+                    var result = spawn.spawnCreep(soldierBody(energyCap, request.isMelee), 'SadisticRabbit' + '_' + this.name + Game.time, { memory: { role: C.ROLE_SOLDIER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
+                        global.heap.rooms[this.name].spawnResult = result
+                        global.heap.rooms[this.name].spawnRole = role
+                        if (result == OK) {
+                            global.heap.rooms[this.name].offensiveQueue.shift()
+                            break;
+                        }
+                }
             case C.ROLE_QUAD_MEMBER:
                 {
                     if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM &&
