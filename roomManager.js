@@ -500,7 +500,7 @@ Room.prototype.roomManager = function roomManager() {
 
                         if (this.memory.baseVariations[key].variationFinished == false) {
                             this.visual.text(key, 25, 4)
-                            if (Game.cpu.bucket > 300) {
+                            if (Game.time % 11 == 0 && Game.cpu.bucket > 500) {
                                 this.buildRoom(key)
                             }
 
@@ -525,7 +525,7 @@ Room.prototype.roomManager = function roomManager() {
                 if (this.memory.variationToBuild == undefined) {
                     this.memory.finishedPlanning = undefined
                 }
-                if (Game.time % 11 == 0) {
+                if (Game.time % 11 == 0 && Game.cpu.bucket > 500) {
 
                     this.buildRoom(this.memory.variationToBuild)
 
