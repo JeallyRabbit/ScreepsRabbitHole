@@ -3,6 +3,26 @@ const C = require('constants');
 
 //TODO:
 //Add avopiding hostile areas during STATE_UNDER_ATTACK
+Creep.prototype.awayFromSpawn=function awayFromSpawn() {
+    var isAwayFromSpawn = true;
+    this.say(isAwayFromSpawn);
+    if (global.heap.rooms[this.memory.homeRoom].spawns != undefined) {
+        for (sp of global.heap.rooms[this.memory.homeRoom].spawns) {
+            if (this.pos.inRangeTo(sp.pos, 4)) {
+                if (this.room.memory.mineralId != undefined &&
+                    Game.getObjectById(this.room.memory.mineralId) != null) {
+                    this.travelTo(Game.getObjectById(this.room.memory.mineralId), { range: 1 });
+                }
+                this.say("spAw", true);
+                isAwayFromSpawn = false;
+            }
+
+        }
+    }
+    if (isAwayFromSpawn) {
+        this.sleep(10);
+    }
+}
 
 
 class boostRequest {
@@ -682,7 +702,9 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
             }
             else {
 
-                if (this.memory.targetRoom == this.memory.homeRoom && Game.rooms[this.memory.homeRoom].storage != undefined) {
+                if (this.memory.targetRoom == this.memory.homeRoom && Game.rooms[this.memory.homeRoom].storage != undefined
+                    && Game.rooms[this.memory.homeRoom].storage.store[RESOURCE_ENERGY]>0
+                ) {
                     global.heap.creeps[this.name].deposit = Game.rooms[this.memory.homeRoom].storage
                     this.memory._testDeposit = 2
                 }
@@ -717,13 +739,17 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
         }
 
     }
-
+    
+    this.say(global.heap.creeps[this.name].deposit==undefined)
     if (global.heap.creeps[this.name].deposit != undefined) {
 
+        this.say("1")
         if (this.memory.targetRoom == this.memory.homeRoom) {
+
             if ((this.room.controller != undefined && this.room.controller.level >= 4 && this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_UPGRADE_LIMIT)
                 || (this.room.memory.energyBalance != undefined && this.room.memory.energyBalance > C.ENERGY_BALANCER_UPGRADER_START)) {
 
+                  
                 var targetDeposit = global.heap.creeps[this.name].deposit
                 this.memory._targetDeposit = targetDeposit
                 if (this.withdraw(targetDeposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -737,12 +763,17 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
                     this.decreaseBalancer();
                 }
             }
+            else{
+                this.awayFromSpawn();
+            }
         }
         else {
-            //this.fleeFrom(global.heap.creeps[this.name].deposit, { range: 5 })
+            
+            this.say(this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY))
             if (global.heap.creeps[this.name] != undefined &&
                 global.heap.creeps[this.name].deposit != undefined
-                && this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                && this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
+                 {
                 this.travelTo(global.heap.creeps[this.name].deposit, { maxRooms: 1 });
                 this.memory._targetDeposit = global.heap.creeps[this.name].deposit
 
@@ -750,10 +781,11 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
             //this.decreaseBalancer()
 
         }
+        //this.say("deb3")
     }
     else { // collect dropped energy
         this.memory._targetDeposit = undefined
-
+        this.say("deb2")
         if (global.heap.creeps[this.name].closestDroppedEnergy != undefined) {
             if (Game.getObjectById(global.heap.creeps[this.name].closestDroppedEnergy.id) == null) {
                 global.heap.creeps[this.name].closestDroppedEnergy = undefined
@@ -773,6 +805,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
 
         if (global.heap.creeps[this.name].closestDroppedEnergy != undefined) {
 
+            this.say("deb1")
             if (this.pickup(global.heap.creeps[this.name].closestDroppedEnergy) == ERR_NOT_IN_RANGE) {
                 // Move to it
                 this.travelTo(global.heap.creeps[this.name].closestDroppedEnergy, { maxRooms: 1 });
@@ -783,24 +816,7 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
             }
         }
         else {//no container or dropped energy to collect from
-            var awayFromSpawn = true
-            if (global.heap.rooms[this.memory.homeRoom].spawns != undefined) {
-                for (sp of global.heap.rooms[this.memory.homeRoom].spawns) {
-                    if (this.pos.inRangeTo(sp.pos, 4)) {
-                        if (this.room.memory.mineralId != undefined &&
-                            Game.getObjectById(this.room.memory.mineralId) != null
-                        ) {
-                            this.travelTo(Game.getObjectById(this.room.memory.mineralId), { range: 1 })
-                        }
-
-                        awayFromSpawn = false
-                    }
-
-                }
-            }
-            if (awayFromSpawn) {
-                this.sleep(10)
-            }
+            this.awayFromSpawn();
 
         }
     }
@@ -1142,5 +1158,6 @@ Creep.prototype.taskFillNukerGhodium = function taskFillNukerGhodium() {
 
 
 }
+
 
 

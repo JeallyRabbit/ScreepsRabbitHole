@@ -26,7 +26,7 @@ Creep.prototype.roleRepairer = function roleRepairer() {
             return;
         }
         if (this.store[RESOURCE_ENERGY] == 0) {
-            //this.say("collect")
+            this.say("collect")
             this.taskCollect()
             return
         }

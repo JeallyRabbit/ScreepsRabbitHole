@@ -869,6 +869,13 @@ Room.prototype.buildFromLists = function buildFromLists() {
                 Game.rooms[this.memory.finalBuildingList[i].roomName].createConstructionSite(this.memory.finalBuildingList[i].x, this.memory.finalBuildingList[i].y, this.memory.finalBuildingList[i].structureType);
 
             }
+            else if(this.memory.finalBuildingList[i].structureType == STRUCTURE_LAB && this.memory.finalBuildingList[i].minRCL <= rcl)
+            {
+                if(this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>C.STORAGE_ENERGY_BOTTOM)
+                {
+                    Game.rooms[this.memory.finalBuildingList[i].roomName].createConstructionSite(this.memory.finalBuildingList[i].x, this.memory.finalBuildingList[i].y, this.memory.finalBuildingList[i].structureType);
+                }
+            }
             else if (isPosFree(this.memory.finalBuildingList[i].x, this.memory.finalBuildingList[i].y, this.memory.finalBuildingList[i].roomName) == true
                 && this.memory.finalBuildingList[i].minRCL <= rcl) {
                 Game.rooms[this.memory.finalBuildingList[i].roomName].createConstructionSite(this.memory.finalBuildingList[i].x, this.memory.finalBuildingList[i].y, this.memory.finalBuildingList[i].structureType);
