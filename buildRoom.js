@@ -888,7 +888,9 @@ Room.prototype.buildFromLists = function buildFromLists() {
 
         for (r of this.memory.roadBuildingList) {
             
-            if (r.minRCL <= rcl && r.roomName != undefined && Game.rooms[r.roomName]!=undefined) {
+            if (r.minRCL <= rcl && r.roomName != undefined && Game.rooms[r.roomName]!=undefined
+                && ( this.memory.roomPlan[r.x][r.y]==0 || this.memory.roomPlan[r.x][r.y]==STRUCTURE_ROAD)
+            ) {
                 Game.rooms[r.roomName].createConstructionSite(r.x, r.y, r.structureType)
             }
         }
@@ -1543,6 +1545,12 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
 
             this.memory.finalBuildingList = uniqueArray
 
+            const uniqueRoadArray = Array.from(
+                new Set(this.memory.roadBuildingList.map(obj => JSON.stringify(obj)))
+            ).map(str => JSON.parse(str))
+
+            this.memory.roadBuildingList=uniqueRoadArray
+
             this.memory.roomCM = roomCM1.serialize();
 
         }
@@ -1571,16 +1579,14 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
                     if (Memory.rooms[this.name].roomCM != undefined) {
                         delete Memory.rooms[this.name].roomCM
                     }
-                    if (Memory.rooms[this.name].roomPlan != undefined) {
-                        delete Memory.rooms[this.name].roomPlan
-                    }
+                    //if (Memory.rooms[this.name].roomPlan != undefined) {
+                        //delete Memory.rooms[this.name].roomPlan
+                    //}
                     if (Memory.rooms[this.name].buildingList != undefined) {
                         delete Memory.rooms[this.name].buildingList
                     }
                 }
 
-                //this.memory.finalBuildingList
-                //this.memory.roadBuildingList
 
             }
 

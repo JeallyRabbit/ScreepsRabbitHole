@@ -22,6 +22,18 @@ const attackManager = require('attackManager')
 const visualize = require('visualize');
 
 
+Room.prototype.reBuild = function reBuild() {
+  this.memory.roomsToScan = undefined;
+  this.memory.buildingStage = undefined;
+  var rows = 50;
+  var cols = 50;
+  this.memory.roomPlan = new Array(rows).fill(null).map(() => new Array(cols).fill(0));
+  this.memory.buildingList = [];
+  this.memory.roadBuildingList = [];
+  this.memory.plannedRoads = false
+
+}
+
 
 Room.prototype.unclaim = function unclaim() {
   for (let c in Game.constructionSites) {
@@ -106,7 +118,7 @@ module.exports.loop = function () {
   profiler.wrap(function () {
 
 
-    console.log("Time: ",Game.time)
+    console.log("Time: ", Game.time)
     var totalStart = Game.cpu.getUsed()
 
     if (Game.time % 8911 == 0) {
@@ -140,7 +152,7 @@ module.exports.loop = function () {
 
     //setting mainRooms
     global.heap.mainRooms = []
-    Memory.mainRooms=[]
+    Memory.mainRooms = []
     global.heap.isSomeRoomPlanning = false;
     for (roomName in Game.rooms) {
 
@@ -155,7 +167,7 @@ module.exports.loop = function () {
         Memory.mainRooms.push(roomName)
       }
 
-      
+
     }
 
     //RoomManager over all rooms
@@ -196,10 +208,10 @@ module.exports.loop = function () {
 
       global.heap.rooms[colonizeRoom.name].claimer = undefined
       global.heap.rooms[colonizeRoom.name].colonizers = []
-      global.heap.rooms[colonizeRoom.name].myColonizeSoldiers=[]
+      global.heap.rooms[colonizeRoom.name].myColonizeSoldiers = []
       global.heap.rooms[colonizeRoom.name].maxColonizers = C.DEFAULT_COLONIZERS_AMOUNT // as we get vision on that room it will be definied in next step
 
-      
+
       global.heap.rooms[colonizeRoom.name].maxSoldiers = C.DEFAULT_COLONIZE_SOLDIERS_AMOUNT
 
       if (Game.rooms[colonizeRoom.name] != undefined) {//Room is being colonized
@@ -218,7 +230,7 @@ module.exports.loop = function () {
 
 
 
-    
+
 
 
     if (Memory.roomsToAttack == undefined) {
@@ -326,7 +338,7 @@ module.exports.loop = function () {
       var start = Game.cpu.getUsed()
 
       if (Game.rooms[mainRoom].memory.distanceToOthers != undefined && Game.rooms[mainRoom].memory.distanceToOthers < minDistanceToFastRclUpgrade
-        && Game.rooms[mainRoom].storage != undefined && Game.rooms[mainRoom].terminal != undefined && Game.rooms[mainRoom].controller.level>=6 && Game.rooms[mainRoom].controller.level < 8
+        && Game.rooms[mainRoom].storage != undefined && Game.rooms[mainRoom].terminal != undefined && Game.rooms[mainRoom].controller.level >= 6 && Game.rooms[mainRoom].controller.level < 8
         && Game.rooms[mainRoom].memory.distanceToOthers != 0
       ) {
         minDistanceToFastRclUpgrade = Game.rooms[mainRoom].memory.distanceToOthers;

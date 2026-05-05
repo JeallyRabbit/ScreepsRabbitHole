@@ -88,17 +88,14 @@ Room.prototype.roomManager = function roomManager() {
         if (this.controller.level >= 7) {
             var sp = this.find(FIND_MY_SPAWNS)
             if (sp.length > 1 && this.memory.rcl7RoomsReset != true) {
-                this.memory.roomsToScan = undefined
+                this.reBuild()
                 this.memory.rcl7RoomsReset = true
-                this.memory.buildingStage = undefined;
-                this.memory.plannedRoads = false
             }
 
             if (sp.length > 2 && this.memory.rcl8RoomsReset != true) {
-                this.memory.roomsToScan = undefined
+                
+                this.reBuild()
                 this.memory.rcl8RoomsReset = true
-                this.memory.buildingStage = undefined
-                this.memory.plannedRoads = false
             }
         }
         //}
