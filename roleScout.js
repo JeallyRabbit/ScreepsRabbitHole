@@ -21,14 +21,14 @@ class FarmingRoom {
 }
 
 class FarmingSource {
-    constructor(id, name, harvesting_power, carry_power, distance, maxHarvesters,pos) {
+    constructor(id, name, harvesting_power, carry_power, distance, maxHarvesters, pos) {
         this.id = id;
         this.roomName = name;
         this.harvestingPower = harvesting_power;
         this.carryPower = carry_power;
         this.distance = distance;
         this.maxHarvesters = maxHarvesters;
-        this.pos=pos
+        this.pos = pos
         this.harvesters = 0;
         var bodyPartsCost = 27;//parts for harvesters (max farmer is made off 12 bodyparts);
         bodyPartsCost += 14;//maxRepairer
@@ -69,14 +69,14 @@ class KeeperRoom {
 }
 
 class KeepersSource {
-    constructor(id, name, harvestingPower, carryPower, distance, maxHarvesters,pos) {
+    constructor(id, name, harvestingPower, carryPower, distance, maxHarvesters, pos) {
         this.id = id;
         this.name = name;
         this.harvestingPower = harvestingPower;
         this.carryPower = carryPower;
         this.distance = distance;
         this.maxHarvesters = maxHarvesters;
-        this.pos=pos
+        this.pos = pos
         this.harvesters = 0;
         this.sourcesNum = 1;
         var sourcesNum = 1;
@@ -155,11 +155,10 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
     if (homeSpawn == null) {
         this.suicide()
     }
-    
-    if(this.memory.targetRoom!=undefined)
-    {
+
+    if (this.memory.targetRoom != undefined) {
         //Combat scout
-        this.travelTo(new RoomPosition(25,25,this.memory.targetRoom,{range: 22}))
+        this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom, { range: 22 }))
         return
     }
 
@@ -186,7 +185,7 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
             const exit = this.pos.findClosestByRange(exitDir);
             this.moveTo(exit, { reusePath: 21, avoidHostile: true, avoidCreeps: true, avoidSk: true });
             */
-           this.travelTo(new RoomPosition(25,25,Game.rooms[this.memory.homeRoom].memory.roomsToScan[0]),{range: 22})
+            this.travelTo(new RoomPosition(25, 25, Game.rooms[this.memory.homeRoom].memory.roomsToScan[0]), { range: 22 })
 
 
 
@@ -209,33 +208,39 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
                 var sourcesNum = sources.length;
                 var maxHarvesters = 0;
                 for (src in sources) {
-                    maxHarvesters += src.pos.getOpenPositions().length;
+                    if (src.pos != undefined) {
+                        maxHarvesters += src.pos.getOpenPositions().length;
+                    }
+
                 }
                 var avgDistance = 0;
 
                 // Keepers sources
                 for (src in sources) {
-                    var ret = findRouteTest(homeSpawn.pos, src.pos.getNearbyPositions())
+                    if (src.pos != undefined) {
 
 
-                    avgDistance += ret.path.length;
+                        var ret = findRouteTest(homeSpawn.pos, src.pos.getNearbyPositions())
 
-                    var newKeeperSource = new KeepersSource(sources[i].id, this.room.name, 0, 0, ret.path.length, src.pos.getOpenPositions().length,src.pos)
 
-                    // check if this source is already scanned or in other use
-                    var alreadyUsed = false;
+                        avgDistance += ret.path.length;
 
-                    // If source is used in other room or on creep homeRoom
-                    for (otherRoom in global.heap.mainRooms) {
-                        if (Game.rooms[otherRoom].memory.keepersSources.some(obj => obj.id === src.id)) {
-                            alreadyUsed = true
+                        var newKeeperSource = new KeepersSource(sources[i].id, this.room.name, 0, 0, ret.path.length, src.pos.getOpenPositions().length, src.pos)
+
+                        // check if this source is already scanned or in other use
+                        var alreadyUsed = false;
+
+                        // If source is used in other room or on creep homeRoom
+                        for (otherRoom in global.heap.mainRooms) {
+                            if (Game.rooms[otherRoom].memory.keepersSources.some(obj => obj.id === src.id)) {
+                                alreadyUsed = true
+                            }
+                        }
+
+                        if (alreadyUsed && ret.path.length < 125) {
+                            Game.rooms[this.memory.homeRoom].memory.keepersSources.push(newKeeperSource)
                         }
                     }
-
-                    if (alreadyUsed && ret.path.length < 125) {
-                        Game.rooms[this.memory.homeRoom].memory.keepersSources.push(newKeeperSource)
-                    }
-
 
 
                 }
@@ -273,7 +278,7 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
 
                     avgDistance += ret.path.length;
 
-                    var new_farming_source = new FarmingSource(src.id, this.room.name, 0, 0, ret.path.length, Math.max(1, src.pos.getOpenPositions().length),src.pos)
+                    var new_farming_source = new FarmingSource(src.id, this.room.name, 0, 0, ret.path.length, Math.max(1, src.pos.getOpenPositions().length), src.pos)
 
                     var alreadyUsed = false
                     //If other player is reserving room (if player is enemy - we will try to harvest there)
@@ -320,19 +325,17 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
 
                 var alreadyUsed = false;
                 for (otherRoom of global.heap.mainRooms) {
-                    if (Game.rooms[otherRoom].memory.harvestingRooms!=undefined && Game.rooms[otherRoom].memory.harvestingRooms.some(obj => obj.name === this.room.name)) {
+                    if (Game.rooms[otherRoom].memory.harvestingRooms != undefined && Game.rooms[otherRoom].memory.harvestingRooms.some(obj => obj.name === this.room.name)) {
                         alreadyUsed = true
                     }
                 }
 
-                if (!alreadyUsed ) {
-                    if(Game.rooms[this.memory.homeRoom].memory==undefined)
-                    {
-                        Game.rooms[this.memory.homeRoom].memory= {}
+                if (!alreadyUsed) {
+                    if (Game.rooms[this.memory.homeRoom].memory == undefined) {
+                        Game.rooms[this.memory.homeRoom].memory = {}
                     }
-                    if(Game.rooms[this.memory.homeRoom].memory.harvestingRooms==undefined)
-                    {
-                        Game.rooms[this.memory.homeRoom].memory.harvestingRooms=[]
+                    if (Game.rooms[this.memory.homeRoom].memory.harvestingRooms == undefined) {
+                        Game.rooms[this.memory.homeRoom].memory.harvestingRooms = []
                     }
                     Game.rooms[this.memory.homeRoom].memory.harvestingRooms.push(newFarming);
                 }

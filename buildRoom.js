@@ -29,23 +29,19 @@ function isPosFree(x, y, roomName) {
 
 }
 
-Room.prototype.rebuildRoads = function rebuildRoads()
-{
-    this.memory.plannedRoads=false;
-    this.memory.buildingStage=undefined
+Room.prototype.rebuildRoads = function rebuildRoads() {
+    this.memory.plannedRoads = false;
+    this.memory.buildingStage = undefined
 }
 
-Room.prototype.printRoads= function printRoads()
-{
-    if(this.memory.roadBuildingList!=undefined && this.memory.roadBuildingList.length>0)
-    {
-        for(r of this.memory.roadBuildingList)
-        {
+Room.prototype.printRoads = function printRoads() {
+    if (this.memory.roadBuildingList != undefined && this.memory.roadBuildingList.length > 0) {
+        for (r of this.memory.roadBuildingList) {
             Game.rooms[r.roomName].visual.circle(r.x, r.y, { fill: '#666666', radius: 0.5, stroke: 'black' });
-            console.log(r.roomName," ",r.x," ",r.y)
+            console.log(r.roomName, " ", r.x, " ", r.y)
         }
     }
-    else{
+    else {
         console.log("No road building list")
     }
 }
@@ -168,9 +164,8 @@ Room.prototype.planRoadToTarget = function planRoadToTarget(roomCM, target, rcl,
 
     for (let i = 0; i < 50; i++) {
         for (let j = 0; j < 50; j++) {
-            if(this.memory.roomPlan==undefined)
-            {
-                this.memory.roomPlan= new Array(50).fill(null).map(() => new Array(50).fill(0));
+            if (this.memory.roomPlan == undefined) {
+                this.memory.roomPlan = new Array(50).fill(null).map(() => new Array(50).fill(0));
             }
             if (this.memory.roomPlan[i][j] == STRUCTURE_ROAD) {
                 roomCM.set(i, j, 0);
@@ -365,6 +360,10 @@ Room.prototype.createExtensionStamp = function createExtensionStamp(x, y, rcl) {
 
 
 Room.prototype.planExtensionStamp = function planExtensionStamp(roomCM, rcl, spawnPos, type) {
+
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11")
+    console.log("planning extension stamp")
+
     var isSuccess = false;
     for (let i = 0; i < 50; i++) {
         for (let j = 0; j < 50; j++) {
@@ -409,7 +408,7 @@ Room.prototype.planExtensionStamp = function planExtensionStamp(roomCM, rcl, spa
     for (i = 0; i < 50; i++) {
         for (let j = 0; j < 50; j++) {
             if (distanceCM.get(i, j) >= 2 && floodCM.get(i, j) < minDistanceFromSpawn
-                && (i > 8 && i < 43) && (j > 8 && j < 43) && this.controller.pos.getRangeTo(i,j)>3) {
+                && (i > 8 && i < 43) && (j > 8 && j < 43) && this.controller.pos.getRangeTo(i, j) > 3) {
                 minDistanceFromSpawn = floodCM.get(i, j);
                 posForStamp.x = i;
                 posForStamp.y = j;
@@ -438,6 +437,8 @@ Room.prototype.planExtensionStamp = function planExtensionStamp(roomCM, rcl, spa
 
 Room.prototype.createManagerStamp = function createManagerStamp(x, y) {
 
+    console.log("@@@@@@@@@@@@@@@@@@@@")
+    console.log("creating extension stamp")
     this.memory.roomPlan[x - 1][y - 1] = STRUCTURE_LINK;
     this.memory.buildingList.push(new buildingListElement(x - 1, y - 1, this.name, STRUCTURE_LINK, 5));
     this.memory.managerLinkPos = new RoomPosition(x - 1, y - 1, this.name);
@@ -869,10 +870,8 @@ Room.prototype.buildFromLists = function buildFromLists() {
                 Game.rooms[this.memory.finalBuildingList[i].roomName].createConstructionSite(this.memory.finalBuildingList[i].x, this.memory.finalBuildingList[i].y, this.memory.finalBuildingList[i].structureType);
 
             }
-            else if(this.memory.finalBuildingList[i].structureType == STRUCTURE_LAB && this.memory.finalBuildingList[i].minRCL <= rcl)
-            {
-                if(this.storage!=undefined && this.storage.store[RESOURCE_ENERGY]>C.STORAGE_ENERGY_BOTTOM)
-                {
+            else if (this.memory.finalBuildingList[i].structureType == STRUCTURE_LAB && this.memory.finalBuildingList[i].minRCL <= rcl) {
+                if (this.storage != undefined && this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
                     Game.rooms[this.memory.finalBuildingList[i].roomName].createConstructionSite(this.memory.finalBuildingList[i].x, this.memory.finalBuildingList[i].y, this.memory.finalBuildingList[i].structureType);
                 }
             }
@@ -886,15 +885,15 @@ Room.prototype.buildFromLists = function buildFromLists() {
         }
     }
 
-        for (r of this.memory.roadBuildingList) {
-            
-            if (r.minRCL <= rcl && r.roomName != undefined && Game.rooms[r.roomName]!=undefined
-                && ( this.memory.roomPlan[r.x][r.y]==0 || this.memory.roomPlan[r.x][r.y]==STRUCTURE_ROAD)
-            ) {
-                Game.rooms[r.roomName].createConstructionSite(r.x, r.y, r.structureType)
-            }
+    for (r of this.memory.roadBuildingList) {
+
+        if (r.minRCL <= rcl && r.roomName != undefined && Game.rooms[r.roomName] != undefined
+            && (this.memory.roomPlan[r.x][r.y] == 0 || this.memory.roomPlan[r.x][r.y] == STRUCTURE_ROAD)
+        ) {
+            Game.rooms[r.roomName].createConstructionSite(r.x, r.y, r.structureType)
         }
-    
+    }
+
 
 }
 
@@ -1362,7 +1361,7 @@ Room.prototype.planExtractor = function planExtractor() {
 
 Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
 
-    
+
     if (this.memory.spawnId != undefined) {
         this.memory.variationToBuild = C.CURRENT_SPAWNPOS
     }
@@ -1395,11 +1394,16 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
 
     }
 
-    console.log("Room: ",this.name," is building, with stage: ",stage)
-    //this.visual.text("Stage: " + stage, 25, 5)
-
+    console.log("Room: ", this.name, " is building, with stage: ", stage)
+    this.visual.text("Stage: " + stage, 25, 5)
+    if(this.memory.roomsToScan!=undefined)
+    {
+        this.visual.text("roomsToScan: "+this.memory.roomsToScan.length,25,6)
+    }
+    
     if (stage == 0) {
 
+        console.log("STAGE 0000000000000000000000000000000000")
         console.log("buildingRoom.js 1")
         // Declaring variables for use in later stages
         var cpuBefore = Game.cpu.getUsed()
@@ -1462,7 +1466,6 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
 
 
         this.visualizeBase()
-        console.log("buildingRoom.js 4")
         if (Game.shard.name != 'shard3') {
             this.planControllerRamparts();
             var rampartsAmount = this.planBorders(4, type, roomCM)
@@ -1474,38 +1477,38 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
         }
 
 
-        if (rampartsAmount < this.memory.minRampartsAmount) {
+        if (rampartsAmount < this.memory.minRampartsAmount || true) {
             this.memory.minRampartsAmount = rampartsAmount
             this.memory.finalRoomPlan = this.memory.roomPlan
 
+            /*
             const uniqueArray = Array.from(
                 new Set(this.memory.buildingList.map(obj => JSON.stringify(obj)))
             ).map(str => JSON.parse(str))
 
 
             this.memory.finalBuildingList = uniqueArray
-
+            */
             this.memory.variationToBuild = type
 
         }
 
 
 
-        this.memory.baseVariations[key].variationFinished = true
+        this.memory.baseVariations[type].variationFinished = true
 
         this.memory.roomCM = roomCM.serialize();
         this.memory.buildingStage++;
         var cpuAfter = Game.cpu.getUsed();
         this.memory.cpuSpentForStamps = cpuAfter - cpuBefore;
-
+        this.memory.finishedPlanning=true
         return;
 
     }
     else if (stage == 1) {
 
-        if(this.memory.buildingList==undefined)
-        {
-            this.memory.buildingList=[];
+        if (this.memory.buildingList == undefined) {
+            this.memory.buildingList = [];
         }
 
         let roomCM1 = PathFinder.CostMatrix.deserialize(this.memory.roomCM);
@@ -1517,7 +1520,7 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
         // If finished scanning
         if (this.memory.roomsToScan != undefined && this.memory.roomsToScan.length == 0) {
 
-            
+
             var spawnPos = this.memory.baseVariations[type].spawnPos
 
             this.planRoadToTarget(roomCM1, this.controller.pos, 2, 1, spawnPos)
@@ -1549,7 +1552,7 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
                 new Set(this.memory.roadBuildingList.map(obj => JSON.stringify(obj)))
             ).map(str => JSON.parse(str))
 
-            this.memory.roadBuildingList=uniqueRoadArray
+            this.memory.roadBuildingList = uniqueRoadArray
 
             this.memory.roomCM = roomCM1.serialize();
 
@@ -1573,19 +1576,19 @@ Room.prototype.buildRoom = function buildRoom(type = C.CURRENT_SPAWNPOS) {
                 stage = 1;
             }
             else {
-                if (Game.time % 123 == 0 || true) {
-                    this.buildFromLists()
-                    this.visual.text("BUILD", 25, 25)
-                    if (Memory.rooms[this.name].roomCM != undefined) {
-                        delete Memory.rooms[this.name].roomCM
-                    }
-                    //if (Memory.rooms[this.name].roomPlan != undefined) {
-                        //delete Memory.rooms[this.name].roomPlan
-                    //}
-                    if (Memory.rooms[this.name].buildingList != undefined) {
-                        delete Memory.rooms[this.name].buildingList
-                    }
+
+                this.buildFromLists()
+                this.visual.text("BUILD ", 25, 25)
+                if (Memory.rooms[this.name].roomCM != undefined) {
+                    delete Memory.rooms[this.name].roomCM
                 }
+                //if (Memory.rooms[this.name].roomPlan != undefined) {
+                //delete Memory.rooms[this.name].roomPlan
+                //}
+                //if (Memory.rooms[this.name].buildingList != undefined) {
+                //    delete Memory.rooms[this.name].buildingList
+                //}
+
 
 
             }

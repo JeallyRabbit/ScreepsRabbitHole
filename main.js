@@ -24,13 +24,15 @@ const visualize = require('visualize');
 
 Room.prototype.reBuild = function reBuild() {
   this.memory.roomsToScan = undefined;
-  this.memory.buildingStage = undefined;
+  this.memory.buildingStage = 0;
   var rows = 50;
   var cols = 50;
   this.memory.roomPlan = new Array(rows).fill(null).map(() => new Array(cols).fill(0));
   this.memory.buildingList = [];
   this.memory.roadBuildingList = [];
   this.memory.plannedRoads = false
+  this.memory.finishedPlanning=false;
+  this.memory.baseVariations == undefined
 
 }
 

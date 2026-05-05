@@ -5,7 +5,6 @@ const C = require('constants');
 //Add avopiding hostile areas during STATE_UNDER_ATTACK
 Creep.prototype.awayFromSpawn=function awayFromSpawn() {
     var isAwayFromSpawn = true;
-    this.say(isAwayFromSpawn);
     if (global.heap.rooms[this.memory.homeRoom].spawns != undefined) {
         for (sp of global.heap.rooms[this.memory.homeRoom].spawns) {
             if (this.pos.inRangeTo(sp.pos, 4)) {
@@ -13,7 +12,6 @@ Creep.prototype.awayFromSpawn=function awayFromSpawn() {
                     Game.getObjectById(this.room.memory.mineralId) != null) {
                     this.travelTo(Game.getObjectById(this.room.memory.mineralId), { range: 1 });
                 }
-                this.say("spAw", true);
                 isAwayFromSpawn = false;
             }
 
@@ -37,28 +35,26 @@ class boostRequest {
 
 Creep.prototype.processBoostRequest = function processBoostRequest() {
 
-    this.say("DBS")
+
     if (global.heap.rooms[this.room.name].boostingRequests.length > 0) {
-        this.say("DBS1")
+
         global.heap.rooms[this.room.name].doctorTask = C.TASK_BOOST_CREEP
         for (r of global.heap.rooms[this.room.name].boostingRequests) {
 
-            this.say("DBS1")
             var boostingLab = Game.getObjectById(global.heap.rooms[this.memory.homeRoom].boostingLabId)
             if (boostingLab == null) {
-                this.say("DBS1.1")
                 return
             }
 
             //this.say(boostingLab.store.getFreeCapacity(r.resource) + boostingLab.store[r.resource] < r.amount)
             if (boostingLab.store.getFreeCapacity(r.resource) + boostingLab.store[r.resource] < r.amount) {
                 this.taskClearBoostingLab(boostingLab, [r.resource, RESOURCE_ENERGY])
-                this.say("DBS2")
+                
                 return
             }
 
             if (this.store[r.resource] < r.amount && this.room.terminal.store[r.resource] > 0) {
-                this.say("DB" + r.amount)
+                
                 if (this.withdraw(this.room.terminal, r.resource, r.amount) == ERR_NOT_IN_RANGE) {
                     this.travelTo(this.room.terminal)
                     this.say("DB3")
@@ -90,7 +86,6 @@ Creep.prototype.taskGetBoosted = function taskGetBoosted() {
     for (b of global.heap.creeps[this.name].boosters) {
         var requiredParts = _.filter(this.body, { type: b.bodyType })
         var unboostedParts = _.filter(requiredParts, obj => !('boost' in obj)).length
-        //this.say(requiredParts.length+" "+unboostedParts+" ")
         if (unboostedParts == 0) {
             boostedBodyTypes++;
 
@@ -740,10 +735,10 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
 
     }
     
-    this.say(global.heap.creeps[this.name].deposit==undefined)
+
     if (global.heap.creeps[this.name].deposit != undefined) {
 
-        this.say("1")
+        
         if (this.memory.targetRoom == this.memory.homeRoom) {
 
             if ((this.room.controller != undefined && this.room.controller.level >= 4 && this.room.storage != undefined && this.room.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_UPGRADE_LIMIT)
@@ -769,7 +764,6 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
         }
         else {
             
-            this.say(this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY))
             if (global.heap.creeps[this.name] != undefined &&
                 global.heap.creeps[this.name].deposit != undefined
                 && this.withdraw(global.heap.creeps[this.name].deposit, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
@@ -781,11 +775,9 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
             //this.decreaseBalancer()
 
         }
-        //this.say("deb3")
     }
     else { // collect dropped energy
         this.memory._targetDeposit = undefined
-        this.say("deb2")
         if (global.heap.creeps[this.name].closestDroppedEnergy != undefined) {
             if (Game.getObjectById(global.heap.creeps[this.name].closestDroppedEnergy.id) == null) {
                 global.heap.creeps[this.name].closestDroppedEnergy = undefined
@@ -805,7 +797,6 @@ Creep.prototype.taskCollect = function taskCollect() {// go to deposits
 
         if (global.heap.creeps[this.name].closestDroppedEnergy != undefined) {
 
-            this.say("deb1")
             if (this.pickup(global.heap.creeps[this.name].closestDroppedEnergy) == ERR_NOT_IN_RANGE) {
                 // Move to it
                 this.travelTo(global.heap.creeps[this.name].closestDroppedEnergy, { maxRooms: 1 });

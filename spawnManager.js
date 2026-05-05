@@ -327,7 +327,7 @@ Room.prototype.spawnManager = function spawnManager() {
                             body = workerBody(energyCap, C.CREEP_MAX_BODYPARTS, scheme)
                         }
 
-                        if (this.controller.level == 8 || global.heap.rooms[this.name].needWorkersParts == 1) {
+                        if ((this.controller.level == 8 && !global.heap.rooms[this.name].construction.length > 0) || global.heap.rooms[this.name].needWorkersParts == 1) {
                             body = [MOVE, CARRY, WORK]
                         }
                     }
@@ -387,6 +387,10 @@ Room.prototype.spawnManager = function spawnManager() {
                     if (this.energyAvailable <= SPAWN_ENERGY_CAPACITY) { body = [WORK, CARRY, MOVE] }
                     else {
                         var scheme = [MOVE, CARRY, WORK, WORK]
+                        if ((this.controller.level == 8 && !global.heap.rooms[this.name].construction.length > 0)|| global.heap.rooms[this.name].needWorkersParts == 1) {
+                            body = [MOVE, CARRY, WORK]
+                        }
+
                         if (global.heap.rooms[this.name].construction.length > 0) {
                             body = workerBody(energyCap, C.CREEP_MAX_BODYPARTS, [MOVE, MOVE, CARRY, WORK])
                         }
@@ -398,9 +402,7 @@ Room.prototype.spawnManager = function spawnManager() {
                             body = workerBody(energyCap, C.CREEP_MAX_BODYPARTS, scheme)
                         }
 
-                        if (this.controller.level == 8 || global.heap.rooms[this.name].needWorkersParts == 1) {
-                            body = [MOVE, CARRY, WORK]
-                        }
+                        
                     }
 
 
