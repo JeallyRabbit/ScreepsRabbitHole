@@ -331,7 +331,7 @@ module.exports.loop = function () {
       //console.log("Game.cpu.get Used: ",Game.cpu.getUsed(), " ",Game.cpu.limit)
       if (Game.cpu.getUsed() > Game.cpu.limit * 0.7
         && Game.cpu.bucket < 500) {
-        c//onsole.log("NOT ENOUGH CPU")
+        //console.log("NOT ENOUGH CPU")
         return
       }
 
