@@ -3,11 +3,11 @@ const C = require('constants');
 
 //TODO:
 //Add avopiding hostile areas during STATE_UNDER_ATTACK
-Creep.prototype.awayFromSpawn=function awayFromSpawn() {
+Creep.prototype.awayFromSpawn=function awayFromSpawn(dist=4) {
     var isAwayFromSpawn = true;
     if (global.heap.rooms[this.memory.homeRoom].spawns != undefined) {
         for (sp of global.heap.rooms[this.memory.homeRoom].spawns) {
-            if (this.pos.inRangeTo(sp.pos, 4)) {
+            if (this.pos.inRangeTo(sp.pos, dist)) {
                 if (this.room.memory.mineralId != undefined &&
                     Game.getObjectById(this.room.memory.mineralId) != null) {
                     this.travelTo(Game.getObjectById(this.room.memory.mineralId), { range: 1 });
@@ -18,6 +18,11 @@ Creep.prototype.awayFromSpawn=function awayFromSpawn() {
         }
     }
     if (isAwayFromSpawn) {
+        if(Game.time%25==1)
+        {
+            this.move((Math.random() * (8 - 1) + 1))
+        }
+        
         this.sleep(10);
     }
 }
@@ -394,6 +399,7 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
         return
     }
 
+    this.awayFromSpawn(2)
 
     this.say("Test1")
 
