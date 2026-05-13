@@ -439,36 +439,11 @@ Room.prototype.roomManager = function roomManager() {
 
                 if (this.memory.baseVariations == undefined) {
                     this.memory.baseVariations = {}
+                    /*
                     this.memory.baseVariations[C.CONTROLLER] = {}
                     this.memory.baseVariations[C.CONTROLLER].variationFinished = false;
                     this.memory.baseVariations[C.CONTROLLER].rampartsAmount = 0;
                     this.memory.baseVariations[C.CONTROLLER].spawnPos = undefined
-                    /*
-                    this.memory.baseVariations[C.SRC_1] = {}
-                    this.memory.baseVariations[C.SRC_1].variationFinished = false;
-                    this.memory.baseVariations[C.SRC_1].rampartsAmount = 0;
-                    this.memory.baseVariations[C.SRC_1].spawnPos = undefined
-                    this.memory.baseVariations[C.SRC_2] = {}
-                    this.memory.baseVariations[C.SRC_2].variationFinished = false;
-                    this.memory.baseVariations[C.SRC_2].rampartsAmount = 0;
-                    this.memory.baseVariations[C.SRC_2].spawnPos = undefined
-                    this.memory.baseVariations[C.SRC_1_2] = {}
-                    this.memory.baseVariations[C.SRC_1_2].variationFinished = false;
-                    this.memory.baseVariations[C.SRC_1_2].rampartsAmount = 0;
-                    this.memory.baseVariations[C.SRC_1_2].spawnPos = undefined
-                    
-                    this.memory.baseVariations[C.SRC_1_CONTROLLER] = {}
-                    this.memory.baseVariations[C.SRC_1_CONTROLLER].variationFinished = false;
-                    this.memory.baseVariations[C.SRC_1_CONTROLLER].rampartsAmount = 0;
-                    this.memory.baseVariations[C.SRC_1_CONTROLLER].spawnPos = undefined
-                    this.memory.baseVariations[C.SRC_2_CONTROLLER] = {}
-                    this.memory.baseVariations[C.SRC_2_CONTROLLER].variationFinished = false;
-                    this.memory.baseVariations[C.SRC_2_CONTROLLER].rampartsAmount = 0;
-                    this.memory.baseVariations[C.SRC_2_CONTROLLER].spawnPos = undefined
-                    this.memory.baseVariations[C.SRC_1_2_CONTROLLER] = {}
-                    this.memory.baseVariations[C.SRC_1_2_CONTROLLER].variationFinished = false;
-                    this.memory.baseVariations[C.SRC_1_2_CONTROLLER].rampartsAmount = 0;
-                    this.memory.baseVariations[C.SRC_1_2_CONTROLLER].spawnPos = undefined
                     */
 
                     //if there is spawn in room use only one variation

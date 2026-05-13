@@ -81,6 +81,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
         if (this.store.getUsedCapacity(RESOURCE_ENERGY) == 0 || this.memory.collecting == undefined) {
             this.memory.collecting = true;
+            global.heap.creeps[this.name]={}
             this.memory.closestHomeContainer = undefined;
 
 

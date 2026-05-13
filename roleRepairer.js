@@ -83,14 +83,14 @@ Creep.prototype.roleRepairer = function roleRepairer() {
                             //repairing
                             if (this.repair(targetStructure) == ERR_NOT_IN_RANGE) {
                                 this.travelTo(targetStructure, { maxRooms: 1 });
-                                return
+                                return 0
                             }
                         }
                         else {
                             //building
                             if (this.build(toBuild) == ERR_NOT_IN_RANGE) {
                                 this.travelTo(toBuild, { maxRooms: 1 });
-                                return
+                                return 0
                             }
 
                         }
@@ -100,14 +100,14 @@ Creep.prototype.roleRepairer = function roleRepairer() {
                         this.say("rep2")
                         if (this.repair(targetStructure) == ERR_NOT_IN_RANGE) {
                             this.travelTo(targetStructure, {maxRooms: 1 });
-                            return
+                            return 0
                         }
                     }
                     else if (toBuild != null) {
                         //building
                         if (this.build(toBuild) == ERR_NOT_IN_RANGE) {
                             this.travelTo(toBuild, {maxRooms: 1 });
-                            return
+                            return 0
                         }
                     }
                     else {

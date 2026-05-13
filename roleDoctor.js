@@ -37,6 +37,7 @@ Creep.prototype.roleDoctor = function roleDoctor() {
         || boostingLab == null
     ) {
         this.say("error")
+        this.awayFromSpawn()
         return
     }
 
