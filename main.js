@@ -123,7 +123,7 @@ module.exports.loop = function () {
     console.log("Time: ", Game.time)
     var totalStart = Game.cpu.getUsed()
 
-    if (Game.time % 8911 == 0) {
+    if (Game.time % 1597 == 0) {
       global.heap = {}
     }
 

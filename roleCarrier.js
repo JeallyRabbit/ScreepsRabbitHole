@@ -192,9 +192,9 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     }
                 }
                 else if (global.heap.creeps[this.name].maxContainer != null) {
-                    if (global.heap.creeps[this.name].maxContainer.store.getUsedCapacity() == 0) {
-                        //turned off for debuggin - creep will go to container even if container is empty 
-                        //global.heap.creeps[this.name].maxContainer = undefined;
+                    if (global.heap.creeps[this.name].maxContainer.store.getUsedCapacity() == 0
+                && Game.time%6==0) {
+                        global.heap.creeps[this.name].maxContainer = undefined;
                     }
                 }
                 else {
@@ -216,7 +216,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         }
                         if (this.withdraw(global.heap.creeps[this.name].maxContainer, resource) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
-                            this.travelTo(global.heap.creeps[this.name].maxContainer.pos, { obstacles: fillersPos })
+                            this.travelTo(global.heap.creeps[this.name].maxContainer.pos, { obstacles: fillersPos,ignoreCreeps: false })
                             break;
                         }
                     }
@@ -299,7 +299,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     return;
                 }
                 else {
-                    this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { obstacles: fillersPos})
+                    this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { obstacles: fillersPos, ignoreCreeps: false})
                 }
             }
 
