@@ -166,6 +166,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
             ) {
                 
                 const destination = new RoomPosition(25, 25, this.memory.targetRoom);
+                this.say("tr1")
                 this.travelTo(destination, { range: 22 })
                 /*
                 if(this.memory.resourceToCollect==undefined
@@ -216,7 +217,9 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         }
                         if (this.withdraw(global.heap.creeps[this.name].maxContainer, resource) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
-                            this.travelTo(global.heap.creeps[this.name].maxContainer.pos, { obstacles: fillersPos  })
+                                this.say("tr2")
+                                //this.say(global.heap.creeps[this.name].maxContainer.pos)
+                            this.travelTo(global.heap.creeps[this.name].maxContainer.pos,{ ignoreCreeps:false,obstacles: fillersPos  })
                             break;
                         }
                     }
@@ -287,7 +290,8 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         global.heap.creeps[this.name].maxContainer = undefined;
                         if (this.pickup(Game.getObjectById(this.memory.resourceToCollect)) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
-                            this.travelTo(Game.getObjectById(this.memory.resourceToCollect))//, { obstacles: fillersPos})
+                                this.say("tr3")
+                            this.travelTo(Game.getObjectById(this.memory.resourceToCollect),{ ignoreCreeps:false,obstacles: fillersPos  })
                         }
                         else if (Game.getObjectById(this.memory.resourceToCollect) == null) {
                             this.memory.resourceToCollect = undefined
@@ -299,6 +303,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     return;
                 }
                 else {
+                    this.say("tr4")
                     this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { obstacles: fillersPos })
                 }
             }
@@ -407,6 +412,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     }
                 }
                 else {
+                    this.say("tr5")
                     this.travelTo(new RoomPosition(25, 25, this.memory.homeRoom))//,{ range: 5})
                 }
 
@@ -420,6 +426,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                     for (let res in this.store) {
                         var transferResut = this.transfer(Game.getObjectById(this.memory.homeContainer), res);
                         if (transferResut == ERR_NOT_IN_RANGE) {
+                            this.say("tr6")
                             this.travelTo(Game.getObjectById(this.memory.homeContainer), { obstacles: fillersPos  })
                             break;
                         }
@@ -442,6 +449,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         }
                         if (transferResut == ERR_NOT_IN_RANGE) {
 
+                            this.say("tr7")
                             this.travelTo(Game.getObjectById(this.memory.homeContainer), { obstacles: fillersPos })
 
                             break;
