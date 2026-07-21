@@ -311,7 +311,7 @@ Creep.prototype.roleHauler = function roleHauler(spawn) {//transfer energy grom 
             var closestExtension = this.pos.findClosestByPath(extensions);
             if (closestExtension) {
                 if (this.transfer(closestExtension, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {// if creep have some energy go to extension and fill with energy
-                    this.travelTo(closestExtension);
+                    this.travelTo(closestExtension, {avoidCreeps: true});
                     return
                     //move_avoid_hostile(creep, closestExtension.pos, 1, false);
                 }
