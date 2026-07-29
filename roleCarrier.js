@@ -31,6 +31,10 @@ Creep.prototype.increaseBalancer = function increaseBalancer() {
     }
 }
 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
 
 Creep.prototype.roleCarrier = function roleCarrier() {
 
@@ -48,7 +52,12 @@ Creep.prototype.roleCarrier = function roleCarrier() {
     if (true /*boosting_driver(this, spawn, this.memory.boostingList, CARRY) == -1 */) {
 
 
+        //dumb idea debugging
 
+        if(this.ticksToLive%(30+(getRandomInt(40)))==0)
+        {
+            delete this.memory._trav
+        }
 
         for (src of Game.rooms[this.memory.homeRoom].memory.harvestingSources) {
             if (src.id == this.memory.sourceId) {
