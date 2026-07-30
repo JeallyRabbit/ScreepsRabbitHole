@@ -77,7 +77,7 @@ Room.prototype.spawnManager = function spawnManager() {
             spawn = Game.getObjectById(this.memory.spawn3Id)
             myDirections = [TOP, TOP_LEFT, TOP_RIGHT]
             //for visualization
-            if (spawn.spawning != undefined) {
+            if (spawn!=null && spawn.spawning != undefined && spawn.spawning != null) {
                 global.heap.rooms[this.name].spawn3Name = spawn.spawning.name
             }
         }

@@ -54,7 +54,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
 
         //dumb idea debugging
 
-        if(this.ticksToLive%(30+(getRandomInt(40)))==0)
+        if(this.ticksToLive%(20+(getRandomInt(15)))==0)
         {
             delete this.memory._trav
         }
