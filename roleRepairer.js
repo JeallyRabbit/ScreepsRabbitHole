@@ -1,5 +1,4 @@
 var roleWorker = require('roleWorker');
-const Movement = require('screeps-movement');
 const C = require('constants')
 //const getMaxEnergyDeposit = require("getMaxEnergyDeposit");
 

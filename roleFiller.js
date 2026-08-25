@@ -55,7 +55,7 @@ Creep.prototype.roleFiller = function (spawn) {
         }
         else {
             this.memory.atPos = undefined;
-            this.moveTo(new RoomPosition(this.memory.workingPos.x, this.memory.workingPos.y, this.room.name), { range: 0 });
+            this.travelTo(new RoomPosition(this.memory.workingPos.x, this.memory.workingPos.y, this.room.name), { range: 0 });
         }
 
     }

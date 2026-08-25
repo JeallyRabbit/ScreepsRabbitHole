@@ -1,5 +1,4 @@
 
-const Movement = require('screeps-movement');
 const C=require('constants');
 
 

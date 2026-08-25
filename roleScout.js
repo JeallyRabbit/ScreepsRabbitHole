@@ -180,14 +180,8 @@ Creep.prototype.roleScout = function roleScout(homeSpawn) {
     if (Game.rooms[this.memory.homeRoom].memory.roomsToScan != undefined && Game.rooms[this.memory.homeRoom].memory.roomsToScan.length > 0) {
         if (this.room.name != Game.rooms[this.memory.homeRoom].memory.roomsToScan[0]) {
 
-            /*
-            const exitDir = this.room.findExitTo(Game.rooms[this.memory.homeRoom].memory.roomsToScan[0]);
-            const exit = this.pos.findClosestByRange(exitDir);
-            this.moveTo(exit, { reusePath: 21, avoidHostile: true, avoidCreeps: true, avoidSk: true });
-            */
+            
             this.travelTo(new RoomPosition(25, 25, Game.rooms[this.memory.homeRoom].memory.roomsToScan[0]), { range: 22 })
-
-
 
         }
         else {

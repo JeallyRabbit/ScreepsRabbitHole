@@ -1,7 +1,6 @@
 
 // Every constant definied in separate file
 const C = require('constants');
-const Movement = require('screeps-movement');
 const sleep = require('creepSleep')
 var Traveler = require('Traveler');
 const { fill } = require('lodash');
