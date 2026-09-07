@@ -229,7 +229,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                             || this.pos.inRangeTo(spawn, 4)) {
                                 this.say("tr col5")
                                 ////this.say(global.heap.creeps[this.name].maxContainer.pos)
-                            this.travelTo(global.heap.creeps[this.name].maxContainer.pos,{ ignoreCreeps:false,obstacles: fillersPos  })
+                            this.travelTo(global.heap.creeps[this.name].maxContainer.pos,{ ignoreCreeps: (Game.time%10>5),obstacles: fillersPos  })
                             break;
                         }
                     }
@@ -314,7 +314,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                 }
                 else {
                     this.say("tr col3")
-                    this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { ignoreCreeps: true,obstacles: fillersPos })
+                    this.travelTo(new RoomPosition(25, 25, this.memory.targetRoom), { ignoreCreeps: (Game.time%10>5),obstacles: fillersPos })
                 }
             }
 

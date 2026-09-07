@@ -142,7 +142,7 @@ Room.prototype.inputLabsMatchReaction = function inputLabsMatchReaction(in1,in2)
     }
     var res1=global.heap.rooms[this.name].reaction[0]
     var res2=global.heap.rooms[this.name].reaction[1]
-    if(in1.store[res1]==0 || in2.store[res2]==0)
+    if(in1.store[res1]>=LAB_REACTION_AMOUNT || in2.store[res2]>=LAB_REACTION_AMOUNT)
         {
         return false
     }
