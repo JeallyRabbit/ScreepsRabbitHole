@@ -301,7 +301,7 @@ Creep.prototype.roleCarrier = function roleCarrier() {
                         if (this.pickup(Game.getObjectById(this.memory.resourceToCollect)) == ERR_NOT_IN_RANGE
                             || this.pos.inRangeTo(spawn, 4)) {
                                 this.say("tr col2")
-                            this.travelTo(Game.getObjectById(this.memory.resourceToCollect),{ ignoreCreeps:true,obstacles: fillersPos  })
+                            this.travelTo(Game.getObjectById(this.memory.resourceToCollect),{ ignoreCreeps:(Game.time%10>5),obstacles: fillersPos  })
                         }
                         else if (Game.getObjectById(this.memory.resourceToCollect) == null) {
                             this.memory.resourceToCollect = undefined
