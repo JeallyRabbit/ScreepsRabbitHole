@@ -1535,15 +1535,15 @@ function operateQuad(quad) {
         //localHeap.path = false
 
         if (topLeft != null && quad.groupingPos != undefined) {
-            topLeft.travelTo(new RoomPosition(quad.groupingPos.x, quad.groupingPos.y, quad.groupingPos.roomName))
+            topLeft.travelTo(new RoomPosition(quad.groupingPos.x, quad.groupingPos.y, quad.groupingPos.roomName),{ignoreCreeps:false})
         }
         if (topRight != null && quad.groupingPos != undefined) {
             if (topLeft != null ) {
                 //topRight.travelTo(new RoomPosition(Math.min(49,topLeft.pos.x + 1), topLeft.pos.y, topLeft.pos.roomName))
-                topRight.travelTo(new RoomPosition(Math.min(49,topLeft.pos.x + 1), quad.groupingPos.y, quad.groupingPos.roomName))
+                topRight.travelTo(new RoomPosition(Math.min(49,topLeft.pos.x + 1), quad.groupingPos.y, quad.groupingPos.roomName),{ignoreCreeps:false})
             }
             else {
-                topRight.travelTo(new RoomPosition(quad.groupingPos.x + 1, quad.groupingPos.y, quad.groupingPos.roomName))
+                topRight.travelTo(new RoomPosition(quad.groupingPos.x + 1, quad.groupingPos.y, quad.groupingPos.roomName),{ignoreCreeps:false})
 
             }
 

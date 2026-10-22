@@ -409,7 +409,8 @@ Creep.prototype.taskFillInputLabsMineral = function taskFillInputLabsMineral(in1
         var res2 = global.heap.rooms[this.room.name].reaction[1]
 
         // Minerals are already in labs
-        if (in1.store[res1] > LAB_REACTION_AMOUNT && in2.store[res2] > LAB_REACTION_AMOUNT) {
+        //if (in1.store[res1] > LAB_REACTION_AMOUNT && in2.store[res2] > LAB_REACTION_AMOUNT) {
+            if (in1.store[res1] > 0 && in2.store[res2] > 0) {
             this.say("FIlINExit", true)
             global.heap.rooms[this.room.name].doctorTask = undefined
             global.heap.rooms[this.room.name].reactionAmount = undefined

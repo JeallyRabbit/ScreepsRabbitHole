@@ -100,7 +100,7 @@ class attackRoom {
 
     this.reqDismantlePower = 0
     this.dismantlePower = 0
-    this.dismantlersId = []
+    this.dismantlers = []
 
     this.controllerAttackCreeps = 0
 
@@ -257,7 +257,9 @@ module.exports.loop = function () {
 
       attackManager(r)
 
-      if (roomName != undefined && Game.rooms[roomName] != undefined && Game.rooms[roomName].controller.owner == undefined) {
+      if (roomName != undefined && Game.rooms[roomName] != undefined && Game.rooms[roomName].controller.owner == undefined
+        && global.heap.rooms[roomName].hostileStructures.length==0
+      ) {
         console.log("Removing room: ", roomName, " from Memory.roomsToAttack")
         Memory.roomsToAttack = Memory.roomsToAttack.filter(function (obj) {
           return obj.name !== roomName;

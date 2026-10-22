@@ -38,7 +38,7 @@ const ROLE_MINERAL_CARRIER = 'mineral_carrier'
 const ROLE_DOCTOR = 'doctor'
 
 const ROLE_ENERGY_DRAINER='energy_drainer'
-
+const ROLE_DISMANTLER='dismantler'
 const ROLE_QUAD_MEMBER = 'quad_member'
 const RANGED_BODY = 'ranged_body'
 const HEALER_BODY = 'healer_body'
@@ -458,7 +458,7 @@ const RAMPARTS_HITS_REPAIR_START=100000
 
 // Room attack
 const ROOM_ATTACK_HISTORY_RANGE = 500
-
+const REQ_DISMANTLE_POWER=1000
 
 
 // Room Visualization
@@ -524,6 +524,7 @@ module.exports = {
   ROLE_MINERAL_CARRIER,
   ROLE_DOCTOR,
   ROLE_ENERGY_DRAINER,
+  ROLE_DISMANTLER,
 
   ROLE_QUAD_MEMBER,
   RANGED_BODY,
@@ -626,6 +627,7 @@ module.exports = {
   RAMPARTS_HITS_REPAIR_START,
   
   ROOM_ATTACK_HISTORY_RANGE,
+  REQ_DISMANTLE_POWER,
 
   OUTLINE_COLOR,
   TEXT_COLOR,

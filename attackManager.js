@@ -79,38 +79,33 @@ function attackManager(attackRoom) {
         attackRoom.operationalTowersAmountHistory = []
     }
 
-    if(attackRoom.drainersId==undefined)
-    {
-        attackRoom.drainersId=[]
+    if (attackRoom.drainersId == undefined) {
+        attackRoom.drainersId = []
     }
-    else if(attackRoom.drainersId.length>0)
-    {
-        for(id of attackRoom.drainersId)
-        if(Game.getObjectById(id)==null)
-        {
-             const index = attackRoom.drainersId.indexOf(id);
+    else if (attackRoom.drainersId.length > 0) {
+        for (id of attackRoom.drainersId)
+            if (Game.getObjectById(id) == null) {
+                const index = attackRoom.drainersId.indexOf(id);
                 if (index > -1) { // only splice array when item is found
                     attackRoom.drainersId.splice(index, 1); // 2nd parameter means remove one item only
                 }
+            }
+    }
+
+    if (attackRoom.scoutId != undefined) {
+        if (Game.getObjectById(attackRoom.scoutId) == null) {
+            attackRoom.scoutId = undefined
         }
     }
 
-    if(attackRoom.scoutId!=undefined)
-    {
-        if(Game.getObjectById(attackRoom.scoutId)==null)
-        {
-            attackRoom.scoutId=undefined
-        }
-    }
-
-    attackRoom.areDefendersPresent = true;
+    attackRoom.areDefendersPresent = false;
 
 
     // boolean to agregate results of history into one value
     attackRoom.areTowersHistoryOperational = false
 
     // boolean to agregate status of all towers in single tick (gets status of one tick)
-    attackRoom.areTowersOperational = true
+    attackRoom.areTowersOperational = false
 
     attackRoom.towers = []
     attackRoom.ramparts = []
@@ -128,7 +123,7 @@ function attackManager(attackRoom) {
 
                 //tracking if towers are refilled/operational/can shoot
                 attackRoom.towers.push(s)
-                if (s.store[RESOURCE_ENERGY] > 0) {
+                if (s.store[RESOURCE_ENERGY] > 0 && Game.rooms[attackRoom.name].controller.owner != undefined) {
                     anyOperational = true
                 }
                 operationalTowersAmount++;
@@ -154,13 +149,13 @@ function attackManager(attackRoom) {
         var historyLength = attackRoom.areTowersOperationalHistory.length
         attackRoom.areTowersOperationalHistory.push(new attackHistoryData(anyOperational, Game.time, operationalTowersAmount))
 
-        //limiting towers history length
-        if (attackRoom.areTowersOperationalHistory[historyLength - 1].time - attackRoom.areTowersOperationalHistory[0].time > C.ROOM_ATTACK_HISTORY_RANGE) {
+        //limiting towers history length to C.ROOM_ATTACK_HISTORY_RANGE
+        if (attackRoom.areTowersOperationalHistory[historyLength - 1] != undefined && attackRoom.areTowersOperationalHistory[historyLength - 1].time - attackRoom.areTowersOperationalHistory[0].time > C.ROOM_ATTACK_HISTORY_RANGE) {
             attackRoom.areTowersOperationalHistory.shift()
         }
 
         //limiting creeps history length
-        if (attackRoom.areDefendersPresentHistory[historyLength - 1].time - attackRoom.areDefendersPresentHistory[0].time > C.ROOM_ATTACK_HISTORY_RANGE) {
+        if (attackRoom.areDefendersPresentHistory[historyLength - 1] != undefined && attackRoom.areDefendersPresentHistory[historyLength - 1].time - attackRoom.areDefendersPresentHistory[0].time > C.ROOM_ATTACK_HISTORY_RANGE) {
             attackRoom.areDefendersPresentHistory.shift()
         }
 
@@ -203,7 +198,7 @@ function attackManager(attackRoom) {
     else {
         //we need vision on the room
         if (attackRoom.lastDataGatherTime != undefined && Game.time - attackRoom.lastDataGatherTime > C.MAX_ROOM_INVISIBILITY_TIME
-            && attackRoom.scoutId==undefined
+            && attackRoom.scoutId == undefined
         ) {
             attackRoom.attackType[C.ATTACK_TYPE_SCOUT] = true
         }
@@ -214,8 +209,8 @@ function attackManager(attackRoom) {
         if (attackRoom.areTowersHistoryOperational == true) {
             attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] = true
 
-            attackRoom.reqDrainers = (attackRoom.meanOperationalTowersAmount!=null)? attackRoom.meanOperationalTowersAmount:2
-        }   
+            attackRoom.reqDrainers = (attackRoom.meanOperationalTowersAmount != null) ? attackRoom.meanOperationalTowersAmount : 2
+        }
         if (attackRoom.areTowersHistoryOperational == false) {
             //turned of for debugging
             //attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] = false
@@ -234,6 +229,7 @@ function attackManager(attackRoom) {
         if (attackRoom.areDefendersPresent == false &&
             attackRoom.areTowersHistoryOperational == false
         ) {
+
             attackRoom.attackType[C.ATTACK_TYPE_DISMANTLE] = true
             attackRoom.attackType[C.ATTACK_TYPE_PLUNDER] = true
         }
@@ -284,12 +280,11 @@ function attackManager(attackRoom) {
                     }
                 }
                 if (minRoom != undefined && global.heap.rooms[minRoom].civilianQueue != undefined) {
-                    console.log("need scout from: ",minRoom," to attackRoom: ",attackRoom.name)
-                    if(global.heap.rooms[minRoom].civilianQueue==undefined)
-                    {
-                        global.heap.rooms[minRoom].civilianQueue=[]
+                    console.log("need scout from: ", minRoom, " to attackRoom: ", attackRoom.name)
+                    if (global.heap.rooms[minRoom].civilianQueue == undefined) {
+                        global.heap.rooms[minRoom].civilianQueue = []
                     }
-                    if (global.heap.rooms[minRoom].civilianQueue.find(( {role} ) => role === C.ROLE_SCOUT) == undefined) {
+                    if (global.heap.rooms[minRoom].civilianQueue.find(({ role }) => role === C.ROLE_SCOUT) == undefined) {
                         global.heap.rooms[minRoom].civilianQueue.push(new scoutRequest(attackRoom.name, C.ROLE_SCOUT))
                     }
 
@@ -303,7 +298,7 @@ function attackManager(attackRoom) {
 
         //ATTACK_TYPE_DRAIN
         if (attackRoom.attackType[C.ATTACK_TYPE_ENERGY_DRAIN] == true) {
-            
+
             if (attackRoom.drainersId.length < attackRoom.reqDrainers) {
                 //
                 var minDistance = Infinity
@@ -316,18 +311,58 @@ function attackManager(attackRoom) {
                 }
                 if (minRoom != undefined) {
                     console.log("Need ENERGY_DRAINER from ", minRoom)
-                    if(global.heap.rooms[minRoom].offensiveQueue==undefined)
-                    {
-                        global.heap.rooms[minRoom].offensiveQueue=[]
+                    if (global.heap.rooms[minRoom].offensiveQueue == undefined) {
+                        global.heap.rooms[minRoom].offensiveQueue = []
                     }
-                    if (global.heap.rooms[minRoom].offensiveQueue.find(({ role }) => role === C.ROLE_ENERGY_DRAINER)==undefined) {
-                        global.heap.rooms[minRoom].offensiveQueue.push(new generalRoomRequest(attackRoom.name,C.ROLE_ENERGY_DRAINER));
+                    if (global.heap.rooms[minRoom].offensiveQueue.find(({ role }) => role === C.ROLE_ENERGY_DRAINER) == undefined) {
+                        global.heap.rooms[minRoom].offensiveQueue.push(new generalRoomRequest(attackRoom.name, C.ROLE_ENERGY_DRAINER));
                     }
                 }
 
             }
         }
 
+        //ATTACK_TYPE_DISMANTLE
+        if (attackRoom.attackType[C.ATTACK_TYPE_DISMANTLE] == true) {
+            attackRoom.reqDismantlePower = C.REQ_DISMANTLE_POWER
+
+
+
+            for (d in attackRoom.dismantlersId) {
+                if (Game.getObjectById(d) != undefined) {
+                    attackRoom.dismantlePower += Game.getObjectById(d).memory.dismantlePower
+                }
+                else {
+                    const index = attackRoom.dismantlersId.indexOf(d);
+                    if (index > -1) {
+                        attackRoom.dismantlersId.splice(index, 1);
+                    }
+                }
+
+
+            }
+            if (attackRoom.dismantlePower < attackRoom.reqDismantlePower) {
+
+                var minDistance = Infinity
+                var minRoom = undefined
+                for (m of global.heap.mainRooms) {
+                    if (Game.map.getRoomLinearDistance(m, attackRoom.name) < minDistance) {
+                        minDistance = Game.map.getRoomLinearDistance(m, attackRoom.name)
+                        minRoom = m
+                    }
+                }
+                if (minRoom != undefined) {
+                    console.log("Need dismantler from ", minRoom)
+                    if (global.heap.rooms[minRoom].offensiveQueue == undefined) {
+                        global.heap.rooms[minRoom].offensiveQueue = []
+                    }
+                    if (global.heap.rooms[minRoom].offensiveQueue.find(({ role }) => role === C.ROLE_DISMANTLER) == undefined) {
+                        global.heap.rooms[minRoom].offensiveQueue.push(new generalRoomRequest(attackRoom.name, C.ROLE_DISMANTLER));
+                    }
+                }
+
+            }
+        }
 
 
 
@@ -367,7 +402,7 @@ function quadAttack(attackRoom) {
     }
 
     for (q of attackRoom.quads) {
-        
+
         if (q.isCompleted != true) {
 
             if (q.homeRoom == undefined) {
@@ -384,8 +419,8 @@ function quadAttack(attackRoom) {
                     }
                     if (maxBodyParts - Game.rooms[m].memory.creepsBodyParts > C.QUAD_BODY_PARTS_AMOUNT) {
 
-                        quadsAmount=Game.rooms[m].memory.quads!=undefined ? Game.rooms[m].memory.quads.length : 0;
-                        if (Game.map.getRoomLinearDistance(m, attackRoom.name)*(Math.pow(1.1,quadsAmount)) < distanceToTargetRoom
+                        quadsAmount = Game.rooms[m].memory.quads != undefined ? Game.rooms[m].memory.quads.length : 0;
+                        if (Game.map.getRoomLinearDistance(m, attackRoom.name) * (Math.pow(1.1, quadsAmount)) < distanceToTargetRoom
                             && Game.rooms[m].controller.level >= 7) {
                             distanceToTargetRoom = Game.map.getRoomLinearDistance(m, attackRoom.name);
                             roomToSpawnQuad = m;
@@ -399,22 +434,22 @@ function quadAttack(attackRoom) {
                 }
             }
 
-            if (q.homeRoom != undefined && global.heap.rooms[q.homeRoom].offensiveQueue != undefined ) {
+            if (q.homeRoom != undefined && global.heap.rooms[q.homeRoom].offensiveQueue != undefined) {
                 if (global.heap.rooms[q.homeRoom].offensiveQueue.find(({ role }) => role === C.ROLE_QUAD_MEMBER) == undefined
-            && Game.time%2==0
-        ) {
-                    console.log("quad members: ",q.members.length)
+                    && Game.time % 2 == 0
+                ) {
+                    console.log("quad members: ", q.members.length)
                     if (q.members.length == 0) {
                         global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, true));
-                        console.log("adding first member of quad: ",q.id);
+                        console.log("adding first member of quad: ", q.id);
                         break;
 
                     }
                     else if (q.members.length == 1) {
                         global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.RANGED_BODY, false));
-                         console.log("Adding second member")
+                        console.log("Adding second member")
                         break;
-                       
+
                     }
                     else if (q.members.length == 2 || q.members.length == 3) {
                         global.heap.rooms[q.homeRoom].offensiveQueue.push(new quadMemberRequest(q.id, C.ROLE_QUAD_MEMBER, C.HEALER_BODY, false));
@@ -431,9 +466,9 @@ function quadAttack(attackRoom) {
 
 
     for (q of attackRoom.quads) {
-        console.log("opearting quad: ",q.id)
+        console.log("opearting quad: ", q.id)
         operateQuad(q);
-        
+
     }
 }
 

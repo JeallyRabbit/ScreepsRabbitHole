@@ -255,6 +255,7 @@ Room.prototype.roomManager = function roomManager() {
             }
         }
 
+        //adding input labs to myStorage
         var inputLab1 = Game.getObjectById(Game.rooms[this.name].memory.inLab1Id)
         if (inputLab1 != null) {
             for (res in inputLab1.store) {
@@ -270,7 +271,7 @@ Room.prototype.roomManager = function roomManager() {
         }
 
 
-        //adding input labs to myStorage
+        
 
         global.heap.rooms[this.name].state = []
         global.heap.rooms[this.name].needRawResources = []

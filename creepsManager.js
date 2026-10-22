@@ -259,6 +259,16 @@ Room.prototype.creepsManager = function creepsManager() {
                         a.drainersId.push(creep.id)
                     }
                 }
+            case C.ROLE_DISMANTLER:
+                creep.memory.dismantlePower=_.filter(creep.body, { type: WORK }).length*DISMANTLE_POWER
+                creep.roleDismantler();
+                for (a of Memory.roomsToAttack) {
+                    if (a.name == creep.memory.targetRoom
+                        && a.dismantlersId.find((id) => id == creep.id) == undefined
+                    ) {
+                        a.dismantlersId.push(creep.id)
+                    }
+                }
                 break;
 
         }
