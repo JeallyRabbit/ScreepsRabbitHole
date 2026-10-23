@@ -10,6 +10,7 @@ const minerBody = require('minerBody')
 const quadHealerBody = require('quadHealerBody')
 const quadRangedBody = require('quadRangedBody')
 const drainerBody = require('drainerBody');
+const dismantlerBody = require('dismantlerBody');
 
 //defining local heap
 
@@ -625,7 +626,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 {
                     if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
                         var name = "ClumsyRabbit"
-                        var body = workerBody(energyCap)
+                        var body = dismantlerBody(energyCap)
                         var result = spawn.spawnCreep(body, name + '_' + this.name + Game.time, { memory: { role: C.ROLE_DISMANTLER, targetRoom: request.roomName, directions: myDirections, homeRoom: this.name } })
                         global.heap.rooms[this.name].spawnResult = result
                         global.heap.rooms[this.name].spawnRole = role

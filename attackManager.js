@@ -346,7 +346,11 @@ function attackManager(attackRoom) {
                 var minDistance = Infinity
                 var minRoom = undefined
                 for (m of global.heap.mainRooms) {
-                    if (Game.map.getRoomLinearDistance(m, attackRoom.name) < minDistance) {
+                    
+
+                    if (Game.map.getRoomLinearDistance(m, attackRoom.name) < minDistance
+                && Game.map.getRoomLinearDistance(m, attackRoom.name) <C.MAX_DISMANTLER_DISTANCE
+            && global.heap.rooms[m].offensiveQueue.find(({ role }) => role === C.ROLE_DISMANTLER) == undefined) {
                         minDistance = Game.map.getRoomLinearDistance(m, attackRoom.name)
                         minRoom = m
                     }

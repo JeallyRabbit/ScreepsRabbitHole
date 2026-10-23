@@ -20,6 +20,7 @@ const roleMineralCarrier = require('roleMineralCarrier')
 const roleDoctor = require('roleDoctor')
 const roleDrainer = require('roleDrainer')
 const operateQuad = require('operateQuad')
+const roleDismantler = require('roleDismantler')
 const _ = require('lodash')
 
 Room.prototype.creepsManager = function creepsManager() {

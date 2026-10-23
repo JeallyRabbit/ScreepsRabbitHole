@@ -31,7 +31,7 @@ Room.prototype.reBuild = function reBuild() {
   this.memory.buildingList = [];
   this.memory.roadBuildingList = [];
   this.memory.plannedRoads = false
-  this.memory.finishedPlanning=false;
+  this.memory.finishedPlanning = false;
   this.memory.baseVariations == undefined
 
 }
@@ -167,6 +167,10 @@ module.exports.loop = function () {
       ) {
         global.heap.mainRooms.push(roomName)
         Memory.mainRooms.push(roomName)
+
+        if (global.heap.rooms[roomName].offensiveQueue == undefined) {
+          global.heap.rooms[roomName].offensiveQueue = []
+        }
       }
 
 
@@ -258,7 +262,7 @@ module.exports.loop = function () {
       attackManager(r)
 
       if (roomName != undefined && Game.rooms[roomName] != undefined && Game.rooms[roomName].controller.owner == undefined
-        && global.heap.rooms[roomName].hostileStructures.length==0
+        && global.heap.rooms[roomName].hostileStructures.length == 0
       ) {
         console.log("Removing room: ", roomName, " from Memory.roomsToAttack")
         Memory.roomsToAttack = Memory.roomsToAttack.filter(function (obj) {
