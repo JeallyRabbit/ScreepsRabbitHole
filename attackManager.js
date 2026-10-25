@@ -328,7 +328,7 @@ function attackManager(attackRoom) {
 
 
 
-            for (d in attackRoom.dismantlersId) {
+            for (d of attackRoom.dismantlersId) {
                 if (Game.getObjectById(d) != null) {
                     attackRoom.dismantlePower += Game.getObjectById(d).memory.dismantlePower
                 }
@@ -358,13 +358,13 @@ function attackManager(attackRoom) {
                 if (minRoom != undefined) {
                     console.log("Need dismantler from ", minRoom)
 
-                    // for testing add dismantler to harvestingQueue instead of offensiveQueue
-                    if (global.heap.rooms[minRoom].harvestingQueue == undefined) {
-                        global.heap.rooms[minRoom].harvestingQueue = []
+                    // for testing add dismantler to civilianQueue instead of offensiveQueue
+                    if (global.heap.rooms[minRoom].civilianQueue == undefined) {
+                        global.heap.rooms[minRoom].civilianQueue = []
                     }
-                    if (global.heap.rooms[minRoom].harvestingQueue.find(({ role }) => role === C.ROLE_DISMANTLER) == undefined
+                    if (global.heap.rooms[minRoom].civilianQueue.find(({ role }) => role === C.ROLE_DISMANTLER) == undefined
                 && Game.rooms[minRoom].storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM/2) {
-                        global.heap.rooms[minRoom].harvestingQueue.push(new generalRoomRequest(attackRoom.name, C.ROLE_DISMANTLER));
+                        global.heap.rooms[minRoom].civilianQueue.push(new generalRoomRequest(attackRoom.name, C.ROLE_DISMANTLER));
                     }
                 }
 

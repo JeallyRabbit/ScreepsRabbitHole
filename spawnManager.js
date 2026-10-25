@@ -341,24 +341,7 @@ Room.prototype.spawnManager = function spawnManager() {
                     }
                     break;
                 }
-            case C.ROLE_DISMANTLER:
-                {
-                    if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM / 2) {
-                        var name = "ClumsyRabbit"
-                        var body = dismantlerBody(energyCap)
-                        var result = spawn.spawnCreep(body, name + '_' + this.name + Game.time, { memory: { role: C.ROLE_DISMANTLER, targetRoom: request.roomName, directions: myDirections, homeRoom: this.name } })
-                        global.heap.rooms[this.name].spawnResult = result
-                        global.heap.rooms[this.name].spawnRole = role
-                        if (result == OK) {
-                            global.heap.rooms[this.name].offensiveQueue.shift()
 
-                        }
-                        break;
-                    }
-                    else {
-                        global.heap.rooms[this.name].offensiveQueue.shift()
-                    }
-                }
         }
 
     }
@@ -561,6 +544,26 @@ Room.prototype.spawnManager = function spawnManager() {
 
                     }
                     break;
+                }
+            case C.ROLE_DISMANTLER:
+                {
+                    if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM / 2) {
+                        var name = "ClumsyRabbit"
+                        var body = dismantlerBody(energyCap)
+                        console.log("dismantler body: ", body, " energyCap: ", energyCap, " room: ", this.name)
+                        var result = spawn.spawnCreep(body, name + '_' + this.name + Game.time, { memory: { role: C.ROLE_DISMANTLER, targetRoom: request.roomName, directions: myDirections, homeRoom: this.name } })
+                        global.heap.rooms[this.name].spawnResult = result
+                        global.heap.rooms[this.name].spawnRole = role
+                        if (result == OK) {
+                            global.heap.rooms[this.name].offensiveQueue.shift()
+
+                        }
+                        console.log("ROLE_DISMANTLER spawning result: ", result)
+                        break;
+                    }
+                    else {
+                        global.heap.rooms[this.name].offensiveQueue.shift()
+                    }
                 }
 
 
