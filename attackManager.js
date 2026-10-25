@@ -326,7 +326,7 @@ function attackManager(attackRoom) {
         if (attackRoom.attackType[C.ATTACK_TYPE_DISMANTLE] == true) {
             attackRoom.reqDismantlePower = C.REQ_DISMANTLE_POWER
 
-
+            attackRoom.dismantlePower = 0
 
             for (d of attackRoom.dismantlersId) {
                 if (Game.getObjectById(d) != null) {
