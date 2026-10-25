@@ -329,7 +329,7 @@ function attackManager(attackRoom) {
 
 
             for (d in attackRoom.dismantlersId) {
-                if (Game.getObjectById(d) != undefined) {
+                if (Game.getObjectById(d) != null) {
                     attackRoom.dismantlePower += Game.getObjectById(d).memory.dismantlePower
                 }
                 else {
@@ -363,7 +363,7 @@ function attackManager(attackRoom) {
                         global.heap.rooms[minRoom].harvestingQueue = []
                     }
                     if (global.heap.rooms[minRoom].harvestingQueue.find(({ role }) => role === C.ROLE_DISMANTLER) == undefined
-                && Game.rooms[minRoom].storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
+                && Game.rooms[minRoom].storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM/2) {
                         global.heap.rooms[minRoom].harvestingQueue.push(new generalRoomRequest(attackRoom.name, C.ROLE_DISMANTLER));
                     }
                 }

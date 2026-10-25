@@ -343,9 +343,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_DISMANTLER:
                 {
-                    console.log("entered spawning dismantler")
-                    console.log(this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM)
-                    if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
+                    if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM / 2) {
                         var name = "ClumsyRabbit"
                         var body = dismantlerBody(energyCap)
                         var result = spawn.spawnCreep(body, name + '_' + this.name + Game.time, { memory: { role: C.ROLE_DISMANTLER, targetRoom: request.roomName, directions: myDirections, homeRoom: this.name } })
@@ -355,11 +353,9 @@ Room.prototype.spawnManager = function spawnManager() {
                             global.heap.rooms[this.name].offensiveQueue.shift()
 
                         }
-                        console.log("ROLE_DISMANTLER spawning result: ", result)
                         break;
                     }
-                    else
-                    {
+                    else {
                         global.heap.rooms[this.name].offensiveQueue.shift()
                     }
                 }
