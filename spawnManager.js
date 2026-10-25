@@ -72,21 +72,20 @@ Room.prototype.spawnManager = function spawnManager() {
         }
     }
 
-    if (spawn!= null && spawn.spawning != undefined && spawn.spawning.remainingTime < spawn.spawning.needTime - 2) {
+    if (spawn != null && spawn.spawning != undefined && spawn.spawning.remainingTime < spawn.spawning.needTime - 2) {
         global.heap.rooms[this.name].spawn2Name = spawn.spawning.name
         if (this.memory.spawn3Id != undefined) {
             spawn = Game.getObjectById(this.memory.spawn3Id)
             myDirections = [TOP, TOP_LEFT, TOP_RIGHT]
             //for visualization
-            if (spawn!=null && spawn.spawning != undefined && spawn.spawning != null) {
+            if (spawn != null && spawn.spawning != undefined && spawn.spawning != null) {
                 global.heap.rooms[this.name].spawn3Name = spawn.spawning.name
             }
         }
     }
     var energyCap = Game.rooms[this.name].energyAvailable
 
-    if(spawn==null)
-    {
+    if (spawn == null) {
         return
     }
     //check if there is quad that has started spawning in offensiveQueue (members>0)
@@ -105,7 +104,7 @@ Room.prototype.spawnManager = function spawnManager() {
         console.log("spawning not first quad member")
         var request = global.heap.rooms[this.name].offensiveQueue[0]
 
-        var blockPos = new RoomPosition(38,22, this.name)
+        var blockPos = new RoomPosition(38, 22, this.name)
         var blockPosWidth = 8
         var blockPosHeight = 1
         this.visual.rect(blockPos.x, blockPos.y, blockPosWidth, blockPosHeight, { fill: C.FILL_COLOR })
@@ -152,7 +151,7 @@ Room.prototype.spawnManager = function spawnManager() {
         return;
     }
 
-    skippedDefensiveQueue=false
+    skippedDefensiveQueue = false
     if (global.heap.rooms[this.name].defensiveQueue.length > 0 && Game.rooms[this.name].energyAvailable >= 300) {
 
         //console.log("spawning from defensive queue")
@@ -180,18 +179,17 @@ Room.prototype.spawnManager = function spawnManager() {
                     if (global.heap.rooms[this.name].harvestingQueue.length > 0) {
                         var harvestingRequest = global.heap.rooms[this.name].harvestingQueue[0]
                         var harvestingRole = harvestingRequest.role
-                        if (harvestingRequest.sourceRoom != request.roomName && harvestingRequest.sourceRoom!=this.name && (harvestingRole == C.ROLE_CARRIER || harvestingRole == C.ROLE_HARVESTER)) {
+                        if (harvestingRequest.sourceRoom != request.roomName && harvestingRequest.sourceRoom != this.name && (harvestingRole == C.ROLE_CARRIER || harvestingRole == C.ROLE_HARVESTER)) {
                             ifCanSkip = true
-                            skippedDefensiveQueue=true
+                            skippedDefensiveQueue = true
                             //console.log("Skipping soldier - can spawn harvesters to other rooms")
                             break;
                         }
                     }
 
-                    if((global.heap.rooms[r.name].hostiles!=undefined && global.heap.rooms[r.name].hostiles.length == 0))
-                    {
+                    if ((global.heap.rooms[r.name].hostiles != undefined && global.heap.rooms[r.name].hostiles.length == 0)) {
                         global.heap.rooms[this.name].defensiveQueue.shift()
-                        ifCanSkip=false
+                        ifCanSkip = false
                     }
                     if (!ifCanSkip) {
                         var result = spawn.spawnCreep(soldierBody(energyCap, request.isMelee), 'SadisticRabbit' + '_' + this.name + Game.time, { memory: { role: C.ROLE_SOLDIER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
@@ -232,7 +230,7 @@ Room.prototype.spawnManager = function spawnManager() {
         }
     }
     if (global.heap.rooms[this.name].harvestingQueue.length > 0
-        && (global.heap.rooms[this.name].defensiveQueue.length==0 || skippedDefensiveQueue==true)
+        && (global.heap.rooms[this.name].defensiveQueue.length == 0 || skippedDefensiveQueue == true)
     ) {
 
         //console.log("spawning from harvestingQueue")
@@ -304,7 +302,7 @@ Room.prototype.spawnManager = function spawnManager() {
                     }
                     break;
                 }
-                case C.ROLE_CONTROLLER_HAULER:
+            case C.ROLE_CONTROLLER_HAULER:
                 {
                     var result = spawn.spawnCreep(carrierBody(energyCap), "CHaulingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_CONTROLLER_HAULER, directions: myDirections, homeRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
@@ -334,7 +332,7 @@ Room.prototype.spawnManager = function spawnManager() {
                     }
 
 
-                    var result = spawn.spawnCreep(body, "SlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_WORKER, directions: myDirections, homeRoom: this.name,targetRoom: this.name  } })
+                    var result = spawn.spawnCreep(body, "SlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_WORKER, directions: myDirections, homeRoom: this.name, targetRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -342,6 +340,28 @@ Room.prototype.spawnManager = function spawnManager() {
 
                     }
                     break;
+                }
+            case C.ROLE_DISMANTLER:
+                {
+                    console.log("entered spawning dismantler")
+                    console.log(this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM)
+                    if (this.storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
+                        var name = "ClumsyRabbit"
+                        var body = dismantlerBody(energyCap)
+                        var result = spawn.spawnCreep(body, name + '_' + this.name + Game.time, { memory: { role: C.ROLE_DISMANTLER, targetRoom: request.roomName, directions: myDirections, homeRoom: this.name } })
+                        global.heap.rooms[this.name].spawnResult = result
+                        global.heap.rooms[this.name].spawnRole = role
+                        if (result == OK) {
+                            global.heap.rooms[this.name].offensiveQueue.shift()
+
+                        }
+                        console.log("ROLE_DISMANTLER spawning result: ", result)
+                        break;
+                    }
+                    else
+                    {
+                        global.heap.rooms[this.name].offensiveQueue.shift()
+                    }
                 }
         }
 
@@ -388,26 +408,25 @@ Room.prototype.spawnManager = function spawnManager() {
                     if (this.energyAvailable <= SPAWN_ENERGY_CAPACITY) { body = [WORK, CARRY, MOVE] }
                     else {
                         var scheme = [MOVE, CARRY, WORK, WORK]
-                        if ((this.controller.level == 8 && !global.heap.rooms[this.name].construction.length > 0)|| global.heap.rooms[this.name].needWorkersParts == 1) {
+                        if ((this.controller.level == 8 && !global.heap.rooms[this.name].construction.length > 0) || global.heap.rooms[this.name].needWorkersParts == 1) {
                             body = [MOVE, CARRY, WORK]
                         }
 
                         if (global.heap.rooms[this.name].construction.length > 0) {
                             body = workerBody(energyCap, C.CREEP_MAX_BODYPARTS, [MOVE, MOVE, CARRY, WORK])
                         }
-                        else if(Memory.fastRclUpgrade!=this.name)
-                        {
-                            body=scheme
+                        else if (Memory.fastRclUpgrade != this.name) {
+                            body = scheme
                         }
                         else {
                             body = workerBody(energyCap, C.CREEP_MAX_BODYPARTS, scheme)
                         }
 
-                        
+
                     }
 
 
-                    var result = spawn.spawnCreep(body, "SlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_WORKER, directions: myDirections, homeRoom: this.name,targetRoom: this.name } })
+                    var result = spawn.spawnCreep(body, "SlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_WORKER, directions: myDirections, homeRoom: this.name, targetRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -446,8 +465,8 @@ Room.prototype.spawnManager = function spawnManager() {
                 {
                     //This condition should be unneccesary but it keeps still spawning rampartsRepairers so added it here
                     if (global.heap.rooms[this.name].rampartRepairersPower < global.heap.rooms[this.name].requiredRampartsRepairersPower) {
-                        var result = spawn.spawnCreep(repairerBody(energyCap /*, global.heap.rooms[this.name].requiredRampartsRepairersPower + 1 */) ,
-                            "RampartLovingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RAMPART_REPAIRER, directions: myDirections, homeRoom: this.name,targetRoom: this.name  } })
+                        var result = spawn.spawnCreep(repairerBody(energyCap /*, global.heap.rooms[this.name].requiredRampartsRepairersPower + 1 */),
+                            "RampartLovingRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_RAMPART_REPAIRER, directions: myDirections, homeRoom: this.name, targetRoom: this.name } })
 
                         global.heap.rooms[this.name].spawnResult = result
                         global.heap.rooms[this.name].spawnRole = role
@@ -516,7 +535,7 @@ Room.prototype.spawnManager = function spawnManager() {
                 }
             case C.ROLE_MINER:
                 {
-                    var result = spawn.spawnCreep(minerBody(energyCap), "AnotherSlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_MINER, directions: myDirections, homeRoom: this.name,targetRoom: this.name } })
+                    var result = spawn.spawnCreep(minerBody(energyCap), "AnotherSlaveRabbit" + '_' + this.name + Game.time, { memory: { role: C.ROLE_MINER, directions: myDirections, homeRoom: this.name, targetRoom: this.name } })
                     global.heap.rooms[this.name].spawnResult = result
                     global.heap.rooms[this.name].spawnRole = role
                     if (result == OK) {
@@ -565,12 +584,12 @@ Room.prototype.spawnManager = function spawnManager() {
             case C.ROLE_SOLDIER:
                 {
                     var result = spawn.spawnCreep(soldierBody(energyCap, request.isMelee), 'SadisticRabbit' + '_' + this.name + Game.time, { memory: { role: C.ROLE_SOLDIER, directions: myDirections, homeRoom: this.name, targetRoom: request.roomName } })
-                        global.heap.rooms[this.name].spawnResult = result
-                        global.heap.rooms[this.name].spawnRole = role
-                        if (result == OK) {
-                            global.heap.rooms[this.name].offensiveQueue.shift()
-                            break;
-                        }
+                    global.heap.rooms[this.name].spawnResult = result
+                    global.heap.rooms[this.name].spawnRole = role
+                    if (result == OK) {
+                        global.heap.rooms[this.name].offensiveQueue.shift()
+                        break;
+                    }
                 }
             case C.ROLE_QUAD_MEMBER:
                 {

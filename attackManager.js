@@ -362,7 +362,8 @@ function attackManager(attackRoom) {
                     if (global.heap.rooms[minRoom].harvestingQueue == undefined) {
                         global.heap.rooms[minRoom].harvestingQueue = []
                     }
-                    if (global.heap.rooms[minRoom].harvestingQueue.find(({ role }) => role === C.ROLE_DISMANTLER) == undefined) {
+                    if (global.heap.rooms[minRoom].harvestingQueue.find(({ role }) => role === C.ROLE_DISMANTLER) == undefined
+                && Game.rooms[minRoom].storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM) {
                         global.heap.rooms[minRoom].harvestingQueue.push(new generalRoomRequest(attackRoom.name, C.ROLE_DISMANTLER));
                     }
                 }
