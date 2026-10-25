@@ -357,11 +357,13 @@ function attackManager(attackRoom) {
                 }
                 if (minRoom != undefined) {
                     console.log("Need dismantler from ", minRoom)
-                    if (global.heap.rooms[minRoom].offensiveQueue == undefined) {
-                        global.heap.rooms[minRoom].offensiveQueue = []
+
+                    // for testing add dismantler to harvestingQueue instead of offensiveQueue
+                    if (global.heap.rooms[minRoom].harvestingQueue == undefined) {
+                        global.heap.rooms[minRoom].harvestingQueue = []
                     }
-                    if (global.heap.rooms[minRoom].offensiveQueue.find(({ role }) => role === C.ROLE_DISMANTLER) == undefined) {
-                        global.heap.rooms[minRoom].offensiveQueue.push(new generalRoomRequest(attackRoom.name, C.ROLE_DISMANTLER));
+                    if (global.heap.rooms[minRoom].harvestingQueue.find(({ role }) => role === C.ROLE_DISMANTLER) == undefined) {
+                        global.heap.rooms[minRoom].harvestingQueue.push(new generalRoomRequest(attackRoom.name, C.ROLE_DISMANTLER));
                     }
                 }
 
