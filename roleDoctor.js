@@ -81,16 +81,20 @@ Creep.prototype.roleDoctor = function roleDoctor() {
             this.say("3")
             global.heap.rooms[this.room.name].doctorTask = C.TASK_BOOST_CREEP
         }
-        else if (this.room.ifBothInputMineralEmpty(inputLab1, inputLab2) == true) {
+        else if (this.room.ifBothInputMineralEmpty(inputLab1, inputLab2) == true
+    && this.room.outputLabsFreeCapacity(outputLabs) > 0
+){
             this.say(C.TASK_FILL_INPUT_LABS_MINERAL)
             global.heap.rooms[this.room.name].doctorTask = C.TASK_FILL_INPUT_LABS_MINERAL
         }
+        /*
         else if(this.room.isAnyOutputFull()==true)
         {
-            global.heap.rooms[this.room.name].doctorTask = C.TASK_CLEAR_INPUT_LABS
+            global.heap.rooms[this.room.name].doctorTask = C.TASK_CLEAR_OUTPUT_LABS//C.TASK_CLEAR_INPUT_LABS
         }
+            */
         else if (this.room.oneInputMineralEmpty(inputLab1, inputLab2) != false
-    || this.room.inputLabsMatchReaction(inputLab1,inputLab2)==false
+   // || this.room.inputLabsMatchReaction(inputLab1,inputLab2)==false
     ) {
             this.say("5")
             global.heap.rooms[this.room.name].doctorTask = C.TASK_CLEAR_INPUT_LABS
@@ -132,6 +136,7 @@ Creep.prototype.roleDoctor = function roleDoctor() {
             this.taskClearInputLabs(inputLab1, inputLab2)
         }
         else if (global.heap.rooms[this.room.name].doctorTask == C.TASK_CLEAR_OUTPUT_LABS) {
+            this.say("clear out")
             this.taskClearOutputLabs(inputLab1, inputLab2)
         }
         
@@ -152,10 +157,10 @@ Room.prototype.isAnyOutputFull = function isAnyOutputFull()
     {
         if(l.store.getFreeCapacity(RESOURCE_OXYGEN)==0)
         {
-            return false
+            return true
         }
     }
-    return true
+    return false
 }
 
 Room.prototype.inputLabsMatchReaction = function inputLabsMatchReaction(in1,in2)
@@ -239,6 +244,14 @@ Room.prototype.oneInputMineralEmpty = function oneInputMineralEmpty(in1, in2) {
     }
     return false
 
+}
+
+Room.prototype.outputLabsFreeCapacity = function outputLabsFreeCapacity(outputLabs) {
+    var freeCapacity = 0
+    for (var i = 0; i < outputLabs.length; i++) {
+        freeCapacity += outputLabs[i].store.getFreeCapacity(RESOURCE_OXYGEN)
+    }
+    return freeCapacity
 }
 
 Room.prototype.ifBothInputMineralEmpty = function ifBothInputMineralEmpty(in1, in2) {
