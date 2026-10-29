@@ -59,8 +59,8 @@ Creep.prototype.roleDoctor = function roleDoctor() {
 
         var res1 = undefined
         var res2 = undefined
-        console.log("this.room.ifBothInputMineralEmpty(inputLab1, inputLab2): ",this.room.ifBothInputMineralEmpty(inputLab1, inputLab2))
-        console.log("this.room.labsUsedCapacity(outputLabs): ",this.room.labsUsedCapacity(outputLabs))
+        //console.log("this.room.ifBothInputMineralEmpty(inputLab1, inputLab2): ",this.room.ifBothInputMineralEmpty(inputLab1, inputLab2))
+        //console.log("this.room.labsUsedCapacity(outputLabs): ",this.room.labsUsedCapacity(outputLabs))
         if (global.heap.rooms[this.room.name].reaction != undefined) {
             res1 = (global.heap.rooms[this.room.name].reaction[0] != undefined) ? global.heap.rooms[this.room.name].reaction[0] : undefined;
             res2 = (global.heap.rooms[this.room.name].reaction[0] != undefined) ? global.heap.rooms[this.room.name].reaction[1] : undefined;
