@@ -363,7 +363,7 @@ function attackManager(attackRoom) {
                         global.heap.rooms[minRoom].civilianQueue = []
                     }
                     if (global.heap.rooms[minRoom].civilianQueue.find(({ role }) => role === C.ROLE_DISMANTLER) == undefined
-                && Game.rooms[minRoom].storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM/2) {
+                && ( Game.rooms[minRoom].storage!=undefined && Game.rooms[minRoom].storage.store[RESOURCE_ENERGY] > C.STORAGE_ENERGY_BOTTOM/2)) {
                         global.heap.rooms[minRoom].civilianQueue.push(new generalRoomRequest(attackRoom.name, C.ROLE_DISMANTLER));
                     }
                 }
